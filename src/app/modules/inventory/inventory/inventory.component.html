@@ -1,6 +1,8 @@
 <p>inventory works!</p>
 <mat-drawer-container>
-  <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened">side</mat-drawer>
+  <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened">
+   <app-added-equipment-card></app-added-equipment-card>
+  </mat-drawer>
   <mat-drawer-content class="equipment-container">
     @for(option of [1,2,3,4,5,6,7]; track option) {
     <app-equipment-card></app-equipment-card>

@@ -1,1 +1,15 @@
-<p>added-equipment-card works!</p>
+<div class="card-container" [ngClass]="[size, type, shade]">
+  <div class="image-wrapper">
+    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+  </div>
+  <div class="content">
+    <span>10 PCS HEX KEY</span>
+    <span>Buffalo</span>
+  </div>
+  <span>1</span>
+  <div class="qty-icon-wrapper">
+    <app-icon name="add" size="sm"></app-icon>
+    <app-icon name="remove" size="sm"></app-icon>
+  </div>
+  <app-icon name="close" size="lg"></app-icon>
+</div>

@@ -6,6 +6,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { EquipmentCardComponent } from '../shared/equipment-card/equipment-card.component';
 import { EquipmentFilterComponent } from '../shared/equipment-filter/equipment-filter.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatSidenavModule,
     EquipmentCardComponent,
     EquipmentFilterComponent,
+    AddedEquipmentCardComponent
   ]
 })
 export class InventoryModule { }

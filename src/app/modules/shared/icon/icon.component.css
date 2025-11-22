@@ -1,6 +1,29 @@
-mat-icon.sm {
+.icon-wrapper {
+ display: flex;
+
+}
+
+mat-icon.xs {
   height: 13px;
   width: 13px;
   font-size: 13px;
   aspect-ratio: 1/1;
+}
+
+mat-icon.sm {
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+  aspect-ratio: 1/1;
+}
+
+mat-icon.lg {
+  height: 28px;
+  width: 28px;
+  font-size: 28px;
+  aspect-ratio: 1/1;
+}
+
+.icon-wrapper.clickable {
+ cursor: pointer;
 }

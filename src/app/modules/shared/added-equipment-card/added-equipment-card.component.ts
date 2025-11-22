@@ -1,11 +1,22 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { IconComponent } from '../icon/icon.component';
+
+type CardSize = 'sm' | 'md' | 'lg';
+type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
+type CardShade = 'default' | 'light';
 
 @Component({
   selector: 'app-added-equipment-card',
-  imports: [],
+  imports: [CommonModule, IconComponent],
   templateUrl: './added-equipment-card.component.html',
   styleUrl: './added-equipment-card.component.css',
 })
 export class AddedEquipmentCardComponent {
-
+  @Input() size: CardSize = 'md';
+  @Input() type: CardType = 'primary';
+  @Input() shade: CardShade = 'default';
+  @Input() title: string = '';
+  @Input() descriptions: string[] = [];
+  @Input() icon: string = 'calendar_today';
 }

@@ -1,1 +1,3 @@
- <mat-icon>{{ name }}</mat-icon>
+<div class="icon-wrapper" [class.clickable]="clickable">
+  <mat-icon [ngClass]="[size]">{{ name }}</mat-icon>
+</div>
