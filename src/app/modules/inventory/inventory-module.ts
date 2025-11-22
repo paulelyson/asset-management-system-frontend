@@ -9,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
 import { ButtonComponent } from '../shared/button/button.component';
 import { TitleSectionComponent } from '../shared/title-section/title-section.component';
+import { SideNavigationComponent } from '../shared/side-navigation/side-navigation.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { TitleSectionComponent } from '../shared/title-section/title-section.com
     EquipmentFilterComponent,
     AddedEquipmentCardComponent,
     ButtonComponent,
-    TitleSectionComponent
+    TitleSectionComponent,
+    SideNavigationComponent
   ]
 })
 export class InventoryModule { }

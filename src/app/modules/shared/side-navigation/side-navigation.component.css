@@ -1,0 +1,12 @@
+.sidenav-container {
+  overflow-x: hidden;
+  transition: 0.5s;
+  width: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidenav-container.opened {
+  width: 300px;
+}
