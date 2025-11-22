@@ -8,6 +8,7 @@ import { EquipmentFilterComponent } from '../shared/equipment-filter/equipment-f
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
 import { ButtonComponent } from '../shared/button/button.component';
+import { TitleSectionComponent } from '../shared/title-section/title-section.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ButtonComponent } from '../shared/button/button.component';
     EquipmentCardComponent,
     EquipmentFilterComponent,
     AddedEquipmentCardComponent,
-    ButtonComponent
+    ButtonComponent,
+    TitleSectionComponent
   ]
 })
 export class InventoryModule { }

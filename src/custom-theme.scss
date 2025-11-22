@@ -33,3 +33,20 @@ body {
   // Reset the user agent margin.
   margin: 0;
 }
+
+
+.h1-title {
+  font-size: 2rem;
+  font-weight: 500;
+}
+.h3-title {
+  font-size: 1.5rem;
+  padding: 2px 10px;
+}
+
+.underlined {
+  -webkit-text-decoration: underline var(--accent) solid 4px;
+  text-decoration: underline var(--accent) solid 0.2em;
+  text-underline-offset: 1px;
+  text-decoration-skip-ink: none;
+}
