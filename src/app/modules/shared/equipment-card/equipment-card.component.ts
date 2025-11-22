@@ -9,7 +9,7 @@ type CardShade = 'default' | 'light';
 
 @Component({
   selector: 'app-equipment-card',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, ButtonComponent],
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
 })
