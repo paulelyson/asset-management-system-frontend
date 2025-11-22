@@ -1,2 +1,15 @@
-<p>equipment-card works!</p>
-<app-button>Confirm</app-button>
+<div class="card-container" [ngClass]="[size, type, shade]">
+  <div class="image-wrapper">
+    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+  </div>
+  <div class="equipment-name">10 PCS HEX KEY</div>
+  <div class="brand-qty">
+    <span>Buffalo</span>
+    <mat-icon>numbers</mat-icon>
+    <span>1</span>
+  </div>
+  <div class="availability">
+    <span>UNAVAILABLE</span>
+    <mat-icon>info</mat-icon>
+  </div>
+</div>

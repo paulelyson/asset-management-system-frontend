@@ -1,0 +1,55 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+
+  .equipment-name {
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  mat-icon {
+    height: 13px;
+    width: 13px;
+    font-size: 13px;
+    aspect-ratio: 1/1;
+  }
+
+  .brand-qty,
+  .availability{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+  }
+
+  .brand-qty span:nth-child(1) {
+    flex: 1;
+  }
+}
+
+/* sizes */
+.card-container.md {
+  max-width: 180px;
+  min-width: 150px;
+  padding: 10px;
+  border-radius: 0.5rem;
+  gap: 5px;
+}
+
+/* color */
+.card-container.primary {
+  background: var(--primary-50);
+}
+
+.image-wrapper .fit-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+@media screen and (max-width: 420px) {
+  .card-container {
+    min-width: 250px;
+  }
+}
