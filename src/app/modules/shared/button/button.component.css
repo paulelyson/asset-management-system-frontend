@@ -1,0 +1,50 @@
+.btn-custom {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+.btn-custom.primary {
+  border: none;
+  background: var(--primary);
+  color: var(--text-white);
+}
+
+.btn-custom.secondary {
+  border: none;
+  background: var(--secondary);
+  color: var(--text);
+}
+
+.btn-custom.secondary.light {
+  border: none;
+  background: var(--secondary-100);
+  color: var(--text);
+}
+
+.btn-custom.success {
+  border: 2px solid var(--color-border-success-idle);
+  background: var(--color-bg-success-idle);
+  color: var(--color-text-success-default);
+}
+
+.btn-custom.sm {
+  height: 28px;
+  border-radius: 5px;
+  padding: 0px 8px;
+  font-size: 10px;
+}
+
+.btn-custom.lg {
+  padding: 0.5rem 2rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  line-height: 2;
+}
+
+.btn-custom.width-filled {
+  width: 100%;
+}

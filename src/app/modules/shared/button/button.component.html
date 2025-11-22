@@ -1,1 +1,3 @@
-<p>button works!</p>
+ <button class="btn-custom" [ngClass]="[type, shade, size, width]"  (click)="onClicked()">
+  <ng-content></ng-content>
+ </button>
