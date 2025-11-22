@@ -2,11 +2,19 @@
   overflow-x: hidden;
   transition: 0.5s;
   width: 0;
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   top: 0;
+  width: 50px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--primary-100);
+  height: 100%;
+  gap: 15px;
 }
 
 .sidenav-container.opened {
-  width: 300px;
+  width: 250px;
 }
