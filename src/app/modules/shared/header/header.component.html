@@ -1,0 +1,21 @@
+<header id="header">
+  <div class="header">
+    <div class="nav-wrapper">
+      <div class="logo-wrapper">
+        <div class="title">AMS</div>
+      </div>
+      <span class="spacer"></span>
+      <ul class="navigation">
+        <app-icon name="notifications" size="lg"></app-icon>
+        <app-icon name="settings" size="lg"></app-icon>
+        <app-icon name="logout" size="lg"></app-icon>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sidenav-container" [class.opened]="sidenav_opened">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Profile</a>
+  </div>
+</header>
