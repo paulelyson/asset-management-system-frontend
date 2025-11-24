@@ -6,10 +6,11 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { TitleSectionComponent } from '../shared/title-section/title-section.component';
 import { EquipmentDetailRowComponent } from '../shared/equipment-detail-row/equipment-detail-row.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { InventoryToolbarComponent } from './inventory-toolbar/inventory-toolbar.component';
 
 
 @NgModule({
-  declarations: [InventoryComponent],
+  declarations: [InventoryComponent, InventoryToolbarComponent],
   imports: [
     CommonModule,
     InventoryRoutingModule,
