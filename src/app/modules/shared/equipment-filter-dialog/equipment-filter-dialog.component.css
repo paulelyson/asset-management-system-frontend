@@ -5,7 +5,14 @@
   align-items: center;
   justify-content: center;
   padding: 2em;
-  gap: 20px;
+  gap: 10px;
   max-height: 80vh;
   max-width: 650px;
+}
+
+.action-wrapper {
+ display: flex;
+ justify-content: center;
+ gap: 15px;
+ padding: 10px;
 }
