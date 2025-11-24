@@ -36,6 +36,21 @@
       background-color: transparent;
     }
   }
+
+  // Dropdown option override
+  mat-select,
+  mat-option.mat-mdc-option {
+    // font-family: var(--mat-form-field-container-text-font, var(--mat-sys-body-small-font) Roboto);
+    line-height: var(--mat-form-field-container-text-line-height,var(--mat-sys-body-medium-line-height));
+    font-size: var(--mat-form-field-container-text-size, var(--mat-sys-body-medium-size));
+    letter-spacing: var(--mat-form-field-container-text-tracking, var(--mat-sys-body-medium-tracking));
+    font-weight: var(--mat-form-field-container-text-weight, var(--mat-sys-body-medium-weight));
+  }
+
+  @include mat.select-overrides((
+    panel-background-color: var(--primary-50),
+    focused-arrow-color: var(--primary)
+  ));
 }
 
 html {

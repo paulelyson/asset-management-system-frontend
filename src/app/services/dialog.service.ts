@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EquipmentDetailDialogComponent } from '../modules/shared/equipment-detail-dialog/equipment-detail-dialog.component';
-import { EquipmentFilterComponent } from '../modules/shared/equipment-filter/equipment-filter.component';
+import { EquipmentFilterDialogComponent } from '../modules/shared/equipment-filter-dialog/equipment-filter-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -11,7 +11,7 @@ type DialogComponent = 'equipment-detail' | 'equipment-filter';
 export class DialogService {
   constructor(private dialog: MatDialog) {}
   openDialog(component: DialogComponent): void {
-    const dialogComponent = component == 'equipment-detail' ? EquipmentDetailDialogComponent : EquipmentFilterComponent;
+    const dialogComponent = component == 'equipment-detail' ? EquipmentDetailDialogComponent : EquipmentFilterDialogComponent;
     const dialogRef = this.dialog.open(dialogComponent, {});
 
     dialogRef.afterClosed().subscribe((result) => {

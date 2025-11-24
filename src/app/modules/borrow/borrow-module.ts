@@ -8,7 +8,6 @@ import { ButtonComponent } from '../shared/button/button.component';
 import { TitleSectionComponent } from '../shared/title-section/title-section.component';
 import { SideNavigationComponent } from '../shared/side-navigation/side-navigation.component';
 import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
-import { EquipmentFilterComponent } from '../shared/equipment-filter/equipment-filter.component';
 import { BorrowComponent } from './borrow/borrow.component';
 
 @NgModule({
@@ -18,7 +17,6 @@ import { BorrowComponent } from './borrow/borrow.component';
     BorrowRoutingModule,
     MatSidenavModule,
     EquipmentCardComponent,
-    EquipmentFilterComponent,
     AddedEquipmentCardComponent,
     ButtonComponent,
     TitleSectionComponent,
