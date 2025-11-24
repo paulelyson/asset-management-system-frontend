@@ -2,13 +2,26 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { BorrowRoutingModule } from './borrow-routing-module';
-
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { EquipmentCardComponent } from '../shared/equipment-card/equipment-card.component';
+import { ButtonComponent } from '../shared/button/button.component';
+import { TitleSectionComponent } from '../shared/title-section/title-section.component';
+import { SideNavigationComponent } from '../shared/side-navigation/side-navigation.component';
+import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
+import { EquipmentFilterComponent } from '../shared/equipment-filter/equipment-filter.component';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    BorrowRoutingModule
-  ]
+    BorrowRoutingModule,
+    MatSidenavModule,
+    EquipmentCardComponent,
+    EquipmentFilterComponent,
+    AddedEquipmentCardComponent,
+    ButtonComponent,
+    TitleSectionComponent,
+    SideNavigationComponent,
+  ],
 })
-export class BorrowModule { }
+export class BorrowModule {}

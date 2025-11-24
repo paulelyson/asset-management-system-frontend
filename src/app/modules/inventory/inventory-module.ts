@@ -3,13 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { InventoryRoutingModule } from './inventory-routing-module';
 import { InventoryComponent } from './inventory/inventory.component';
-import { EquipmentCardComponent } from '../shared/equipment-card/equipment-card.component';
-import { EquipmentFilterComponent } from '../shared/equipment-filter/equipment-filter.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
-import { ButtonComponent } from '../shared/button/button.component';
 import { TitleSectionComponent } from '../shared/title-section/title-section.component';
-import { SideNavigationComponent } from '../shared/side-navigation/side-navigation.component';
 
 
 @NgModule({
@@ -17,13 +11,7 @@ import { SideNavigationComponent } from '../shared/side-navigation/side-navigati
   imports: [
     CommonModule,
     InventoryRoutingModule,
-    MatSidenavModule,
-    EquipmentCardComponent,
-    EquipmentFilterComponent,
-    AddedEquipmentCardComponent,
-    ButtonComponent,
     TitleSectionComponent,
-    SideNavigationComponent
   ]
 })
 export class InventoryModule { }

@@ -1,0 +1,15 @@
+<app-title-section>Borrow Equipment</app-title-section>
+<mat-drawer-container>
+  <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened">
+   <app-added-equipment-card></app-added-equipment-card>
+  </mat-drawer>
+  <mat-drawer-content class="equipment-container">
+    @for(option of [1,2,3,4,5,6]; track option) {
+    <app-equipment-card></app-equipment-card>
+    }@empty {
+    <span>No items.</span>
+    }
+    <app-button (btnclicked)="openDialog()">OPEN DIALOG</app-button>
+
+  </mat-drawer-content>
+</mat-drawer-container>
