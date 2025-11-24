@@ -10,5 +10,9 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
   styleUrl: './equipment-filter-dialog.component.css',
 })
 export class EquipmentFilterDialogComponent {
-  equipment_types: string[]= ['bar', 'foo', 'waa']
+  equipment_types: string[]= ['bar', 'foo', 'waa'];
+
+  navigate() {
+    
+  }
 }

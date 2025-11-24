@@ -4,7 +4,7 @@
  <app-dropdown [options]="equipment_types" label="Location"></app-dropdown>
  <app-autocomplete></app-autocomplete>
  <div class="action-wrapper">
-  <app-button>Apply</app-button>
+  <app-button (btnclicked)="navigate()">Apply</app-button>
   <app-button>Cancel</app-button>
  </div>
 </div>
