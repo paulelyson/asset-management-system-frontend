@@ -11,5 +11,4 @@ const DEFAULT_IMG = './assets/equipment_default_image.png';
   styleUrl: './equipment-detail-dialog.component.css',
 })
 export class EquipmentDetailDialogComponent {
-  DEFAULT_IMG: string = '../../../../assets/equipment_default_image.png';
 }
