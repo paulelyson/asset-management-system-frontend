@@ -7,6 +7,7 @@ import { TitleSectionComponent } from '../shared/title-section/title-section.com
 import { EquipmentDetailRowComponent } from '../shared/equipment-detail-row/equipment-detail-row.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { InventoryToolbarComponent } from './inventory-toolbar/inventory-toolbar.component';
+import { InputComponent } from '../shared/input/input.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { InventoryToolbarComponent } from './inventory-toolbar/inventory-toolbar
     InventoryRoutingModule,
     TitleSectionComponent,
     EquipmentDetailRowComponent,
-    MatDividerModule
+    MatDividerModule,
+    InputComponent
   ]
 })
 export class InventoryModule { }

@@ -1,0 +1,11 @@
+<mat-form-field [floatLabel]="floatLabel" [appearance]="appearance">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    [placeholder]="placeholder"
+    autocomplete="off"
+    [(ngModel)]="value"
+    (input)="onInput($event)"
+  />
+  <mat-icon *ngIf="suffix_icon.length" matSuffix>{{ suffix_icon }}</mat-icon>
+</mat-form-field>
