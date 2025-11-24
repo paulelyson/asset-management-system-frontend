@@ -5,6 +5,7 @@ import { InventoryRoutingModule } from './inventory-routing-module';
 import { InventoryComponent } from './inventory/inventory.component';
 import { TitleSectionComponent } from '../shared/title-section/title-section.component';
 import { EquipmentDetailRowComponent } from '../shared/equipment-detail-row/equipment-detail-row.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { EquipmentDetailRowComponent } from '../shared/equipment-detail-row/equi
     CommonModule,
     InventoryRoutingModule,
     TitleSectionComponent,
-    EquipmentDetailRowComponent
+    EquipmentDetailRowComponent,
+    MatDividerModule
   ]
 })
 export class InventoryModule { }
