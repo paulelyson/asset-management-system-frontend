@@ -1,4 +1,11 @@
 .toolbar-container {
  display: flex;
  justify-content: flex-end;
+ align-items: center;
+}
+
+.filter-badge-wrapper {
+ display: flex;
+ padding: 10px;
+ gap: 5px;
 }

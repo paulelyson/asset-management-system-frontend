@@ -8,6 +8,8 @@ import { EquipmentDetailRowComponent } from '../shared/equipment-detail-row/equi
 import { MatDividerModule } from '@angular/material/divider';
 import { InventoryToolbarComponent } from './inventory-toolbar/inventory-toolbar.component';
 import { InputComponent } from '../shared/input/input.component';
+import { ButtonComponent } from '../shared/button/button.component';
+import { BadgeComponent } from '../shared/badge/badge.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { InputComponent } from '../shared/input/input.component';
     TitleSectionComponent,
     EquipmentDetailRowComponent,
     MatDividerModule,
-    InputComponent
+    InputComponent,
+    ButtonComponent,
+    BadgeComponent
   ]
 })
 export class InventoryModule { }

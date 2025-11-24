@@ -1,0 +1,5 @@
+<div class="badge-container" [ngClass]="[size, type]">
+  <mat-icon *ngIf="hasBadgeIcon">info</mat-icon>
+  <ng-content></ng-content>
+  <mat-icon class="close" *ngIf="hasCloseIcon">close</mat-icon>
+</div>
