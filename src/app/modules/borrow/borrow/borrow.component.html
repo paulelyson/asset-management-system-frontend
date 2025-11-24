@@ -4,7 +4,7 @@
    <app-added-equipment-card></app-added-equipment-card>
   </mat-drawer>
   <mat-drawer-content class="equipment-container">
-    @for(option of [1,2,3,4,5,6]; track option) {
+    @for(option of []; track option) {
     <app-equipment-card></app-equipment-card>
     }@empty {
     <span>No items.</span>
