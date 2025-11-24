@@ -1,11 +1,9 @@
-
-
-.sidenav {
-  width: 300px;
+.equipment-page-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.equipment-container {
+.equipment-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
 }

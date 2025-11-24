@@ -3,9 +3,9 @@ import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-borrow',
-  imports: [],
   templateUrl: './borrow.component.html',
   styleUrl: './borrow.component.css',
+  standalone: false
 })
 export class BorrowComponent {
   constructor(private dialogService: DialogService) {}

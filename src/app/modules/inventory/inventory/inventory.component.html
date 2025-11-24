@@ -1,1 +1,10 @@
-<app-title-section>Inventory</app-title-section>
+<div class="equipment-page-container">
+  <app-title-section>Inventory</app-title-section>
+  <div class="equipment-wrapper">
+    @for(option of [1,2,3,4,5,6]; track option) {
+    <app-equipment-detail-row></app-equipment-detail-row>
+    }@empty {
+    <span>No items.</span>
+    }
+  </div>
+</div>
