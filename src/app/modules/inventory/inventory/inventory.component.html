@@ -2,7 +2,7 @@
   <app-title-section>Inventory</app-title-section>
   <app-inventory-toolbar></app-inventory-toolbar>
   <div class="equipment-wrapper">
-    @for(eqpmnt of equipment(); track eqpmnt) {
+    @for(eqpmnt of equipment(); track eqpmnt._id) {
     <app-row-display
       [image]="eqpmnt.images[0]?.thumbnail ?? ''"
       [title]="eqpmnt.name"

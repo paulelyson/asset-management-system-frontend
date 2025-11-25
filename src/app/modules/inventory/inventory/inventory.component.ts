@@ -39,18 +39,22 @@ export class InventoryComponent implements OnInit {
     let contents: RowDisplayContent[] = [];
     contents.push(
       {
+        id: 1,
         type: 'text',
         content: [equipment.equipmentType],
       },
       {
+        id: 2,
         type: 'text',
         content: [equipment.inventorytype],
       },
       {
+        id: 3,
         type: 'badge',
         content: equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition),
       },
       {
+        id: 4,
         type: 'text',
         content: [equipment.location]
       }

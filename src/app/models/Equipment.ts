@@ -18,6 +18,7 @@ interface IEquipmentImage {
 }
 
 export interface IEquipment {
+  _id: string;
   serialNo: string;
   equipmentType: string;
   categories: string[];

@@ -55,6 +55,12 @@
   //   panel-background-color: var(--primary-50),
   //   focused-arrow-color: var(--primary)
   // ));
+
+  // Tooltip override
+  @include mat.tooltip-overrides((
+    container-color: var(--gray-100),
+    supporting-text-color: var(--gray-900)
+  ));
 }
 
 html {

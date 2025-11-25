@@ -11,19 +11,19 @@ interface IconType {
 
 interface BadgeTypeSetting {
   value: string;
-  type: BadgeType
+  type: BadgeType;
 }
 
 @Component({
   selector: 'app-badge',
-  imports: [CommonModule,MatIconModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './badge.component.html',
   styleUrl: './badge.component.css',
 })
 export class BadgeComponent {
-@Input() size: BadgeSize = 'sm';
+  @Input() size: BadgeSize = 'sm';
   @Input() type: BadgeType = 'primary';
   @Input() hasBadgeIcon: boolean = false;
   @Input() hasCloseIcon: boolean = false;
-  iconlist: IconType[] = []
+  iconlist: IconType[] = [];
 }

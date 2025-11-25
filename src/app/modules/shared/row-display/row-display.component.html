@@ -6,7 +6,7 @@
     <span class="title">{{ title }}</span>
     <span class="subtitle">{{ subtitle }}</span>
   </div>
-  @for(content of contents; track content) { @if(content.type == 'badge') {
+  @for(content of contents; track content.id) { @if(content.type == 'badge') {
   <span *ngFor="let content of content.content">
     <app-badge size="md" type="success">{{ content }}</app-badge>
   </span>
@@ -14,9 +14,9 @@
   <span *ngFor="let content of content.content">{{ content }}</span>
   } }
   <div class="action-wrapper">
-    <app-icon name="info" size="sm"></app-icon>
-    <app-icon name="edit" size="sm"></app-icon>
-    <app-icon name="content_copy" size="sm"></app-icon>
+    <app-icon name="info" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
+    <app-icon name="edit" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
+    <app-icon name="content_copy" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
   </div>
 </div>
 <mat-divider></mat-divider>
