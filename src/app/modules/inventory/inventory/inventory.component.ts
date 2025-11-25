@@ -15,24 +15,6 @@ import { RowDisplayContent } from '../../shared/row-display/row-display.componen
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipment: WritableSignal<IEquipment[]> = signal([]);
-  contents: RowDisplayContent[] = [
-    {
-      type: 'text',
-      content: 'allen keys/wrenches',
-    },
-    {
-      type: 'text',
-      content: 'Inventory',
-    },
-    {
-      type: 'badge',
-      content: '1 Functional',
-    },
-    {
-      type: 'badge',
-      content: '1 Functional',
-    },
-  ];
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
@@ -50,6 +32,30 @@ export class InventoryComponent implements OnInit {
         console.log('ressspp', this.equipment());
       },
     });
+  }
+
+  equipmentContents(equipment: IEquipment): RowDisplayContent[] {
+    const fields = ['equipmentType', 'inventorytype', 'conditionAndQuantity', 'location'];
+    let contents: RowDisplayContent[] = [];
+    contents.push(
+      {
+        type: 'text',
+        content: [equipment.equipmentType],
+      },
+      {
+        type: 'text',
+        content: [equipment.inventorytype],
+      },
+      {
+        type: 'badge',
+        content: equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition),
+      },
+      {
+        type: 'text',
+        content: [equipment.location]
+      }
+    );
+    return contents;
   }
 
   openDialog() {

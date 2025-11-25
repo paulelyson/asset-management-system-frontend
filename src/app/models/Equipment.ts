@@ -22,6 +22,7 @@ export interface IEquipment {
   equipmentType: string;
   categories: string[];
   name: string;
+  brand: string;
   color: string;
   modelNo: string;
   totalQuantity: number;

@@ -1,17 +1,17 @@
 <div class="equipment-container">
   <div class="image-wrapper">
-    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <img class="fit-image" [src]="image ? image : default_img" />
   </div>
   <div class="equipment-name">
     <span class="title">{{ title }}</span>
     <span class="subtitle">{{ subtitle }}</span>
   </div>
   @for(content of contents; track content) { @if(content.type == 'badge') {
-  <span>
-    <app-badge size="md" type="success">{{ content.content }}</app-badge>
+  <span *ngFor="let content of content.content">
+    <app-badge size="md" type="success">{{ content }}</app-badge>
   </span>
   } @else {
-  <span>{{ content.content }}</span>
+  <span *ngFor="let content of content.content">{{ content }}</span>
   } }
   <div class="action-wrapper">
     <app-icon name="info" size="sm"></app-icon>
