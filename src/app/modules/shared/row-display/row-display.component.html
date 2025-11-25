@@ -1,0 +1,22 @@
+<div class="equipment-container">
+  <div class="image-wrapper">
+    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+  </div>
+  <div class="equipment-name">
+    <span class="title">{{ title }}</span>
+    <span class="subtitle">{{ subtitle }}</span>
+  </div>
+  @for(content of contents; track content) { @if(content.type == 'badge') {
+  <span>
+    <app-badge size="md" type="success">{{ content.content }}</app-badge>
+  </span>
+  } @else {
+  <span>{{ content.content }}</span>
+  } }
+  <div class="action-wrapper">
+    <app-icon name="info" size="sm"></app-icon>
+    <app-icon name="edit" size="sm"></app-icon>
+    <app-icon name="content_copy" size="sm"></app-icon>
+  </div>
+</div>
+<mat-divider></mat-divider>

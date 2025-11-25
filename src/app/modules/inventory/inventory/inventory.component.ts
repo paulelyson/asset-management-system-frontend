@@ -3,6 +3,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { IEquipment } from '../../../models/Equipment';
+import { RowDisplayContent } from '../../shared/row-display/row-display.component';
 
 @Component({
   selector: 'app-inventory',
@@ -14,6 +15,24 @@ import { IEquipment } from '../../../models/Equipment';
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipment: WritableSignal<IEquipment[]> = signal([]);
+  contents: RowDisplayContent[] = [
+    {
+      type: 'text',
+      content: 'allen keys/wrenches',
+    },
+    {
+      type: 'text',
+      content: 'Inventory',
+    },
+    {
+      type: 'badge',
+      content: '1 Functional',
+    },
+    {
+      type: 'badge',
+      content: '1 Functional',
+    },
+  ];
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
@@ -38,6 +57,6 @@ export class InventoryComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
-    this.getEquipment()
+    this.getEquipment();
   }
 }

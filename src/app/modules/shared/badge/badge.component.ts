@@ -9,6 +9,11 @@ interface IconType {
   icon: string;
 }
 
+interface BadgeTypeSetting {
+  value: string;
+  type: BadgeType
+}
+
 @Component({
   selector: 'app-badge',
   imports: [CommonModule,MatIconModule],

@@ -10,6 +10,7 @@ import { InventoryToolbarComponent } from './inventory-toolbar/inventory-toolbar
 import { InputComponent } from '../shared/input/input.component';
 import { ButtonComponent } from '../shared/button/button.component';
 import { BadgeComponent } from '../shared/badge/badge.component';
+import { RowDisplayComponent } from '../shared/row-display/row-display.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { BadgeComponent } from '../shared/badge/badge.component';
     MatDividerModule,
     InputComponent,
     ButtonComponent,
-    BadgeComponent
+    BadgeComponent,
+    RowDisplayComponent
   ]
 })
 export class InventoryModule { }

@@ -3,7 +3,8 @@
   <app-inventory-toolbar></app-inventory-toolbar>
   <div class="equipment-wrapper">
     @for(option of [1,2,3,4,5,6]; track option) {
-    <app-equipment-detail-row></app-equipment-detail-row>
+    <app-row-display title="10 Pcs Hex Key" subtitle="20003 | Stanley" [contents]="contents">
+    </app-row-display>
     }@empty {
     <span>No items.</span>
     }
