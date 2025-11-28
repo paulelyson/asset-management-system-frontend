@@ -8,6 +8,7 @@
       [title]="eqpmnt.name"
       [subtitle]="eqpmnt.brand"
       [contents]="equipmentContents(eqpmnt)"
+      (actionclicked)="openDialog(eqpmnt)"
     >
     </app-row-display>
     }@empty {

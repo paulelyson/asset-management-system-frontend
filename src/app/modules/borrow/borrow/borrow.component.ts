@@ -13,6 +13,6 @@ export class BorrowComponent {
 
   openDialog() {
     console.log('dancing queen');
-    this.dialogService.openDialog('equipment-detail');
+    // this.dialogService.openDialog('equipment-detail');
   }
 }

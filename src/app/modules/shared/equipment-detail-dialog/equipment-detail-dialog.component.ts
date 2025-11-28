@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
+import { IEquipment } from '../../../models/Equipment';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
 const DEFAULT_IMG = './assets/equipment_default_image.png';
@@ -10,5 +12,14 @@ const DEFAULT_IMG = './assets/equipment_default_image.png';
   templateUrl: './equipment-detail-dialog.component.html',
   styleUrl: './equipment-detail-dialog.component.css',
 })
-export class EquipmentDetailDialogComponent {
+export class EquipmentDetailDialogComponent implements OnInit {
+
+    constructor(
+    public dialogRef: MatDialogRef<EquipmentDetailDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IEquipment,
+  ) {}
+
+  ngOnInit(): void {
+    console.log(this.data)
+  }
 }

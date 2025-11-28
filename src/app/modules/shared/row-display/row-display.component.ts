@@ -34,7 +34,6 @@ export class RowDisplayComponent {
   @Output() actionclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onActionClicked(event: any): void {
-    console.log(event, 'haha');
     this.actionclicked.emit(event);
   }
 }

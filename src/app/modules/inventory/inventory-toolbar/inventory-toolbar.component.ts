@@ -11,6 +11,6 @@ export class InventoryToolbarComponent {
   constructor(private dialogService: DialogService) {}
 
   openFilterDialog() {
-    this.dialogService.openDialog('equipment-filter');
+    // this.dialogService.openDialog('equipment-filter');
   }
 }

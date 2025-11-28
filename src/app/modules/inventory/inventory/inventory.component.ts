@@ -62,8 +62,8 @@ export class InventoryComponent implements OnInit {
     return contents;
   }
 
-  openDialog() {
-    this.dialogService.openDialog('equipment-detail');
+  openDialog(equipment: IEquipment) {
+    this.dialogService.openDialog('equipment-detail', equipment);
   }
 
   queryParamsHandling(params: Params): void {
