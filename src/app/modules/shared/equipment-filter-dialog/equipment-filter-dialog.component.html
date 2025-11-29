@@ -1,10 +1,12 @@
-<div class="equipment-filter-container">
- <app-dropdown [options]="equipment_types" label="Brand"></app-dropdown>
- <app-dropdown [options]="equipment_types" label="Equipment Type"></app-dropdown>
- <app-dropdown [options]="equipment_types" label="Location"></app-dropdown>
- <app-autocomplete></app-autocomplete>
- <div class="action-wrapper">
-  <app-button (btnclicked)="navigate()">Apply</app-button>
-  <app-button>Cancel</app-button>
- </div>
-</div>
+<form [formGroup]="filterForm">
+  <div class="equipment-filter-container">
+    <app-dropdown [options]="equipment_types" label="Categories" formControlName="categories"></app-dropdown>
+    <app-dropdown [options]="equipment_types" label="Brand" formControlName="brand"></app-dropdown>
+    <app-dropdown [options]="equipment_types" label="Equipment Type" formControlName="equipmentType"></app-dropdown>
+    <app-dropdown [options]="equipment_types" label="Location" formControlName="location"></app-dropdown>
+    <div class="action-wrapper">
+      <app-button (btnclicked)="navigate()">Apply</app-button>
+      <app-button>Cancel</app-button>
+    </div>
+  </div>
+</form>

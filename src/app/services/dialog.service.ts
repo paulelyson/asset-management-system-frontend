@@ -24,6 +24,13 @@ export class DialogService {
     });
   }
 
+  openEquipmentFilterDialog(): void {
+    const dialogRef = this.dialog.open(EquipmentFilterDialogComponent, {});
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The filter dialog was closed');
+    });
+  }
+
   openCreateEquipmentDialog(): void {
     const dialogRef = this.dialog.open(CreateEquipmentDialogComponent, {});
 
