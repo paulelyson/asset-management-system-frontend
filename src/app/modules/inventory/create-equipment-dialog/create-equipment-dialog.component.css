@@ -1,0 +1,10 @@
+.create-equipment-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  padding: 2em;
+  gap: 20px;
+  max-height: 80vh;
+  max-width: 650px;
+}

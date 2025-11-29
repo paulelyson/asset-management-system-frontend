@@ -11,6 +11,7 @@ import { ButtonComponent } from '../shared/button/button.component';
 import { BadgeComponent } from '../shared/badge/badge.component';
 import { RowDisplayComponent } from '../shared/row-display/row-display.component';
 import { CreateEquipmentDialogComponent } from './create-equipment-dialog/create-equipment-dialog.component';
+import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 
 @NgModule({
   declarations: [InventoryComponent, InventoryToolbarComponent, CreateEquipmentDialogComponent],
@@ -23,6 +24,7 @@ import { CreateEquipmentDialogComponent } from './create-equipment-dialog/create
     ButtonComponent,
     BadgeComponent,
     RowDisplayComponent,
+    AutocompleteComponent
   ],
 })
 export class InventoryModule {}

@@ -19,15 +19,14 @@ interface IEquipmentImage {
 
 export interface IEquipment {
   _id: string;
+  name: string;
   serialNo: string;
+  modelNo: string;
   equipmentType: string;
   categories: string[];
-  name: string;
   brand: string;
   color: string;
-  modelNo: string;
   totalQuantity: number;
-  conditionAndQuantity: IConditionAndQuantity[];
   unit: string;
   matter: Matter;
   description: string;
@@ -43,5 +42,6 @@ export interface IEquipment {
   confirmed: boolean;
   warrantyPeriod: Date;
   availability: EquipmentAvailability;
+  conditionAndQuantity: IConditionAndQuantity[];
   dis: boolean;
 }
