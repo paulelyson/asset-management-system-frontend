@@ -1,18 +1,23 @@
 <form [formGroup]="equipmentForm">
   <div class="create-equipment-container">
-    <app-input label="Name*" formControlName="name"></app-input>
-    <app-input label="Serial Number"></app-input>
-    <app-input label="Model Number"></app-input>
-    <app-autocomplete label="Equipment Type" formControlName="equipmentType"></app-autocomplete>
-    <app-input label="Categories"></app-input>
-    <app-autocomplete label="Brand"></app-autocomplete>
-    <app-input label="Color"></app-input>
-    <app-input label="Unit"></app-input>
-    <app-autocomplete label="Matter"></app-autocomplete>
-    <app-input label="Description"></app-input>
-    <app-input label="Remarks"></app-input>
-    <app-autocomplete label="Inventory Type"></app-autocomplete>
-    <app-input label="Location"></app-input>
+    <div class="image-wrapper">
+      <img class="fit-image" [src]="default_img" />
+    </div>
+    <div class="create-equipment-wrapper">
+      <app-input label="Name*" formControlName="name"></app-input>
+      <app-input label="Serial Number"></app-input>
+      <app-input label="Model Number"></app-input>
+      <app-autocomplete label="Equipment Type" formControlName="equipmentType"></app-autocomplete>
+      <app-input label="Categories"></app-input>
+      <app-autocomplete label="Brand"></app-autocomplete>
+      <app-input label="Color"></app-input>
+      <app-input label="Unit"></app-input>
+      <app-autocomplete label="Matter"></app-autocomplete>
+      <app-input label="Description"></app-input>
+      <app-input label="Remarks"></app-input>
+      <app-autocomplete label="Inventory Type"></app-autocomplete>
+      <app-input label="Location"></app-input>
+    </div>
+    <app-button (btnclicked)="test()">Submit</app-button>
   </div>
-  <app-button (btnclicked)="test()">Submit</app-button>
 </form>

@@ -8,12 +8,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   standalone: false,
 })
 export class CreateEquipmentDialogComponent {
+  default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
+
   equipmentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.equipmentForm = this.fb.group({
       name: [''],
-      equipmentType: ['']
+      equipmentType: [''],
     });
   }
 
