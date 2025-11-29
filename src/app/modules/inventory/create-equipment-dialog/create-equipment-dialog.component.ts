@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class CreateEquipmentDialogComponent {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
-
+  image: string | undefined
   equipmentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -21,5 +21,9 @@ export class CreateEquipmentDialogComponent {
 
   test() {
     console.log(this.equipmentForm.value);
+  }
+
+  loadImage(event: string): void {
+    this.image = event
   }
 }

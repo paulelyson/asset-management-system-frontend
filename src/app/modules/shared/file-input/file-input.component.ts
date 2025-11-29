@@ -11,7 +11,6 @@ export class FileInputComponent {
   @Output() filechanged: EventEmitter<string> = new EventEmitter<string>();
 
   loadImageFromFile(event: Event): void {
-    console.log('load file event', event);
     let files = (event.target as HTMLInputElement).files as FileList;
 
     for (let x = 0; x < files.length; x++) {
@@ -24,7 +23,6 @@ export class FileInputComponent {
     const validtypes = ['image/jpeg', 'image/png'];
     const maxSizeInBytes = 5e6; // 10MB
     if (!validtypes.includes(image.type)) {
-      console.log('not valid haha');
       // this.snackbarService.openSnackBar('invalid image type', 'ok', true);
       return false;
     }

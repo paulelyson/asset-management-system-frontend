@@ -1,9 +1,9 @@
 <form [formGroup]="equipmentForm">
   <div class="create-equipment-container">
     <div class="image-wrapper">
-      <img class="fit-image" [src]="default_img" />
+      <img class="fit-image" [src]="image ?? default_img" />
     </div>
-    <app-file-input></app-file-input>
+    <app-file-input (filechanged)="loadImage($event)"></app-file-input>
     <div class="create-equipment-wrapper">
       <app-input label="Name*" formControlName="name"></app-input>
       <app-input label="Serial Number"></app-input>
