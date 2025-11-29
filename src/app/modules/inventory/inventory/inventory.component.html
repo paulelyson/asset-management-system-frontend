@@ -8,7 +8,7 @@
       [title]="eqpmnt.name"
       [subtitle]="eqpmnt.brand"
       [contents]="equipmentContents(eqpmnt)"
-      (actionclicked)="openDialog(eqpmnt)"
+      (actionclicked)="openDialog($event, eqpmnt)"
     >
     </app-row-display>
     }@empty {

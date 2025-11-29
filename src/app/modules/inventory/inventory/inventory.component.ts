@@ -56,14 +56,18 @@ export class InventoryComponent implements OnInit {
       {
         id: 4,
         type: 'text',
-        content: [equipment.location]
+        content: [equipment.location],
       }
     );
     return contents;
   }
 
-  openDialog(equipment: IEquipment) {
-    this.dialogService.openDialog('equipment-detail', equipment);
+  openDialog(action: string, equipment: IEquipment) {
+    if (action == 'edit') {
+      this.dialogService.openCreateEquipmentDialog()
+    } else {
+      this.dialogService.openDialog('equipment-detail', equipment);
+    }
   }
 
   queryParamsHandling(params: Params): void {
