@@ -32,7 +32,6 @@ export class InventoryComponent implements OnInit {
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
-        console.log('ressspp', this.equipment());
       },
     });
   }
