@@ -11,7 +11,7 @@ import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FloatLabelType, MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { map, Observable, startWith } from 'rxjs';
 
@@ -37,8 +37,12 @@ import { map, Observable, startWith } from 'rxjs';
 })
 export class AutocompleteComponent implements ControlValueAccessor {
   @Input() label: string = '';
+  @Input() options: string[] = [];
+  @Input() floatLabel: FloatLabelType = 'always';
+  @Input() appearance: MatFormFieldAppearance = 'fill';
+  @Input() placeholder: string = '';
+
   myControl = new FormControl('');
-  options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
   @Output() optionselected: EventEmitter<string> = new EventEmitter();
 
