@@ -13,6 +13,7 @@ export class CreateEquipmentDialogComponent {
   constructor(private fb: FormBuilder) {
     this.equipmentForm = this.fb.group({
       name: [''],
+      equipmentType: ['']
     });
   }
 
