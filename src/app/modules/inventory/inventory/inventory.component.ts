@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { EquipmentService } from '../../../services/equipment.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { IEquipment } from '../../../models/Equipment';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
+import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 
 @Component({
   selector: 'app-inventory',
@@ -14,11 +15,13 @@ import { RowDisplayContent } from '../../shared/row-display/row-display.componen
 })
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
+  equipmentFilter: IEquipmentFilter = { page: 1 };
   equipment: WritableSignal<IEquipment[]> = signal([]);
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -26,9 +29,9 @@ export class InventoryComponent implements OnInit {
   }
 
   getEquipment(): void {
-    this.equipmentService.getEquipment().subscribe({
+    this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.equipment.set(resp);
+        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
         console.log('ressspp', this.equipment());
       },
     });
@@ -64,13 +67,26 @@ export class InventoryComponent implements OnInit {
 
   openDialog(action: string, equipment: IEquipment) {
     if (action == 'edit') {
-      this.dialogService.openCreateEquipmentDialog()
+      this.dialogService.openCreateEquipmentDialog();
     } else {
       this.dialogService.openDialog('equipment-detail', equipment);
     }
   }
 
+  loadMoreEquipment() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        page: this.equipmentFilter.page + 1,
+        // limit: event.pageSize,
+      },
+      queryParamsHandling: 'merge',
+    };
+
+    this.router.navigate(['/inventory'], navigationExtras);
+  }
+
   queryParamsHandling(params: Params): void {
+    this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
     this.getEquipment();
   }
 }

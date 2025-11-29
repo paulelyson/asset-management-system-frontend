@@ -1,8 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { IEquipmentFilter } from '../models/EquipmentFilter';
 
 interface ApiResponse {
   data: IEquipment[];
@@ -16,8 +17,13 @@ interface ApiResponse {
 export class EquipmentService {
   constructor(private http: HttpClient) {}
 
-  getEquipment(): Observable<IEquipment[]> {
-    return this.http.get<ApiResponse>(environment.api_url + '/api/equipment').pipe(
+  getEquipment(filter: IEquipmentFilter): Observable<IEquipment[]> {
+    let params = new HttpParams({
+      fromObject: {
+        page: filter.page,
+      },
+    });
+    return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
       map((resp) => resp.data),
       catchError(this.handleError)
     );
