@@ -1,61 +1,63 @@
 <div class="equipment-detail-container">
   <div class="image-wrapper">
-    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <img class="fit-image" [src]="data.images[0]?.thumbnail ?? default_img" />
   </div>
   <div class="detail-wrapper">
     <div class="label-wrapper">
       <div class="subtitle">Name</div>
-      <div class="label">10 Pcs Hex Key</div>
+      <div class="label">{{ data.name }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Equipment Type</div>
-      <div class="label">wrenches</div>
+      <div class="label">{{ data.equipmentType }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Categories</div>
-      <div class="label">Handtools</div>
+      <div class="label">{{ data.categories }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Serial No</div>
-      <div class="label">N/A</div>
+      <div class="label">{{ data.serialNo }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Model</div>
-      <div class="label">69-230</div>
+      <div class="label">{{ data.modelNo }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Brand</div>
-      <div class="label">sStanley</div>
+      <div class="label">{{ data.brand }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Matter</div>
-      <div class="label">solid</div>
+      <div class="label">{{ data.matter }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Color</div>
-      <div class="label">Black</div>
+      <div class="label">{{ data.color }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Inventory Type</div>
-      <div class="label">Inventory</div>
+      <div class="label">{{ data.inventorytype }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Location</div>
-      <div class="label">B1-04</div>
+      <div class="label">{{ data.location }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Condition</div>
-      <div class="label">functional (1)</div>
+      @for(condition of data.conditionAndQuantity; track condition) {
+      <div class="label">{{ condition.condition }}</div>
+      }
     </div>
   </div>
 </div>
