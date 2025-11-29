@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -9,21 +9,31 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class CreateEquipmentDialogComponent {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
-  image: string | undefined
+  image: string | undefined;
   equipmentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.equipmentForm = this.fb.group({
       name: [''],
       equipmentType: [''],
+      images: this.fb.array([]),
     });
+  }
+
+  get images(): FormArray {
+    return this.equipmentForm.get('images') as FormArray;
   }
 
   test() {
     console.log(this.equipmentForm.value);
   }
 
-  loadImage(event: string): void {
-    this.image = event
+  addImage(event: string): void {
+    const imageForm = this.fb.group({
+      thumbnail: [''],
+      midsize: [''],
+      original: [event],
+    });
+    this.images.push(imageForm);
   }
 }
