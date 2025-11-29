@@ -13,6 +13,7 @@ import { RowDisplayComponent } from '../shared/row-display/row-display.component
 import { CreateEquipmentDialogComponent } from './create-equipment-dialog/create-equipment-dialog.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileInputComponent } from '../shared/file-input/file-input.component';
 
 @NgModule({
   declarations: [InventoryComponent, InventoryToolbarComponent, CreateEquipmentDialogComponent],
@@ -28,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AutocompleteComponent,
     FormsModule,
     ReactiveFormsModule,
+    FileInputComponent,
   ],
 })
 export class InventoryModule {}
