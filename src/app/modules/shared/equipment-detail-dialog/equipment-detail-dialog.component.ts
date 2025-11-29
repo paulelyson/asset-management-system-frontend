@@ -2,12 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { IEquipment } from '../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
-const DEFAULT_IMG = './assets/equipment_default_image.png';
+import { ConditionQuantityPipe } from '../../../pipes/condition-quantity.pipe';
 
 @Component({
   selector: 'app-equipment-detail-dialog',
-  imports: [MatDividerModule],
+  imports: [MatDividerModule, ConditionQuantityPipe],
   templateUrl: './equipment-detail-dialog.component.html',
   styleUrl: './equipment-detail-dialog.component.css',
 })

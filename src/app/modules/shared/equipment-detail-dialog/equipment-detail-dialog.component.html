@@ -56,7 +56,7 @@
     <div class="label-wrapper">
       <div class="subtitle">Condition</div>
       @for(condition of data.conditionAndQuantity; track condition) {
-      <div class="label">{{ condition.condition }}</div>
+      <div class="label">{{ condition | conditionQuantity }}</div>
       }
     </div>
   </div>
