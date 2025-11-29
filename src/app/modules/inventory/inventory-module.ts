@@ -12,6 +12,7 @@ import { BadgeComponent } from '../shared/badge/badge.component';
 import { RowDisplayComponent } from '../shared/row-display/row-display.component';
 import { CreateEquipmentDialogComponent } from './create-equipment-dialog/create-equipment-dialog.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [InventoryComponent, InventoryToolbarComponent, CreateEquipmentDialogComponent],
@@ -24,7 +25,9 @@ import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.compo
     ButtonComponent,
     BadgeComponent,
     RowDisplayComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class InventoryModule {}
