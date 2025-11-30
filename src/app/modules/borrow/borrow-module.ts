@@ -10,6 +10,7 @@ import { SideNavigationComponent } from '../shared/side-navigation/side-navigati
 import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
 import { BorrowComponent } from './borrow/borrow.component';
 import { ClassScheduleComponent } from './class-schedule/class-schedule.component';
+import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
 
 @NgModule({
   declarations: [BorrowComponent, ClassScheduleComponent],
@@ -22,6 +23,7 @@ import { ClassScheduleComponent } from './class-schedule/class-schedule.componen
     ButtonComponent,
     TitleSectionComponent,
     SideNavigationComponent,
+    EmptyPlaceholderComponent
   ],
 })
 export class BorrowModule {}
