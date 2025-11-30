@@ -2,7 +2,7 @@
 <mat-drawer-container>
   <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened" position="end">
     @for(eqpmnt of addedEquipment; track eqpmnt) {
-    <app-added-equipment-card></app-added-equipment-card>
+    <app-added-equipment-card [equipment]="eqpmnt"></app-added-equipment-card>
     }@empty {
     <span>No items.</span>
     }

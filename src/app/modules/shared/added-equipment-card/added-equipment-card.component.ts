@@ -17,10 +17,13 @@ type CardShade = 'default' | 'light';
   styleUrl: './added-equipment-card.component.css',
 })
 export class AddedEquipmentCardComponent {
+  @Input() equipment!: IAddedEquipment;
   @Input() size: CardSize = 'md';
   @Input() type: CardType = 'primary';
   @Input() shade: CardShade = 'default';
   @Input() title: string = '';
   @Input() descriptions: string[] = [];
   @Input() icon: string = 'calendar_today';
+  default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
+
 }

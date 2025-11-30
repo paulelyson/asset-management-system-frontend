@@ -1,10 +1,10 @@
 <div class="card-container" [ngClass]="[size, type, shade]">
   <div class="image-wrapper">
-    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <img class="fit-image" [src]="equipment.images[0]?.thumbnail ?? default_img" />
   </div>
   <div class="content">
-    <span>10 PCS HEX KEY</span>
-    <span>Buffalo</span>
+    <span>{{ equipment.name }}</span>
+    <span>{{ equipment.brand }}</span>
   </div>
   <span>1</span>
   <div class="qty-icon-wrapper">
