@@ -11,6 +11,8 @@ import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/adde
 import { BorrowComponent } from './borrow/borrow.component';
 import { ClassScheduleComponent } from './class-schedule/class-schedule.component';
 import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
+import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
+import { InputComponent } from '../shared/input/input.component';
 
 @NgModule({
   declarations: [BorrowComponent, ClassScheduleComponent],
@@ -23,7 +25,9 @@ import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-pla
     ButtonComponent,
     TitleSectionComponent,
     SideNavigationComponent,
-    EmptyPlaceholderComponent
+    EmptyPlaceholderComponent,
+    AutocompleteComponent,
+    InputComponent,
   ],
 })
 export class BorrowModule {}
