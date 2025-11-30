@@ -1,11 +1,18 @@
 <app-title-section>Borrow Equipment</app-title-section>
 <mat-drawer-container>
   <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened" position="end">
+    @for(eqpmnt of addedEquipment; track eqpmnt) {
     <app-added-equipment-card></app-added-equipment-card>
+    }@empty {
+    <span>No items.</span>
+    }
   </mat-drawer>
   <mat-drawer-content class="equipment-container">
     @for(eqpmnt of equipment(); track eqpmnt) {
-    <app-equipment-card [equipment]="eqpmnt"></app-equipment-card>
+    <app-equipment-card
+      [equipment]="eqpmnt"
+      (addequipment)="onAddEquipment($event)"
+    ></app-equipment-card>
     }@empty {
     <span>No items.</span>
     }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,5 +23,10 @@ export class EquipmentCardComponent {
   @Input() title: string = '';
   @Input() descriptions: string[] = [];
   @Input() icon: string = 'calendar_today';
+  @Output() addequipment: EventEmitter<IEquipment> = new EventEmitter<IEquipment>();
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
+
+  onAddEquipment(): void {
+    this.addequipment.emit(this.equipment);
+  }
 }

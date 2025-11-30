@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
+import { IEquipment } from '../../../models/Equipment';
 
+export interface IAddedEquipment extends IEquipment {
+  borrowedCount: number;
+}
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
 type CardShade = 'default' | 'light';

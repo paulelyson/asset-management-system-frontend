@@ -4,6 +4,9 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
+import { IAddedEquipment } from '../../shared/added-equipment-card/added-equipment-card.component';
+
+
 
 @Component({
   selector: 'app-borrow',
@@ -15,6 +18,7 @@ export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipmentFilter: IEquipmentFilter = { page: 1 };
   equipment: WritableSignal<IEquipment[]> = signal([]);
+  addedEquipment: IAddedEquipment[] = [];
 
   constructor(
     private dialogService: DialogService,
@@ -31,6 +35,11 @@ export class BorrowComponent implements OnInit {
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
       },
     });
+  }
+
+  onAddEquipment(equipment: IEquipment) {
+    const addedEqmnt: IAddedEquipment = { ...equipment, borrowedCount: 1 };
+    this.addedEquipment.push(addedEqmnt);
   }
 
   queryParamsHandling(params: Params): void {
