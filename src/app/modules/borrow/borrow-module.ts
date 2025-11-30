@@ -9,9 +9,10 @@ import { TitleSectionComponent } from '../shared/title-section/title-section.com
 import { SideNavigationComponent } from '../shared/side-navigation/side-navigation.component';
 import { AddedEquipmentCardComponent } from '../shared/added-equipment-card/added-equipment-card.component';
 import { BorrowComponent } from './borrow/borrow.component';
+import { ClassScheduleComponent } from './class-schedule/class-schedule.component';
 
 @NgModule({
-  declarations: [BorrowComponent],
+  declarations: [BorrowComponent, ClassScheduleComponent],
   imports: [
     CommonModule,
     BorrowRoutingModule,

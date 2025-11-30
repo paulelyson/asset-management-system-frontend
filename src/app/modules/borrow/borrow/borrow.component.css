@@ -1,5 +1,9 @@
 .sidenav {
   width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
 }
 
 .equipment-container {
