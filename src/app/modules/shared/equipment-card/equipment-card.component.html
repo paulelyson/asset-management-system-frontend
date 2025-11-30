@@ -1,16 +1,16 @@
 <div class="card-container" [ngClass]="[size, type, shade]">
   <div class="image-wrapper">
-    <img class="fit-image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <img class="fit-image" [src]="equipment.images[0]?.thumbnail ?? default_img" />
   </div>
-  <div class="equipment-name">10 PCS HEX KEY</div>
+  <div class="equipment-name">{{ equipment.name }}</div>
   <div class="brand-qty">
-    <span>Buffalo</span>
-    <mat-icon>numbers</mat-icon>
+    <span>{{ equipment.brand }}</span>
+    <app-icon name="numbers"></app-icon>
     <span>1</span>
   </div>
   <div class="availability">
     <span>UNAVAILABLE</span>
-    <mat-icon>info</mat-icon>
+    <app-icon name="info"></app-icon>
   </div>
   <div class="action-wrapper">
     <app-button width="width-filled" type="success">ADD</app-button>

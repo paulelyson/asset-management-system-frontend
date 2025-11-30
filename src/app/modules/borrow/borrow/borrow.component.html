@@ -4,8 +4,8 @@
     <app-added-equipment-card></app-added-equipment-card>
   </mat-drawer>
   <mat-drawer-content class="equipment-container">
-    @for(option of equipment(); track option) {
-    <app-equipment-card></app-equipment-card>
+    @for(eqpmnt of equipment(); track eqpmnt) {
+    <app-equipment-card [equipment]="eqpmnt"></app-equipment-card>
     }@empty {
     <span>No items.</span>
     }
