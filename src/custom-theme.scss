@@ -39,6 +39,15 @@
     mat-label {
       font-size: var(--mat-form-field-filled-label-text-size, var(--mat-sys-body-small-size))
     }
+
+    // Datepicker override
+    .mdc-text-field--filled .mdc-floating-label {
+      font-family: var(--mat-form-field-container-text-font, var(--mat-sys-body-small-font) Roboto);
+      line-height: var(--mat-form-field-container-text-line-height,var(--mat-sys-body-small-line-height));
+      font-size: var(--mat-form-field-container-text-size, var(--mat-sys-body-small-size));
+      letter-spacing: var(--mat-form-field-container-text-tracking,var(--mat-sys-body-small-tracking));
+      font-weight: var(--mat-form-field-container-text-weight, var(--mat-sys-body-small-weight));
+    }
   }
 
   // Dropdown option override
@@ -61,6 +70,8 @@
     container-color: var(--gray-100),
     supporting-text-color: var(--gray-900)
   ));
+
+  
 }
 
 html {

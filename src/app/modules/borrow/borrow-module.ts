@@ -13,6 +13,7 @@ import { ClassScheduleComponent } from './class-schedule/class-schedule.componen
 import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { InputComponent } from '../shared/input/input.component';
+import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
 
 @NgModule({
   declarations: [BorrowComponent, ClassScheduleComponent],
@@ -28,6 +29,7 @@ import { InputComponent } from '../shared/input/input.component';
     EmptyPlaceholderComponent,
     AutocompleteComponent,
     InputComponent,
+    DatepickerComponent
   ],
 })
 export class BorrowModule {}
