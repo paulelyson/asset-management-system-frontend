@@ -28,6 +28,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() suffix_icon: string = '';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
+  @Input() inputType: string = 'text';
   // accessor
   value: string = '';
   disabled: boolean = false;
