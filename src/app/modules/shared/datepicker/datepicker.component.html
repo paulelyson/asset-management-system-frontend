@@ -1,6 +1,28 @@
+@if(type == 'datepicker') {
 <mat-form-field [floatLabel]="floatLabel" [appearance]="appearance">
-  <mat-label>{{ label }}</mat-label>
+  <mat-label>Choose a date</mat-label>
   <input matInput [matDatepicker]="picker" />
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>
+}@else {
+<mat-form-field [floatLabel]="floatLabel" [appearance]="appearance">
+  <mat-label>{{ label }}</mat-label>
+  <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
+    <input
+      matStartDate
+      placeholder="Start date"
+      (dateChange)="onStartDateChange($event)"
+      [(ngModel)]="startDate"
+    />
+    <input
+      matEndDate
+      placeholder="End date"
+      (dateChange)="onEndDateChange($event)"
+      [(ngModel)]="endDate"
+    />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>
+}
