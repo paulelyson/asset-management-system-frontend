@@ -1,5 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ControlValueAccessor, FormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  Form,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import {
@@ -12,24 +19,24 @@ import { americanDateToISODate } from '../../../utils/date.util';
 
 @Component({
   selector: 'app-datepicker',
-  imports:  [
+  imports: [
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './datepicker.component.html',
   styleUrl: './datepicker.component.css',
 })
 export class DatepickerComponent implements ControlValueAccessor {
   @Input() label: string = 'Choose date';
+  @Input() placeholder: string = '';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() type: 'datepicker' | 'daterange' = 'datepicker';
   @Output() dateChanged: EventEmitter<string> = new EventEmitter();
-  startDate: string = '';
-  endDate: string = '';
 
   // accessor
   value: string = '';
@@ -37,15 +44,20 @@ export class DatepickerComponent implements ControlValueAccessor {
   public changed = (_: any) => {};
   public touched = () => {};
 
+  // daterange
+  daterangeForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.daterangeForm = this.fb.group({
+      start: [''],
+      end: [''],
+    });
+  }
+
   writeValue(value: any): void {
     this.value = value;
   }
   registerOnChange(fn: any): void {
-    const [startDate, endDate] = this.value.split('-'); // splitting eg 10/13/2025-10/14/2025
-    [this.startDate, this.endDate] = [
-      americanDateToISODate(startDate),
-      americanDateToISODate(endDate),
-    ]; // converted american to iso since datepicker accepts iso
     this.changed = fn;
   }
   registerOnTouched(fn: any): void {
@@ -55,17 +67,15 @@ export class DatepickerComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+  onDateChange(event: MatDatepickerInputEvent<Date>): void {
+    this.changed(this.value);
+  }
+
   onStartDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.value = event.value?.toLocaleString().split(',')[0] ?? '';
-    // this.changed(this.value);
+    this.changed(this.daterangeForm.value);
   }
 
   onEndDateChange(event: MatDatepickerInputEvent<Date>): void {
-    if (event.value) {
-      this.value = this.value + '-' + (event.value?.toLocaleString().split(',')[0] ?? '');
-      this.changed(this.value);
-      // emitting datepicker as american format separated by '-' so it's easier to split the start and end
-      this.dateChanged.emit(this.value);
-    }
+    this.changed(this.daterangeForm.value);
   }
 }
