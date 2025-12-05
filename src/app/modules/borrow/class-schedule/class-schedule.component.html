@@ -1,9 +1,15 @@
-<div class="class-detail-container">
-  <app-input label="Class*"></app-input>
-  <app-autocomplete label="Instructor*"></app-autocomplete>
-  <app-autocomplete label="Purpose*"></app-autocomplete>
-  <app-autocomplete label="Department*"></app-autocomplete>
-  <app-datepicker label="Choose date*" type="daterange"></app-datepicker>
-  <app-input label="Start Period*" inputType="time"></app-input>
-  <app-input label="End Period*" inputType="time"></app-input>
-</div>
+<form [formGroup]="classScheduleForm">
+  <div class="class-detail-container">
+    <app-autocomplete label="Department*" formControlName="classDepartment"></app-autocomplete>
+    <app-autocomplete label="Faculty*" formControlName="faculty"></app-autocomplete>
+    <app-autocomplete label="Purpose*" formControlName="purpose"></app-autocomplete>
+    <app-input label="Class Code" formControlName="classCode"></app-input>
+    <app-input label="Class Name" formControlName="className"></app-input>
+    <app-datepicker label="Choose date*" type="daterange"></app-datepicker>
+    <app-input label="Start Period*" inputType="time" formControlName="timeOfUseStart"></app-input>
+    <app-input label="End Period*" inputType="time" formControlName="timeOfUseEnd"></app-input>
+  </div>
+  <div class="action-wrapper">
+    <app-button (btnclicked)="onSubmit()">Submit</app-button>
+  </div>
+</form>

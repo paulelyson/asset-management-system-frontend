@@ -14,6 +14,7 @@ import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-pla
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { InputComponent } from '../shared/input/input.component';
 import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [BorrowComponent, ClassScheduleComponent],
@@ -29,7 +30,9 @@ import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
     EmptyPlaceholderComponent,
     AutocompleteComponent,
     InputComponent,
-    DatepickerComponent
+    DatepickerComponent,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class BorrowModule {}
