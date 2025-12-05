@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IDateRange } from '../../shared/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-class-schedule',
@@ -25,9 +26,13 @@ export class ClassScheduleComponent {
     });
   }
 
-  
+  onClassDateChanged(event: IDateRange) {
+    this.classScheduleForm.controls['dateOfUseStart'].patchValue(event.start);
+    this.classScheduleForm.controls['dateOfUseEnd'].patchValue(event.end);
+  }
 
   onSubmit() {
+    console.log(this.classScheduleForm.invalid);
     console.log(this.classScheduleForm.value);
   }
 }

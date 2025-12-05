@@ -17,6 +17,7 @@ export class ButtonComponent {
   @Input() type: ButtonType = 'default';
   @Input() shade: ButtonShade = 'default';
   @Input() width: ButtonWidth = 'width-auto';
+  @Input() btnType: 'submit' | 'button' | 'reset' = 'button';
   @Output() btnclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onClicked(): void {

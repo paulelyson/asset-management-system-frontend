@@ -1,3 +1,8 @@
- <button class="btn-custom" [ngClass]="[type, shade, size, width]"  (click)="onClicked()">
+<button
+  [type]="btnType"
+  class="btn-custom"
+  [ngClass]="[type, shade, size, width]"
+  (click)="onClicked()"
+>
   <ng-content></ng-content>
- </button>
+</button>

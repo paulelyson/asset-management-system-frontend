@@ -1,15 +1,15 @@
-<form [formGroup]="classScheduleForm">
+<form [formGroup]="classScheduleForm" (ngSubmit)="onSubmit()">
   <div class="class-detail-container">
     <app-autocomplete label="Department*" formControlName="classDepartment"></app-autocomplete>
     <app-autocomplete label="Faculty*" formControlName="faculty"></app-autocomplete>
     <app-autocomplete label="Purpose*" formControlName="purpose"></app-autocomplete>
     <app-input label="Class Code" formControlName="classCode"></app-input>
     <app-input label="Class Name" formControlName="className"></app-input>
-    <app-datepicker label="Choose date*" type="daterange"></app-datepicker>
+    <app-datepicker label="Choose date" type="daterange" (dateRangeChanged)="onClassDateChanged($event)"></app-datepicker>
     <app-input label="Start Period*" inputType="time" formControlName="timeOfUseStart"></app-input>
     <app-input label="End Period*" inputType="time" formControlName="timeOfUseEnd"></app-input>
   </div>
   <div class="action-wrapper">
-    <app-button (btnclicked)="onSubmit()">Submit</app-button>
+    <app-button btnType="submit">Submit</app-button>
   </div>
 </form>

@@ -15,7 +15,11 @@ import {
   MatFormFieldModule,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { americanDateToISODate } from '../../../utils/date.util';
+
+export interface IDateRange {
+  start: string;
+  end: string;
+}
 
 @Component({
   selector: 'app-datepicker',
@@ -36,7 +40,9 @@ export class DatepickerComponent implements ControlValueAccessor {
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() type: 'datepicker' | 'daterange' = 'datepicker';
-  @Output() dateChanged: EventEmitter<string> = new EventEmitter();
+  @Output() dateChanged: EventEmitter<string> = new EventEmitter<string>();
+  @Output() dateRangeChanged: EventEmitter<IDateRange> = new EventEmitter<IDateRange>();
+
 
   // accessor
   value: string = '';
@@ -69,13 +75,16 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   onDateChange(event: MatDatepickerInputEvent<Date>): void {
     this.changed(this.value);
+    this.dateChanged.emit(this.value);
   }
 
   onStartDateChange(event: MatDatepickerInputEvent<Date>): void {
     this.changed(this.daterangeForm.value);
+    this.dateRangeChanged.emit(this.daterangeForm.value);
   }
 
   onEndDateChange(event: MatDatepickerInputEvent<Date>): void {
     this.changed(this.daterangeForm.value);
+    this.dateRangeChanged.emit(this.daterangeForm.value);
   }
 }
