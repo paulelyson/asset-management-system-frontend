@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDateRange } from '../../shared/datepicker/datepicker.component';
+import { IBorrowingDetails } from '../../../models/BorrowedEquipment';
 
 @Component({
   selector: 'app-class-schedule',
@@ -10,6 +11,7 @@ import { IDateRange } from '../../shared/datepicker/datepicker.component';
 })
 export class ClassScheduleComponent {
   classScheduleForm: FormGroup;
+  @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
 
   constructor(private fb: FormBuilder) {
     this.classScheduleForm = this.fb.group({
@@ -32,7 +34,11 @@ export class ClassScheduleComponent {
   }
 
   onSubmit() {
-    console.log(this.classScheduleForm.invalid);
-    console.log(this.classScheduleForm.value);
+    if(this.classScheduleForm.invalid) {
+      this.onFormSubmit.emit(this.classScheduleForm.value)
+    } else {
+      // TO DO
+      // display snackbar error
+    }
   }
 }

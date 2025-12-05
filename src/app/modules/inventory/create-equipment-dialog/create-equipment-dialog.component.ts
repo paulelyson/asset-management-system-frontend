@@ -24,10 +24,6 @@ export class CreateEquipmentDialogComponent {
     return this.equipmentForm.get('images') as FormArray;
   }
 
-  test() {
-    console.log(this.equipmentForm.value);
-  }
-
   addImage(event: string): void {
     const imageForm = this.fb.group({
       thumbnail: [''],

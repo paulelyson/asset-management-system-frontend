@@ -30,6 +30,6 @@ export class EquipmentService {
   }
 
   handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.message));
+    return throwError(() => new Error(err.error.message || err.error));
   }
 }

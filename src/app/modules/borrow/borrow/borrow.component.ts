@@ -5,8 +5,9 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../../shared/added-equipment-card/added-equipment-card.component';
-
-
+import { FormBuilder } from '@angular/forms';
+import { IBorrowedEquipment, IBorrowingDetails } from '../../../models/BorrowedEquipment';
+import { BorrowService } from '../../../services/borrow.service';
 
 @Component({
   selector: 'app-borrow',
@@ -23,7 +24,8 @@ export class BorrowComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private activatedRoute: ActivatedRoute,
-    private equipmentService: EquipmentService
+    private equipmentService: EquipmentService,
+    private borrowService: BorrowService
   ) {}
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
@@ -40,6 +42,21 @@ export class BorrowComponent implements OnInit {
   onAddEquipment(equipment: IEquipment) {
     const addedEqmnt: IAddedEquipment = { ...equipment, borrowedCount: 1 };
     this.addedEquipment.push(addedEqmnt);
+  }
+
+  onSubmitRequest(event: IBorrowingDetails): void {
+    const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
+      equipment: eqpmnt._id,
+      quantity: eqpmnt.borrowedCount,
+      borrowedEquipmentStatus: [],
+      remarks: '',
+    }));
+
+    let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
+    this.borrowService.createBorrowedEquipment(body).subscribe({
+      next: resp=> console.log(resp),
+      error: (err)=> console.error(err)
+    })
   }
 
   queryParamsHandling(params: Params): void {

@@ -17,7 +17,7 @@ export interface BorrowedEquipmentStatus extends IConditionAndQuantity {
   status: BorrowedEquipmentStatusType;
 }
 
-interface IBorrowedEquipment {
+export interface IBorrowedEquipment {
   _id?: string;
   equipment: string;
   quantity: number;
