@@ -4,7 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
-import { IAddedEquipment } from '../../shared/added-equipment-card/added-equipment-card.component';
+import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
 import { IBorrowedEquipment, IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { IEquipment } from '../../../models/Equipment';
 
 export interface IAddedEquipment extends IEquipment {
@@ -12,9 +12,9 @@ type CardShade = 'default' | 'light';
 
 @Component({
   selector: 'app-added-equipment-card',
-  imports: [CommonModule, IconComponent],
   templateUrl: './added-equipment-card.component.html',
   styleUrl: './added-equipment-card.component.css',
+  standalone: false,
 })
 export class AddedEquipmentCardComponent {
   @Input() equipment!: IAddedEquipment;
