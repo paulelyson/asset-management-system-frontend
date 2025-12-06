@@ -15,12 +15,11 @@ export class IconComponent {
   @Input() name: string = 'numbers';
   @Input() size: IconSize = 'sm';
   @Input() type: IconType = 'primary';
+  @Input() tooltip: string = '';
   @Input() clickable: boolean = true;
   @Output() iconclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onClicked(): void {
     this.iconclicked.emit(this.name);
   }
-
 }
-

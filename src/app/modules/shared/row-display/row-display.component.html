@@ -14,9 +14,14 @@
   <span *ngFor="let content of content.content">{{ content }}</span>
   } }
   <div class="action-wrapper">
-    <app-icon name="info" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
-    <app-icon name="edit" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
-    <app-icon name="content_copy" size="sm" (iconclicked)="onActionClicked($event)"></app-icon>
+    @for(action of actions; track action.name) {
+    <app-icon
+      [name]="action.name"
+      [size]="action.size"
+      [tooltip]="action.tooltip"
+      (iconclicked)="onActionClicked($event)"
+    />
+    }
   </div>
 </div>
 <mat-divider></mat-divider>

@@ -1,3 +1,3 @@
 <div class="icon-wrapper" [class.clickable]="clickable" (click)="onClicked()">
-  <mat-icon [ngClass]="[size]" matTooltip="Info about the action">{{ name }}</mat-icon>
+  <mat-icon [ngClass]="[size]" [matTooltip]="tooltip">{{ name }}</mat-icon>
 </div>

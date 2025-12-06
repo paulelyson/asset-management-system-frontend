@@ -29,31 +29,12 @@ export class BorrowedEquipmentComponent implements OnInit {
     });
   }
 
-  borrowedEquipmentContents(equipment: BorrowedEquipment): RowDisplayContent[] {
-    let contents: RowDisplayContent[] = [];
-    contents.push(
-      {
-        id: 1,
-        type: 'text',
-        content: ['Lorem Ipsum'],
-      },
-      {
-        id: 2,
-        type: 'text',
-        content: ['Lorem Ipsum'],
-      },
-      {
-        id: 3,
-        type: 'badge',
-        content: ['Lorem Ipsum'],
-      },
-      {
-        id: 4,
-        type: 'text',
-        content: ['Lorem Ipsum'],
-      }
-    );
-    return contents;
+  borrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
+    return this.borrowService.getRowDisplayContent();
+  }
+
+  borrowedEquipmentActions() {
+    return this.borrowService.getRowDisplayActions();
   }
 
   openDialog() {}
