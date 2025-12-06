@@ -4,11 +4,11 @@
     @for(eqpmnt of borrowed_equipment(); track eqpmnt._id) {
     <app-row-display
       [image]="eqpmnt.equipment.images[0]?.thumbnail ?? ''"
-      [title]="'Lorem Ipsum'"
-      [subtitle]="'Lorem Ipsum'"
+      [title]="eqpmnt.equipment.name"
+      [subtitle]="eqpmnt.purpose"
       [contents]="borrowedEquipmentContents(eqpmnt)"
       [actions]="borrowedEquipmentActions()"
-      (actionclicked)="openDialog()"
+      (actionclicked)="onActionClicked($event, eqpmnt)"
     />
     }
   </div>
