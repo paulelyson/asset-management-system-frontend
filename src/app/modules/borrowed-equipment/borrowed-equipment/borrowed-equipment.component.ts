@@ -4,6 +4,7 @@ import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/
 import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
 import { IEquipment } from '../../../models/Equipment';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -14,7 +15,11 @@ import { RowDisplayContent } from '../../shared/row-display/row-display.componen
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
 
-  constructor(private activatedRoute: ActivatedRoute, private borrowService: BorrowService) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private borrowService: BorrowService,
+    private dialogService: DialogService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
@@ -60,6 +65,8 @@ export class BorrowedEquipmentComponent implements OnInit {
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'lock_open') {
       this.updateBorrowedEquipmentStatus(borrowedEquipment, 'pending_return');
+    } else if (action == 'edit') {
+      this.dialogService.openBorrowedEquipmentUpdateDialog()
     }
   }
 

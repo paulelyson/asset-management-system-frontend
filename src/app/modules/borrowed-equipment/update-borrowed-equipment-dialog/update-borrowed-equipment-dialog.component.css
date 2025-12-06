@@ -1,0 +1,16 @@
+.update-borrowed-equipment-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /* align-items: center; to make the button stretchable on flex*/ 
+  justify-content: center;
+  padding: 2.5em;
+  gap: 10px;
+  max-height: 80vh;
+  max-width: 650px;
+}
+
+.action-wrapper {
+ gap: 15px;
+ padding: 10px;
+}

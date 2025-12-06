@@ -6,6 +6,9 @@ type EquipmentAvailability = 'available' | 'borrowed' | 'unreturned';
 type EquipmentInventoryType = 'inventory' | 'non_inventory';
 type Matter = 'solid' | 'liquid' | 'gas';
 
+export const EQUIPMENT_CONDITION: EquipmentCondition[] = ['functional', 'defective', 'obsolete', 'lost', 'for_checkup', 'turned_over'];
+
+
 export interface IConditionAndQuantity {
   condition: EquipmentCondition;
   quantity: number;
