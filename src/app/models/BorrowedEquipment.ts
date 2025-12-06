@@ -42,6 +42,7 @@ export interface IBorrowingDetails {
 
 
 export interface BorrowedEquipment {
+  _id: string;
 	borrower: IUser;
   classDepartment: Department;
   faculty: IUser;

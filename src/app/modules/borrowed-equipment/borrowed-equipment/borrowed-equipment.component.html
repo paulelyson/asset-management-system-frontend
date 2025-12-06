@@ -1,1 +1,14 @@
-<p>borrowed-equipment works!</p>
+<div class="borrowed-equipment-page-container">
+  <app-title-section>Borrowed Equipments</app-title-section>
+  <div class="borrowed-equipment-wrapper">
+    @for(eqpmnt of borrowed_equipment(); track eqpmnt._id) {
+    <app-row-display
+      [image]="eqpmnt.equipment.images[0]?.thumbnail ?? ''"
+      [title]="'Lorem Ipsum'"
+      [subtitle]="'Lorem Ipsum'"
+      [contents]="borrowedEquipmentContents(eqpmnt)"
+      (actionclicked)="openDialog()"
+    />
+    }
+  </div>
+</div>
