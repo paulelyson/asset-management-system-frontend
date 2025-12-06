@@ -1,11 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IBorrowingDetails } from '../models/BorrowedEquipment';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BorrowedEquipment, IBorrowingDetails } from '../models/BorrowedEquipment';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 interface ApiResponse {
-  data: null;
+  data: BorrowedEquipment[];
   message: string;
   success: boolean;
 }
@@ -20,6 +20,14 @@ export class BorrowService {
     return this.http
       .post<ApiResponse>(environment.api_url + '/api/borrowequipment', body, {})
       .pipe(catchError(this.handleError));
+  }
+
+  getBorrowedEquipment(): Observable<BorrowedEquipment[]>  {
+    let params = new HttpParams({});
+    return this.http.get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params }).pipe(
+      map((resp) => resp.data),
+      catchError(this.handleError)
+    );
   }
 
   handleError(err: HttpErrorResponse) {

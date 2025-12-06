@@ -3,7 +3,7 @@ import { Department, IUser } from './User';
 
 export type BorrowedEquipmentStatusType =
   | 'requested'
-  | 'faculty_confirmed'
+  | 'faculty_approved'
   | 'faculty_rejected'
   | 'oic_approved'
   | 'oic_rejected'
@@ -15,6 +15,7 @@ export type BorrowedEquipmentStatusType =
 
 export interface BorrowedEquipmentStatus extends IConditionAndQuantity {
   status: BorrowedEquipmentStatusType;
+  remarks?: string;
 }
 
 export interface IBorrowedEquipment {
@@ -22,7 +23,6 @@ export interface IBorrowedEquipment {
   equipment: string;
   quantity: number;
   borrowedEquipmentStatus: BorrowedEquipmentStatus[];
-  remarks: string;
 }
 
 export interface IBorrowingDetails {
