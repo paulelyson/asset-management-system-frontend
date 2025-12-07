@@ -39,9 +39,8 @@ export class BorrowComponent implements OnInit {
     });
   }
 
-  onAddEquipment(equipment: IEquipment) {
-    const addedEqmnt: IAddedEquipment = { ...equipment, borrowedCount: 1 };
-    const found = this.addedEquipment.some((eqpmnt) => eqpmnt._id == equipment._id);
+  onAddEquipment(addedEqmnt: IAddedEquipment) {
+    const found = this.addedEquipment.some((eqpmnt) => eqpmnt._id == addedEqmnt._id);
     if (!found) this.addedEquipment.push(addedEqmnt);
   }
 
@@ -52,7 +51,7 @@ export class BorrowComponent implements OnInit {
   onSubmitRequest(event: IBorrowingDetails): void {
     const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
       equipment: eqpmnt._id,
-      quantity: eqpmnt.borrowedCount,
+      quantity: eqpmnt.borrowedQty,
       borrowedEquipmentStatus: [],
       remarks: '',
     }));
@@ -66,6 +65,7 @@ export class BorrowComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
+    this.equipmentFilter.search = params['search'] ? params['search'] : '';
     this.getEquipment();
   }
 }

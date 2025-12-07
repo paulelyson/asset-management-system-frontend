@@ -4,7 +4,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { IEquipment } from '../../../models/Equipment';
 
 export interface IAddedEquipment extends IEquipment {
-  borrowedCount: number;
+  borrowedQty: number;
 }
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';

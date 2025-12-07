@@ -21,6 +21,7 @@ export class EquipmentService {
     let params = new HttpParams({
       fromObject: {
         page: filter.page,
+        search: filter.search ?? '',
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(

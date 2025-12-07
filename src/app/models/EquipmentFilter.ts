@@ -1,3 +1,4 @@
 export interface IEquipmentFilter {
- page: number
+  page: number;
+  search?: string
 }
