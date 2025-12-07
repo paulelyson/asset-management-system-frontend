@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDateRange } from '../../shared/datepicker/datepicker.component';
 import { IBorrowingDetails } from '../../../models/BorrowedEquipment';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-class-schedule',
@@ -13,7 +15,7 @@ export class ClassScheduleComponent {
   classScheduleForm: FormGroup;
   @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private snackBarService: SnackbarService) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
       classDepartment: ['', Validators.required],
@@ -34,9 +36,15 @@ export class ClassScheduleComponent {
   }
 
   onSubmit() {
-    if(this.classScheduleForm.invalid) {
-      this.onFormSubmit.emit(this.classScheduleForm.value)
+    if (this.classScheduleForm.invalid) {
+      const config: ISnackBarConfig = {
+        type: 'error',
+        message: ['Please fill out all details.'],
+        icon: '',
+      };
+      this.snackBarService.openSnackbar(config);
     } else {
+      this.onFormSubmit.emit(this.classScheduleForm.value);
       // TO DO
       // display snackbar error
     }

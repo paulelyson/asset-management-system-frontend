@@ -102,6 +102,17 @@ body {
   margin: 0;
 }
 
+.snackbar-override {
+  .mat-mdc-snackbar-surface {
+    // border-radius: 12px;
+    --mat-sys-corner-extra-small: 12px;
+    background-color: transparent !important;
+    .mdc-snackbar__label {
+      padding: 0;
+    }
+  }
+}
+
 
 .h1-title {
   font-size: 2rem;

@@ -1,0 +1,14 @@
+<div class="snackbar-container" [ngClass]="config.type">
+  <div class="snackbar-wrapper">
+    <div class="icon-wrapper" [class.hasHeader]="hasHeader">
+      <app-icon name="info" size="md" />
+    </div>
+    <div class="content-wrapper">
+      <div class="header" *ngIf="config.header">Test</div>
+      <ul class="description" [class.unlist]="!isList">
+        <li *ngFor="let message of config.message">{{ message }}</li>
+      </ul>
+    </div>
+    <app-icon name="close" size="md" />
+  </div>
+</div>
