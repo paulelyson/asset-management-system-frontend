@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonComponent } from '../button/button.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { IEquipment } from '../../../models/Equipment';
-import { IconComponent } from '../icon/icon.component';
-import { IAddedEquipment } from '../../borrow/added-equipment-card/added-equipment-card.component';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -13,9 +13,9 @@ type CardShade = 'default' | 'light';
 
 @Component({
   selector: 'app-equipment-card',
-  imports: [CommonModule, MatIconModule, ButtonComponent, IconComponent],
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
+  standalone: false
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;
