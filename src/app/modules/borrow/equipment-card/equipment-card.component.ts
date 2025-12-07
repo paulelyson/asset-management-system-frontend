@@ -5,17 +5,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { IEquipment } from '../../../models/Equipment';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
+import { DialogService } from '../../../services/dialog.service';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
 type CardShade = 'default' | 'light';
 
-
 @Component({
   selector: 'app-equipment-card',
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
-  standalone: false
+  standalone: false,
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;
@@ -28,7 +28,11 @@ export class EquipmentCardComponent {
   @Output() addequipment: EventEmitter<IAddedEquipment> = new EventEmitter<IAddedEquipment>();
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
 
+  constructor(private dialogService: DialogService) {}
   onAddEquipment(): void {
+    if (this.equipment.totalQuantity > 1) {
+      this.dialogService.openUpdateQuantityStatusDialog();
+    }
     const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 4 };
     this.addequipment.emit(addedEqmnt);
   }

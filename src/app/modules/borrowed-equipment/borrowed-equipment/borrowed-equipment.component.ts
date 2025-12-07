@@ -66,7 +66,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     if (action == 'lock_open') {
       this.updateBorrowedEquipmentStatus(borrowedEquipment, 'pending_return');
     } else if (action == 'edit') {
-      this.dialogService.openBorrowedEquipmentUpdateDialog()
+      this.dialogService.openUpdateQuantityStatusDialog()
     }
   }
 

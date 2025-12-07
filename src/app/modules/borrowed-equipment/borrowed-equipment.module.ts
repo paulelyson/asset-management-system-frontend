@@ -6,11 +6,10 @@ import { TitleSectionComponent } from '../shared/title-section/title-section.com
 import { RowDisplayComponent } from '../shared/row-display/row-display.component';
 import { InputComponent } from '../shared/input/input.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
-import { UpdateBorrowedEquipmentDialogComponent } from './update-borrowed-equipment-dialog/update-borrowed-equipment-dialog.component';
 import { ButtonComponent } from '../shared/button/button.component';
 
 @NgModule({
-  declarations: [BorrowedEquipmentComponent, UpdateBorrowedEquipmentDialogComponent],
+  declarations: [BorrowedEquipmentComponent],
   imports: [
     CommonModule,
     BorrowedEquipmentRoutingModule,
