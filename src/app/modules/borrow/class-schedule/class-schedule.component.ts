@@ -4,6 +4,7 @@ import { IDateRange } from '../../shared/datepicker/datepicker.component';
 import { IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
+import { DEPARTMENTS } from '../../../models/User';
 
 @Component({
   selector: 'app-class-schedule',
@@ -12,6 +13,7 @@ import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
   standalone: false,
 })
 export class ClassScheduleComponent {
+  departments = DEPARTMENTS
   classScheduleForm: FormGroup;
   @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
 

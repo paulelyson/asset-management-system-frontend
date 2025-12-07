@@ -41,7 +41,12 @@ export class BorrowComponent implements OnInit {
 
   onAddEquipment(equipment: IEquipment) {
     const addedEqmnt: IAddedEquipment = { ...equipment, borrowedCount: 1 };
-    this.addedEquipment.push(addedEqmnt);
+    const found = this.addedEquipment.some((eqpmnt) => eqpmnt._id == equipment._id);
+    if (!found) this.addedEquipment.push(addedEqmnt);
+  }
+
+  onRemoveEquipment(equipment: IAddedEquipment) {
+    this.addedEquipment = this.addedEquipment.filter((eqpmnt) => eqpmnt._id !== equipment._id);
   }
 
   onSubmitRequest(event: IBorrowingDetails): void {
@@ -54,9 +59,9 @@ export class BorrowComponent implements OnInit {
 
     let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
     this.borrowService.createBorrowedEquipment(body).subscribe({
-      next: resp=> console.log(resp),
-      error: (err)=> console.error(err)
-    })
+      next: (resp) => console.log(resp),
+      error: (err) => console.error(err),
+    });
   }
 
   queryParamsHandling(params: Params): void {

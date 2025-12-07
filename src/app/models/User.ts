@@ -11,6 +11,18 @@ export type Department =
   | 'dmsep'
   | 'ecl';
 
+export const DEPARTMENTS: Department[] = [
+  'civil_engineering',
+  'computer_engineering',
+  'electrical_engineering',
+  'electronics_and_communications_engineering',
+  'industrial_engineering',
+  'mechanical_engineering',
+  'dmsep',
+  'ecl',
+];
+
+
 export interface IUser {
   firstName: string;
   middleName: string;

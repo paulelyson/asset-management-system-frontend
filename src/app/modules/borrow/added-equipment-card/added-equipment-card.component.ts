@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IEquipment } from '../../../models/Equipment';
 
@@ -24,6 +24,11 @@ export class AddedEquipmentCardComponent {
   @Input() title: string = '';
   @Input() descriptions: string[] = [];
   @Input() icon: string = 'calendar_today';
+  @Output() remove: EventEmitter<IAddedEquipment> = new EventEmitter<IAddedEquipment>();
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
+
+  onRemoveEquipment(iconName: string) {
+    this.remove.emit(this.equipment)
+  }
 
 }

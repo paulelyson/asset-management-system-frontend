@@ -3,9 +3,9 @@
   <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">
     <div class="added-equipment-card-wrapper">
       @for(eqpmnt of addedEquipment; track eqpmnt) {
-      <app-added-equipment-card [equipment]="eqpmnt" />
+      <app-added-equipment-card [equipment]="eqpmnt" (remove)="onRemoveEquipment($event)" />
       }@empty {
-      <span>No items.</span>
+      <span>No equipment added yet.</span>
       }
     </div>
     <app-class-schedule (onFormSubmit)="onSubmitRequest($event)" />

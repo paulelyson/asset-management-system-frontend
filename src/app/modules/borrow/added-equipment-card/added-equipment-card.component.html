@@ -7,5 +7,5 @@
     <span>{{ equipment.brand }}</span>
   </div>
   <span class="quantity" matTooltip="Click to change quantity"> 1 </span>
-  <app-icon name="delete" size="md"></app-icon>
+  <app-icon name="delete" size="md" (iconclicked)="onRemoveEquipment($event)"/>
 </div>

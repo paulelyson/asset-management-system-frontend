@@ -33,7 +33,7 @@ export class RowDisplayComponent {
   @Input() actions: RowDisplayActionConfig[] = [];
   @Output() actionclicked: EventEmitter<string> = new EventEmitter<string>();
 
-  onActionClicked(event: any): void {
-    this.actionclicked.emit(event);
+  onActionClicked(icon: string): void {
+    this.actionclicked.emit(icon);
   }
 }
