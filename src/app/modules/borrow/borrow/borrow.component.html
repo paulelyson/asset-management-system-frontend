@@ -1,21 +1,20 @@
 <app-title-section>Borrow Equipment</app-title-section>
 <mat-drawer-container>
-  <mat-drawer class="sidenav" mode="side" [opened]="sidenav_opened" position="end">
-    @for(eqpmnt of addedEquipment; track eqpmnt) {
-    <app-added-equipment-card [equipment]="eqpmnt"></app-added-equipment-card>
-    }@empty {
-    <span>No items.</span>
-    }
-    <app-class-schedule (onFormSubmit)="onSubmitRequest($event)"></app-class-schedule>
+  <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">
+    <div class="added-equipment-card-wrapper">
+      @for(eqpmnt of addedEquipment; track eqpmnt) {
+      <app-added-equipment-card [equipment]="eqpmnt" />
+      }@empty {
+      <span>No items.</span>
+      }
+    </div>
+    <app-class-schedule (onFormSubmit)="onSubmitRequest($event)" />
   </mat-drawer>
   <mat-drawer-content class="equipment-container">
     @for(eqpmnt of equipment(); track eqpmnt) {
-    <app-equipment-card
-      [equipment]="eqpmnt"
-      (addequipment)="onAddEquipment($event)"
-    ></app-equipment-card>
+    <app-equipment-card [equipment]="eqpmnt" (addequipment)="onAddEquipment($event)" />
     }@empty {
-    <app-empty-placeholder></app-empty-placeholder>
+    <app-empty-placeholder />
     }
   </mat-drawer-content>
 </mat-drawer-container>

@@ -16,6 +16,7 @@ import { InputComponent } from '../shared/input/input.component';
 import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../shared/icon/icon.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [BorrowComponent, ClassScheduleComponent, AddedEquipmentCardComponent],
@@ -33,7 +34,8 @@ import { IconComponent } from '../shared/icon/icon.component';
     DatepickerComponent,
     FormsModule,
     ReactiveFormsModule,
-    IconComponent
+    IconComponent,
+    MatTooltipModule
   ],
 })
 export class BorrowModule {}

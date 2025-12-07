@@ -1,5 +1,5 @@
-.sidenav {
-  width: 300px;
+.matdrawer-side {
+  width: 320px; /* change mat drawer size width */
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -10,4 +10,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.added-equipment-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
 }

@@ -1,18 +1,26 @@
 .card-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   .content {
     display: flex;
     flex-direction: column;
     flex: 1;
+    max-width: 140px;
   }
 
-  .qty-icon-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-right: 5px;
-    gap: 5px;
+  .content span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .quantity {
+    min-width: 15px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 550;
   }
 }
 
@@ -21,7 +29,7 @@
   height: 35px;
 }
 .fit-image {
-  width: 100%;
+  width: 35px;
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
@@ -29,8 +37,8 @@
 
 /* sizes */
 .card-container.md {
-  max-width: 250px;
-  min-width: 200px;
+  max-width: 320px;
+  min-width: 220px;
   height: 40px;
   padding: 10px;
   border-radius: 0.5rem;
