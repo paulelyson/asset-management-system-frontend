@@ -30,6 +30,7 @@ export class EquipmentCardComponent {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
 
   constructor(private dialogService: DialogService) {}
+
   onAddEquipment(): void {
     if (this.equipment.totalQuantity > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
@@ -41,13 +42,28 @@ export class EquipmentCardComponent {
           type: 'default',
           shade: 'default',
           width: 'width-filled',
-          btnType: 'submit',
+          btnType: 'button',
         },
       ];
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions);
+
+      this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
+        if (resp) {
+          let quantity = parseInt(resp.quantity);
+          const addedEqmnt: IAddedEquipment = {
+            ...this.equipment,
+            borrowedQty: quantity
+              ? quantity > this.equipment.totalQuantity
+                ? this.equipment.totalQuantity
+                : quantity
+              : 1,
+          };
+          this.addequipment.emit(addedEqmnt);
+        }
+      });
+    } else {
+      const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 1 };
+      this.addequipment.emit(addedEqmnt);
     }
-    const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 4 };
-    this.addequipment.emit(addedEqmnt);
   }
 
   get image() {

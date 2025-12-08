@@ -9,6 +9,8 @@ import {
   UpdateQuantityStatusDialogComponent,
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../modules/shared/button/button.component';
+import { Observable } from 'rxjs';
+import { BorrowedEquipmentStatus } from '../models/BorrowedEquipment';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -29,11 +31,9 @@ export class DialogService {
     });
   }
 
-  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[]): void {
+  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[]){
     const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, { data: { fields, actions } });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The filter dialog was closed');
-    });
+    return dialogRef.afterClosed()
   }
 
   openEquipmentFilterDialog(): void {

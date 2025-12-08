@@ -1,16 +1,20 @@
-<div class="update-borrowed-equipment-container">
-  @if(data.fields.includes('quantity')) {
-  <app-input label="Quantity" />
-  } @if(data.fields.includes('status')) {
-  <app-autocomplete label="Status" [options]="conditions" />
-  } @if(data.fields.includes('condition')) {
-  <app-autocomplete label="Condition" [options]="conditions" />
-  } @if(data.fields.includes('remarks')) {
-  <app-input label="Remarks" />
-  }
-  <div class="action-wrapper">
-    @for(action of data.actions; track action.id) {
-    <app-button width="width-filled" (btnclicked)="onClicked(action.name)">{{ action.name }}</app-button>
+<form [formGroup]="borrowedEquipmentStatusForm">
+  <div class="update-borrowed-equipment-container">
+    @if(data.fields.includes('quantity')) {
+    <app-input label="Quantity" formControlName="quantity" />
+    } @if(data.fields.includes('status')) {
+    <app-autocomplete label="Status" [options]="conditions" formControlName="status" />
+    } @if(data.fields.includes('condition')) {
+    <app-autocomplete label="Condition" [options]="conditions" formControlName="condition" />
+    } @if(data.fields.includes('remarks')) {
+    <app-input label="Remarks" formControlName="remarks" />
     }
+    <div class="action-wrapper">
+      @for(action of data.actions; track action.id) {
+      <app-button width="width-filled" (btnclicked)="onClicked(action.name)">{{
+        action.name
+      }}</app-button>
+      }
+    </div>
   </div>
-</div>
+</form>
