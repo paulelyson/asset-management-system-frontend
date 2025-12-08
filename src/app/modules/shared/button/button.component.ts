@@ -4,7 +4,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
 type ButtonShade = 'default' | 'light';
-type ButtonWidth = 'width-filled' | 'width-auto'
+type ButtonWidth = 'width-filled' | 'width-auto';
+
+export interface IButtonConfig {
+  id: number;
+  name: string;
+  size: ButtonSize;
+  type: ButtonType;
+  shade: ButtonShade;
+  width: ButtonWidth;
+  btnType: 'submit' | 'button' | 'reset';
+}
 
 @Component({
   selector: 'app-button',

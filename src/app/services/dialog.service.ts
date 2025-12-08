@@ -4,7 +4,11 @@ import { EquipmentDetailDialogComponent } from '../modules/shared/equipment-deta
 import { EquipmentFilterDialogComponent } from '../modules/shared/equipment-filter-dialog/equipment-filter-dialog.component';
 import { IEquipment } from '../models/Equipment';
 import { CreateEquipmentDialogComponent } from '../modules/inventory/create-equipment-dialog/create-equipment-dialog.component';
-import { UpdateQuantityStatusDialogComponent } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+import {
+  BorrowedEquipmentStatusFields,
+  UpdateQuantityStatusDialogComponent,
+} from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+import { IButtonConfig } from '../modules/shared/button/button.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -25,8 +29,8 @@ export class DialogService {
     });
   }
 
-  openUpdateQuantityStatusDialog(): void {
-    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, {});
+  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[]): void {
+    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, { data: { fields, actions } });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The filter dialog was closed');
     });

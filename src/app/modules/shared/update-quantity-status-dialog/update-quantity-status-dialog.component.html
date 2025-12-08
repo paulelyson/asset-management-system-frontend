@@ -1,8 +1,16 @@
 <div class="update-borrowed-equipment-container">
-  <app-input label="Number of items to update"></app-input>
-  <app-autocomplete label="Condition" [options]="conditions"></app-autocomplete>
-  <app-input label="Remarks"></app-input>
+  @if(data.fields.includes('quantity')) {
+  <app-input label="Quantity" />
+  } @if(data.fields.includes('status')) {
+  <app-autocomplete label="Status" [options]="conditions" />
+  } @if(data.fields.includes('condition')) {
+  <app-autocomplete label="Condition" [options]="conditions" />
+  } @if(data.fields.includes('remarks')) {
+  <app-input label="Remarks" />
+  }
   <div class="action-wrapper">
-    <app-button width="width-filled">Confirm and Release</app-button>
+    @for(action of data.actions; track action.id) {
+    <app-button width="width-filled" (btnclicked)="onClicked(action.name)">{{ action.name }}</app-button>
+    }
   </div>
 </div>

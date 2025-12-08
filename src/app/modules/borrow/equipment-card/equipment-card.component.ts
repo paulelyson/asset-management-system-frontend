@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { ButtonComponent, IButtonConfig } from '../../shared/button/button.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { IEquipment } from '../../../models/Equipment';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { DialogService } from '../../../services/dialog.service';
+import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -31,7 +32,19 @@ export class EquipmentCardComponent {
   constructor(private dialogService: DialogService) {}
   onAddEquipment(): void {
     if (this.equipment.totalQuantity > 1) {
-      this.dialogService.openUpdateQuantityStatusDialog();
+      const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
+      const actions: IButtonConfig[] = [
+        {
+          id: 0,
+          name: 'Update and Add',
+          size: 'sm',
+          type: 'default',
+          shade: 'default',
+          width: 'width-filled',
+          btnType: 'submit',
+        },
+      ];
+      this.dialogService.openUpdateQuantityStatusDialog(fields, actions);
     }
     const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 4 };
     this.addequipment.emit(addedEqmnt);

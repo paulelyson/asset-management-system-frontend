@@ -2,7 +2,6 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
 import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
-import { IEquipment } from '../../../models/Equipment';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
 import { DialogService } from '../../../services/dialog.service';
 
@@ -66,7 +65,8 @@ export class BorrowedEquipmentComponent implements OnInit {
     if (action == 'lock_open') {
       this.updateBorrowedEquipmentStatus(borrowedEquipment, 'pending_return');
     } else if (action == 'edit') {
-      this.dialogService.openUpdateQuantityStatusDialog()
+      // const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
+      // this.dialogService.openUpdateQuantityStatusDialog(fields);
     }
   }
 
