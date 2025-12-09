@@ -31,4 +31,9 @@ export class AddedEquipmentCardComponent {
     this.remove.emit(this.equipment)
   }
 
+  get image() {
+    const img = this.equipment.images[0]?.thumbnail;
+    return img ? img : this.default_img;
+  }
+
 }

@@ -63,7 +63,7 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'lock_open') {
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, 'pending_return');
+      this.updateBorrowedEquipmentStatus(borrowedEquipment, 'mark_returned');
     } else if (action == 'edit') {
       // const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
       // this.dialogService.openUpdateQuantityStatusDialog(fields);

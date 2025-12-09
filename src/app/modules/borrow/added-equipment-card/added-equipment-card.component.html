@@ -1,6 +1,6 @@
 <div class="card-container" [ngClass]="[size, type, shade]">
   <div class="image-wrapper">
-    <img class="fit-image" [src]="equipment.images[0]?.thumbnail ?? default_img" />
+    <img class="fit-image" [src]="image" />
   </div>
   <div class="content">
     <span>{{ equipment.name }}</span>

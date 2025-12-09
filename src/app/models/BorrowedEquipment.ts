@@ -8,7 +8,7 @@ export type BorrowedEquipmentStatusType =
   | 'oic_approved'
   | 'oic_rejected'
   | 'released'
-  | 'pending_return'
+  | 'mark_returned'
   | 'returned'
   | 'unreturned'
   | 'system_reset';
