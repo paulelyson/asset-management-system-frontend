@@ -1,10 +1,21 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  OnInit,
+  Output,
+  Signal,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDateRange } from '../../shared/datepicker/datepicker.component';
 import { IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
-import { DEPARTMENTS } from '../../../models/User';
+import { DEPARTMENTS, IUser } from '../../../models/User';
+import { UserService } from '../../../services/user.service';
+import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'app-class-schedule',
@@ -12,12 +23,18 @@ import { DEPARTMENTS } from '../../../models/User';
   styleUrl: './class-schedule.component.css',
   standalone: false,
 })
-export class ClassScheduleComponent {
-  departments = DEPARTMENTS
+export class ClassScheduleComponent implements OnInit {
+  departments = DEPARTMENTS;
   classScheduleForm: FormGroup;
+  faculty: WritableSignal<IUser[]> = signal([]);
   @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
 
-  constructor(private fb: FormBuilder, private snackBarService: SnackbarService) {
+  // facultyAutoCompleteOptions: IAutocompleteOption[] = []
+  constructor(
+    private fb: FormBuilder,
+    private snackBarService: SnackbarService,
+    private userService: UserService
+  ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
       classDepartment: ['', Validators.required],
@@ -30,6 +47,18 @@ export class ClassScheduleComponent {
       timeOfUseStart: ['', Validators.required],
       timeOfUseEnd: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    this.userService.getUsers().subscribe({
+      next: (resp) => {
+        this.faculty.set(resp);
+      },
+    });
+  }
+
+  get facultyAutoCompleteOptions() {
+    return this.faculty().map(user => ({view: user.firstName, value: user._id}))
   }
 
   onClassDateChanged(event: IDateRange) {

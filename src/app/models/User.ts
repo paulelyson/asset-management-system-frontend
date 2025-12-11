@@ -24,6 +24,7 @@ export const DEPARTMENTS: Department[] = [
 
 
 export interface IUser {
+  _id: string;
   firstName: string;
   middleName: string;
   lastName: string;

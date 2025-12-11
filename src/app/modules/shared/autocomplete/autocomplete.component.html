@@ -13,8 +13,8 @@
     #auto="matAutocomplete"
     (optionSelected)="onOptionSelected($event)"
   >
-    @for (option of filteredOptions | async; track option) {
-    <mat-option [value]="option">{{ option }}</mat-option>
+    @for (option of filteredOptions | async; track option.value) {
+    <mat-option [value]="option.value">{{ option.view }}</mat-option>
     }
   </mat-autocomplete>
 </mat-form-field>

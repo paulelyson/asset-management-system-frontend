@@ -1,11 +1,11 @@
 <form [formGroup]="classScheduleForm" (ngSubmit)="onSubmit()">
   <div class="class-detail-container">
-    <app-autocomplete
+    <!-- <app-autocomplete
       label="Department*"
       formControlName="classDepartment"
       [options]="departments"
-    />
-    <app-autocomplete label="Faculty*" formControlName="faculty"></app-autocomplete>
+    /> -->
+    <app-autocomplete label="Faculty*" formControlName="faculty" [options]="facultyAutoCompleteOptions"></app-autocomplete>
     <app-autocomplete label="Purpose*" formControlName="purpose"></app-autocomplete>
     <app-input label="Class Code" formControlName="classCode"></app-input>
     <app-input label="Class Name" formControlName="className"></app-input>

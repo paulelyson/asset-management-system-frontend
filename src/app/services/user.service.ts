@@ -16,7 +16,7 @@ interface ApiResponse {
 export class UserService {
   constructor(private http: HttpClient) {}
 
-  getUser(): Observable<IUser[]> {
+  getUsers(): Observable<IUser[]> {
     return this.http.get<ApiResponse>(environment.api_url + '/api/user', {}).pipe(
       map((resp) => resp.data),
       catchError(this.handleError)

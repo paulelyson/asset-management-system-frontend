@@ -1,5 +1,14 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -11,9 +20,18 @@ import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
-import { FloatLabelType, MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  FloatLabelType,
+  MatFormFieldAppearance,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { map, Observable, startWith } from 'rxjs';
+
+export interface IAutocompleteOption {
+  value: string;
+  view: string;
+}
 
 @Component({
   selector: 'app-autocomplete',
@@ -35,15 +53,15 @@ import { map, Observable, startWith } from 'rxjs';
     },
   ],
 })
-export class AutocompleteComponent implements ControlValueAccessor {
+export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
   @Input() label: string = '';
-  @Input() options: string[] = [];
+  @Input() options: IAutocompleteOption[] = [];
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() placeholder: string = '';
 
   myControl = new FormControl('');
-  filteredOptions: Observable<string[]>;
+  filteredOptions!: Observable<IAutocompleteOption[]>;
   @Output() optionselected: EventEmitter<string> = new EventEmitter();
 
   // accessor
@@ -57,6 +75,11 @@ export class AutocompleteComponent implements ControlValueAccessor {
       startWith(''),
       map((value) => this._filter(value || ''))
     );
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) {
+      
+    }
   }
 
   writeValue(value: any): void {
@@ -81,9 +104,8 @@ export class AutocompleteComponent implements ControlValueAccessor {
     this.changed(this.myControl.value);
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string): IAutocompleteOption[] {
     const filterValue = value.toLowerCase();
-
-    return this.options.filter((option) => option.toLowerCase().includes(filterValue));
+    return this.options.filter((option) => option.view.toLowerCase().includes(filterValue));
   }
 }
