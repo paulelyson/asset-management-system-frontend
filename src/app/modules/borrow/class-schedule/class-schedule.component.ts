@@ -16,6 +16,7 @@ import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 import { DEPARTMENTS, IUser } from '../../../models/User';
 import { UserService } from '../../../services/user.service';
 import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
+import { getDisplayName } from '../../../utils/string.util';
 
 @Component({
   selector: 'app-class-schedule',
@@ -58,7 +59,7 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   get facultyAutoCompleteOptions() {
-    return this.faculty().map(user => ({view: user.firstName, value: user._id}))
+    return this.faculty().map((user) => ({ view: getDisplayName(user), value: user._id }));
   }
 
   onClassDateChanged(event: IDateRange) {

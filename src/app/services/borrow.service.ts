@@ -57,13 +57,13 @@ export class BorrowService {
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
     const length = borrowedEquipment.borrowedEquipmentStatus.length;
     const _status = borrowedEquipment.borrowedEquipmentStatus[length - 1];
-    const status = `${_status.quantity} ${this.getBorrowStatusPlaceholder(_status.status)}`;
+    const statuses = this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus);
     const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
     const name = getDisplayName(borrowedEquipment.borrower);
     let contents: RowDisplayContent[] = [
       { id: 1, type: 'text', content: [borrowedEquipment.className] },
       { id: 2, type: 'text', content: [name] },
-      { id: 3, type: 'badge', content: [status] },
+      { id: 3, type: 'badge', content: statuses },
       { id: 4, type: 'text', content: [date as string] },
     ];
     return contents;
@@ -102,37 +102,31 @@ export class BorrowService {
     return statusPlaceHolder[status] ?? '';
   }
 
-  computeCurrentQtyStatus(
-    borrowedEquipmentStatus: BorrowedEquipmentStatus[]
-  ): Record<BorrowedEquipmentStatusType, number> {
-    const result: Record<BorrowedEquipmentStatusType, number> = {
-      requested: 0,
-      faculty_approved: 0,
-      faculty_rejected: 0,
-      oic_approved: 0,
-      oic_rejected: 0,
-      released: 0,
-      mark_returned: 0,
-      returned: 0,
-      unreturned: 0,
-      system_reset: 0,
-    };
+  computeCurrentQtyStatus(borrowedEquipmentStatus: BorrowedEquipmentStatus[]) {
+    const result: {
+      status: BorrowedEquipmentStatusType;
+      quantity: number;
+    }[] = [];
 
-    // Accumulate initial counts
-    // for (const tx of transactions) {
-    //   result[tx.status] += tx.item;
-    // }
+    for (let i = 0; i < borrowedEquipmentStatus.length; i++) {
+      const current = borrowedEquipmentStatus[i];
+      const next = borrowedEquipmentStatus[i + 1];
 
-    // // Subtract transitions (previous → next)
-    // for (let i = 0; i < transactions.length - 1; i++) {
-    //   const current = transactions[i];
-    //   const next = transactions[i + 1];
+      if (next) {
+        result.push({
+          status: current.status,
+          quantity: current.quantity - next.quantity,
+        });
+      } else {
+        // last status keeps remaining quantity
+        result.push({
+          status: current.status,
+          quantity: current.quantity,
+        });
+      }
+    }
 
-    //   // Any next transaction reduces the current bucket
-    //   result[current.status] -= next.item;
-    // }
-
-    return result;
+    return result.filter(x=> x.quantity > 0).map(x=> `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
   }
 
   getRowDisplayActions(): RowDisplayActionConfig[] {
