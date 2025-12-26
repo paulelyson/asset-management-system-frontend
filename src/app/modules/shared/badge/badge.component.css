@@ -5,9 +5,10 @@
   align-items: center;
   gap: 4px;
 
+  white-space: nowrap;
   overflow: hidden;
-  text-align: center;
   text-overflow: ellipsis;
+  text-align: center;
 }
 
 .badge-container.sm {
@@ -27,6 +28,7 @@
   padding: 4px 8px;
   font-size: 11px;
   line-height: 12px;
+  max-width: 75px;
 
   mat-icon {
     height: 10px;
@@ -87,6 +89,10 @@
 
   /* .close:hover {
   } */
+}
+
+.badge-container.clickable {
+  cursor: pointer;
 }
 
 .close {

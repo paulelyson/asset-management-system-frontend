@@ -25,5 +25,6 @@ export class BadgeComponent {
   @Input() type: BadgeType = 'primary';
   @Input() hasBadgeIcon: boolean = false;
   @Input() hasCloseIcon: boolean = false;
+  @Input() clickable: boolean = true;
   iconlist: IconType[] = [];
 }
