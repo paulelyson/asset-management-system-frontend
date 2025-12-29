@@ -4,6 +4,8 @@ import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/
 import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
 import { DialogService } from '../../../services/dialog.service';
+import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+import { IButtonConfig } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -35,14 +37,15 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   updateBorrowedEquipmentStatus(
     borrowedEquipment: BorrowedEquipment,
-    status: BorrowedEquipmentStatusType
+    status: BorrowedEquipmentStatusType,
+    quantity: number
   ): void {
     let updated: BorrowedEquipmentStatusExt[] = [
       {
         id: borrowedEquipment._id,
         equipment: borrowedEquipment.equipment._id,
         status: status,
-        quantity: 1,
+        quantity: quantity,
         condition: 'functional',
         remarks: '',
       },
@@ -63,10 +66,22 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'lock_open') {
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, 'mark_returned');
     } else if (action == 'edit') {
-      // const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
-      // this.dialogService.openUpdateQuantityStatusDialog(fields);
+      const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
+      const actions: IButtonConfig[] = [
+        {
+          id: 0,
+          name: 'Update',
+          size: 'sm',
+          type: 'default',
+          shade: 'default',
+          width: 'width-filled',
+          btnType: 'button',
+        },
+      ];
+      this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
+        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+      });
     }
   }
 
