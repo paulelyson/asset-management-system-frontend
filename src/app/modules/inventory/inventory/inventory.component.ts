@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
@@ -17,20 +24,29 @@ export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipmentFilter: IEquipmentFilter = { page: 1 };
   equipment: WritableSignal<IEquipment[]> = signal([]);
+  test: string[] = [];
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
+  get filterValues(): Record<string, string>[] {
+    const notIncludeFields = ['page'];
+    return Object.entries(this.equipmentFilter)
+      .map(([key, val]) => ({ field: key, value: val }))
+      .filter((x) => x.value && !notIncludeFields.includes(x.field));
+  }
+
   getEquipment(): void {
-    if(this.equipmentFilter.page == 1) {
-    this.equipment.set([])
+    if (this.equipmentFilter.page == 1) {
+      this.equipment.set([]);
     }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
@@ -93,6 +109,9 @@ export class InventoryComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
+    console.log(this.equipmentFilter);
+
+    this.test = Object.keys(this.equipmentFilter);
     this.getEquipment();
   }
 }

@@ -1,6 +1,6 @@
 <div class="toolbar-container">
   <div class="filter-badge-wrapper">
-    @for(filter of filterValues; track filter['field']) {
+    @for(filter of filters; track filter['field']) {
     <app-badge size="sm" [hasCloseIcon]="true" type="success" (closed)="onBadgeClosed(filter)">
       {{ filter['value'] }}
     </app-badge>

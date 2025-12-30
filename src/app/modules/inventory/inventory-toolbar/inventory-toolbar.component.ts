@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
@@ -9,29 +9,21 @@ import { NavigationExtras, Router } from '@angular/router';
   styleUrl: './inventory-toolbar.component.css',
   standalone: false,
 })
-export class InventoryToolbarComponent implements OnChanges {
-  @Input() filters: IEquipmentFilter = { page: 1 };
-  filterValues: Record<string, string>[] = [];
+export class InventoryToolbarComponent {
+  @Input() filters: Record<string, string>[] = [];
   url: string = '';
-  constructor(private dialogService: DialogService, private router: Router) {
+  constructor(
+    private dialogService: DialogService,
+    private router: Router,
+  ) {
     this.url = this.router.url.split('?')[0];
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['filters']) {
-      this.filterValues = this.getFilterValues();
-    }
   }
 
   openFilterDialog() {
     this.dialogService.openEquipmentFilterDialog();
   }
 
-  getFilterValues(): Record<string, string>[] {
-    return Object.entries(this.filters).map(([key, val]) => ({ field: key, value: val }));
-  }
-
-  onBadgeClosed(filter: Record<string, string>): void {
+  onBadgeClosed(filter:  Record<string, string>): void {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         [filter['field']]: null,
