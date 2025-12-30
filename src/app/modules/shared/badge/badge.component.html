@@ -1,5 +1,5 @@
 <div class="badge-container" [ngClass]="[size, type]" [class.clickable]="clickable">
   <mat-icon *ngIf="hasBadgeIcon">info</mat-icon>
   <ng-content></ng-content>
-  <mat-icon class="close" *ngIf="hasCloseIcon">close</mat-icon>
+  <mat-icon class="close" *ngIf="hasCloseIcon" (click)="onClosed()">close</mat-icon>
 </div>
