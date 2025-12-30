@@ -33,4 +33,8 @@ export class AutocompleteService {
       },
     ];
   }
+
+  mapIntoAutocompleteOption(options: string[]): IAutocompleteOption[] {
+    return options.map(opt=> ({value: opt, view: opt}))
+  }
 }

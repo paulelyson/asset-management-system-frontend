@@ -4,9 +4,10 @@ import { IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IEquipmentFilter } from '../models/EquipmentFilter';
+import { Department } from '../models/User';
 
 interface ApiResponse {
-  data: IEquipment[];
+  data: IEquipment[] | string[];
   message: string;
   success: boolean;
 }
@@ -25,7 +26,17 @@ export class EquipmentService {
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
-      map((resp) => resp.data),
+      map((resp) => resp.data as IEquipment[]),
+      catchError(this.handleError)
+    );
+  }
+
+  getDistinctValues(field: string, department: Department): Observable<string[]> {
+    let params = new HttpParams();
+    params = params.append('field', field);
+    params = params.append('department', department);
+    return this.http.get<ApiResponse>(environment.api_url + '/api/equipment/distinct', { params }).pipe(
+      map((resp) => resp.data as string[]),
       catchError(this.handleError)
     );
   }

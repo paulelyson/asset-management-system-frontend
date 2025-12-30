@@ -51,7 +51,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       },
     ];
     this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
-      next: (resp) => console.log(resp),
+      next: (resp) => this.getBorrowedEquipment(),
       error: (err) => console.error(err),
     });
   }
