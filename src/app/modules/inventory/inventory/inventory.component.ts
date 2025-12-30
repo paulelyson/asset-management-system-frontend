@@ -29,6 +29,9 @@ export class InventoryComponent implements OnInit {
   }
 
   getEquipment(): void {
+    if(this.equipmentFilter.page == 1) {
+    this.equipment.set([])
+    }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
@@ -86,6 +89,10 @@ export class InventoryComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
+    this.equipmentFilter.search = params['search'];
+    this.equipmentFilter.brand = params['brand'];
+    this.equipmentFilter.categories = params['categories'];
+    this.equipmentFilter.equipmentType = params['equipmentType'];
     this.getEquipment();
   }
 }
