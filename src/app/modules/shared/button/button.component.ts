@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { IconComponent } from '../icon/icon.component';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
 type ButtonShade = 'default' | 'light';
 type ButtonWidth = 'width-filled' | 'width-auto';
+type ButtonVariant = 'default' | 'link';
 
 export interface IButtonConfig {
   id: number;
@@ -18,16 +21,18 @@ export interface IButtonConfig {
 
 @Component({
   selector: 'app-button',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule, IconComponent],
   templateUrl: './button.component.html',
   styleUrl: './button.component.css',
 })
 export class ButtonComponent {
+  @Input() variant: ButtonVariant = 'default';
   @Input() size: ButtonSize = 'sm';
   @Input() type: ButtonType = 'default';
   @Input() shade: ButtonShade = 'default';
   @Input() width: ButtonWidth = 'width-auto';
   @Input() btnType: 'submit' | 'button' | 'reset' = 'button';
+  @Input() icon: string = 'none';
   @Output() btnclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onClicked(): void {

@@ -5,6 +5,16 @@
   gap: 4px;
   cursor: pointer;
   transition: 0.5s ease;
+  background-color: transparent;
+}
+
+/* variant */
+.btn-custom.link {
+  border: none;
+  &:hover {
+    text-decoration: underline;
+    font-weight: 550;
+  }
 }
 
 .btn-custom.primary {

@@ -1,8 +1,11 @@
 <button
   [type]="btnType"
   class="btn-custom"
-  [ngClass]="[type, shade, size, width]"
+  [ngClass]="[type, shade, size, width, variant]"
   (click)="onClicked()"
 >
+  @if(icon !== 'none') {
+  <app-icon [name]="icon"></app-icon>
+  }
   <ng-content></ng-content>
 </button>
