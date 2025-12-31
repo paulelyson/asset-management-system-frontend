@@ -5,6 +5,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IEquipmentFilter } from '../models/EquipmentFilter';
 import { Department } from '../models/User';
+import { RowDisplayActionConfig } from '../modules/shared/row-display/row-display.component';
 
 interface ApiResponse {
   data: IEquipment[] | string[];
@@ -45,6 +46,13 @@ export class EquipmentService {
         map((resp) => resp.data as string[]),
         catchError(this.handleError)
       );
+  }
+
+  getRowDisplayActions(): RowDisplayActionConfig[] {
+    return [
+      { name: 'info', tooltip: 'View Details', type: 'primary', size: 'sm' },
+      { name: 'edit', tooltip: 'Update qty, condition, & status', type: 'primary', size: 'sm' },
+    ];
   }
 
   handleError(err: HttpErrorResponse) {

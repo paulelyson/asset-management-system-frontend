@@ -43,6 +43,10 @@ export class InventoryComponent implements OnInit {
       .filter((x) => x.value && !notIncludeFields.includes(x.field));
   }
 
+  get rowDisplayActions() {
+    return this.equipmentService.getRowDisplayActions();
+  }
+
   getEquipment(): void {
     if (this.equipmentFilter.page == 1) {
       this.equipment.set([]);
@@ -86,11 +90,11 @@ export class InventoryComponent implements OnInit {
     return contents;
   }
 
-  openDialog(action: string, equipment: IEquipment) {
-    if (action == 'edit') {
+  onActionClicked(action: string, equipment: IEquipment) {
+    if (action == 'info') {
+      this.dialogService.openEquipmentDetailDialog(equipment);
+    } else if (action == 'edit') {
       this.dialogService.openCreateEquipmentDialog();
-    } else {
-      this.dialogService.openDialog('equipment-detail', equipment);
     }
   }
 

@@ -19,13 +19,8 @@ type DialogComponent = 'equipment-detail' | 'equipment-filter';
 })
 export class DialogService {
   constructor(private dialog: MatDialog) {}
-  openDialog(component: DialogComponent, equipment: IEquipment): void {
-    const dialogComponent: any =
-      component == 'equipment-detail'
-        ? EquipmentDetailDialogComponent
-        : EquipmentFilterDialogComponent;
-    const dialogRef = this.dialog.open(dialogComponent, { data: equipment });
-
+  openEquipmentDetailDialog(equipment: IEquipment): void {
+    const dialogRef = this.dialog.open(EquipmentDetailDialogComponent, { data: equipment });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
