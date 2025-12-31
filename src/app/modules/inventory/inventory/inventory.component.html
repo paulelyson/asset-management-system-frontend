@@ -15,7 +15,7 @@
     <span>No items.</span>
     }
     <div class="bottom-action-wrapper">
-      <app-button (btnclicked)="loadMoreEquipment()">Show more...</app-button>
+      <app-button (btnclicked)="loadMoreEquipment()" [disabled]="disable_showmore">Show more...</app-button>
     </div>
   </div>
 </div>

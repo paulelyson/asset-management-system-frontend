@@ -3,6 +3,7 @@
   class="btn-custom"
   [ngClass]="[type, shade, size, width, variant]"
   (click)="onClicked()"
+  [disabled]="disabled"
 >
   @if(icon !== 'none') {
   <app-icon [name]="icon"></app-icon>

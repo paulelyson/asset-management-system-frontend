@@ -33,6 +33,7 @@ export class ButtonComponent {
   @Input() width: ButtonWidth = 'width-auto';
   @Input() btnType: 'submit' | 'button' | 'reset' = 'button';
   @Input() icon: string = 'none';
+  @Input() disabled: boolean = false;
   @Output() btnclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onClicked(): void {

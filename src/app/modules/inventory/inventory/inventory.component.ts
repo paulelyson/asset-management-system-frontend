@@ -23,14 +23,13 @@ import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipmentFilter: IEquipmentFilter = { page: 1 };
+  disable_showmore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
-  test: string[] = [];
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -50,13 +49,17 @@ export class InventoryComponent implements OnInit {
     }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
+        this.disable_showmore = resp.length < 15;
+        this.equipment.update((eqpmnt) =>
+          [...eqpmnt]
+            .concat(resp)
+            .filter((item, index, arr) => index === arr.findIndex((o) => o._id === item._id))
+        );
       },
     });
   }
 
   equipmentContents(equipment: IEquipment): RowDisplayContent[] {
-    const fields = ['equipmentType', 'inventorytype', 'conditionAndQuantity', 'location'];
     let contents: RowDisplayContent[] = [];
     contents.push(
       {
@@ -109,9 +112,6 @@ export class InventoryComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
-    console.log(this.equipmentFilter);
-
-    this.test = Object.keys(this.equipmentFilter);
     this.getEquipment();
   }
 }
