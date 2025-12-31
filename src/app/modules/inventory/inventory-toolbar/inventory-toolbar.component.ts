@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@
 import { DialogService } from '../../../services/dialog.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { debounceTime, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-inventory-toolbar',
@@ -11,25 +13,34 @@ import { NavigationExtras, Router } from '@angular/router';
 })
 export class InventoryToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
+  searchControl = new FormControl('');
   url: string = '';
-  constructor(
-    private dialogService: DialogService,
-    private router: Router,
-  ) {
+  constructor(private dialogService: DialogService, private router: Router) {
     this.url = this.router.url.split('?')[0];
+    this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(()=>this.onSearch());
   }
 
   openFilterDialog() {
     this.dialogService.openEquipmentFilterDialog();
   }
 
-  onBadgeClosed(filter:  Record<string, string>): void {
+  onBadgeClosed(filter: Record<string, string>): void {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         [filter['field']]: null,
       },
       queryParamsHandling: 'merge',
     };
+    this.router.navigate([this.url], navigationExtras);
+  }
+
+  onSearch(): void {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        search: this.searchControl.value
+      },
+      queryParamsHandling: 'merge',
+    }
     this.router.navigate([this.url], navigationExtras);
   }
 }

@@ -23,6 +23,10 @@ export class EquipmentService {
       fromObject: {
         page: filter.page,
         search: filter.search ?? '',
+        department: filter.department ?? '',
+        brand: filter.brand ?? '',
+        categories: filter.categories ?? '',
+        equipmentType: filter.equipmentType ?? '',
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
@@ -35,10 +39,12 @@ export class EquipmentService {
     let params = new HttpParams();
     params = params.append('field', field);
     params = params.append('department', department);
-    return this.http.get<ApiResponse>(environment.api_url + '/api/equipment/distinct', { params }).pipe(
-      map((resp) => resp.data as string[]),
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<ApiResponse>(environment.api_url + '/api/equipment/distinct', { params })
+      .pipe(
+        map((resp) => resp.data as string[]),
+        catchError(this.handleError)
+      );
   }
 
   handleError(err: HttpErrorResponse) {

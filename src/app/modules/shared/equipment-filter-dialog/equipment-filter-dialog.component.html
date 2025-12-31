@@ -1,8 +1,8 @@
 <form [formGroup]="filterForm">
   <div class="equipment-filter-container">
-    <app-autocomplete [options]="categories" label="Categories" formControlName="categories"></app-autocomplete>
     <app-autocomplete [options]="brands" label="Brand" formControlName="brand"></app-autocomplete>
     <app-autocomplete [options]="equipmentTypes" label="Equipment Type" formControlName="equipmentType"></app-autocomplete>
+    <app-autocomplete [options]="categories" label="Categories" formControlName="categories"></app-autocomplete>
     <app-autocomplete [options]="equipment_types" label="Location" formControlName="location"></app-autocomplete>
     <div class="action-wrapper">
       <app-button (btnclicked)="navigate()">Apply</app-button>

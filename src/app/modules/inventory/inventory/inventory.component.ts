@@ -67,7 +67,7 @@ export class InventoryComponent implements OnInit {
       {
         id: 2,
         type: 'text',
-        content: [equipment.inventorytype],
+        content: equipment.categories,
       },
       {
         id: 3,
