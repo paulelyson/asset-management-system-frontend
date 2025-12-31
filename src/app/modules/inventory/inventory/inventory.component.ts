@@ -94,7 +94,7 @@ export class InventoryComponent implements OnInit {
     if (action == 'info') {
       this.dialogService.openEquipmentDetailDialog(equipment);
     } else if (action == 'edit') {
-      this.dialogService.openCreateEquipmentDialog();
+      // TO DO
     }
   }
 

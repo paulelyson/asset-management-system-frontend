@@ -6,6 +6,8 @@
   cursor: pointer;
   transition: 0.5s ease;
   background-color: transparent;
+  font-weight: 550;
+  font-family: 'Poppins';
 }
 
 /* variant */
@@ -46,6 +48,13 @@
   border-radius: 5px;
   padding: 0px 8px;
   font-size: 10px;
+}
+
+.btn-custom.md {
+  height: 24px; /* TO DO */
+  border-radius: 5px; /* TO DO */
+  padding: 0px 8px; /* TO DO */
+  font-size: 12px;
 }
 
 .btn-custom.lg {

@@ -4,6 +4,7 @@ import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';
+import { EquipmentService } from '../../../services/equipment.service';
 
 @Component({
   selector: 'app-inventory-toolbar',
@@ -15,7 +16,10 @@ export class InventoryToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
   searchControl = new FormControl('');
   url: string = '';
-  constructor(private dialogService: DialogService, private router: Router) {
+  constructor(
+    private dialogService: DialogService,
+    private router: Router,
+  ) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
@@ -46,5 +50,9 @@ export class InventoryToolbarComponent {
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);
+  }
+
+  addNewEquipment(): void {
+    this.dialogService.openCreateEquipmentDialog()
   }
 }

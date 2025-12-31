@@ -27,7 +27,7 @@ export interface IButtonConfig {
 })
 export class ButtonComponent {
   @Input() variant: ButtonVariant = 'default';
-  @Input() size: ButtonSize = 'sm';
+  @Input() size: ButtonSize = 'md';
   @Input() type: ButtonType = 'default';
   @Input() shade: ButtonShade = 'default';
   @Input() width: ButtonWidth = 'width-auto';
