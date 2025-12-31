@@ -11,6 +11,7 @@ import {
 import { IButtonConfig } from '../modules/shared/button/button.component';
 import { Observable } from 'rxjs';
 import { BorrowedEquipmentStatus } from '../models/BorrowedEquipment';
+import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -43,6 +44,14 @@ export class DialogService {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The create dialog was closed');
+    });
+  }
+
+  openBorrowedEquipmentFilterDialog(): void {
+     const dialogRef = this.dialog.open(BorrowedEquipmentFilterDialogComponent, {});
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The borrowed equipment filter dialog was closed');
     });
   }
 }
