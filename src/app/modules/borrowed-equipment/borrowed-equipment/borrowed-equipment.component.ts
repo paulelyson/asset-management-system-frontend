@@ -6,6 +6,7 @@ import { RowDisplayContent } from '../../shared/row-display/row-display.componen
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../../shared/button/button.component';
+import { AuthService, TokenData } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -15,12 +16,15 @@ import { IButtonConfig } from '../../shared/button/button.component';
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
-
+  user: TokenData;
   constructor(
     private activatedRoute: ActivatedRoute,
     private borrowService: BorrowService,
-    private dialogService: DialogService
-  ) {}
+    private dialogService: DialogService,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getUser();
+  }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
