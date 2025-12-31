@@ -1,7 +1,14 @@
+#toolbar {
+  display: flex;
+  justify-content: center;
+}
+
 .toolbar-container {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  min-width: 1150px;
+  padding: 1.5rem 0;
 }
 
 .filter-badge-wrapper {

@@ -8,6 +8,7 @@ import { InputComponent } from '../shared/input/input.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { ButtonComponent } from '../shared/button/button.component';
 import { BorrowedEquipmentToolbarComponent } from './borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [BorrowedEquipmentComponent, BorrowedEquipmentToolbarComponent],
@@ -19,6 +20,8 @@ import { BorrowedEquipmentToolbarComponent } from './borrowed-equipment-toolbar/
     InputComponent,
     AutocompleteComponent,
     ButtonComponent,
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class BorrowedEquipmentModule {}
