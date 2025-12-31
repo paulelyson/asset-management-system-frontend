@@ -17,11 +17,15 @@ export class InventoryToolbarComponent {
   url: string = '';
   constructor(private dialogService: DialogService, private router: Router) {
     this.url = this.router.url.split('?')[0];
-    this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(()=>this.onSearch());
+    this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
 
   openFilterDialog() {
     this.dialogService.openEquipmentFilterDialog();
+  }
+
+  clearFilter(): void {
+    this.router.navigate([this.url]);
   }
 
   onBadgeClosed(filter: Record<string, string>): void {
@@ -37,10 +41,10 @@ export class InventoryToolbarComponent {
   onSearch(): void {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        search: this.searchControl.value
+        search: this.searchControl.value,
       },
       queryParamsHandling: 'merge',
-    }
+    };
     this.router.navigate([this.url], navigationExtras);
   }
 }

@@ -7,8 +7,13 @@
     }
   </div>
   <span class="spacer"></span>
+  @if(filters.length) {
+  <app-button variant="link" icon="history" (btnclicked)="clearFilter()">
+    Clear Filters
+  </app-button>
+  }
   <app-button variant="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
   </app-button>
-  <app-input suffix_icon="search" [formControl]="searchControl"></app-input>
+  <app-input suffix_icon="search" [formControl]="searchControl" placeholder="Equipment Name"/>
 </div>
