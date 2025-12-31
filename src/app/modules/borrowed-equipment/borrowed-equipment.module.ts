@@ -7,9 +7,10 @@ import { RowDisplayComponent } from '../shared/row-display/row-display.component
 import { InputComponent } from '../shared/input/input.component';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { ButtonComponent } from '../shared/button/button.component';
+import { BorrowedEquipmentToolbarComponent } from './borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 
 @NgModule({
-  declarations: [BorrowedEquipmentComponent],
+  declarations: [BorrowedEquipmentComponent, BorrowedEquipmentToolbarComponent],
   imports: [
     CommonModule,
     BorrowedEquipmentRoutingModule,

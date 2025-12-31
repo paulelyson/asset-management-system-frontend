@@ -1,6 +1,6 @@
 <div class="equipment-page-container">
   <app-title-section>Inventory</app-title-section>
-  <app-inventory-toolbar [filters]="filterValues"></app-inventory-toolbar>
+  <app-inventory-toolbar [filters]="filterValues"/>
   <div class="equipment-wrapper">
     @for(eqpmnt of equipment(); track eqpmnt._id) {
     <app-row-display

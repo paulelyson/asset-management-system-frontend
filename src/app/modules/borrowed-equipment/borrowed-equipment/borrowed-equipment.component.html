@@ -1,5 +1,6 @@
 <div class="borrowed-equipment-page-container">
   <app-title-section>Borrowed Equipments</app-title-section>
+  <app-borrowed-equipment-toolbar />
   <div class="borrowed-equipment-wrapper">
     @for(eqpmnt of borrowed_equipment(); track eqpmnt._id) {
     <app-row-display
