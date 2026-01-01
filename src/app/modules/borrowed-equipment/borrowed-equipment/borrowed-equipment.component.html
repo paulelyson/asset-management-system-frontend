@@ -11,6 +11,13 @@
       [actions]="borrowedEquipmentActions()"
       (actionclicked)="onActionClicked($event, eqpmnt)"
     />
+    }@empty {
+    <app-empty-placeholder />
     }
+    <div class="bottom-action-wrapper">
+      <app-button [disabled]="disable_showmore">
+        Show more...
+      </app-button>
+    </div>
   </div>
 </div>

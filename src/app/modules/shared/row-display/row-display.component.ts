@@ -16,6 +16,7 @@ export interface RowDisplayActionConfig {
   tooltip: string;
   type: IconType;
   size: IconSize;
+  action?: 'icon' | 'button'
 }
 
 @Component({

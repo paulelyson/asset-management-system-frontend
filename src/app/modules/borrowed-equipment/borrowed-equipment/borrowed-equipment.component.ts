@@ -16,6 +16,7 @@ import { AuthService, TokenData } from '../../../services/auth.service';
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
+  disable_showmore: boolean = false;
   user: TokenData;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,6 +34,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   getBorrowedEquipment(): void {
     this.borrowService.getBorrowedEquipment().subscribe({
       next: (resp) => {
+        this.disable_showmore = resp.length < 15;
         this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
         console.log(resp);
       },

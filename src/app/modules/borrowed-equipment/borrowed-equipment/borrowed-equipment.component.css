@@ -8,3 +8,9 @@
   flex-direction: column;
   align-items: center;
 }
+
+.bottom-action-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
