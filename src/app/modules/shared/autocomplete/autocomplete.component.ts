@@ -53,7 +53,7 @@ export interface IAutocompleteOption {
     },
   ],
 })
-export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
+export class AutocompleteComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() options: IAutocompleteOption[] = [];
   @Input() floatLabel: FloatLabelType = 'always';
@@ -76,11 +76,6 @@ export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
       map((value) => this._filter(value || ''))
     );
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options']) {
-      
-    }
-  }
 
   writeValue(value: any): void {
     this.value = value;
@@ -102,6 +97,10 @@ export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
 
   onInput(event: Event) {
     this.changed(this.myControl.value);
+  }
+
+  onFocus() {
+    this.myControl.setValue(this.myControl.value ?? '', { emitEvent: true });
   }
 
   private _filter(value: string): IAutocompleteOption[] {
