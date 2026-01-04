@@ -10,13 +10,14 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDateRange } from '../../shared/datepicker/datepicker.component';
-import { IBorrowingDetails } from '../../../models/BorrowedEquipment';
+import { BORROWED_EQUIPMENT_PURPOSE, IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 import { DEPARTMENTS, IUser } from '../../../models/User';
 import { UserService } from '../../../services/user.service';
 import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
 import { getDisplayName } from '../../../utils/string.util';
+import { AutocompleteService } from '../../../services/autocomplete.service';
 
 @Component({
   selector: 'app-class-schedule',
@@ -34,7 +35,8 @@ export class ClassScheduleComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBarService: SnackbarService,
-    private userService: UserService
+    private userService: UserService,
+    private autocompleteService: AutocompleteService
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
@@ -60,6 +62,10 @@ export class ClassScheduleComponent implements OnInit {
 
   get facultyAutoCompleteOptions() {
     return this.faculty().map((user) => ({ view: getDisplayName(user), value: user._id }));
+  }
+
+  get purposeOptions() {
+    return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE)
   }
 
   onClassDateChanged(event: IDateRange) {

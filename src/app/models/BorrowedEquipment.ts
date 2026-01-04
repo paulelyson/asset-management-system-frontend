@@ -13,6 +13,8 @@ export type BorrowedEquipmentStatusType =
   | 'unreturned'
   | 'system_reset';
 
+export type BorrowedEquipmentPurpose = 'class_use' | 'research' | 'instructional' | 'others';
+
 export interface BorrowedEquipmentStatus extends IConditionAndQuantity {
   status: BorrowedEquipmentStatusType;
   remarks?: string;
@@ -40,10 +42,9 @@ export interface IBorrowingDetails {
   dis: boolean;
 }
 
-
 export interface BorrowedEquipment {
   _id: string;
-	borrower: IUser;
+  borrower: IUser;
   classDepartment: Department;
   faculty: IUser;
   purpose: string;
@@ -58,3 +59,10 @@ export interface BorrowedEquipment {
   borrowedEquipmentStatus: BorrowedEquipmentStatus[];
   remarks: string;
 }
+
+export const BORROWED_EQUIPMENT_PURPOSE: BorrowedEquipmentPurpose[] = [
+  'class_use',
+  'research',
+  'instructional',
+  'others',
+];
