@@ -79,6 +79,7 @@ export class AutocompleteComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     this.value = value;
+    this.myControl.setValue(this.value ?? '', { emitEvent: true });
   }
   registerOnChange(fn: any): void {
     this.changed = fn;

@@ -4,3 +4,25 @@ export const americanDateToISODate = (input: string) => {
 };
 
 export const convertToAmericanFormat = (date: string) => date.toLocaleString().split(',')[0];
+
+export const get24HourTime = (
+  isodate: string = new Date().toISOString(),
+  roundToHour: boolean = true,
+  addHours: number = 0
+) => {
+  const date = new Date(isodate);
+
+  if (roundToHour) {
+    date.setUTCMinutes(0, 0, 0); // 18:25 → 18:00
+  }
+
+  if (addHours) {
+    date.setUTCHours(date.getUTCHours() + addHours);
+  }
+
+  return date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};

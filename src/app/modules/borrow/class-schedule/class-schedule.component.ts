@@ -22,6 +22,7 @@ import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.comp
 import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
+import { get24HourTime } from '../../../utils/date.util';
 
 @Component({
   selector: 'app-class-schedule',
@@ -48,13 +49,13 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
       borrower: ['', Validators.required],
       classDepartment: ['', Validators.required],
       faculty: ['', Validators.required],
-      purpose: ['', Validators.required],
+      purpose: ['class_use', Validators.required],
       classCode: ['', Validators.required],
       className: ['', Validators.required],
       dateOfUseStart: ['', Validators.required],
       dateOfUseEnd: ['', Validators.required],
-      timeOfUseStart: ['', Validators.required],
-      timeOfUseEnd: ['', Validators.required],
+      timeOfUseStart: [get24HourTime(), Validators.required],
+      timeOfUseEnd: [get24HourTime(undefined, true, 1), Validators.required],
     });
   }
 
@@ -71,7 +72,7 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
       this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
     }
 
-    if(changes['department']) {
+    if (changes['department']) {
       this.classScheduleForm.controls['classDepartment'].patchValue(this.department);
     }
   }
