@@ -8,7 +8,11 @@
       <span>No equipment added yet.</span>
       }
     </div>
-    <app-class-schedule (onFormSubmit)="onSubmitRequest($event)" />
+    <app-class-schedule
+      [user]="user"
+      [department]="equipmentFilter.department"
+      (onFormSubmit)="onSubmitRequest($event)"
+    />
   </mat-drawer>
   <mat-drawer-content class="equipment-container">
     @for(eqpmnt of equipment(); track eqpmnt) {

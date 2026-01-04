@@ -2,10 +2,13 @@ import {
   Component,
   computed,
   EventEmitter,
+  Input,
+  OnChanges,
   OnInit,
   Output,
   Signal,
   signal,
+  SimpleChanges,
   WritableSignal,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,11 +16,12 @@ import { IDateRange } from '../../shared/datepicker/datepicker.component';
 import { BORROWED_EQUIPMENT_PURPOSE, IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
-import { DEPARTMENTS, IUser } from '../../../models/User';
+import { Department, DEPARTMENTS, IUser } from '../../../models/User';
 import { UserService } from '../../../services/user.service';
 import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
 import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
+import { TokenData } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-class-schedule',
@@ -25,11 +29,13 @@ import { AutocompleteService } from '../../../services/autocomplete.service';
   styleUrl: './class-schedule.component.css',
   standalone: false,
 })
-export class ClassScheduleComponent implements OnInit {
+export class ClassScheduleComponent implements OnInit, OnChanges {
+  @Input() user!: TokenData;
+  @Input() department!: Department;
+  @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
   departments = DEPARTMENTS;
   classScheduleForm: FormGroup;
   faculty: WritableSignal<IUser[]> = signal([]);
-  @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
 
   // facultyAutoCompleteOptions: IAutocompleteOption[] = []
   constructor(
@@ -60,12 +66,22 @@ export class ClassScheduleComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['user']) {
+      this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
+    }
+
+    if(changes['department']) {
+      this.classScheduleForm.controls['classDepartment'].patchValue(this.department);
+    }
+  }
+
   get facultyAutoCompleteOptions() {
     return this.faculty().map((user) => ({ view: getDisplayName(user), value: user._id }));
   }
 
   get purposeOptions() {
-    return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE)
+    return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
   }
 
   onClassDateChanged(event: IDateRange) {

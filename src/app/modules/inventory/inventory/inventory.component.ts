@@ -22,7 +22,7 @@ import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 })
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
-  equipmentFilter: IEquipmentFilter = { page: 1 };
+  equipmentFilter: IEquipmentFilter;
   disable_showmore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   constructor(
@@ -30,7 +30,9 @@ export class InventoryComponent implements OnInit {
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.equipmentFilter = {page: 1, department: 'computer_engineering'}
+  }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));

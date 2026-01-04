@@ -8,6 +8,8 @@ import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.co
 import { FormBuilder } from '@angular/forms';
 import { IBorrowedEquipment, IBorrowingDetails } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
+import { AuthService, TokenData } from '../../../services/auth.service';
+import { Department } from '../../../models/User';
 
 @Component({
   selector: 'app-borrow',
@@ -17,16 +19,22 @@ import { BorrowService } from '../../../services/borrow.service';
 })
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = true;
-  equipmentFilter: IEquipmentFilter = { page: 1 };
+  equipmentFilter: IEquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
+  user: TokenData;
 
   constructor(
     private dialogService: DialogService,
     private activatedRoute: ActivatedRoute,
     private equipmentService: EquipmentService,
-    private borrowService: BorrowService
-  ) {}
+    private borrowService: BorrowService,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getUser();
+    this.equipmentFilter = { page: 1, department: 'computer_engineering' };
+  }
+
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
@@ -66,6 +74,7 @@ export class BorrowComponent implements OnInit {
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
     this.equipmentFilter.search = params['search'] ? params['search'] : '';
+    this.equipmentFilter.department = params['department'] ?? this.equipmentFilter.department;
     this.getEquipment();
   }
 }
