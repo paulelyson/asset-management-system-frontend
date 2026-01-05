@@ -44,9 +44,17 @@ export class BorrowComponent implements OnInit {
   }
 
   getEquipment(): void {
+    if (this.equipmentFilter.page == 1) {
+      this.equipment.set([]);
+    }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
+        this.disable_showmore = resp.length < 15;
+        this.equipment.update((eqpmnt) =>
+          [...eqpmnt]
+            .concat(resp)
+            .filter((item, ndx, arr) => ndx === arr.findIndex((x) => x._id === item._id))
+        );
       },
     });
   }
@@ -102,8 +110,10 @@ export class BorrowComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.equipmentFilter.search = params['search'] ? params['search'] : '';
-    this.equipmentFilter.department = params['department'] ?? this.equipmentFilter.department;
+    this.equipmentFilter.search = params['search'];
+    this.equipmentFilter.brand = params['brand'];
+    this.equipmentFilter.categories = params['categories'];
+    this.equipmentFilter.equipmentType = params['equipmentType'];
     this.getEquipment();
   }
 }

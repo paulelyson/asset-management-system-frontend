@@ -16,10 +16,7 @@ export class InventoryToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
   searchControl = new FormControl('');
   url: string = '';
-  constructor(
-    private dialogService: DialogService,
-    private router: Router,
-  ) {
+  constructor(private dialogService: DialogService, private router: Router) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
@@ -34,9 +31,7 @@ export class InventoryToolbarComponent {
 
   onBadgeClosed(filter: Record<string, string>): void {
     let navigationExtras: NavigationExtras = {
-      queryParams: {
-        [filter['field']]: null,
-      },
+      queryParams: { [filter['field']]: null },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);
@@ -44,15 +39,13 @@ export class InventoryToolbarComponent {
 
   onSearch(): void {
     let navigationExtras: NavigationExtras = {
-      queryParams: {
-        search: this.searchControl.value,
-      },
+      queryParams: { page: 1, search: this.searchControl.value },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);
   }
 
   addNewEquipment(): void {
-    this.dialogService.openCreateEquipmentDialog()
+    this.dialogService.openCreateEquipmentDialog();
   }
 }
