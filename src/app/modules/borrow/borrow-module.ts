@@ -17,6 +17,7 @@ import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../shared/icon/icon.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BorrowToolbarComponent } from './borrow-toolbar/borrow-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ClassScheduleComponent,
     AddedEquipmentCardComponent,
     EquipmentCardComponent,
+    BorrowToolbarComponent
   ],
   imports: [
     CommonModule,
