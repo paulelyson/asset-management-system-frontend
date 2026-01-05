@@ -22,6 +22,22 @@ export class BorrowToolbarComponent {
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
 
+  openFilterDialog() {
+    this.dialogService.openEquipmentFilterDialog();
+  }
+
+  clearFilter(): void {
+    this.router.navigate([this.url]);
+  }
+
+  onBadgeClosed(filter: Record<string, string>): void {
+    let navigationExtras: NavigationExtras = {
+      queryParams: { [filter['field']]: null },
+      queryParamsHandling: 'merge',
+    };
+    this.router.navigate([this.url], navigationExtras);
+  }
+
   onToggleBorrowForm() {
     this.sidenav_opened = !this.sidenav_opened;
     this.toggleSideNav.emit(this.sidenav_opened);

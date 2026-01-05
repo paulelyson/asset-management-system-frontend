@@ -1,5 +1,9 @@
 <app-title-section>Borrow Equipment</app-title-section>
-<app-borrow-toolbar [sidenav_opened]="sidenav_opened" (toggleSideNav)="onToggleSideNav($event)" />
+<app-borrow-toolbar
+  [sidenav_opened]="sidenav_opened"
+  (toggleSideNav)="onToggleSideNav($event)"
+  [filters]="filterValues"
+/>
 <mat-drawer-container>
   <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">
     <div class="added-equipment-card-wrapper">
