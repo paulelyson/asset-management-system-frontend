@@ -19,7 +19,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
   standalone: false,
 })
 export class BorrowComponent implements OnInit {
-  sidenav_opened: boolean = true;
+  sidenav_opened: boolean = false;
   equipmentFilter: IEquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
@@ -27,7 +27,6 @@ export class BorrowComponent implements OnInit {
   user: TokenData;
 
   constructor(
-    private dialogService: DialogService,
     private activatedRoute: ActivatedRoute,
     private equipmentService: EquipmentService,
     private borrowService: BorrowService,
@@ -85,6 +84,10 @@ export class BorrowComponent implements OnInit {
           icon: '',
         }),
     });
+  }
+
+  onToggleSideNav(event: boolean) {
+    this.sidenav_opened = event;
   }
 
   queryParamsHandling(params: Params): void {
