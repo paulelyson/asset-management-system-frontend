@@ -18,6 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../shared/icon/icon.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BorrowToolbarComponent } from './borrow-toolbar/borrow-toolbar.component';
+import { BadgeComponent } from '../shared/badge/badge.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { BorrowToolbarComponent } from './borrow-toolbar/borrow-toolbar.componen
     CommonModule,
     ButtonComponent,
     IconComponent,
+    BadgeComponent
   ],
 })
 export class BorrowModule {}
