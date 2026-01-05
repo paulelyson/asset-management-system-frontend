@@ -10,6 +10,7 @@ import { ButtonComponent } from '../shared/button/button.component';
 import { BorrowedEquipmentToolbarComponent } from './borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
+import { RowHeaderComponent } from '../shared/row-header/row-header.component';
 
 @NgModule({
   declarations: [BorrowedEquipmentComponent, BorrowedEquipmentToolbarComponent],
@@ -23,7 +24,8 @@ import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-pla
     ButtonComponent,
     FormsModule,
     ReactiveFormsModule,
-    EmptyPlaceholderComponent
+    EmptyPlaceholderComponent,
+    RowHeaderComponent
   ],
 })
 export class BorrowedEquipmentModule {}

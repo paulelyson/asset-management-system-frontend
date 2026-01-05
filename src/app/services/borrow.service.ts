@@ -131,8 +131,8 @@ export class BorrowService {
 
   getRowDisplayActions(): RowDisplayActionConfig[] {
     return [
-      { name: 'lock_open', tooltip: 'Release', type: 'primary', size: 'md' },
-      { name: 'edit', tooltip: 'Update qty, condition, & status', type: 'primary', size: 'md' },
+      { name: 'thumb_up', tooltip: 'Release', type: 'primary', size: 'md' },
+      // { name: 'edit', tooltip: 'Update qty, condition, & status', type: 'primary', size: 'md' },
     ];
   }
 

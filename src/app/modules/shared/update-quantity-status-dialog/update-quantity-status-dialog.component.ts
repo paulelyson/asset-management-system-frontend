@@ -38,7 +38,7 @@ export class UpdateQuantityStatusDialogComponent {
     private autocompleteService: AutocompleteService
   ) {
     this.borrowedEquipmentStatusForm = this.fb.group({
-      quantity: [''],
+      quantity: [1],
       status: [''],
       condition: [''],
       remarks: [''],

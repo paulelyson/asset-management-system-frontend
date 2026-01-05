@@ -37,7 +37,7 @@ export class EquipmentCardComponent {
       const actions: IButtonConfig[] = [
         {
           id: 0,
-          name: 'Update and Add',
+          name: 'Add',
           size: 'sm',
           type: 'default',
           shade: 'default',
