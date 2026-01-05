@@ -71,7 +71,13 @@
     supporting-text-color: var(--gray-900)
   ));
 
-  
+
+  // SideNav Override
+  @include mat.sidenav-overrides((
+    container-background-color:  #f3f5f8,
+    content-background-color:  #f3f5f8
+  ));
+
 }
 
 html {
@@ -94,7 +100,7 @@ body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  // background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-small);
 
