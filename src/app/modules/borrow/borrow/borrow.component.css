@@ -6,10 +6,16 @@
   padding: 12px;
 }
 
-.equipment-container {
+.equipment-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.equipment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .added-equipment-card-wrapper {
@@ -18,4 +24,10 @@
   gap: 5px;
   padding: 12px;
   text-align: center;
+}
+
+.bottom-action-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
 }

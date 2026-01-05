@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
@@ -20,6 +20,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
 })
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = false;
+  disable_showmore: boolean = false;
   equipmentFilter: IEquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
@@ -31,7 +32,8 @@ export class BorrowComponent implements OnInit {
     private equipmentService: EquipmentService,
     private borrowService: BorrowService,
     private authService: AuthService,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private router: Router
   ) {
     this.user = this.authService.getUser();
     this.equipmentFilter = { page: 1, department: 'computer_engineering' };
@@ -47,6 +49,14 @@ export class BorrowComponent implements OnInit {
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
       },
     });
+  }
+
+  loadMoreEquipment() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { page: this.equipmentFilter.page + 1 },
+      queryParamsHandling: 'merge',
+    };
+    this.router.navigate(['/borrow'], navigationExtras);
   }
 
   onAddEquipment(addedEqmnt: IAddedEquipment) {
