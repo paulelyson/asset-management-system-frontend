@@ -7,7 +7,8 @@ import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 import { EquipmentService } from '../../../services/equipment.service';
 import { AutocompleteService } from '../../../services/autocomplete.service';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, of } from 'rxjs';
+import { DEPARTMENTS } from '../../../models/User';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
@@ -22,6 +23,8 @@ export class EquipmentFilterDialogComponent implements OnInit {
   categories: IAutocompleteOption[] = [];
   brands: IAutocompleteOption[] = [];
   equipmentTypes: IAutocompleteOption[] = [];
+  departments: IAutocompleteOption[] = [];
+  
 
   constructor(
     public dialogRef: MatDialogRef<EquipmentFilterDialogComponent>,
@@ -33,6 +36,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
     this.url = this.router.url.split('?')[0];
 
     this.filterForm = this.fb.group({
+      department: [''],
       categories: [''],
       brand: [''],
       equipmentType: [''],
@@ -51,17 +55,20 @@ export class EquipmentFilterDialogComponent implements OnInit {
     categories: this.equipmentService.getDistinctValues('categories', 'computer_engineering'),
     brands: this.equipmentService.getDistinctValues('brand', 'computer_engineering'),
     equipmentTypes: this.equipmentService.getDistinctValues('equipmentType', 'computer_engineering'),
+    departments: of(DEPARTMENTS)
   })
-    .pipe(map(({ categories, brands, equipmentTypes }) => ({
+    .pipe(map(({ categories, brands, equipmentTypes, departments }) => ({
         categories: this.autocompleteService.mapIntoAutocompleteOption(categories),
         brands: this.autocompleteService.mapIntoAutocompleteOption(brands),
         equipmentTypes: this.autocompleteService.mapIntoAutocompleteOption(equipmentTypes),
+        departments: this.autocompleteService.mapIntoAutocompleteOption(departments),
       }))
     )
     .subscribe(result => {
       this.categories = result.categories;
       this.brands = result.brands;
       this.equipmentTypes = result.equipmentTypes;
+      this.departments = result.departments
     });
   }
 

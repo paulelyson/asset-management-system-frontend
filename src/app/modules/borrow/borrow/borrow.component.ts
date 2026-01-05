@@ -36,7 +36,7 @@ export class BorrowComponent implements OnInit {
     private router: Router
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = { page: 1, department: 'computer_engineering' };
+    this.equipmentFilter = { page: 1, department: this.user.department[0] };
   }
 
   ngOnInit(): void {
@@ -121,6 +121,7 @@ export class BorrowComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
+    this.equipmentFilter.department = params['department'] ??  this.equipmentFilter.department;
     this.getEquipment();
   }
 }
