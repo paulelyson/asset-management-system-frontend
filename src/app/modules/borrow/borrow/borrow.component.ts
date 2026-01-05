@@ -10,6 +10,7 @@ import { IBorrowedEquipment, IBorrowingDetails } from '../../../models/BorrowedE
 import { BorrowService } from '../../../services/borrow.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-borrow',
@@ -22,6 +23,7 @@ export class BorrowComponent implements OnInit {
   equipmentFilter: IEquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
+  resetForm: WritableSignal<boolean> = signal(false);
   user: TokenData;
 
   constructor(
@@ -29,7 +31,8 @@ export class BorrowComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private equipmentService: EquipmentService,
     private borrowService: BorrowService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBarService: SnackbarService
   ) {
     this.user = this.authService.getUser();
     this.equipmentFilter = { page: 1, department: 'computer_engineering' };
@@ -66,8 +69,21 @@ export class BorrowComponent implements OnInit {
 
     let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
     this.borrowService.createBorrowedEquipment(body).subscribe({
-      next: (resp) => console.log(resp),
-      error: (err) => console.error(err),
+      next: (resp) => {
+        this.snackBarService.openSnackbar({
+          type: 'success',
+          message: [resp.message],
+          icon: '',
+        });
+        this.addedEquipment = [];
+        this.resetForm.set(true);
+      },
+      error: (err) =>
+        this.snackBarService.openSnackbar({
+          type: 'error',
+          message: [err.message],
+          icon: '',
+        }),
     });
   }
 

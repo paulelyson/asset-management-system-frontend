@@ -11,6 +11,7 @@
     <app-class-schedule
       [user]="user"
       [department]="equipmentFilter.department"
+      [resetForm]="resetForm()"
       (onFormSubmit)="onSubmitRequest($event)"
     />
   </mat-drawer>

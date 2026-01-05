@@ -22,7 +22,7 @@ import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.comp
 import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
-import { get24HourTime } from '../../../utils/date.util';
+import { convertToAmericanFormat, get24HourTime } from '../../../utils/date.util';
 
 @Component({
   selector: 'app-class-schedule',
@@ -33,9 +33,11 @@ import { get24HourTime } from '../../../utils/date.util';
 export class ClassScheduleComponent implements OnInit, OnChanges {
   @Input() user!: TokenData;
   @Input() department!: Department;
+  @Input() resetForm: boolean = false;
   @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
   departments = DEPARTMENTS;
   classScheduleForm: FormGroup;
+  initialSchedule: string;
   faculty: WritableSignal<IUser[]> = signal([]);
 
   // facultyAutoCompleteOptions: IAutocompleteOption[] = []
@@ -57,6 +59,8 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
       timeOfUseStart: [get24HourTime(), Validators.required],
       timeOfUseEnd: [get24HourTime(undefined, true, 1), Validators.required],
     });
+    this.initialSchedule =
+      convertToAmericanFormat(new Date()) + '-' + convertToAmericanFormat(new Date());
   }
 
   ngOnInit(): void {
@@ -74,6 +78,10 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
 
     if (changes['department']) {
       this.classScheduleForm.controls['classDepartment'].patchValue(this.department);
+    }
+
+    if (changes['resetForm'] && this.resetForm == true) {
+      this.classScheduleForm.reset();
     }
   }
 

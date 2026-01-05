@@ -3,7 +3,8 @@ export const americanDateToISODate = (input: string) => {
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 };
 
-export const convertToAmericanFormat = (date: string) => date.toLocaleString().split(',')[0];
+
+export const convertToAmericanFormat = (date: Date) => date.toLocaleString().split(',')[0];
 
 export const get24HourTime = (
   isodate: string = new Date().toISOString(),
@@ -23,6 +24,6 @@ export const get24HourTime = (
   return date.toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false
+    hour12: false,
   });
 };

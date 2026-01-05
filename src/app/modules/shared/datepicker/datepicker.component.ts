@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import {
   ControlValueAccessor,
   Form,
@@ -15,6 +15,7 @@ import {
   MatFormFieldModule,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { americanDateToISODate } from '../../../utils/date.util';
 
 export interface IDateRange {
   start: string;
@@ -34,15 +35,15 @@ export interface IDateRange {
   templateUrl: './datepicker.component.html',
   styleUrl: './datepicker.component.css',
 })
-export class DatepickerComponent implements ControlValueAccessor {
+export class DatepickerComponent implements ControlValueAccessor, OnChanges {
   @Input() label: string = 'Choose date';
   @Input() placeholder: string = '';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() type: 'datepicker' | 'daterange' = 'datepicker';
+  @Input() initialDateRange: string = '';
   @Output() dateChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() dateRangeChanged: EventEmitter<IDateRange> = new EventEmitter<IDateRange>();
-
 
   // accessor
   value: string = '';
@@ -58,6 +59,16 @@ export class DatepickerComponent implements ControlValueAccessor {
       start: [''],
       end: [''],
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialDateRange'] && this.initialDateRange) {
+      const [startDate, endDate] = this.initialDateRange.split('-'); // splitting eg 10/13/2025-10/14/2025
+      this.daterangeForm.controls['start'].setValue(americanDateToISODate(startDate));
+      this.daterangeForm.controls['end'].setValue(americanDateToISODate(endDate));
+      this.onStartDateChange()
+      this.onEndDateChange()
+    }
   }
 
   writeValue(value: any): void {
@@ -78,12 +89,12 @@ export class DatepickerComponent implements ControlValueAccessor {
     this.dateChanged.emit(this.value);
   }
 
-  onStartDateChange(event: MatDatepickerInputEvent<Date>): void {
+  onStartDateChange(): void {
     this.changed(this.daterangeForm.value);
     this.dateRangeChanged.emit(this.daterangeForm.value);
   }
 
-  onEndDateChange(event: MatDatepickerInputEvent<Date>): void {
+  onEndDateChange(): void {
     this.changed(this.daterangeForm.value);
     this.dateRangeChanged.emit(this.daterangeForm.value);
   }
