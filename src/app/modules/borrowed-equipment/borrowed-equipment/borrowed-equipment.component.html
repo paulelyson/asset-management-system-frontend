@@ -3,13 +3,13 @@
   <app-borrowed-equipment-toolbar />
   <div class="borrowed-equipment-wrapper">
     <app-row-header />
-    @for(eqpmnt of borrowed_equipment(); track eqpmnt._id) {
+    @for(eqpmnt of borrowed_equipment(); track $index) {
     <app-row-display
       [image]="eqpmnt.equipment.images[0]?.thumbnail ?? ''"
       [title]="eqpmnt.equipment.name"
       [subtitle]="eqpmnt.purpose"
       [contents]="borrowedEquipmentContents(eqpmnt)"
-      [actions]="borrowedEquipmentActions()"
+      [actions]="borrowedEquipmentActions"
       (actionclicked)="onActionClicked($event, eqpmnt)"
     />
     }@empty {

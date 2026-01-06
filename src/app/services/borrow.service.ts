@@ -14,6 +14,7 @@ import {
 } from '../modules/shared/row-display/row-display.component';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
+import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 
 interface ApiResponse {
   data: BorrowedEquipment[];
@@ -44,8 +45,10 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
-  getBorrowedEquipment(): Observable<BorrowedEquipment[]> {
-    let params = new HttpParams({});
+  getBorrowedEquipment(filter: IBorrowedEquimentFilter): Observable<BorrowedEquipment[]> {
+    let params = new HttpParams();
+    params = params.append('page', filter.page ?? '');
+    params = params.append('search', filter.search ?? '');
     return this.http
       .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params })
       .pipe(
@@ -126,7 +129,9 @@ export class BorrowService {
       }
     }
 
-    return result.filter(x=> x.quantity > 0).map(x=> `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
+    return result
+      .filter((x) => x.quantity > 0)
+      .map((x) => `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
   }
 
   getRowDisplayActions(): RowDisplayActionConfig[] {

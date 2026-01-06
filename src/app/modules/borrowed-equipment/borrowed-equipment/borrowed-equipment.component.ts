@@ -7,6 +7,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../../shared/button/button.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
+import { IBorrowedEquimentFilter } from '../../../models/BorrowedEquipmentFilter';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -18,6 +19,8 @@ export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
   disable_showmore: boolean = false;
   user: TokenData;
+  filter: IBorrowedEquimentFilter = {};
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private borrowService: BorrowService,
@@ -32,7 +35,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getBorrowedEquipment(): void {
-    this.borrowService.getBorrowedEquipment().subscribe({
+    this.borrowService.getBorrowedEquipment(this.filter).subscribe({
       next: (resp) => {
         this.disable_showmore = resp.length < 15;
         this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
@@ -66,10 +69,11 @@ export class BorrowedEquipmentComponent implements OnInit {
     return this.borrowService.getRowDisplayContent(borrowedEquipment);
   }
 
-  borrowedEquipmentActions() {
+  get borrowedEquipmentActions() {
     return this.borrowService.getRowDisplayActions();
-  }
 
+  }
+  
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'lock_open') {
     } else if (action == 'edit') {
@@ -92,6 +96,8 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
+    this.filter.page = params['page'] ? parseInt(params['page']) : 1;
+    this.filter.search = params['search'];
     this.getBorrowedEquipment();
   }
 }
