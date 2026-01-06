@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
 import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
@@ -25,7 +25,8 @@ export class BorrowedEquipmentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private borrowService: BorrowService,
     private dialogService: DialogService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.user = this.authService.getUser();
   }
@@ -35,6 +36,9 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getBorrowedEquipment(): void {
+    if (this.filter.page == 1) {
+      this.borrowed_equipment.set([]);
+    }
     this.borrowService.getBorrowedEquipment(this.filter).subscribe({
       next: (resp) => {
         this.disable_showmore = resp.length < 15;
@@ -71,9 +75,8 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   get borrowedEquipmentActions() {
     return this.borrowService.getRowDisplayActions();
-
   }
-  
+
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'lock_open') {
     } else if (action == 'edit') {
@@ -93,6 +96,15 @@ export class BorrowedEquipmentComponent implements OnInit {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
     }
+  }
+
+  loadMoreBorrowedEquipment() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { page: (this.filter.page as number) + 1 },
+      queryParamsHandling: 'merge',
+    };
+
+    this.router.navigate(['/borrowed-equipment'], navigationExtras);
   }
 
   queryParamsHandling(params: Params): void {

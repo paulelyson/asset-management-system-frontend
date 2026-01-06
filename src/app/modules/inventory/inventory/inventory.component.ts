@@ -59,7 +59,7 @@ export class InventoryComponent implements OnInit {
         this.equipment.update((eqpmnt) =>
           [...eqpmnt]
             .concat(resp)
-            .filter((item, index, arr) => index === arr.findIndex((o) => o._id === item._id))
+            .filter((item, index, arr) => index === arr.findIndex((x) => x._id === item._id))
         );
       },
     });

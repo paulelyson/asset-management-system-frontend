@@ -17,7 +17,7 @@
     }
     <div class="bottom-action-wrapper">
       @if(!disable_showmore) {
-      <app-button>Show more... </app-button>
+      <app-button (btnclicked)="loadMoreBorrowedEquipment()">Show more... </app-button>
       }
     </div>
   </div>
