@@ -24,6 +24,15 @@ interface ApiResponse {
   success: boolean;
 }
 
+const STATUS_FLOW: BorrowedEquipmentStatusType[] = [
+  'requested',
+  'faculty_approved',
+  'oic_approved',
+  'released',
+  'mark_returned',
+  'returned',
+];
+
 export interface BorrowedEquipmentStatusExt extends BorrowedEquipmentStatus {
   id: string;
   equipment: string;
@@ -112,29 +121,34 @@ export class BorrowService {
   }
 
   computeCurrentQtyStatus(borrowedEquipmentStatus: BorrowedEquipmentStatus[]) {
-    const result: {
-      status: BorrowedEquipmentStatusType;
-      quantity: number;
-    }[] = [];
+    if (!borrowedEquipmentStatus?.length) return [];
 
-    for (let i = 0; i < borrowedEquipmentStatus.length; i++) {
-      const current = borrowedEquipmentStatus[i];
-      const next = borrowedEquipmentStatus[i + 1];
+    // sort chronologically
+    const sorted = [...borrowedEquipmentStatus].sort(
+      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
 
-      if (next) {
-        result.push({
-          status: current.status,
-          quantity: current.quantity - next.quantity,
-        });
-      } else {
-        // last status keeps remaining quantity
-        result.push({
-          status: current.status,
-          quantity: current.quantity,
-        });
+    // initialize counters
+    const counts = new Map<BorrowedEquipmentStatusType, number>();
+    STATUS_FLOW.forEach((s) => counts.set(s, 0));
+
+    for (const tx of sorted) {
+      const index = STATUS_FLOW.indexOf(tx.status);
+
+      // add to current status
+      counts.set(tx.status, counts.get(tx.status)! + tx.quantity);
+
+      // subtract from previous status (if any)
+      if (index > 0) {
+        const prev = STATUS_FLOW[index - 1];
+        counts.set(prev, counts.get(prev)! - tx.quantity);
       }
     }
 
+    // return only non-zero statuses
+    const result = Array.from(counts.entries())
+      .filter(([_, qty]) => qty > 0)
+      .map(([status, quantity]) => ({ status, quantity }));
     return result
       .filter((x) => x.quantity > 0)
       .map((x) => `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
@@ -143,28 +157,34 @@ export class BorrowService {
   getCurrentStatus(
     borrowedEquipmentStatus: BorrowedEquipmentStatus[]
   ): BorrowedEquipmentStatusType[] {
-    const result: {
-      status: BorrowedEquipmentStatusType;
-      quantity: number;
-    }[] = [];
+    if (!borrowedEquipmentStatus?.length) return [];
 
-    for (let i = 0; i < borrowedEquipmentStatus.length; i++) {
-      const current = borrowedEquipmentStatus[i];
-      const next = borrowedEquipmentStatus[i + 1];
+    // sort chronologically
+    const sorted = [...borrowedEquipmentStatus].sort(
+      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
 
-      if (next) {
-        result.push({
-          status: current.status,
-          quantity: current.quantity - next.quantity,
-        });
-      } else {
-        // last status keeps remaining quantity
-        result.push({
-          status: current.status,
-          quantity: current.quantity,
-        });
+    // initialize counters
+    const counts = new Map<BorrowedEquipmentStatusType, number>();
+    STATUS_FLOW.forEach((s) => counts.set(s, 0));
+
+    for (const tx of sorted) {
+      const index = STATUS_FLOW.indexOf(tx.status);
+
+      // add to current status
+      counts.set(tx.status, counts.get(tx.status)! + tx.quantity);
+
+      // subtract from previous status (if any)
+      if (index > 0) {
+        const prev = STATUS_FLOW[index - 1];
+        counts.set(prev, counts.get(prev)! - tx.quantity);
       }
     }
+
+    // return only non-zero statuses
+    const result = Array.from(counts.entries())
+      .filter(([_, qty]) => qty > 0)
+      .map(([status, quantity]) => ({ status, quantity }));
 
     return result.filter((x) => x.quantity > 0).map((x) => x.status);
   }
