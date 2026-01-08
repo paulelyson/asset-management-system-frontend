@@ -8,8 +8,8 @@
       [image]="eqpmnt.equipment.images[0]?.thumbnail ?? ''"
       [title]="eqpmnt.equipment.name"
       [subtitle]="eqpmnt.purpose"
-      [contents]="borrowedEquipmentContents(eqpmnt)"
-      [actions]="borrowedEquipmentActions"
+      [contents]="getBorrowedEquipmentContents(eqpmnt)"
+      [actions]="getBorrowedEquipmentActions(eqpmnt)"
       (actionclicked)="onActionClicked($event, eqpmnt)"
     />
     }@empty {

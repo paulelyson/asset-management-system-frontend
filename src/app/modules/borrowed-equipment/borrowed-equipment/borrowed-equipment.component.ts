@@ -2,7 +2,10 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
 import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
-import { RowDisplayContent } from '../../shared/row-display/row-display.component';
+import {
+  RowDisplayActionConfig,
+  RowDisplayContent,
+} from '../../shared/row-display/row-display.component';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../../shared/button/button.component';
@@ -71,22 +74,26 @@ export class BorrowedEquipmentComponent implements OnInit {
       },
     ];
     this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
-      next: (resp) => this.getBorrowedEquipment(),
+      next: (resp) => {
+        console.log(resp)
+        this.getBorrowedEquipment()
+      },
       error: (err) => console.error(err),
     });
   }
 
-  borrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
+  getBorrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
     return this.borrowService.getRowDisplayContent(borrowedEquipment);
   }
 
-  get borrowedEquipmentActions() {
-    return this.borrowService.getRowDisplayActions();
+  getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
+    return this.borrowService.getRowDisplayActions(this.user, borrowedEquipment);
   }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
-    if (action == 'lock_open') {
-    } else if (action == 'edit') {
+    if (action == 'thumb_up' && borrowedEquipment.quantity == 1) {
+        this.updateBorrowedEquipmentStatus(borrowedEquipment, 'faculty_approved', borrowedEquipment.quantity);
+    } else if (action == 'thumb_up' && borrowedEquipment.quantity > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
       const actions: IButtonConfig[] = [
         {

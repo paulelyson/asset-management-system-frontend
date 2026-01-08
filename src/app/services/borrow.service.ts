@@ -15,6 +15,8 @@ import {
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
+import { IUser } from '../models/User';
+import { AuthService } from './auth.service';
 
 interface ApiResponse {
   data: BorrowedEquipment[];
@@ -31,7 +33,11 @@ export interface BorrowedEquipmentStatusExt extends BorrowedEquipmentStatus {
   providedIn: 'root',
 })
 export class BorrowService {
-  constructor(private http: HttpClient, private datePipe: DatePipe) {}
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe,
+    private authService: AuthService
+  ) {}
 
   createBorrowedEquipment(body: IBorrowingDetails): Observable<ApiResponse> {
     return this.http
@@ -134,11 +140,54 @@ export class BorrowService {
       .map((x) => `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
   }
 
-  getRowDisplayActions(): RowDisplayActionConfig[] {
-    return [
-      { name: 'thumb_up', tooltip: 'Release', type: 'primary', size: 'md' },
-      // { name: 'edit', tooltip: 'Update qty, condition, & status', type: 'primary', size: 'md' },
-    ];
+  getCurrentStatus(
+    borrowedEquipmentStatus: BorrowedEquipmentStatus[]
+  ): BorrowedEquipmentStatusType[] {
+    const result: {
+      status: BorrowedEquipmentStatusType;
+      quantity: number;
+    }[] = [];
+
+    for (let i = 0; i < borrowedEquipmentStatus.length; i++) {
+      const current = borrowedEquipmentStatus[i];
+      const next = borrowedEquipmentStatus[i + 1];
+
+      if (next) {
+        result.push({
+          status: current.status,
+          quantity: current.quantity - next.quantity,
+        });
+      } else {
+        // last status keeps remaining quantity
+        result.push({
+          status: current.status,
+          quantity: current.quantity,
+        });
+      }
+    }
+
+    return result.filter((x) => x.quantity > 0).map((x) => x.status);
+  }
+
+  getRowDisplayActions(
+    user: IUser,
+    borrowedEquipment: BorrowedEquipment
+  ): RowDisplayActionConfig[] {
+    console.log(this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus));
+    let actions: RowDisplayActionConfig[] = [];
+    let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
+    let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
+    //  approver | class faculty / oic / chairman of the borrowed equipment
+    if (
+      user._id == borrowedEquipment.faculty._id ||
+      isDeptChair ||
+      (isDeptOIC &&
+        this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('requested'))
+    ) {
+      actions.push({ name: 'thumb_up', tooltip: 'Approve', type: 'primary', size: 'md' });
+    }
+
+    return actions;
   }
 
   handleError(err: HttpErrorResponse) {
