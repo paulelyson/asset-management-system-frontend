@@ -11,6 +11,7 @@ import { BorrowedEquipmentToolbarComponent } from './borrowed-equipment-toolbar/
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
 import { RowHeaderComponent } from '../shared/row-header/row-header.component';
+import { BadgeComponent } from '../shared/badge/badge.component';
 
 @NgModule({
   declarations: [BorrowedEquipmentComponent, BorrowedEquipmentToolbarComponent],
@@ -25,7 +26,8 @@ import { RowHeaderComponent } from '../shared/row-header/row-header.component';
     FormsModule,
     ReactiveFormsModule,
     EmptyPlaceholderComponent,
-    RowHeaderComponent
+    RowHeaderComponent,
+    BadgeComponent
   ],
 })
 export class BorrowedEquipmentModule {}

@@ -1,6 +1,16 @@
 <section id="toolbar">
   <div class="toolbar-container">
-    <app-button variant="link" icon="filter_list" (btnclicked)="openFilterDialog()"> Filter </app-button>
+    <div class="filter-badge-wrapper">
+      @for(filter of filters; track filter['field']) {
+      <app-badge size="sm" [hasCloseIcon]="true" type="success" (closed)="onBadgeClosed(filter)">
+        {{ filter['value'] }}
+      </app-badge>
+      }
+    </div>
+    <span class="spacer"></span>
+    <app-button variant="link" icon="filter_list" (btnclicked)="openFilterDialog()">
+      Filter
+    </app-button>
     <app-input suffix_icon="search" [formControl]="searchControl" placeholder="Equipment Name" />
   </div>
 </section>

@@ -1,6 +1,6 @@
 <div class="borrowed-equipment-page-container">
   <app-title-section>Borrowed Equipments</app-title-section>
-  <app-borrowed-equipment-toolbar />
+  <app-borrowed-equipment-toolbar [filters]="filterValues"/>
   <div class="borrowed-equipment-wrapper">
     <app-row-header />
     @for(eqpmnt of borrowed_equipment(); track $index) {

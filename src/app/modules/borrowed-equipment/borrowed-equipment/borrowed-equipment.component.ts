@@ -35,6 +35,13 @@ export class BorrowedEquipmentComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
+  get filterValues(): Record<string, string>[] {
+    const notIncludeFields = ['page'];
+    return Object.entries(this.filter)
+      .map(([key, val]) => ({ field: key, value: val }))
+      .filter((x) => x.value && !notIncludeFields.includes(x.field));
+  }
+
   getBorrowedEquipment(): void {
     if (this.filter.page == 1) {
       this.borrowed_equipment.set([]);
