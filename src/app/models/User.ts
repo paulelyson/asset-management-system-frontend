@@ -32,6 +32,7 @@ export interface IUser {
   email: string;
   schoolId: string;
   department: Department[];
+  assignedTo: Department[];
   role: UserRole[];
   password: string;
   activated: boolean;

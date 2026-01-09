@@ -78,11 +78,12 @@ export class BorrowService {
     const statuses = this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus);
     const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
     const name = getDisplayName(borrowedEquipment.borrower);
+    const faculty = getDisplayName(borrowedEquipment.faculty);
     let contents: RowDisplayContent[] = [
       { id: 1, type: 'text', content: [borrowedEquipment.className] },
       { id: 2, type: 'text', content: [name] },
       { id: 3, type: 'badge', content: statuses },
-      { id: 4, type: 'text', content: [date as string] },
+      { id: 4, type: 'text', content: [faculty] },
     ];
     return contents;
   }
@@ -184,9 +185,9 @@ export class BorrowService {
     // return only non-zero statuses
     const result = Array.from(counts.entries())
       .filter(([_, qty]) => qty > 0)
-      .map(([status, quantity]) => ({ status, quantity }));
+      .map(([status, quantity]) => status);
 
-    return result.filter((x) => x.quantity > 0).map((x) => x.status);
+    return result;
   }
 
   getRowDisplayActions(
@@ -199,12 +200,20 @@ export class BorrowService {
     let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
     //  approver | class faculty / oic / chairman of the borrowed equipment
     if (
-      user._id == borrowedEquipment.faculty._id ||
-      isDeptChair ||
-      (isDeptOIC &&
-        this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('requested'))
+      (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
+      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('requested')
     ) {
       actions.push({ name: 'thumb_up', tooltip: 'Approve', type: 'primary', size: 'md' });
+    }
+
+    // can release as oic
+    if (
+      user.assignedTo.includes(borrowedEquipment.classDepartment) &&
+      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).some((x) =>
+        ['oic_approved', 'faculty_approved'].includes(x)
+      )
+    ) {
+      actions.push({ name: 'lock_open', tooltip: 'Release', type: 'primary', size: 'md' });
     }
 
     return actions;
