@@ -24,6 +24,10 @@ export class BorrowedEquipmentToolbarComponent {
     this.dialogService.openBorrowedEquipmentFilterDialog();
   }
 
+  clearFilter(): void {
+    this.router.navigate([this.url]);
+  }
+
   onBadgeClosed(filter: Record<string, string>): void {
     let navigationExtras: NavigationExtras = {
       queryParams: { [filter['field']]: null },
