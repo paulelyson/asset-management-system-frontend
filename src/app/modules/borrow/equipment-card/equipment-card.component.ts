@@ -7,6 +7,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+import ButtonConfig from '../../../models/ButtonConfig';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -34,18 +35,7 @@ export class EquipmentCardComponent {
   onAddEquipment(): void {
     if (this.equipment.totalQuantity > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
-      const actions: IButtonConfig[] = [
-        {
-          id: 0,
-          name: 'Add',
-          size: 'sm',
-          type: 'default',
-          shade: 'default',
-          width: 'width-filled',
-          btnType: 'button',
-        },
-      ];
-
+      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Add' })];
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         if (resp) {
           let quantity = parseInt(resp.quantity);

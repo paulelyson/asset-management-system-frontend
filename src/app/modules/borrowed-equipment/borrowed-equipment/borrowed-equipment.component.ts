@@ -11,6 +11,7 @@ import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-stat
 import { IButtonConfig } from '../../shared/button/button.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { IBorrowedEquimentFilter } from '../../../models/BorrowedEquipmentFilter';
+import ButtonConfig from '../../../models/ButtonConfig';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -91,24 +92,11 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'thumb_up' && borrowedEquipment.quantity == 1) {
-      this.updateBorrowedEquipmentStatus(
-        borrowedEquipment,
-        'faculty_approved',
-        borrowedEquipment.quantity
-      );
+      const status = 'faculty_approved';
+      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
     } else if (action == 'thumb_up' && borrowedEquipment.quantity > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
-      const actions: IButtonConfig[] = [
-        {
-          id: 0,
-          name: 'Update',
-          size: 'sm',
-          type: 'default',
-          shade: 'default',
-          width: 'width-filled',
-          btnType: 'button',
-        },
-      ];
+      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Release' })];
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
@@ -116,17 +104,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.updateBorrowedEquipmentStatus(borrowedEquipment, 'released', borrowedEquipment.quantity);
     } else if (action == 'lock_open' && borrowedEquipment.quantity > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
-      const actions: IButtonConfig[] = [
-        {
-          id: 0,
-          name: 'Update',
-          size: 'sm',
-          type: 'default',
-          shade: 'default',
-          width: 'width-filled',
-          btnType: 'button',
-        },
-      ];
+      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Release' })];
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
