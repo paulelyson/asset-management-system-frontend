@@ -124,32 +124,33 @@ export class BorrowService {
   computeCurrentQtyStatus(borrowedEquipmentStatus: BorrowedEquipmentStatus[]) {
     if (!borrowedEquipmentStatus?.length) return [];
 
-    // sort chronologically
-    const sorted = [...borrowedEquipmentStatus].sort(
-      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+    // 1️⃣ Sum quantities per status (event-based accumulation)
+    const reached = new Map<BorrowedEquipmentStatusType, number>();
 
-    // initialize counters
-    const counts = new Map<BorrowedEquipmentStatusType, number>();
-    STATUS_FLOW.forEach((s) => counts.set(s, 0));
+    for (const tx of borrowedEquipmentStatus) {
+      reached.set(tx.status, (reached.get(tx.status) ?? 0) + tx.quantity);
+    }
 
-    for (const tx of sorted) {
-      const index = STATUS_FLOW.indexOf(tx.status);
+    // 2️⃣ Compute remaining count per status
+    const result: { status: BorrowedEquipmentStatusType; quantity: number }[] = [];
 
-      // add to current status
-      counts.set(tx.status, counts.get(tx.status)! + tx.quantity);
+    for (let i = 0; i < STATUS_FLOW.length; i++) {
+      const status = STATUS_FLOW[i];
+      const current = reached.get(status) ?? 0;
+      if (!current) continue;
 
-      // subtract from previous status (if any)
-      if (index > 0) {
-        const prev = STATUS_FLOW[index - 1];
-        counts.set(prev, counts.get(prev)! - tx.quantity);
+      // subtract everything that moved beyond this status
+      let progressed = 0;
+      for (let j = i + 1; j < STATUS_FLOW.length; j++) {
+        progressed += reached.get(STATUS_FLOW[j]) ?? 0;
+      }
+
+      const remaining = current - progressed;
+      if (remaining > 0) {
+        result.push({ status, quantity: remaining });
       }
     }
 
-    // return only non-zero statuses
-    const result = Array.from(counts.entries())
-      .filter(([_, qty]) => qty > 0)
-      .map(([status, quantity]) => ({ status, quantity }));
     return result
       .filter((x) => x.quantity > 0)
       .map((x) => `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
@@ -160,34 +161,36 @@ export class BorrowService {
   ): BorrowedEquipmentStatusType[] {
     if (!borrowedEquipmentStatus?.length) return [];
 
-    // sort chronologically
-    const sorted = [...borrowedEquipmentStatus].sort(
-      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+    // 1️⃣ Sum quantities per status (event-based accumulation)
+    const reached = new Map<BorrowedEquipmentStatusType, number>();
 
-    // initialize counters
-    const counts = new Map<BorrowedEquipmentStatusType, number>();
-    STATUS_FLOW.forEach((s) => counts.set(s, 0));
+    for (const tx of borrowedEquipmentStatus) {
+      reached.set(tx.status, (reached.get(tx.status) ?? 0) + tx.quantity);
+    }
 
-    for (const tx of sorted) {
-      const index = STATUS_FLOW.indexOf(tx.status);
+    // 2️⃣ Compute remaining count per status
+    const result: { status: BorrowedEquipmentStatusType; quantity: number }[] = [];
 
-      // add to current status
-      counts.set(tx.status, counts.get(tx.status)! + tx.quantity);
+    for (let i = 0; i < STATUS_FLOW.length; i++) {
+      const status = STATUS_FLOW[i];
+      const current = reached.get(status) ?? 0;
+      if (!current) continue;
 
-      // subtract from previous status (if any)
-      if (index > 0) {
-        const prev = STATUS_FLOW[index - 1];
-        counts.set(prev, counts.get(prev)! - tx.quantity);
+      // subtract everything that moved beyond this status
+      let progressed = 0;
+      for (let j = i + 1; j < STATUS_FLOW.length; j++) {
+        progressed += reached.get(STATUS_FLOW[j]) ?? 0;
+      }
+
+      const remaining = current - progressed;
+      if (remaining > 0) {
+        result.push({ status, quantity: remaining });
       }
     }
 
-    // return only non-zero statuses
-    const result = Array.from(counts.entries())
-      .filter(([_, qty]) => qty > 0)
-      .map(([status, quantity]) => status);
+    return result.map((x) => x.status);
 
-    return result;
+    // return result;
   }
 
   getRowDisplayActions(
