@@ -1,0 +1,18 @@
+.borrowed-equipment-filter-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  gap: 10px;
+  max-height: 80vh;
+  max-width: 650px;
+}
+
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px;
+}

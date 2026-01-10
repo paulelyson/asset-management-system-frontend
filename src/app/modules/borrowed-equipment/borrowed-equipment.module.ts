@@ -12,9 +12,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmptyPlaceholderComponent } from '../shared/empty-placeholder/empty-placeholder.component';
 import { RowHeaderComponent } from '../shared/row-header/row-header.component';
 import { BadgeComponent } from '../shared/badge/badge.component';
+import { BorrowedEquipmentFilterDialogComponent } from './borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 
 @NgModule({
-  declarations: [BorrowedEquipmentComponent, BorrowedEquipmentToolbarComponent],
+  declarations: [
+    BorrowedEquipmentComponent,
+    BorrowedEquipmentToolbarComponent,
+    BorrowedEquipmentFilterDialogComponent,
+  ],
   imports: [
     CommonModule,
     BorrowedEquipmentRoutingModule,
@@ -27,7 +32,8 @@ import { BadgeComponent } from '../shared/badge/badge.component';
     ReactiveFormsModule,
     EmptyPlaceholderComponent,
     RowHeaderComponent,
-    BadgeComponent
+    BadgeComponent,
+    ButtonComponent
   ],
 })
 export class BorrowedEquipmentModule {}

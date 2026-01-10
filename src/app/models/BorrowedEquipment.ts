@@ -66,3 +66,16 @@ export const BORROWED_EQUIPMENT_PURPOSE: BorrowedEquipmentPurpose[] = [
   'instructional',
   'others',
 ];
+
+export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
+  'requested',
+  'faculty_approved',
+  'faculty_rejected',
+  'oic_approved',
+  'oic_rejected',
+  'released',
+  'mark_returned',
+  'returned',
+  'unreturned',
+  'system_reset',
+];

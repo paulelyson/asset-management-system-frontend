@@ -1,1 +1,8 @@
-<p>borrowed-equipment-filter-dialog works!</p>
+<div class="borrowed-equipment-filter-container">
+  <app-autocomplete label="Status" [options]="status"></app-autocomplete>
+  <app-autocomplete label="Purpose" [options]="purposes"></app-autocomplete>
+  <div class="action-wrapper">
+    <app-button>Apply</app-button>
+    <app-button>Cancel</app-button>
+  </div>
+</div>
