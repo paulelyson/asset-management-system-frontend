@@ -64,6 +64,8 @@ export class BorrowService {
     let params = new HttpParams();
     params = params.append('page', filter.page ?? '');
     params = params.append('search', filter.search ?? '');
+    params = params.append('purpose', filter.purpose ?? '');
+    params = params.append('status', filter.status ?? '');
     return this.http
       .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params })
       .pipe(
@@ -159,7 +161,6 @@ export class BorrowService {
   getCurrentStatus(
     borrowedEquipmentStatus: BorrowedEquipmentStatus[]
   ): BorrowedEquipmentStatusType[] {
-    if (!borrowedEquipmentStatus?.length) return [];
 
     // 1️⃣ Sum quantities per status (event-based accumulation)
     const reached = new Map<BorrowedEquipmentStatusType, number>();
@@ -189,8 +190,6 @@ export class BorrowService {
     }
 
     return result.map((x) => x.status);
-
-    // return result;
   }
 
   getRowDisplayActions(

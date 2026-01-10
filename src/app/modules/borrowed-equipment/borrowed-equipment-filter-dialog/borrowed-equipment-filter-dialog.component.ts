@@ -33,12 +33,11 @@ export class BorrowedEquipmentFilterDialogComponent {
     this.purposes = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
     this.status = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_STATUS);
     this.url = this.router.url.split('?')[0];
-
   }
 
   navigate() {
     let navigationExtras: NavigationExtras = {
-      queryParams: {},
+      queryParams: { page: 1 },
       queryParamsHandling: 'merge',
     };
     Object.entries(this.filterForm.value).forEach(([key, val]) => {
