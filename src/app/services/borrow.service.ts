@@ -219,6 +219,19 @@ export class BorrowService {
       actions.push({ name: 'lock_open', tooltip: 'Release', type: 'primary', size: 'md' });
     }
 
+    // mark as return
+    if (
+      user._id == borrowedEquipment.borrower._id &&
+      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('released')
+    ) {
+      actions.push({
+        name: 'keyboard_return',
+        tooltip: 'Return Equipment',
+        type: 'primary',
+        size: 'md',
+      });
+    }
+
     return actions;
   }
 
