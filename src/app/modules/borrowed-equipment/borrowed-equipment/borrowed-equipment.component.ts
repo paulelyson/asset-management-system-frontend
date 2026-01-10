@@ -140,6 +140,8 @@ export class BorrowedEquipmentComponent implements OnInit {
   queryParamsHandling(params: Params): void {
     this.filter.page = params['page'] ? parseInt(params['page']) : 1;
     this.filter.search = params['search'];
+    this.filter.purpose = params['purpose'];
+    this.filter.status = params['status'];
     this.getBorrowedEquipment();
   }
 }
