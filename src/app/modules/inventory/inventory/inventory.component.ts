@@ -31,7 +31,7 @@ export class InventoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-    this.equipmentFilter = {page: 1, department: 'computer_engineering'}
+    this.equipmentFilter = { page: 1, department: 'computer_engineering' };
   }
 
   ngOnInit(): void {
@@ -72,21 +72,25 @@ export class InventoryComponent implements OnInit {
         id: 1,
         type: 'text',
         content: [equipment.equipmentType],
+        span: 'mid',
       },
       {
         id: 2,
         type: 'text',
         content: equipment.categories,
+        span: 'mid',
       },
       {
         id: 3,
         type: 'badge',
         content: equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition),
+        span: 'mid',
       },
       {
         id: 4,
         type: 'text',
         content: [equipment.location],
+        span: 'mid',
       }
     );
     return contents;

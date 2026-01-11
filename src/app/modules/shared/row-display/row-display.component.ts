@@ -9,6 +9,7 @@ export interface RowDisplayContent {
   id: number; // fix track by identity warning
   type: 'badge' | 'text';
   content: string[];
+  span: 'wide' | 'mid' | 'narrow';
 }
 
 export interface RowDisplayActionConfig {

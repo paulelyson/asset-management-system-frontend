@@ -52,5 +52,11 @@ export class RowHeaderComponent {
       text: 'Date Requested',
       span: 'narrow',
     },
+     {
+      id: 5,
+      type: 'text',
+      text: 'Action',
+      span: 'narrow',
+    },
   ];
 }

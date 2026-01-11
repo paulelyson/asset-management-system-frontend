@@ -2,7 +2,20 @@
   <div class="image-wrapper">
     <img class="fit-image" [src]="image ? image : default_img" />
   </div>
-  <div class="equipment-name">
+  @for(content of contents; track content.id){
+  <div [ngClass]="[content.span]">{{ content.content }}</div>
+  }
+  <div class="action-wrapper narrow">
+    @for(action of actions; track action.name) {
+    <app-icon
+      [name]="action.name"
+      [size]="action.size"
+      [tooltip]="action.tooltip"
+      (iconclicked)="onActionClicked($event)"
+    />
+    }
+  </div>
+  <!-- <div class="equipment-name">
     <span class="title">{{ title }}</span>
     <span class="subtitle">{{ subtitle }}</span>
   </div>
@@ -25,6 +38,6 @@
       (iconclicked)="onActionClicked($event)"
     />
     }
-  </div>
+  </div> -->
 </div>
 <mat-divider></mat-divider>

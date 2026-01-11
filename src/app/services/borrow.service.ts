@@ -82,10 +82,12 @@ export class BorrowService {
     const name = getDisplayName(borrowedEquipment.borrower);
     const faculty = getDisplayName(borrowedEquipment.faculty);
     let contents: RowDisplayContent[] = [
-      { id: 1, type: 'text', content: [borrowedEquipment.className] },
-      { id: 2, type: 'text', content: [name] },
-      { id: 3, type: 'badge', content: statuses },
-      { id: 4, type: 'text', content: [faculty] },
+      { id: 0, type: 'text', content: [borrowedEquipment.className], span: 'wide' },
+      { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
+      { id: 2, type: 'text', content: [name], span: 'mid'},
+      { id: 2, type: 'text', content: ['1'], span: 'narrow'},
+      { id: 3, type: 'badge', content: statuses, span: 'mid' },
+      { id: 4, type: 'text', content: [date as string], span: 'narrow' },
     ];
     return contents;
   }

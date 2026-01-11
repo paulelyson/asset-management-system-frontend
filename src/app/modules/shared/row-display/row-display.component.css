@@ -17,14 +17,30 @@
   border-radius: 5px;
 }
 
-.equipment-container span {
+.equipment-container .image-gap {
+  width: 50px;
+}
+
+.equipment-container .wide {
+  flex-basis: 30%;
+}
+
+.equipment-container .mid {
+  flex-basis: 15%;
+}
+
+.equipment-container .narrow {
+  flex-basis: 8%;
+}
+
+/* .equipment-container span {
   flex-basis: 15%;
 }
 
 .equipment-name {
   display: flex;
   flex-direction: column;
-  flex-basis: 30%;
+  flex-basis: 25%;
   line-height: normal;
 
   .title {
@@ -43,7 +59,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
+} */
 
 .action-wrapper {
   display: flex;
