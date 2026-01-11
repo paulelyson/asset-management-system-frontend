@@ -1,0 +1,23 @@
+.header-container {
+  min-width: 1100px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-container .image-gap {
+ width: 50px;
+}
+
+.header-container .wide {
+  flex-basis: 25%;
+}
+
+.header-container .mid {
+  flex-basis: 15%;
+}
+
+.header-container .narrow {
+  flex-basis: 8%;
+}
