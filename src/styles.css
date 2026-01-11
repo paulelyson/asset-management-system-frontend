@@ -188,6 +188,6 @@ body {
   height: 100%;
   background-color: var(--primary-50);
   color: var(--text);
-  font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-display: swap;
 }

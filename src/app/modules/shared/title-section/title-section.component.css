@@ -1,11 +1,11 @@
 .title-container {
   display: flex;
-  padding: 2.5rem 0;
+  padding: 2.5rem;
   align-items: center;
   gap: 15px;
 }
 
 .divider {
-  border-top: 3px solid var(--primary-500);
-  margin: 0;
+  border-top:  3px solid var(--primary-700);
+  margin: 0 2.5rem;
 }
