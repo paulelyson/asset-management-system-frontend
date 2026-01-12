@@ -28,7 +28,7 @@
   padding: 4px 8px;
   font-size: 11px;
   line-height: 12px;
-  max-width: 75px;
+  /* max-width: 100px; */
 
   mat-icon {
     height: 10px;
@@ -63,7 +63,7 @@
 
 .badge-container.success {
   border-radius: 12px;
-  border: 1px solid var(--color-border-success-idle);
+  /* border: 1px solid var(--color-border-success-idle); */
   background: var(--color-bg-success-idle);
   color: var(--color-text-success-default);
 
@@ -73,7 +73,7 @@
 
 .badge-container.warning {
   border-radius: 12px;
-  border: 1px solid var(--color-border-warning-idle);
+  /* border: 1px solid var(--color-border-warning-idle); */
   background: var(--color-bg-warning-idle);
   color: var(--color-text-warning-default);
 

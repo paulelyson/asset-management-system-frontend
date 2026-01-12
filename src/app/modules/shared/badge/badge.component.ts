@@ -21,7 +21,7 @@ interface BadgeTypeSetting {
   styleUrl: './badge.component.css',
 })
 export class BadgeComponent {
-  @Input() size: BadgeSize = 'sm';
+  @Input() size: BadgeSize = 'md';
   @Input() type: BadgeType = 'default';
   @Input() hasBadgeIcon: boolean = false;
   @Input() hasCloseIcon: boolean = false;
