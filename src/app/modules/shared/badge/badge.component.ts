@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 type BadgeSize = 'sm' | 'md' | 'lg';
-export type BadgeType = 'primary' | 'success' | 'warning' | 'danger';
+export type BadgeType = 'primary' | 'success' | 'warning' | 'danger' | 'default';
 interface IconType {
   type: BadgeType;
   icon: string;
@@ -22,7 +22,7 @@ interface BadgeTypeSetting {
 })
 export class BadgeComponent {
   @Input() size: BadgeSize = 'sm';
-  @Input() type: BadgeType = 'primary';
+  @Input() type: BadgeType = 'default';
   @Input() hasBadgeIcon: boolean = false;
   @Input() hasCloseIcon: boolean = false;
   @Input() clickable: boolean = true;
