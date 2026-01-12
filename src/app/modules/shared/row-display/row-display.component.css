@@ -33,33 +33,18 @@
   flex-basis: 8%;
 }
 
-/* .equipment-container span {
-  flex-basis: 15%;
-}
-
-.equipment-name {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 25%;
-  line-height: normal;
-
-  .title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-transform: capitalize;
-    color: var(--success-800);
-  }
-
-  .subtitle {
-    color: var(--gray-600);
-  }
+.equipment-container .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--primary-700);
 }
 
 .badge-wrapper {
   display: flex;
   flex-direction: column;
   gap: 4px;
-} */
+}
 
 .action-wrapper {
   display: flex;

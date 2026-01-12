@@ -4,10 +4,13 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  color: var(--primary-700);
+  font-size: 16px;
+  font-weight: 550;
 }
 
 .header-container .image-gap {
- width: 50px;
+  width: 50px;
 }
 
 .header-container .wide {

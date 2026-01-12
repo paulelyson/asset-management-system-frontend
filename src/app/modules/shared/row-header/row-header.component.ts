@@ -37,7 +37,7 @@ export class RowHeaderComponent {
      {
       id: 2,
       type: 'text',
-      text: 'Total # Requested',
+      text: 'Qty',
       span: 'narrow',
     },
     {
@@ -49,7 +49,7 @@ export class RowHeaderComponent {
     {
       id: 4,
       type: 'text',
-      text: 'Date Requested',
+      text: 'Date',
       span: 'narrow',
     },
      {
