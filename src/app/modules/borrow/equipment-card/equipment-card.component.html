@@ -9,10 +9,10 @@
     <span>{{ equipment.totalQuantity }}</span>
   </div>
   <div class="availability">
-    <span>UNAVAILABLE</span>
+    <app-badge>Available</app-badge>
     <app-icon name="info"></app-icon>
   </div>
   <div class="action-wrapper">
-    <app-button width="width-filled" type="primary" (click)="onAddEquipment()">Add</app-button>
+    <app-button variant="link" icon="add" width="width-filled" type="primary" (click)="onAddEquipment()">Add</app-button>
   </div>
 </div>

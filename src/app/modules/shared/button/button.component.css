@@ -31,6 +31,12 @@
   color: var(--text);
 }
 
+.btn-custom.accent {
+  border: none;
+  background: var(--accent);
+  color: var(--text-white);
+}
+
 .btn-custom.secondary.light {
   border: none;
   background: var(--secondary-100);
