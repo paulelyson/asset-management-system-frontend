@@ -38,14 +38,14 @@
   --background-900: #12092a;
   --background-950: #090515;
 
-  --primary-50: #f6fbf7;
-  --primary-100: #e9f5ec;
+  --primary-50: #fcfdf8;
+  --primary-100: #eaefdb;
   --primary-200: #d2ead8;
   --primary-300: #b7ddc1;
   --primary-400: #92caa1;
   --primary-500: #6db681;
   --primary-600: #539364;
-  --primary-700: #3f6f4c;
+  --primary-700: #4b7947;
   --primary-800: #2a4b33;
   --primary-900: #15261a;
   --primary-950: #0b140e;
@@ -75,7 +75,7 @@
   --accent-950: #140507;
 
   --success-50: #f3fdf6; /* airy, hint of green */
-  --success-100: #e3f5e4; /* light green mist */
+  --success-100: #eaefdb; /* light green mist */
   --success-200: #cbe7ce; /* soft minty sage */
   --success-300: #afd1b4; /* leafy green-gray */
   --success-400: #94b99c; /* pastel sage green */
