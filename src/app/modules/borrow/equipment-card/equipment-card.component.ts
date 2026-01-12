@@ -21,7 +21,7 @@ type CardShade = 'default' | 'light';
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;
-  @Input() size: CardSize = 'md';
+  @Input() size: CardSize = 'lg';
   @Input() type: CardType = 'primary';
   @Input() shade: CardShade = 'default';
   @Input() title: string = '';

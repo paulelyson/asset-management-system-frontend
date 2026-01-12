@@ -74,8 +74,8 @@
 
   // SideNav Override
   @include mat.sidenav-overrides((
-    container-background-color:  #f3f5f8,
-    content-background-color:  #f3f5f8
+    container-background-color: var(--bg),
+    content-background-color:  var(--bg)
   ));
 
 }

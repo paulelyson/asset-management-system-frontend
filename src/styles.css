@@ -3,10 +3,11 @@
 :root {
   --text: #07040e;
   --text-white: rgb(248, 246, 253);
-  --bg: #f8f6fd;
-  --primary: #754acd;
+  --bg: var(--primary-50);
+  --card-bg: #e1e8d7;
+  --primary: var(--primary-700);
   --secondary: #e397b7;
-  --accent: #d8727d;
+  --accent: #f1b12b;
   --textcontrast: #64d97b;
   --bgcontrast: #64d97b;
   --primarycontrast: #ffdd00;
@@ -186,7 +187,7 @@ html,
 body {
   margin: 0;
   height: 100%;
-  background-color: var(--primary-50);
+  background-color: var(--bg);
   color: var(--text);
   font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-display: swap;

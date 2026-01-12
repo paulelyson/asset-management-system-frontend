@@ -48,5 +48,5 @@
 
 /* color */
 .card-container.primary {
-  background: var(--primary-50);
+  background: var(--card-bg);
 }
