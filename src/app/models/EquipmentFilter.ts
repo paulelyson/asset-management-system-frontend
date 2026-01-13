@@ -7,4 +7,5 @@ export interface IEquipmentFilter {
   categories?: string;
   brand?: string;
   equipmentType?: string;
+  borrow?: boolean;
 }

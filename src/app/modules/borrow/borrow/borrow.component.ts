@@ -122,6 +122,7 @@ export class BorrowComponent implements OnInit {
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
     this.equipmentFilter.department = params['department'] ??  this.equipmentFilter.department;
+    this.equipmentFilter.borrow = Boolean(params['borrow']) ??  true;
     this.getEquipment();
   }
 }

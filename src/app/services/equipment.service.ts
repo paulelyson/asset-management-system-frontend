@@ -28,6 +28,7 @@ export class EquipmentService {
         brand: filter.brand ?? '',
         categories: filter.categories ?? '',
         equipmentType: filter.equipmentType ?? '',
+        borrow: filter.borrow ?? '',
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
