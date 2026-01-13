@@ -56,6 +56,10 @@ export class EquipmentCardComponent {
     }
   }
 
+  onViewEquipmentInfo(): void {
+    this.dialogService.openEquipmentDetailDialog(this.equipment);
+  }
+
   get image() {
     const img = this.equipment.images[0]?.thumbnail;
     return img ? img : this.default_img;

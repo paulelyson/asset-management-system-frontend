@@ -78,6 +78,11 @@
     content-background-color:  #e1e8d7
   ));
 
+  // Dialog Override
+  @include mat.dialog-overrides((
+    container-color: var(--bg),
+  ));
+
 }
 
 html {

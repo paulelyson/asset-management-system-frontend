@@ -5,14 +5,22 @@
   <div class="equipment-name">{{ equipment.name }}</div>
   <div class="brand-qty">
     <span>{{ equipment.brand }}</span>
-    <app-icon name="numbers"></app-icon>
-    <span>{{ equipment.totalQuantity }}</span>
+    <!-- <app-icon name="numbers"></app-icon>
+    <span>{{ equipment.totalQuantity }}</span> -->
   </div>
   <div class="availability">
-    <app-badge type="success" size="sm">Available</app-badge>
-    <app-icon name="info"></app-icon>
+    <app-badge type="success" size="sm">1 Available</app-badge>
+    <app-icon name="info" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()"/>
   </div>
   <div class="action-wrapper">
-    <app-button variant="link" icon="add" width="width-filled" type="primary" (click)="onAddEquipment()">Add</app-button>
+    <app-button
+      variant="link"
+      icon="add"
+      width="width-filled"
+      type="primary"
+      (click)="onAddEquipment()"
+      >Add
+      </app-button
+    >
   </div>
 </div>
