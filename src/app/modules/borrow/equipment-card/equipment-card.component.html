@@ -14,11 +14,11 @@
   </div>
   <div class="action-wrapper">
     <app-button
-      variant="link"
       icon="add"
       width="width-filled"
       type="primary"
       (click)="onAddEquipment()"
+      [disabled]="!equipment.totalQuantity" 
       >Add
     </app-button>
   </div>

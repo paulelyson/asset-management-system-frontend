@@ -8,6 +8,8 @@ import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.co
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import ButtonConfig from '../../../models/ButtonConfig';
+import { BorrowService } from '../../../services/borrow.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -30,7 +32,11 @@ export class EquipmentCardComponent {
   @Output() addequipment: EventEmitter<IAddedEquipment> = new EventEmitter<IAddedEquipment>();
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
 
-  constructor(private dialogService: DialogService) {}
+  constructor(
+    private dialogService: DialogService,
+    private borrowService: BorrowService,
+    private snackbarService: SnackbarService
+  ) {}
 
   onAddEquipment(): void {
     if (this.equipment.totalQuantity > 1) {
@@ -47,13 +53,21 @@ export class EquipmentCardComponent {
                 : quantity
               : 1,
           };
-          this.addequipment.emit(addedEqmnt);
+          this.addEquipment(addedEqmnt);
         }
       });
     } else {
       const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 1 };
-      this.addequipment.emit(addedEqmnt);
+      this.addEquipment(addedEqmnt);
     }
+  }
+
+  addEquipment(addedEqmnt: IAddedEquipment) {
+    this.borrowService.isEquipmentRequested(addedEqmnt._id).subscribe({
+      next: (resp) => this.addequipment.emit(addedEqmnt),
+      error: (err) =>
+        this.snackbarService.openSnackbar({ type: 'error', message: [err.message], icon: '' }),
+    });
   }
 
   onViewEquipmentInfo(): void {

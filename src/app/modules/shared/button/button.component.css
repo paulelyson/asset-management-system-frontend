@@ -49,6 +49,15 @@
   color: var(--color-text-success-default);
 }
 
+.btn-custom:disabled,
+.btn-custom[disabled]{
+  border: none;
+  background: var(--color-bg-gray-idle);
+  color: var(--color-text-gray-light);
+}
+
+
+
 .btn-custom.sm {
   height: 24px;
   border-radius: 5px;

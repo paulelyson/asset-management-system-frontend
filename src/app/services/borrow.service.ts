@@ -60,6 +60,12 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
+  isEquipmentRequested(equipmentid: string) {
+    return this.http
+      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid)
+      .pipe(catchError(this.handleError));
+  }
+
   getBorrowedEquipment(filter: IBorrowedEquimentFilter): Observable<BorrowedEquipment[]> {
     let params = new HttpParams();
     params = params.append('page', filter.page ?? '');
@@ -84,8 +90,8 @@ export class BorrowService {
     let contents: RowDisplayContent[] = [
       { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
       { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
-      { id: 2, type: 'text', content: [name], span: 'mid'},
-      { id: 2, type: 'text', content: ['1'], span: 'narrow'},
+      { id: 2, type: 'text', content: [name], span: 'mid' },
+      { id: 2, type: 'text', content: ['1'], span: 'narrow' },
       { id: 3, type: 'badge', content: statuses, span: 'mid' },
       { id: 4, type: 'text', content: [date as string], span: 'narrow' },
     ];
@@ -163,7 +169,6 @@ export class BorrowService {
   getCurrentStatus(
     borrowedEquipmentStatus: BorrowedEquipmentStatus[]
   ): BorrowedEquipmentStatusType[] {
-
     // 1️⃣ Sum quantities per status (event-based accumulation)
     const reached = new Map<BorrowedEquipmentStatusType, number>();
 
