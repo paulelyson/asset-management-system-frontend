@@ -14,13 +14,15 @@ import { RowHeaderComponent } from '../shared/row-header/row-header.component';
 import { BadgeComponent } from '../shared/badge/badge.component';
 import { BorrowedEquipmentFilterDialogComponent } from './borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 import { BorrowedEquipmentDetailDialogComponent } from './borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
+import { BorrowedEquipmentHistoryDialogComponent } from './borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 
 @NgModule({
   declarations: [
     BorrowedEquipmentComponent,
     BorrowedEquipmentToolbarComponent,
     BorrowedEquipmentFilterDialogComponent,
-    BorrowedEquipmentDetailDialogComponent
+    BorrowedEquipmentDetailDialogComponent,
+    BorrowedEquipmentHistoryDialogComponent
   ],
   imports: [
     CommonModule,
