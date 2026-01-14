@@ -125,6 +125,8 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
+    } else if (action == 'info' && borrowedEquipment.quantity == 1) {
+      this.dialogService.openBorrowedEquipmentDetailDialog()
     }
   }
 

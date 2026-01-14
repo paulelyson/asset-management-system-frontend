@@ -91,7 +91,7 @@ export class BorrowService {
       { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
       { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
       { id: 2, type: 'text', content: [name], span: 'mid' },
-      { id: 2, type: 'text', content: ['1'], span: 'narrow' },
+      { id: 2, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
       { id: 3, type: 'badge', content: statuses, span: 'mid' },
       { id: 4, type: 'text', content: [date as string], span: 'narrow' },
     ];
@@ -163,7 +163,7 @@ export class BorrowService {
 
     return result
       .filter((x) => x.quantity > 0)
-      .map((x) => `${x.quantity} ${this.getBorrowStatusPlaceholder(x.status)}`);
+      .map((x) => `${x.quantity} ${x.status}`);
   }
 
   getCurrentStatus(
@@ -237,6 +237,23 @@ export class BorrowService {
         size: 'md',
       });
     }
+
+    // add view details
+     actions.push({
+        name: 'info',
+        tooltip: 'View Detail',
+        type: 'primary',
+        size: 'md',
+      });
+
+    // add progress logs
+    actions.push({
+        name: 'history',
+        tooltip: 'Progress Logs',
+        type: 'primary',
+        size: 'md',
+      });
+
 
     return actions;
   }
