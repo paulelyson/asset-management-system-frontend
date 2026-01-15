@@ -1,0 +1,91 @@
+/* .container {
+  width: 25%;
+} */
+
+.wrapper-title {
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 600;
+  padding: 10px 0 20px 0;
+}
+
+.step {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background-color: cream;
+}
+
+.v-stepper {
+  position: relative;
+  /*   visibility: visible; */
+}
+
+/* regular step */
+.step .circle {
+  background-color: white;
+  /* border: 1px solid gray; */
+  border-radius: 100%;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+
+.step .line {
+  top: 12px;
+  left: 6px;
+  height: calc(100% + 10px);
+  position: absolute;
+}
+
+.step.completed .circle {
+  visibility: visible;
+  background-color: rgb(62, 112, 62);
+  border-color: rgb(62, 112, 62);
+}
+
+.step.completed .line {
+  border-left: 3px solid rgb(62, 112, 62);
+}
+
+.step.active .circle {
+  visibility: visible;
+  border-color: rgb(62, 112, 62);
+}
+
+.step.empty .circle {
+  visibility: hidden;
+}
+
+.step.empty .line {
+  /*     visibility: hidden; */
+  /*   height: 150%; */
+  top: 0;
+  height: 150%;
+}
+
+.step:last-child .line {
+  border-left: 3px solid white;
+  z-index: -1; /* behind the circle to completely hide */
+}
+
+.content {
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.content .title {
+  padding: 2px 0;
+  min-width: 110px;
+  font-weight: 600;
+  font-size: 13px;
+  color: rgb(62, 112, 62);
+  display: inline-block;
+}
+
+.content .subtitle {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 11px;
+  line-height: 1.2;
+}

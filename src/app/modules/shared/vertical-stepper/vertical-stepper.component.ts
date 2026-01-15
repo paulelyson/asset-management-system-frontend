@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-vertical-stepper',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './vertical-stepper.component.css',
 })
 export class VerticalStepperComponent {
-
+ @Input() contents: string[] = ['asdfs', 'bar', 'foo', 'bear']
 }

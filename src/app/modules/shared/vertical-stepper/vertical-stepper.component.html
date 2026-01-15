@@ -1,1 +1,17 @@
-<p>vertical-stepper works!</p>
+<div class="container">
+  <div class="wrapper-title underlined">History</div>
+  <!-- completed -->
+  @for(content of contents; track contents) {
+  <div class="step completed">
+    <div class="v-stepper">
+      <div class="circle"></div>
+      <div class="line"></div>
+    </div>
+
+    <div class="content">
+      <div class="title">Title</div>
+      <div class="subtitle">Subtitle</div>
+    </div>
+  </div>
+  }
+</div>
