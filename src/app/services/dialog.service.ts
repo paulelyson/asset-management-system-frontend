@@ -10,7 +10,7 @@ import {
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../modules/shared/button/button.component';
 import { Observable } from 'rxjs';
-import { BorrowedEquipmentStatus } from '../models/BorrowedEquipment';
+import { BorrowedEquipment, BorrowedEquipmentStatus } from '../models/BorrowedEquipment';
 import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
 import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
@@ -57,8 +57,8 @@ export class DialogService {
     });
   }
 
-  openBorrowedEquipmentDetailDialog(): void {
-     const dialogRef = this.dialog.open(BorrowedEquipmentDetailDialogComponent, {});
+  openBorrowedEquipmentDetailDialog(borrowedEquipment: BorrowedEquipment): void {
+     const dialogRef = this.dialog.open(BorrowedEquipmentDetailDialogComponent, { data: borrowedEquipment });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The borrowed equipment detail dialog was closed');

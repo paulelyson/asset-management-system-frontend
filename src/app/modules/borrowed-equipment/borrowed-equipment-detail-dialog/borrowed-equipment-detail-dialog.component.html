@@ -1,1 +1,53 @@
-<p>borrowed-equipment-detail-dialog works!</p>
+<div class="borrowed-equipment-detail-container">
+  <div class="image-wrapper">
+    <img class="fit-image" [src]="data.equipment.images[0]?.thumbnail ?? default_img" />
+  </div>
+  <div class="detail-wrapper">
+    <div class="label-wrapper">
+      <div class="subtitle">Class Name</div>
+      <div class="label">{{ data.className }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Borrower</div>
+      <div class="label">{{ borrowerName }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Instructor</div>
+      <div class="label">{{ instructorName }}</div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="label-wrapper">
+      <div class="subtitle">Purpose</div>
+      <div class="label">{{ data.purpose }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Total Qty. Requested</div>
+      <div class="label">{{ data.quantity }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Date of Use</div>
+      <div class="label">
+        {{ data.dateOfUseStart | date: 'mediumDate' }} -
+        {{ data.dateOfUseEnd | date: 'mediumDate' }}
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Time of Use</div>
+      <div class="label">
+        {{ data.timeOfUseStart }} -
+        {{ data.timeOfUseEnd }}
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Date Requested</div>
+      <div class="label">{{ data.dateOfUseStart | date: 'medium' }}</div>
+    </div>
+  </div>
+</div>

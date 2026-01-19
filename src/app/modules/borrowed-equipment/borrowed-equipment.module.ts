@@ -16,6 +16,7 @@ import { BorrowedEquipmentFilterDialogComponent } from './borrowed-equipment-fil
 import { BorrowedEquipmentDetailDialogComponent } from './borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
 import { BorrowedEquipmentHistoryDialogComponent } from './borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { VerticalStepperComponent } from '../shared/vertical-stepper/vertical-stepper.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import { VerticalStepperComponent } from '../shared/vertical-stepper/vertical-st
     RowHeaderComponent,
     BadgeComponent,
     ButtonComponent,
-    VerticalStepperComponent
+    VerticalStepperComponent,
+    MatDividerModule
+
   ],
 })
 export class BorrowedEquipmentModule {}

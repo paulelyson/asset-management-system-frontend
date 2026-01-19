@@ -126,7 +126,7 @@ export class BorrowedEquipmentComponent implements OnInit {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
     } else if (action == 'info') {
-      this.dialogService.openBorrowedEquipmentDetailDialog();
+      this.dialogService.openBorrowedEquipmentDetailDialog(borrowedEquipment);
     } else if (action == 'history') {
       this.dialogService.openBorrowedEquipmentHistoryDialog();
     }
