@@ -45,7 +45,7 @@ export class BorrowService {
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   createBorrowedEquipment(body: IBorrowingDetails): Observable<ApiResponse> {
@@ -76,7 +76,7 @@ export class BorrowService {
       .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params })
       .pipe(
         map((resp) => resp.data),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -161,13 +161,11 @@ export class BorrowService {
       }
     }
 
-    return result
-      .filter((x) => x.quantity > 0)
-      .map((x) => `${x.quantity} ${x.status}`);
+    return result.filter((x) => x.quantity > 0).map((x) => `${x.quantity} ${x.status}`);
   }
 
   getCurrentStatus(
-    borrowedEquipmentStatus: BorrowedEquipmentStatus[]
+    borrowedEquipmentStatus: BorrowedEquipmentStatus[],
   ): BorrowedEquipmentStatusType[] {
     // 1️⃣ Sum quantities per status (event-based accumulation)
     const reached = new Map<BorrowedEquipmentStatusType, number>();
@@ -201,7 +199,7 @@ export class BorrowService {
 
   getRowDisplayActions(
     user: IUser,
-    borrowedEquipment: BorrowedEquipment
+    borrowedEquipment: BorrowedEquipment,
   ): RowDisplayActionConfig[] {
     console.log(this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus));
     let actions: RowDisplayActionConfig[] = [];
@@ -215,11 +213,11 @@ export class BorrowService {
       actions.push({ name: 'thumb_up', tooltip: 'Approve', type: 'primary', size: 'md' });
     }
 
-    // can release as oic
+    // can release as reads
     if (
       user.assignedTo.includes(borrowedEquipment.classDepartment) &&
       this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).some((x) =>
-        ['oic_approved', 'faculty_approved'].includes(x)
+        ['oic_approved', 'faculty_approved'].includes(x),
       )
     ) {
       actions.push({ name: 'lock_open', tooltip: 'Release', type: 'primary', size: 'md' });
@@ -238,22 +236,31 @@ export class BorrowService {
       });
     }
 
+    // confirm returns
+    if (
+      // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
+      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).some((x) =>
+        ['mark_returned'].includes(x),
+      )
+    ) {
+      actions.push({ name: 'check', tooltip: 'Confirm Return', type: 'primary', size: 'md' });
+    }
+
     // add view details
-     actions.push({
-        name: 'info',
-        tooltip: 'View Detail',
-        type: 'primary',
-        size: 'md',
-      });
+    actions.push({
+      name: 'info',
+      tooltip: 'View Detail',
+      type: 'primary',
+      size: 'md',
+    });
 
     // add progress logs
     actions.push({
-        name: 'history',
-        tooltip: 'Progress Logs',
-        type: 'primary',
-        size: 'md',
-      });
-
+      name: 'history',
+      tooltip: 'Progress Logs',
+      type: 'primary',
+      size: 'md',
+    });
 
     return actions;
   }

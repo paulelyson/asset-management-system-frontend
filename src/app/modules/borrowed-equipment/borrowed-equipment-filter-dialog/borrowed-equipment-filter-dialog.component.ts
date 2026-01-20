@@ -8,6 +8,7 @@ import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.comp
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
+import { DEPARTMENTS } from '../../../models/User';
 
 @Component({
   selector: 'app-borrowed-equipment-filter-dialog',
@@ -18,6 +19,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class BorrowedEquipmentFilterDialogComponent {
   purposes: IAutocompleteOption[] = [];
   status: IAutocompleteOption[] = [];
+  departments: IAutocompleteOption[] = [];
   filterForm: FormGroup;
   url: string = '';
   constructor(
@@ -30,6 +32,7 @@ export class BorrowedEquipmentFilterDialogComponent {
       purpose: [''],
       status: [''],
     });
+    this.purposes = this.autocompleteService.mapIntoAutocompleteOption(DEPARTMENTS);
     this.purposes = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
     this.status = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_STATUS);
     this.url = this.router.url.split('?')[0];
