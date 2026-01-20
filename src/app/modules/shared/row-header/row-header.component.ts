@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 export interface IRowHeader {
-  id: number; // fix track by identity warning
+  // id: number; // fix track by identity warning
   type: 'badge' | 'text';
   text: string;
   span: 'wide' | 'mid' | 'narrow';
@@ -17,46 +17,46 @@ export interface IRowHeader {
 export class RowHeaderComponent {
   @Input() headers: IRowHeader[] = [
     {
-      id: 0,
+      // id: 0,
       type: 'text',
       text: 'Equipment',
       span: 'wide',
     },
     {
-      id: 1,
+      // id: 1,
       type: 'text',
       text: 'Class',
       span: 'mid',
     },
     {
-      id: 2,
+      // id: 2,
       type: 'text',
       text: 'Borrower',
       span: 'mid',
     },
      {
-      id: 2,
+      // id: 3,
       type: 'text',
       text: 'Qty',
       span: 'narrow',
     },
     {
-      id: 3,
+      // id: 4,
       type: 'text',
       text: 'Status',
       span: 'mid',
     },
     {
-      id: 4,
+      // id: 4,
       type: 'text',
       text: 'Date',
       span: 'narrow',
     },
      {
-      id: 5,
+      // id: 5,
       type: 'text',
-      text: 'Action',
-      span: 'narrow',
+      text: '',
+      span: 'mid',
     },
   ];
 }
