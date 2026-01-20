@@ -11,6 +11,7 @@ export type BorrowedEquipmentStatusType =
   | 'mark_returned'
   | 'returned'
   | 'unreturned'
+  | 'cancelled'
   | 'system_reset';
 
 export type BorrowedEquipmentPurpose = 'class_use' | 'research' | 'instructional' | 'others';
@@ -44,6 +45,7 @@ export interface IBorrowingDetails {
 
 export interface BorrowedEquipment {
   _id: string;
+  trackId: string;
   borrower: IUser;
   classDepartment: Department;
   faculty: IUser;
@@ -77,5 +79,6 @@ export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'mark_returned',
   'returned',
   'unreturned',
+  'cancelled',
   'system_reset',
 ];

@@ -2,24 +2,35 @@
   <div class="image-wrapper">
     <img class="fit-image" [src]="image ? image : default_img" />
   </div>
-  @for(content of contents; track content.id){ @if(content.type == 'badge') {
-  <div class="badge-wrapper" [ngClass]="[content.span]">
-    <span *ngFor="let content of content.content">
-      <app-badge size="md">{{ content }}</app-badge>
-    </span>
-  </div>
-
-  } @else {
-  <div [ngClass]="[content.span]" [class.title]="content.span == 'wide'">{{ content.content }}</div>
-  } }
-  <div class="action-wrapper narrow">
-    @for(action of actions; track action.name) {
-    <app-icon
+  @for (content of contents; track content.id) {
+    @if (content.type == 'badge') {
+      <div class="badge-wrapper" [ngClass]="[content.span]">
+        <span *ngFor="let content of content.content">
+          <app-badge size="md">{{ content }}</app-badge>
+        </span>
+      </div>
+    } @else {
+      <div [ngClass]="[content.span]" [class.title]="content.span == 'wide'">
+        {{ content.content }}
+      </div>
+    }
+  }
+  <div class="action-wrapper mid">
+    @for (action of actions; track $index) {
+      <!-- <app-icon
       [name]="action.name"
       [size]="action.size"
       [tooltip]="action.tooltip"
       (iconclicked)="onActionClicked($event)"
-    />
+    /> -->
+      <!-- <app-button
+        size="sm"
+        variant="link"
+        [icon]="action.name"
+        (btnclicked)="onActionClicked($event)"
+      >
+        {{ action.tooltip }}
+      </app-button> -->
     }
   </div>
 </div>

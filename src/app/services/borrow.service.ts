@@ -91,9 +91,9 @@ export class BorrowService {
       { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
       { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
       { id: 2, type: 'text', content: [name], span: 'mid' },
-      { id: 2, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
-      { id: 3, type: 'badge', content: statuses, span: 'mid' },
-      { id: 4, type: 'text', content: [date as string], span: 'narrow' },
+      { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
+      { id: 4, type: 'badge', content: statuses, span: 'mid' },
+      { id: 5, type: 'text', content: [date as string], span: 'narrow' },
     ];
     return contents;
   }
@@ -110,6 +110,7 @@ export class BorrowService {
       returned: [], // final state,
       unreturned: [],
       system_reset: [],
+      cancelled: [],
     };
     return statusTransitions[current] ?? [];
   }
@@ -126,6 +127,7 @@ export class BorrowService {
       returned: 'Return Confirmed',
       unreturned: '',
       system_reset: '',
+      cancelled: 'cancelled'
     };
 
     return statusPlaceHolder[status] ?? '';
@@ -245,6 +247,16 @@ export class BorrowService {
     ) {
       actions.push({ name: 'check', tooltip: 'Confirm Return', type: 'primary', size: 'md' });
     }
+
+
+    // cancelled 
+
+    actions.push({
+      name: 'cancel',
+      tooltip: 'Cancel Request',
+      type: 'primary',
+      size: 'sm',
+    })
 
     // add view details
     actions.push({
