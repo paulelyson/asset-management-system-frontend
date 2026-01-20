@@ -59,6 +59,7 @@ export interface BorrowedEquipment {
   equipment: IEquipment;
   quantity: number;
   borrowedEquipmentStatus: BorrowedEquipmentStatus[];
+  latestStatus: string[];
   remarks: string;
 }
 

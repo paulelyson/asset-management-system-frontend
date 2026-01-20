@@ -81,9 +81,7 @@ export class BorrowService {
   }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    const length = borrowedEquipment.borrowedEquipmentStatus.length;
-    const _status = borrowedEquipment.borrowedEquipmentStatus[length - 1];
-    const statuses = this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus);
+    const statuses = borrowedEquipment.latestStatus;
     const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
     const name = getDisplayName(borrowedEquipment.borrower);
     const faculty = getDisplayName(borrowedEquipment.faculty);
@@ -96,23 +94,6 @@ export class BorrowService {
       { id: 5, type: 'text', content: [date as string], span: 'narrow' },
     ];
     return contents;
-  }
-
-  getNextBorrowStatus(current: BorrowedEquipmentStatusType) {
-    const statusTransitions: Record<BorrowedEquipmentStatusType, BorrowedEquipmentStatusType[]> = {
-      requested: ['faculty_approved', 'faculty_rejected', 'oic_approved', 'oic_rejected'],
-      faculty_approved: ['released'],
-      oic_approved: ['released'],
-      faculty_rejected: [], // no next state
-      oic_rejected: [], // no next state
-      released: ['mark_returned'],
-      mark_returned: ['returned'],
-      returned: [], // final state,
-      unreturned: [],
-      system_reset: [],
-      cancelled: [],
-    };
-    return statusTransitions[current] ?? [];
   }
 
   getBorrowStatusPlaceholder(status: BorrowedEquipmentStatusType) {
@@ -133,84 +114,38 @@ export class BorrowService {
     return statusPlaceHolder[status] ?? '';
   }
 
-  computeCurrentQtyStatus(borrowedEquipmentStatus: BorrowedEquipmentStatus[]) {
-    if (!borrowedEquipmentStatus?.length) return [];
-
-    // 1️⃣ Sum quantities per status (event-based accumulation)
-    const reached = new Map<BorrowedEquipmentStatusType, number>();
-
-    for (const tx of borrowedEquipmentStatus) {
-      reached.set(tx.status, (reached.get(tx.status) ?? 0) + tx.quantity);
-    }
-
-    // 2️⃣ Compute remaining count per status
-    const result: { status: BorrowedEquipmentStatusType; quantity: number }[] = [];
-
-    for (let i = 0; i < STATUS_FLOW.length; i++) {
-      const status = STATUS_FLOW[i];
-      const current = reached.get(status) ?? 0;
-      if (!current) continue;
-
-      // subtract everything that moved beyond this status
-      let progressed = 0;
-      for (let j = i + 1; j < STATUS_FLOW.length; j++) {
-        progressed += reached.get(STATUS_FLOW[j]) ?? 0;
-      }
-
-      const remaining = current - progressed;
-      if (remaining > 0) {
-        result.push({ status, quantity: remaining });
-      }
-    }
-
-    return result.filter((x) => x.quantity > 0).map((x) => `${x.quantity} ${x.status}`);
+   getNextBorrowStatus(current: BorrowedEquipmentStatusType) {
+    const statusTransitions: Record<BorrowedEquipmentStatusType, BorrowedEquipmentStatusType[]> = {
+      requested: ['faculty_approved', 'faculty_rejected', 'oic_approved', 'oic_rejected'],
+      faculty_approved: ['released'],
+      oic_approved: ['released'],
+      faculty_rejected: [], // no next state
+      oic_rejected: [], // no next state
+      released: ['mark_returned'],
+      mark_returned: ['returned'],
+      returned: [], // final state,
+      unreturned: [],
+      system_reset: [],
+      cancelled: [],
+    };
+    return statusTransitions[current] ?? [];
   }
 
-  getCurrentStatus(
-    borrowedEquipmentStatus: BorrowedEquipmentStatus[],
-  ): BorrowedEquipmentStatusType[] {
-    // 1️⃣ Sum quantities per status (event-based accumulation)
-    const reached = new Map<BorrowedEquipmentStatusType, number>();
-
-    for (const tx of borrowedEquipmentStatus) {
-      reached.set(tx.status, (reached.get(tx.status) ?? 0) + tx.quantity);
-    }
-
-    // 2️⃣ Compute remaining count per status
-    const result: { status: BorrowedEquipmentStatusType; quantity: number }[] = [];
-
-    for (let i = 0; i < STATUS_FLOW.length; i++) {
-      const status = STATUS_FLOW[i];
-      const current = reached.get(status) ?? 0;
-      if (!current) continue;
-
-      // subtract everything that moved beyond this status
-      let progressed = 0;
-      for (let j = i + 1; j < STATUS_FLOW.length; j++) {
-        progressed += reached.get(STATUS_FLOW[j]) ?? 0;
-      }
-
-      const remaining = current - progressed;
-      if (remaining > 0) {
-        result.push({ status, quantity: remaining });
-      }
-    }
-
-    return result.map((x) => x.status);
+  getCurrentStatus(latestStatus: string[]): BorrowedEquipmentStatusType[] {
+    return [];
   }
 
   getRowDisplayActions(
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
   ): RowDisplayActionConfig[] {
-    console.log(this.computeCurrentQtyStatus(borrowedEquipment.borrowedEquipmentStatus));
     let actions: RowDisplayActionConfig[] = [];
     let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
     let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
     //  approver | class faculty / oic / chairman of the borrowed equipment
     if (
       (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
-      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('requested')
+      this.getCurrentStatus(borrowedEquipment.latestStatus).includes('requested')
     ) {
       actions.push({
         icon: 'check',
@@ -224,7 +159,7 @@ export class BorrowService {
     // can release as reads
     if (
       user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).some((x) =>
+      this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
         ['oic_approved', 'faculty_approved'].includes(x),
       )
     ) {
@@ -240,7 +175,7 @@ export class BorrowService {
     // mark as return
     if (
       user._id == borrowedEquipment.borrower._id &&
-      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('released')
+      this.getCurrentStatus(borrowedEquipment.latestStatus).includes('released')
     ) {
       actions.push({
         icon: 'keyboard_return',
@@ -254,7 +189,7 @@ export class BorrowService {
     // confirm returns
     if (
       // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-      this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).some((x) =>
+      this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
         ['mark_returned'].includes(x),
       )
     ) {
@@ -270,11 +205,11 @@ export class BorrowService {
     // cancelled
 
     actions.push({
-      name: 'cancel',
+      name: 'Cancel Request',
       tooltip: 'Cancel Request',
       type: 'primary',
       size: 'sm',
-      icon: 'cancel'
+      icon: 'cancel',
     });
 
     // add view details
@@ -283,7 +218,7 @@ export class BorrowService {
       tooltip: 'View Detail',
       type: 'primary',
       size: 'md',
-      icon: 'info'
+      icon: 'info',
     });
 
     // add progress logs
@@ -292,7 +227,7 @@ export class BorrowService {
       tooltip: 'Progress Logs',
       type: 'primary',
       size: 'md',
-      icon: 'history'
+      icon: 'history',
     });
 
     return actions;

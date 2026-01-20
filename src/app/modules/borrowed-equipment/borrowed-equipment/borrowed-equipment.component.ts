@@ -30,7 +30,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     private borrowService: BorrowService,
     private dialogService: DialogService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.user = this.authService.getUser();
   }
@@ -61,8 +61,9 @@ export class BorrowedEquipmentComponent implements OnInit {
             .concat(resp)
             .filter(
               (item, index, arr) =>
-                index === arr.findIndex((x) => x._id === item._id && x.equipment === item.equipment)
-            )
+                index ===
+                arr.findIndex((x) => x._id === item._id && x.equipment === item.equipment),
+            ),
         );
       },
     });
@@ -71,7 +72,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   updateBorrowedEquipmentStatus(
     borrowedEquipment: BorrowedEquipment,
     status: BorrowedEquipmentStatusType,
-    quantity: number
+    quantity: number,
   ): void {
     let updated: BorrowedEquipmentStatusExt[] = [
       {
@@ -125,16 +126,21 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
       });
-    } else if (action == 'cancel' && borrowedEquipment.quantity == 1) {
+    }
+    // cancelled
+    else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
       const status = 'cancelled';
       this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    }  else if (action == 'cancel' && borrowedEquipment.quantity == 1) {
+    } else if (action == 'Cancel Request' && borrowedEquipment.quantity > 1) {
       const status = 'cancelled';
       this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
     }
+    // view info
     else if (action == 'info') {
       this.dialogService.openBorrowedEquipmentDetailDialog(borrowedEquipment);
-    } else if (action == 'history') {
+    } 
+    // view
+    else if (action == 'history') {
       this.dialogService.openBorrowedEquipmentHistoryDialog();
     }
   }
