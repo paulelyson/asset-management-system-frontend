@@ -17,20 +17,24 @@
   }
   <div class="action-wrapper mid">
     @for (action of actions; track $index) {
-      <!-- <app-icon
-      [name]="action.name"
-      [size]="action.size"
-      [tooltip]="action.tooltip"
-      (iconclicked)="onActionClicked($event)"
-    /> -->
-      <!-- <app-button
-        size="sm"
-        variant="link"
-        [icon]="action.name"
-        (btnclicked)="onActionClicked($event)"
-      >
-        {{ action.tooltip }}
-      </app-button> -->
+      @if (action.action == 'icon') {
+        <app-icon
+          [name]="action.name"
+          [size]="action.size"
+          [tooltip]="action.tooltip"
+          (iconclicked)="onActionClicked($event)"
+        />
+      } @else {
+        <app-button
+          size="sm"
+          variant="link"
+          [icon]="action.icon"
+          [action]="action.name"
+          (btnclicked)="onActionClicked($event)"
+        >
+          {{ action.name }}
+        </app-button>
+      }
     }
   </div>
 </div>

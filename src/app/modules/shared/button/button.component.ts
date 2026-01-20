@@ -26,6 +26,7 @@ export interface IButtonConfig {
   styleUrl: './button.component.css',
 })
 export class ButtonComponent {
+  @Input() action: string = '';
   @Input() variant: ButtonVariant = 'default';
   @Input() size: ButtonSize = 'md';
   @Input() type: ButtonType = 'default';
@@ -37,6 +38,6 @@ export class ButtonComponent {
   @Output() btnclicked: EventEmitter<string> = new EventEmitter<string>();
 
   onClicked(): void {
-    this.btnclicked.emit();
+    this.btnclicked.emit(this.action);
   }
 }

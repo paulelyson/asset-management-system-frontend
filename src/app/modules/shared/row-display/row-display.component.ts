@@ -3,6 +3,7 @@ import { BadgeComponent } from '../badge/badge.component';
 import { IconComponent, IconSize, IconType } from '../icon/icon.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../button/button.component';
 
 
 export interface RowDisplayContent {
@@ -13,6 +14,7 @@ export interface RowDisplayContent {
 }
 
 export interface RowDisplayActionConfig {
+  icon: string;
   name: string;
   tooltip: string;
   type: IconType;
@@ -22,7 +24,7 @@ export interface RowDisplayActionConfig {
 
 @Component({
   selector: 'app-row-display',
-  imports: [MatDividerModule, IconComponent, BadgeComponent, CommonModule],
+  imports: [MatDividerModule, IconComponent, BadgeComponent, CommonModule, ButtonComponent],
   templateUrl: './row-display.component.html',
   styleUrl: './row-display.component.css',
 })

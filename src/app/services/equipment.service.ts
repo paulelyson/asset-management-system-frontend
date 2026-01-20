@@ -33,7 +33,7 @@ export class EquipmentService {
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
       map((resp) => resp.data as IEquipment[]),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -45,14 +45,26 @@ export class EquipmentService {
       .get<ApiResponse>(environment.api_url + '/api/equipment/distinct', { params })
       .pipe(
         map((resp) => resp.data as string[]),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
   getRowDisplayActions(): RowDisplayActionConfig[] {
     return [
-      { name: 'info', tooltip: 'View Details', type: 'primary', size: 'sm' },
-      { name: 'edit', tooltip: 'Update qty, condition, & status', type: 'primary', size: 'sm' },
+      {
+        name: 'View Details',
+        tooltip: 'View Details',
+        type: 'primary',
+        size: 'sm',
+        icon: 'info',
+      },
+      {
+        name: 'Update qty, condition, & status',
+        tooltip: 'Update qty, condition, & status',
+        type: 'primary',
+        size: 'sm',
+        icon: 'info',
+      },
     ];
   }
 

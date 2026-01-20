@@ -127,7 +127,7 @@ export class BorrowService {
       returned: 'Return Confirmed',
       unreturned: '',
       system_reset: '',
-      cancelled: 'cancelled'
+      cancelled: 'cancelled',
     };
 
     return statusPlaceHolder[status] ?? '';
@@ -212,7 +212,13 @@ export class BorrowService {
       (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
       this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('requested')
     ) {
-      actions.push({ name: 'thumb_up', tooltip: 'Approve', type: 'primary', size: 'md' });
+      actions.push({
+        icon: 'check',
+        name: 'thumb_up',
+        tooltip: 'Approve',
+        type: 'primary',
+        size: 'md',
+      });
     }
 
     // can release as reads
@@ -222,7 +228,13 @@ export class BorrowService {
         ['oic_approved', 'faculty_approved'].includes(x),
       )
     ) {
-      actions.push({ name: 'lock_open', tooltip: 'Release', type: 'primary', size: 'md' });
+      actions.push({
+        icon: 'lock_open',
+        name: 'Release',
+        tooltip: 'Release',
+        type: 'primary',
+        size: 'md',
+      });
     }
 
     // mark as return
@@ -231,7 +243,8 @@ export class BorrowService {
       this.getCurrentStatus(borrowedEquipment.borrowedEquipmentStatus).includes('released')
     ) {
       actions.push({
-        name: 'keyboard_return',
+        icon: 'keyboard_return',
+        name: 'Return Equipment',
         tooltip: 'Return Equipment',
         type: 'primary',
         size: 'md',
@@ -245,33 +258,41 @@ export class BorrowService {
         ['mark_returned'].includes(x),
       )
     ) {
-      actions.push({ name: 'check', tooltip: 'Confirm Return', type: 'primary', size: 'md' });
+      actions.push({
+        name: 'Confirm Return',
+        tooltip: 'Confirm Return',
+        type: 'primary',
+        size: 'md',
+        icon: 'check',
+      });
     }
 
-
-    // cancelled 
+    // cancelled
 
     actions.push({
       name: 'cancel',
       tooltip: 'Cancel Request',
       type: 'primary',
       size: 'sm',
-    })
+      icon: 'cancel'
+    });
 
     // add view details
     actions.push({
-      name: 'info',
+      name: 'View Detail',
       tooltip: 'View Detail',
       type: 'primary',
       size: 'md',
+      icon: 'info'
     });
 
     // add progress logs
     actions.push({
-      name: 'history',
+      name: 'Progress Logs',
       tooltip: 'Progress Logs',
       type: 'primary',
       size: 'md',
+      icon: 'history'
     });
 
     return actions;
