@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./modules/homepage/homepage.module').then((m) => m.HomepageModule),
+  },
    {
     path: 'borrow',
     loadChildren: () => import('./modules/borrow/borrow-module').then((m) => m.BorrowModule),
