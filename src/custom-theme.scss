@@ -7,6 +7,7 @@
 @use '@angular/material' as mat;
 
 :root {
+  
   mat-form-field {
     --mat-sys-surface-variant: transparent;
     width: -webkit-fill-available;
@@ -83,6 +84,20 @@
     container-color: var(--bg),
   ));
 
+  // slide toggle
+  --mat-slide-toggle-with-icon-handle-size: 16px;
+  --mat-slide-toggle-track-height: 18px;
+  mat-slide-toggle .mdc-switch__track::before ,
+  mat-slide-toggle .mdc-switch__track::after {
+    width: 42px;
+   }
+
+  mat-slide-toggle .mdc-switch__ripple {
+    display: none;
+  }
+  // mat-slide-toggle .mdc-switch__track {
+  //   height: 16px;
+  // }
 }
 
 html {

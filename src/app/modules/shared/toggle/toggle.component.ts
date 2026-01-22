@@ -9,6 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   styleUrl: './toggle.component.css',
 })
 export class ToggleComponent {
-  @Input() isChecked = true;
+  @Input() isChecked: boolean = false;
+  @Input() label: string = '';
   @Input() labelPosition: 'before' | 'after' = 'before';
 }

@@ -17,6 +17,7 @@ import { BorrowedEquipmentDetailDialogComponent } from './borrowed-equipment-det
 import { BorrowedEquipmentHistoryDialogComponent } from './borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { VerticalStepperComponent } from '../shared/vertical-stepper/vertical-stepper.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { ToggleComponent } from '../shared/toggle/toggle.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MatDividerModule } from '@angular/material/divider';
     BadgeComponent,
     ButtonComponent,
     VerticalStepperComponent,
-    MatDividerModule
+    MatDividerModule,
+    ToggleComponent
 
   ],
 })
