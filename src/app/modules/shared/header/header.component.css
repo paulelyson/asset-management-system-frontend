@@ -4,7 +4,7 @@
 }
 
 .header {
-  padding: 0 7%;
+  padding: 0 3.5rem;
   margin: auto;
   display: flex;
   align-items: center;
@@ -27,7 +27,7 @@
       font-size: 1.8rem;
       font-weight: 600;
       line-height: 1.5;
-      color: var(--primary-700)
+      color: var(--primary-700);
     }
   }
 }
@@ -42,13 +42,36 @@
   padding: 0;
   li {
     list-style: none;
+
     a {
-      font-size: 15px;
-      text-transform: capitalize;
-      color: var(--text);
-      display: block;
-      line-height: 1;
+      position: relative;
+      font-size: 1rem;
+      font-weight: 550;
+      line-height: 1.5;
+      color: var(--primary-700);
+      display: inline-block;
       text-decoration: none;
+      cursor: pointer;
+
+      /* &:hover {
+        font-weight: 600;
+      } */
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -3px;
+        height: 2px;
+        background-color: currentColor;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
     }
   }
 }

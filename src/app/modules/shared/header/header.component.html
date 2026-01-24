@@ -2,14 +2,19 @@
   <div class="header">
     <div class="nav-wrapper">
       <div class="logo-wrapper">
-        <app-icon name="eco" size="lg"></app-icon>
+        <!-- <app-icon name="eco" size="lg"></app-icon> -->
         <div class="title">Asset Management</div>
       </div>
       <span class="spacer"></span>
       <ul class="navigation">
-        <app-icon name="notifications" size="lg"></app-icon>
+        <!-- <app-icon name="notifications" size="lg"></app-icon>
         <app-icon name="settings" size="lg"></app-icon>
-        <app-icon name="logout" size="lg"></app-icon>
+        <app-icon name="logout" size="lg"></app-icon> -->
+        <li><a routerLink="/inventory">Inventory</a></li>
+        <li><a routerLink="/borrow">Borrow</a></li>
+        <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
+        <app-icon name="notifications" size="md"></app-icon>
+        <app-icon name="logout" size="md"></app-icon>
       </ul>
     </div>
   </div>
