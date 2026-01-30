@@ -17,12 +17,21 @@ import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
 import { AuthService } from './auth.service';
+import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 
 interface ApiResponse {
   data: BorrowedEquipment[];
   message: string;
   success: boolean;
 }
+
+interface ProgressLogsApiResponse {
+  data: IBorrowedEquipmentHistory[];
+  message: string;
+  success: boolean;
+}
+
+
 
 const STATUS_FLOW: BorrowedEquipmentStatusType[] = [
   'requested',
@@ -42,38 +51,59 @@ export interface BorrowedEquipmentStatusExt extends BorrowedEquipmentStatus {
   providedIn: 'root',
 })
 export class BorrowService {
+  token: string;
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
     private authService: AuthService,
-  ) {}
+  ) {
+    this.token = localStorage.getItem('token')!;
+  }
 
   createBorrowedEquipment(body: IBorrowingDetails): Observable<ApiResponse> {
+    const headers = { Authorization: this.token };
     return this.http
-      .post<ApiResponse>(environment.api_url + '/api/borrowequipment', body, {})
+      .post<ApiResponse>(environment.api_url + '/api/borrowequipment', body, { headers })
       .pipe(catchError(this.handleError));
   }
 
   updateBorrowedEquipmentStatus(body: BorrowedEquipmentStatusExt[]) {
+    const headers = { Authorization: this.token };
     return this.http
-      .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body)
+      .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, { headers })
       .pipe(catchError(this.handleError));
   }
 
   isEquipmentRequested(equipmentid: string) {
+    const headers = { Authorization: this.token };
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid)
+      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid, { headers })
       .pipe(catchError(this.handleError));
   }
 
   getBorrowedEquipment(filter: IBorrowedEquimentFilter): Observable<BorrowedEquipment[]> {
     let params = new HttpParams();
+    const headers = { Authorization: this.token };
+
     params = params.append('page', filter.page ?? '');
     params = params.append('search', filter.search ?? '');
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params })
+      .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params, headers })
+      .pipe(
+        map((resp) => resp.data),
+        catchError(this.handleError),
+      );
+  }
+
+  getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
+    let params = new HttpParams();
+    const headers = { Authorization: this.token };
+    params = params.append('borrowId', borrowId?? '');
+    params = params.append('equipment', equipment ?? '');
+    return this.http
+      .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', { params, headers })
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),

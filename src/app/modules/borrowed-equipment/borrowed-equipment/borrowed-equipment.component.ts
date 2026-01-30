@@ -132,17 +132,27 @@ export class BorrowedEquipmentComponent implements OnInit {
       const status = 'cancelled';
       this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
     } else if (action == 'Cancel Request' && borrowedEquipment.quantity > 1) {
+      // TODO
       const status = 'cancelled';
       this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
     }
     // view info
-    else if (action == 'info') {
+    else if (action == 'View Detail') {
       this.dialogService.openBorrowedEquipmentDetailDialog(borrowedEquipment);
-    } 
-    // view
-    else if (action == 'history') {
-      this.dialogService.openBorrowedEquipmentHistoryDialog();
     }
+    // view
+    else if (action == 'Progress Logs') {
+      const borrowId = borrowedEquipment._id;
+      const equipment = borrowedEquipment.equipment._id;
+      // this.dialogService.openBorrowedEquipmentHistoryDialog();
+      this.onDisplayProgressLogs(borrowId, equipment);
+    }
+  }
+
+  onDisplayProgressLogs(borrowId: string, equipment: string): void {
+    this.borrowService.getProgressLogs(borrowId, equipment).subscribe({
+      next: (resp) => console.log(resp),
+    });
   }
 
   loadMoreBorrowedEquipment() {
