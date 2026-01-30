@@ -5,7 +5,10 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IEquipmentFilter } from '../models/EquipmentFilter';
 import { Department } from '../models/User';
-import { RowDisplayActionConfig } from '../modules/shared/row-display/row-display.component';
+import {
+  RowDisplayActionConfig,
+  RowDisplayContent,
+} from '../modules/shared/row-display/row-display.component';
 
 interface ApiResponse {
   data: IEquipment[] | string[];
@@ -49,18 +52,24 @@ export class EquipmentService {
       );
   }
 
+  getRowDisplayContent(equipment: IEquipment) {
+    const conditions = equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition);
+    let contents: RowDisplayContent[] = [
+      { id: 0, type: 'text', content: [equipment.name], span: 'wide' },
+      { id: 1, type: 'text', content: equipment.categories, span: 'mid' },
+      { id: 2, type: 'text', content: [equipment.brand], span: 'mid' },
+      { id: 3, type: 'text', content: [equipment.totalQuantity.toString()], span: 'narrow' },
+      { id: 4, type: 'badge', content: conditions, span: 'mid' },
+      { id: 5, type: 'text', content: [equipment.location], span: 'narrow' },
+    ];
+    return contents;
+  }
+
   getRowDisplayActions(): RowDisplayActionConfig[] {
     return [
       {
-        name: 'View Details',
+        name: 'Details',
         tooltip: 'View Details',
-        type: 'primary',
-        size: 'sm',
-        icon: 'info',
-      },
-      {
-        name: 'Update qty, condition, & status',
-        tooltip: 'Update qty, condition, & status',
         type: 'primary',
         size: 'sm',
         icon: 'info',

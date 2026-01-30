@@ -66,38 +66,11 @@ export class InventoryComponent implements OnInit {
   }
 
   equipmentContents(equipment: IEquipment): RowDisplayContent[] {
-    let contents: RowDisplayContent[] = [];
-    contents.push(
-      {
-        id: 1,
-        type: 'text',
-        content: [equipment.equipmentType],
-        span: 'mid',
-      },
-      {
-        id: 2,
-        type: 'text',
-        content: equipment.categories,
-        span: 'mid',
-      },
-      {
-        id: 3,
-        type: 'badge',
-        content: equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition),
-        span: 'mid',
-      },
-      {
-        id: 4,
-        type: 'text',
-        content: [equipment.location],
-        span: 'mid',
-      }
-    );
-    return contents;
+    return this.equipmentService.getRowDisplayContent(equipment);
   }
 
   onActionClicked(action: string, equipment: IEquipment) {
-    if (action == 'info') {
+    if (action == 'Details') {
       this.dialogService.openEquipmentDetailDialog(equipment);
     } else if (action == 'edit') {
       // TO DO

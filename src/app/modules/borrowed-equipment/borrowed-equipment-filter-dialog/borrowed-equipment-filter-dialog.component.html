@@ -1,6 +1,6 @@
 <form [formGroup]="filterForm">
   <div class="borrowed-equipment-filter-container">
-    <app-autocomplete [options]="departments" label="Department" formControlName="department"></app-autocomplete>
+    <app-autocomplete [options]="departments" label="Department" formControlName="department"/>
     <app-autocomplete label="Status" [options]="status" formControlName="status"/>
     <app-autocomplete label="Purpose" [options]="purposes" formControlName="purpose" />
     <div class="action-wrapper">
