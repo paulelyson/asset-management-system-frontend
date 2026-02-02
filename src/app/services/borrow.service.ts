@@ -31,8 +31,6 @@ interface ProgressLogsApiResponse {
   success: boolean;
 }
 
-
-
 const STATUS_FLOW: BorrowedEquipmentStatusType[] = [
   'requested',
   'faculty_approved',
@@ -70,14 +68,18 @@ export class BorrowService {
   updateBorrowedEquipmentStatus(body: BorrowedEquipmentStatusExt[]) {
     const headers = { Authorization: this.token };
     return this.http
-      .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, { headers })
+      .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, {
+        headers,
+      })
       .pipe(catchError(this.handleError));
   }
 
   isEquipmentRequested(equipmentid: string) {
     const headers = { Authorization: this.token };
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid, { headers })
+      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid, {
+        headers,
+      })
       .pipe(catchError(this.handleError));
   }
 
@@ -100,10 +102,13 @@ export class BorrowService {
   getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
     let params = new HttpParams();
     const headers = { Authorization: this.token };
-    params = params.append('borrowId', borrowId?? '');
+    params = params.append('borrowId', borrowId ?? '');
     params = params.append('equipment', equipment ?? '');
     return this.http
-      .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', { params, headers })
+      .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', {
+        params,
+        headers,
+      })
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),
@@ -144,7 +149,7 @@ export class BorrowService {
     return statusPlaceHolder[status] ?? '';
   }
 
-   getNextBorrowStatus(current: BorrowedEquipmentStatusType) {
+  getNextBorrowStatus(current: BorrowedEquipmentStatusType) {
     const statusTransitions: Record<BorrowedEquipmentStatusType, BorrowedEquipmentStatusType[]> = {
       requested: ['faculty_approved', 'faculty_rejected', 'oic_approved', 'oic_rejected'],
       faculty_approved: ['released'],
@@ -168,6 +173,7 @@ export class BorrowService {
   getRowDisplayActions(
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
+    displayInfoAndHistory?: boolean,
   ): RowDisplayActionConfig[] {
     let actions: RowDisplayActionConfig[] = [];
     let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
@@ -243,22 +249,24 @@ export class BorrowService {
     });
 
     // add view details
-    actions.push({
-      name: 'View Detail',
-      tooltip: 'View Detail',
-      type: 'primary',
-      size: 'md',
-      icon: 'info',
-    });
+    if (displayInfoAndHistory) {
+      actions.push({
+        name: 'View Detail',
+        tooltip: 'View Detail',
+        type: 'primary',
+        size: 'md',
+        icon: 'info',
+      });
 
-    // add progress logs
-    actions.push({
-      name: 'Progress Logs',
-      tooltip: 'Progress Logs',
-      type: 'primary',
-      size: 'md',
-      icon: 'history',
-    });
+      // add progress logs
+      actions.push({
+        name: 'Progress Logs',
+        tooltip: 'Progress Logs',
+        type: 'primary',
+        size: 'md',
+        icon: 'history',
+      });
+    }
 
     return actions;
   }

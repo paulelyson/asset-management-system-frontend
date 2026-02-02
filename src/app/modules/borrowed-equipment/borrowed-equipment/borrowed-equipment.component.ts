@@ -97,7 +97,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
-    return this.borrowService.getRowDisplayActions(this.user, borrowedEquipment);
+    return this.borrowService.getRowDisplayActions(this.user, borrowedEquipment, this.filter.info_and_history);
   }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
@@ -171,6 +171,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     this.filter.search = params['search'];
     this.filter.purpose = params['purpose'];
     this.filter.status = params['status'];
+    this.filter.info_and_history = params['info_and_history'] ? params['info_and_history'] === 'true' : false;
     this.getBorrowedEquipment();
   }
 }

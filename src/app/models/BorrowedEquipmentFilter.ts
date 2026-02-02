@@ -7,4 +7,6 @@ export interface IBorrowedEquimentFilter {
   search?: string;
   status?: BorrowedEquipmentStatusType;
   purpose?: BorrowedEquipmentPurpose;
+  needed_action?: boolean;
+  info_and_history?: boolean;
 }

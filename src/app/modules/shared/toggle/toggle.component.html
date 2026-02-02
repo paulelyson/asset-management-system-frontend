@@ -1,6 +1,6 @@
 <div class="toggle-container">
   <label class="switch">
-    <input type="checkbox" [checked]="isChecked" />
+    <input type="checkbox" [(ngModel)]="isChecked" (ngModelChange)="onToggleChange($event)" />
     <span class="slider round"></span>
   </label>
   <span>{{ label }}</span>

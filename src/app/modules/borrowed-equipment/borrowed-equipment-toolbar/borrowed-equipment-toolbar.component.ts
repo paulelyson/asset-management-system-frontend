@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
@@ -10,14 +10,25 @@ import { debounceTime } from 'rxjs';
   styleUrl: './borrowed-equipment-toolbar.component.css',
   standalone: false,
 })
-export class BorrowedEquipmentToolbarComponent {
+export class BorrowedEquipmentToolbarComponent implements OnChanges {
   @Input() filters: Record<string, string>[] = [];
   searchControl = new FormControl('');
   url: string = '';
+  infoAndHistory: boolean = false;
 
-  constructor(private dialogService: DialogService, private router: Router) {
+  constructor(
+    private dialogService: DialogService,
+    private router: Router,
+  ) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filters']) {
+      const found = this.filters.find((filter) => filter['field'] == 'info_and_history');
+      this.infoAndHistory = found ? JSON.parse(found['value']) : false;
+    }
   }
 
   openFilterDialog() {
@@ -39,6 +50,14 @@ export class BorrowedEquipmentToolbarComponent {
   onSearch(): void {
     let navigationExtras: NavigationExtras = {
       queryParams: { page: 1, search: this.searchControl.value },
+      queryParamsHandling: 'merge',
+    };
+    this.router.navigate([this.url], navigationExtras);
+  }
+
+  onShowInfoAndHistoryToggle(event: boolean): void {
+    let navigationExtras: NavigationExtras = {
+      queryParams: { page: 1, info_and_history: event },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);
