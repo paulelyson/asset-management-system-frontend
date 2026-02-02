@@ -14,6 +14,7 @@ import { BorrowedEquipment, BorrowedEquipmentStatus } from '../models/BorrowedEq
 import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
 import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
+import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -65,8 +66,8 @@ export class DialogService {
     });
   }
 
-  openBorrowedEquipmentHistoryDialog(): void {
-     const dialogRef = this.dialog.open(BorrowedEquipmentHistoryDialogComponent, {});
+  openBorrowedEquipmentHistoryDialog(histories: IBorrowedEquipmentHistory[]): void {
+     const dialogRef = this.dialog.open(BorrowedEquipmentHistoryDialogComponent, { data: histories });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The borrowed equipment history dialog was closed');

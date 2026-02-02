@@ -151,7 +151,9 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   onDisplayProgressLogs(borrowId: string, equipment: string): void {
     this.borrowService.getProgressLogs(borrowId, equipment).subscribe({
-      next: (resp) => console.log(resp),
+      next: (resp) => {
+        this.dialogService.openBorrowedEquipmentHistoryDialog(resp);
+      },
     });
   }
 

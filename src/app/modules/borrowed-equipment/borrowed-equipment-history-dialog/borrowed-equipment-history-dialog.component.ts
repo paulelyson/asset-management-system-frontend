@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHistory';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
@@ -7,5 +9,5 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class BorrowedEquipmentHistoryDialogComponent {
-
+    constructor(@Inject(MAT_DIALOG_DATA) public data: IBorrowedEquipmentHistory[]) {}
 }

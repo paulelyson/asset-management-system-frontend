@@ -1,5 +1,10 @@
 import { Component, Input } from '@angular/core';
 
+export interface IVerticalStepper {
+  title: string;
+  contents: string[];
+}
+
 @Component({
   selector: 'app-vertical-stepper',
   imports: [],
@@ -7,5 +12,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './vertical-stepper.component.css',
 })
 export class VerticalStepperComponent {
- @Input() contents: string[] = ['asdfs', 'bar', 'foo', 'bear']
+  @Input() contents: IVerticalStepper[] = [
+    {
+      title: 'Requested',
+      contents: ['Jan. 31, 2026'],
+    },
+  ];
 }
