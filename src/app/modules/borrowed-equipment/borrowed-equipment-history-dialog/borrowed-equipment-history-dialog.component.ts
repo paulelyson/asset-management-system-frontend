@@ -1,6 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHistory';
+import { IVerticalStepper } from '../../shared/vertical-stepper/vertical-stepper.component';
+import { getDisplayName } from '../../../utils/string.util';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
@@ -9,5 +12,18 @@ import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHist
   standalone: false,
 })
 export class BorrowedEquipmentHistoryDialogComponent {
-    constructor(@Inject(MAT_DIALOG_DATA) public data: IBorrowedEquipmentHistory[]) {}
+  histories: IVerticalStepper[];
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: IBorrowedEquipmentHistory[],
+    private datePipe: DatePipe,
+  ) {
+    this.histories = data.map((dt) => ({
+      title: dt.updatedStatus,
+      contents: [
+        getDisplayName(dt.responsibleUser),
+        this.datePipe.transform(dt.createdAt, 'medium') ?? dt.createdAt,
+        dt.remarks,
+      ],
+    }));
+  }
 }

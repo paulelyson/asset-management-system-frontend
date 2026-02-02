@@ -1,5 +1,6 @@
 import { BorrowedEquipmentStatusType } from "./BorrowedEquipment";
 import { IConditionAndQuantity } from "./Equipment";
+import { IUser } from "./User";
 
 export interface IBorrowedEquipmentHistory {
   _id: string;
@@ -7,7 +8,9 @@ export interface IBorrowedEquipmentHistory {
   equipment: string;
   updatedStatus: BorrowedEquipmentStatusType;
   updatedConditionQuantity: IConditionAndQuantity;
-  responsibleUser: string;
+  responsibleUser: IUser;
   remarks: string;
+  createdAt: string,
+  updatedAt: string,
   dis: boolean;
 }
