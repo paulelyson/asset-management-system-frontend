@@ -167,7 +167,8 @@ export class BorrowService {
   }
 
   getCurrentStatus(latestStatus: string[]): BorrowedEquipmentStatusType[] {
-    return [];
+    const status_only= latestStatus.map(status => status.split(' ')[1]) as BorrowedEquipmentStatusType[]
+    return status_only
   }
 
   getRowDisplayActions(
@@ -184,11 +185,11 @@ export class BorrowService {
       this.getCurrentStatus(borrowedEquipment.latestStatus).includes('requested')
     ) {
       actions.push({
-        icon: 'check',
-        name: 'thumb_up',
-        tooltip: 'Approve',
+        name: 'Approve',
+        tooltip: 'Approve Request',
         type: 'primary',
         size: 'md',
+        icon: 'thumb_up',
       });
     }
 

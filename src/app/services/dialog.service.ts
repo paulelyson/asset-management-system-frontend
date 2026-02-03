@@ -9,8 +9,7 @@ import {
   UpdateQuantityStatusDialogComponent,
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../modules/shared/button/button.component';
-import { Observable } from 'rxjs';
-import { BorrowedEquipment, BorrowedEquipmentStatus } from '../models/BorrowedEquipment';
+import { BorrowedEquipment, BorrowedEquipmentStatus, BorrowedEquipmentStatusType } from '../models/BorrowedEquipment';
 import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
 import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
@@ -30,8 +29,8 @@ export class DialogService {
     });
   }
 
-  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[]){
-    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, { data: { fields, actions } });
+  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[], status?: BorrowedEquipmentStatusType[]){
+    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, { data: { fields, actions, statusOptions: status } });
     return dialogRef.afterClosed()
   }
 

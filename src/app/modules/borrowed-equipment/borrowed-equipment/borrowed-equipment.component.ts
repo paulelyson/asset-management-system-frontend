@@ -97,36 +97,33 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
-    return this.borrowService.getRowDisplayActions(this.user, borrowedEquipment, this.filter.info_and_history);
+    return this.borrowService.getRowDisplayActions(
+      this.user,
+      borrowedEquipment,
+      this.filter.info_and_history,
+    );
   }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
-    const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
-
-    if (action == 'check' && borrowedEquipment.quantity == 1) {
-      const status = 'faculty_approved';
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    } else if (action == 'check' && borrowedEquipment.quantity > 1) {
-      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Approve' })];
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
-        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
-      });
-    } else if (action == 'lock_open' && borrowedEquipment.quantity == 1) {
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, 'released', borrowedEquipment.quantity);
-    } else if (action == 'lock_open' && borrowedEquipment.quantity > 1) {
-      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Release' })];
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
-        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
-      });
-    } else if (action == 'keyboard_return' && borrowedEquipment.quantity == 1) {
-      const status = 'mark_returned';
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    } else if (action == 'keyboard_return' && borrowedEquipment.quantity > 1) {
-      const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Return' })];
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
-        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
-      });
+    if (action == 'Approve') {
+      this.onApproveByFaculty(borrowedEquipment);
     }
+    // } else if (action == 'lock_open' && borrowedEquipment.quantity == 1) {
+    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, 'released', borrowedEquipment.quantity);
+    // } else if (action == 'lock_open' && borrowedEquipment.quantity > 1) {
+    //   const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Release' })];
+    //   this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
+    //     this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+    //   });
+    // } else if (action == 'keyboard_return' && borrowedEquipment.quantity == 1) {
+    //   const status = 'mark_returned';
+    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
+    // } else if (action == 'keyboard_return' && borrowedEquipment.quantity > 1) {
+    //   const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Return' })];
+    //   this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
+    //     this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+    //   });
+    // }
     // cancelled
     else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
       const status = 'cancelled';
@@ -146,6 +143,19 @@ export class BorrowedEquipmentComponent implements OnInit {
       const equipment = borrowedEquipment.equipment._id;
       // this.dialogService.openBorrowedEquipmentHistoryDialog();
       this.onDisplayProgressLogs(borrowId, equipment);
+    }
+  }
+
+  onApproveByFaculty(borrowedEquipment: BorrowedEquipment) {
+    const status = 'faculty_approved';
+    const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
+    const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Approve' })];
+    if (borrowedEquipment.quantity == 1) {
+      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
+    } else {
+      this.dialogService.openUpdateQuantityStatusDialog(fields, actions, [status]).subscribe((resp) => {
+        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+      });
     }
   }
 
@@ -171,7 +181,9 @@ export class BorrowedEquipmentComponent implements OnInit {
     this.filter.search = params['search'];
     this.filter.purpose = params['purpose'];
     this.filter.status = params['status'];
-    this.filter.info_and_history = params['info_and_history'] ? params['info_and_history'] === 'true' : false;
+    this.filter.info_and_history = params['info_and_history']
+      ? params['info_and_history'] === 'true'
+      : false;
     this.getBorrowedEquipment();
   }
 }

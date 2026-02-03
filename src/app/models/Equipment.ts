@@ -1,6 +1,6 @@
 import { Department } from "./User";
 
-type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
+export type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
 type EquipmentStatus = 'acquired' | 'returned';
 type EquipmentAvailability = 'available' | 'borrowed' | 'unreturned';
 type EquipmentInventoryType = 'inventory' | 'non_inventory';
