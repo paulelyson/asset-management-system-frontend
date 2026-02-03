@@ -8,10 +8,10 @@ import {
 } from '../../shared/row-display/row-display.component';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
-import { IButtonConfig } from '../../shared/button/button.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { IBorrowedEquimentFilter } from '../../../models/BorrowedEquipmentFilter';
 import ButtonConfig from '../../../models/ButtonConfig';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -31,6 +31,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     private dialogService: DialogService,
     private authService: AuthService,
     private router: Router,
+    private snackBarService: SnackbarService,
   ) {
     this.user = this.authService.getUser();
   }
@@ -88,7 +89,8 @@ export class BorrowedEquipmentComponent implements OnInit {
       next: (resp) => {
         this.getBorrowedEquipment();
       },
-      error: (err) => console.error(err),
+      error: (err) =>
+        this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
     });
   }
 
@@ -153,9 +155,13 @@ export class BorrowedEquipmentComponent implements OnInit {
     if (borrowedEquipment.quantity == 1) {
       this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
     } else {
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions, [status]).subscribe((resp) => {
-        this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
-      });
+      this.dialogService
+        .openUpdateQuantityStatusDialog(fields, actions, [status])
+        .subscribe((resp) => {
+          if (resp) {
+            this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+          }
+        });
     }
   }
 
