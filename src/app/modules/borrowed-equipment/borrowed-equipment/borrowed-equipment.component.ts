@@ -87,6 +87,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     ];
     this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
       next: (resp) => {
+        this.snackBarService.openSnackbar({ icon: 'info', type: 'success', message: [resp.message] }),
         this.getBorrowedEquipment();
       },
       error: (err) =>

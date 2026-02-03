@@ -1,7 +1,7 @@
 .snackbar-container {
   display: flex;
   width: 640px;
-  min-height: 35px;
+  min-height: 42px;
   padding: 6px 16px;
   gap: 4px;
 }
@@ -43,8 +43,10 @@
     }
 
     .description {
-      line-height: var(--line-height-sm);
-      font-weight: var(--font-weight-book);
+      /* line-height: var(--line-height-sm);
+      font-weight: var(--font-weight-book); */
+      font-size: 13px;
+      font-family: Poppins;
       font-feature-settings: 'case' on;
       /* ul and li bullt padding overrides*/
       margin: 0;
@@ -88,7 +90,7 @@
 
 .snackbar-container.error {
   border-radius: 12px;
-  background: var(--danger-300);
+  background: var(--color-bg-danger-idle);
   color: var(--color-text-danger-default);
   font-size: var(--font-size-sm);
 }
