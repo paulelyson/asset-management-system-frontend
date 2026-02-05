@@ -207,7 +207,7 @@ export class BorrowService {
         tooltip: 'Release Equipment',
         type: 'primary',
         size: 'md',
-        icon: 'lock_open'
+        icon: 'lock_open',
       });
     }
 
@@ -218,7 +218,7 @@ export class BorrowService {
     ) {
       actions.push({
         icon: 'keyboard_return',
-        name: 'Return Equipment',
+        name: 'Return',
         tooltip: 'Return Equipment',
         type: 'primary',
         size: 'md',
@@ -233,23 +233,22 @@ export class BorrowService {
       )
     ) {
       actions.push({
-        name: 'Confirm Return',
-        tooltip: 'Confirm Return',
+        icon: 'keyboard_return',
+        name: 'Confirm Returns',
+        tooltip: 'Confirm Returns',
         type: 'primary',
         size: 'md',
-        icon: 'check',
       });
     }
 
     // cancelled
-
-    actions.push({
-      name: 'Cancel Request',
-      tooltip: 'Cancel Request',
-      type: 'primary',
-      size: 'sm',
-      icon: 'cancel',
-    });
+    // actions.push({
+    //   name: 'Cancel Request',
+    //   tooltip: 'Cancel Request',
+    //   type: 'primary',
+    //   size: 'sm',
+    //   icon: 'cancel',
+    // });
 
     // add view details
     if (displayInfoAndHistory) {

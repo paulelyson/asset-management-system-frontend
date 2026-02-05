@@ -116,10 +116,12 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.onUpdateStatus(borrowedEquipment, 'faculty_approved', 'Approve');
     } else if (action == 'Release') {
       this.onUpdateStatus(borrowedEquipment, 'released', 'Release');
+    } else if (action == 'Return') {
+      this.onUpdateStatus(borrowedEquipment, 'mark_returned', 'Return');
+    } else if (action == 'Confirm Returns') {
+      this.onUpdateStatus(borrowedEquipment, 'returned', 'Confirm Returns');
     }
 
-
-    
     // cancelled
     else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
       const status = 'cancelled';
@@ -142,7 +144,11 @@ export class BorrowedEquipmentComponent implements OnInit {
     }
   }
 
-  onUpdateStatus(borrowedEquipment: BorrowedEquipment, status: BorrowedEquipmentStatusType, action: string) {
+  onUpdateStatus(
+    borrowedEquipment: BorrowedEquipment,
+    status: BorrowedEquipmentStatusType,
+    action: string,
+  ) {
     const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
     const actions: ButtonConfig[] = [new ButtonConfig({ name: action })];
     if (borrowedEquipment.quantity == 1) {
