@@ -9,11 +9,16 @@ import {
   UpdateQuantityStatusDialogComponent,
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../modules/shared/button/button.component';
-import { BorrowedEquipment, BorrowedEquipmentStatus, BorrowedEquipmentStatusType } from '../models/BorrowedEquipment';
+import {
+  BorrowedEquipment,
+  BorrowedEquipmentStatus,
+  BorrowedEquipmentStatusType,
+} from '../models/BorrowedEquipment';
 import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
 import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
 import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
+import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -29,9 +34,15 @@ export class DialogService {
     });
   }
 
-  openUpdateQuantityStatusDialog(fields: BorrowedEquipmentStatusFields[], actions: IButtonConfig[], status?: BorrowedEquipmentStatusType[]){
-    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, { data: { fields, actions, statusOptions: status } });
-    return dialogRef.afterClosed()
+  openUpdateQuantityStatusDialog(
+    fields: BorrowedEquipmentStatusFields[],
+    actions: IButtonConfig[],
+    status?: BorrowedEquipmentStatusType[],
+  ) {
+    const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, {
+      data: { fields, actions, statusOptions: status },
+    });
+    return dialogRef.afterClosed();
   }
 
   openEquipmentFilterDialog(): void {
@@ -50,7 +61,7 @@ export class DialogService {
   }
 
   openBorrowedEquipmentFilterDialog(): void {
-     const dialogRef = this.dialog.open(BorrowedEquipmentFilterDialogComponent, {});
+    const dialogRef = this.dialog.open(BorrowedEquipmentFilterDialogComponent, {});
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The borrowed equipment filter dialog was closed');
@@ -58,7 +69,9 @@ export class DialogService {
   }
 
   openBorrowedEquipmentDetailDialog(borrowedEquipment: BorrowedEquipment): void {
-     const dialogRef = this.dialog.open(BorrowedEquipmentDetailDialogComponent, { data: borrowedEquipment });
+    const dialogRef = this.dialog.open(BorrowedEquipmentDetailDialogComponent, {
+      data: borrowedEquipment,
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The borrowed equipment detail dialog was closed');
@@ -66,10 +79,19 @@ export class DialogService {
   }
 
   openBorrowedEquipmentHistoryDialog(histories: IBorrowedEquipmentHistory[]): void {
-     const dialogRef = this.dialog.open(BorrowedEquipmentHistoryDialogComponent, { data: histories });
+    const dialogRef = this.dialog.open(BorrowedEquipmentHistoryDialogComponent, {
+      data: histories,
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The borrowed equipment history dialog was closed');
+    });
+  }
+
+  openLoginDialog() {
+    const dialogRef = this.dialog.open(LoginDialogComponent, {});
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The login dialog was closed');
     });
   }
 }
