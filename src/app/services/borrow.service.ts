@@ -167,8 +167,10 @@ export class BorrowService {
   }
 
   getCurrentStatus(latestStatus: string[]): BorrowedEquipmentStatusType[] {
-    const status_only= latestStatus.map(status => status.split(' ')[1]) as BorrowedEquipmentStatusType[]
-    return status_only
+    const status_only = latestStatus.map(
+      (status) => status.split(' ')[1],
+    ) as BorrowedEquipmentStatusType[];
+    return status_only;
   }
 
   getRowDisplayActions(
@@ -195,17 +197,17 @@ export class BorrowService {
 
     // can release as reads
     if (
-      user.assignedTo.includes(borrowedEquipment.classDepartment) &&
+      // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
       this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
         ['oic_approved', 'faculty_approved'].includes(x),
       )
     ) {
       actions.push({
-        icon: 'lock_open',
         name: 'Release',
-        tooltip: 'Release',
+        tooltip: 'Release Equipment',
         type: 'primary',
         size: 'md',
+        icon: 'lock_open'
       });
     }
 

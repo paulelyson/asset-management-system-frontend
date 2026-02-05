@@ -20,6 +20,7 @@ export class BorrowedEquipmentHistoryDialogComponent {
     this.histories = data.map((dt) => ({
       title: dt.updatedStatus,
       contents: [
+        'Qty: ' + dt.updatedConditionQuantity.quantity,
         getDisplayName(dt.responsibleUser),
         this.datePipe.transform(dt.createdAt, 'medium') ?? dt.createdAt,
         dt.remarks,
