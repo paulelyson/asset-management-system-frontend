@@ -1,0 +1,12 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  gap: 10px;
+  max-height: 80vh;
+  max-width: 650px;
+}
+
+.action-wrapper {
+ padding: 15px 0 0 0;
+}
