@@ -14,9 +14,14 @@ import { MenuComponent } from '../menu/menu.component';
 })
 export class HeaderComponent {
   sidenav_opened: boolean = false;
+  showAvatarMenu: boolean = false;
 
   constructor(private dialogService: DialogService) {}
   login(): void {
     this.dialogService.openLoginDialog();
+  }
+
+  onAvatarClicked() {
+    this.showAvatarMenu = !this.showAvatarMenu;
   }
 }

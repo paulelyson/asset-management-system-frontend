@@ -12,8 +12,8 @@
         <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
         <li><a (click)="login()">Login</a></li>
         <div class="avatar-wrapper">
-          <app-avatar></app-avatar>
-          <app-menu></app-menu>
+          <app-avatar (avatarclicked)="onAvatarClicked()" />
+          <app-menu [show]="showAvatarMenu"></app-menu>
         </div>
       </ul>
     </div>

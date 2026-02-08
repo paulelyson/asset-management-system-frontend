@@ -1,1 +1,5 @@
-<p>avatar works!</p>
+<div class="avatar-wrapper">
+  <div class="image-wrapper" [ngClass]="[size]" (click)="onAvatarClicked()">
+    <img class="fit-image" [src]="image" />
+  </div>
+</div>

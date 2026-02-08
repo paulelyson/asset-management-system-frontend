@@ -1,0 +1,10 @@
+.image-wrapper.md {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.fit-image {
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
