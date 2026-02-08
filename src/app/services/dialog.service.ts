@@ -90,8 +90,6 @@ export class DialogService {
 
   openLoginDialog() {
     const dialogRef = this.dialog.open(LoginDialogComponent, {});
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The login dialog was closed');
-    });
+    return dialogRef.afterClosed()
   }
 }

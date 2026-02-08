@@ -13,11 +13,8 @@ import { DialogService } from '../../../services/dialog.service';
 export class HeaderComponent {
   sidenav_opened: boolean = false;
 
-  constructor(private dialogService: DialogService) {
-
-  }
+  constructor(private dialogService: DialogService) {}
   login(): void {
-    this.dialogService.openLoginDialog()
+    this.dialogService.openLoginDialog();
   }
-
 }
