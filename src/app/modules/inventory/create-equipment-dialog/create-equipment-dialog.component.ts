@@ -32,6 +32,7 @@ export class CreateEquipmentDialogComponent {
       remarks: [data?.remarks ?? ''],
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location ?? ''],
+      dateAcquired: [data?.dateAcquired?? ''],
       images: this.fb.array([]),
     });
   }

@@ -14,6 +14,7 @@ import { CreateEquipmentDialogComponent } from './create-equipment-dialog/create
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileInputComponent } from '../shared/file-input/file-input.component';
+import { DatepickerComponent } from '../shared/datepicker/datepicker.component';
 
 @NgModule({
   declarations: [InventoryComponent, InventoryToolbarComponent, CreateEquipmentDialogComponent],
@@ -30,6 +31,7 @@ import { FileInputComponent } from '../shared/file-input/file-input.component';
     FormsModule,
     ReactiveFormsModule,
     FileInputComponent,
+    DatepickerComponent
   ],
 })
 export class InventoryModule {}

@@ -1,13 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import {
   ControlValueAccessor,
   Form,
   FormBuilder,
   FormGroup,
   FormsModule,
+  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import {
   FloatLabelType,
@@ -31,6 +32,13 @@ export interface IDateRange {
     MatNativeDateModule,
     FormsModule,
     ReactiveFormsModule,
+  ],
+  providers: [provideNativeDateAdapter(),
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DatepickerComponent),
+      multi: true,
+    },
   ],
   templateUrl: './datepicker.component.html',
   styleUrl: './datepicker.component.css',

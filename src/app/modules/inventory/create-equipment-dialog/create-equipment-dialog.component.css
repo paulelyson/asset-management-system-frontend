@@ -26,3 +26,9 @@
   max-height: 80vh;
   max-width: 650px;
 }
+
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 25px 10px;
+}
