@@ -5,19 +5,19 @@
     </div>
     <app-file-input (filechanged)="addImage($event)"></app-file-input>
     <div class="create-equipment-wrapper">
-      <app-input label="Name*" formControlName="name"></app-input>
-      <app-input label="Serial Number"></app-input>
-      <app-input label="Model Number"></app-input>
-      <app-autocomplete label="Equipment Type" formControlName="equipmentType"></app-autocomplete>
-      <app-input label="Categories"></app-input>
-      <app-autocomplete label="Brand"></app-autocomplete>
-      <app-input label="Color"></app-input>
-      <app-input label="Unit"></app-input>
-      <app-autocomplete label="Matter"></app-autocomplete>
-      <app-input label="Description"></app-input>
-      <app-input label="Remarks"></app-input>
-      <app-autocomplete label="Inventory Type"></app-autocomplete>
-      <app-input label="Location"></app-input>
+      <app-input label="Name*" formControlName="name" />
+      <app-input label="Serial Number" formControlName="serialNo" />
+      <app-input label="Model Number" formControlName="modelNo" />
+      <app-autocomplete label="Equipment Type" formControlName="equipmentType" />
+      <app-input label="Categories" formControlName="categories" />
+      <app-autocomplete label="Brand" formControlName="brand" />
+      <app-input label="Color" formControlName="color" />
+      <app-input label="Unit" formControlName="unit" />
+      <app-autocomplete label="Matter" formControlName="matter" />
+      <app-input label="Description" formControlName="description" />
+      <app-input label="Remarks" formControlName="remarks" />
+      <app-autocomplete label="Inventory Type" formControlName="inventorytype" />
+      <app-input label="Location"  formControlName="location" />
     </div>
     <app-button>Submit</app-button>
   </div>

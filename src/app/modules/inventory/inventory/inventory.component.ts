@@ -72,8 +72,8 @@ export class InventoryComponent implements OnInit {
   onActionClicked(action: string, equipment: IEquipment) {
     if (action == 'Details') {
       this.dialogService.openEquipmentDetailDialog(equipment);
-    } else if (action == 'edit') {
-      // TO DO
+    } else if (action == 'Update') {
+      this.dialogService.openUpdateEquipmentDialog(equipment);
     }
   }
 

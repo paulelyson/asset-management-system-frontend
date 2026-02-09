@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IEquipment } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -12,10 +14,24 @@ export class CreateEquipmentDialogComponent {
   image: string | undefined;
   equipmentForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.equipmentForm = this.fb.group({
-      name: [''],
-      equipmentType: [''],
+  constructor(
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
+  ) {
+    this.equipmentForm = this.fb.nonNullable.group({
+      name: [data?.name ?? ''],
+      equipmentType: [data?.equipmentType ?? ''],
+      serialNo: [data?.serialNo ?? ''],
+      modelNo: [data?.modelNo ?? ''],
+      categories: [data?.categories ?? ''],
+      brand: [data?.brand ?? ''],
+      color: [data?.color ?? ''],
+      unit: [data?.unit ?? ''],
+      matter: [data?.matter ?? ''],
+      description: [data?.description ?? ''],
+      remarks: [data?.remarks ?? ''],
+      inventorytype: [data?.inventorytype ?? ''],
+      location: [data?.location ?? ''],
       images: this.fb.array([]),
     });
   }

@@ -60,6 +60,11 @@ export class DialogService {
     });
   }
 
+  openUpdateEquipmentDialog(equipment: IEquipment) {
+    const dialogRef = this.dialog.open(CreateEquipmentDialogComponent, { data: equipment });
+    return dialogRef.afterClosed();
+  }
+
   openBorrowedEquipmentFilterDialog(): void {
     const dialogRef = this.dialog.open(BorrowedEquipmentFilterDialogComponent, {});
 

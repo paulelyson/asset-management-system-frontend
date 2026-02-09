@@ -74,6 +74,13 @@ export class EquipmentService {
         size: 'sm',
         icon: 'info',
       },
+      {
+        name: 'Update',
+        tooltip: 'Update equipment',
+        type: 'primary',
+        size: 'sm',
+        icon: 'edit',
+      },
     ];
   }
 
