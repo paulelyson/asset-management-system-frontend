@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IEquipment } from '../../../models/Equipment';
 
 @Component({
@@ -16,9 +16,11 @@ export class CreateEquipmentDialogComponent {
 
   constructor(
     private fb: FormBuilder,
+    public dialogRef: MatDialogRef<CreateEquipmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
   ) {
     this.equipmentForm = this.fb.nonNullable.group({
+      _id: [data?._id ?? ''],
       name: [data?.name ?? ''],
       equipmentType: [data?.equipmentType ?? ''],
       serialNo: [data?.serialNo ?? ''],
@@ -48,5 +50,9 @@ export class CreateEquipmentDialogComponent {
       original: [event],
     });
     this.images.push(imageForm);
+  }
+
+  submit() {
+    this.dialogRef.close(this.equipmentForm.value)
   }
 }

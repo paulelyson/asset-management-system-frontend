@@ -29,7 +29,7 @@ export class InventoryComponent implements OnInit {
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     this.equipmentFilter = { page: 1, department: 'computer_engineering' };
   }
@@ -59,7 +59,7 @@ export class InventoryComponent implements OnInit {
         this.equipment.update((eqpmnt) =>
           [...eqpmnt]
             .concat(resp)
-            .filter((item, index, arr) => index === arr.findIndex((x) => x._id === item._id))
+            .filter((item, index, arr) => index === arr.findIndex((x) => x._id === item._id)),
         );
       },
     });
@@ -73,8 +73,19 @@ export class InventoryComponent implements OnInit {
     if (action == 'Details') {
       this.dialogService.openEquipmentDetailDialog(equipment);
     } else if (action == 'Update') {
-      this.dialogService.openUpdateEquipmentDialog(equipment);
+      this.onUpdateEquipment(equipment);
     }
+  }
+
+  onUpdateEquipment(equipment: IEquipment) {
+    this.dialogService.openUpdateEquipmentDialog(equipment).subscribe((resp: IEquipment | null) => {
+      if (resp) {
+        this.equipmentService.updateEquipment(resp).subscribe({
+          next: (resp) => console.log(resp),
+          error: (err) => console.error(err),
+        });
+      }
+    });
   }
 
   loadMoreEquipment() {

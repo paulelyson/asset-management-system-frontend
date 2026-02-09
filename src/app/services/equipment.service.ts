@@ -52,6 +52,15 @@ export class EquipmentService {
       );
   }
 
+  updateEquipment(equipment: IEquipment) {
+    return this.http
+      .patch<ApiResponse>(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
+      .pipe(
+        map((resp) => resp.data),
+        catchError(this.handleError),
+      );
+  }
+
   getRowDisplayContent(equipment: IEquipment) {
     const conditions = equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition);
     let contents: RowDisplayContent[] = [
