@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Subject, throwError } from 'rxjs';
 
 interface ApiResponse {
   data: string;
@@ -13,6 +13,7 @@ interface ApiResponse {
   providedIn: 'root',
 })
 export class LoginService {
+  loggedInSubject = new BehaviorSubject<boolean>(this.hasToken())
   constructor(private http: HttpClient) {}
 
   login(accoundId: string, password: string) {
@@ -25,5 +26,13 @@ export class LoginService {
 
   handleError(err: HttpErrorResponse) {
     return throwError(() => new Error(err.error.message || err.error));
+  }
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  isLoggedIn() {
+    return this.loggedInSubject.asObservable()
   }
 }

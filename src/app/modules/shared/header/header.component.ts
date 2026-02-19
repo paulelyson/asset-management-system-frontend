@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconComponent } from '../icon/icon.component';
 import { RouterLink } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MenuComponent } from '../menu/menu.component';
+import { AuthService } from '../../../services/auth.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -12,11 +14,22 @@ import { MenuComponent } from '../menu/menu.component';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   sidenav_opened: boolean = false;
   showAvatarMenu: boolean = false;
+  isLoggedIn: boolean = false;
 
-  constructor(private dialogService: DialogService) {}
+  constructor(
+    private dialogService: DialogService,
+    private loginService: LoginService,
+  ) {
+    this.loginService.isLoggedIn().subscribe((resp) => (this.isLoggedIn = resp));
+  }
+
+  ngOnInit(): void {
+    // throw new Error('Method not implemented.');
+  }
+
   login(): void {
     this.dialogService.openLoginDialog();
   }
