@@ -9,6 +9,8 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+type InputSize = 'sm' | 'md' | 'lg';
+
 @Component({
   selector: 'app-input',
   imports: [CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule],
@@ -29,6 +31,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() inputType: string = 'text';
+  @Input() width: InputSize = 'md';
   // accessor
   value: string = '';
   disabled: boolean = false;

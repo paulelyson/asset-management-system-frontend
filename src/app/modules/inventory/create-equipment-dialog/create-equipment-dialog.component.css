@@ -27,6 +27,12 @@
   max-width: 650px;
 }
 
+.condition-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
 .action-wrapper {
   display: flex;
   justify-content: center;
