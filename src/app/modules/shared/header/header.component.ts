@@ -6,7 +6,6 @@ import { DialogService } from '../../../services/dialog.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MenuComponent } from '../menu/menu.component';
 import { AuthService } from '../../../services/auth.service';
-import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -21,9 +20,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private dialogService: DialogService,
-    private loginService: LoginService,
+    private authService: AuthService,
   ) {
-    this.loginService.isLoggedIn().subscribe((resp) => (this.isLoggedIn = resp));
+    this.authService.isLoggedIn().subscribe((resp) => (this.isLoggedIn = resp));
   }
 
   ngOnInit(): void {
