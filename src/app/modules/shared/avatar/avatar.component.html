@@ -1,5 +1,6 @@
-<div class="avatar-wrapper">
-  <div class="image-wrapper" [ngClass]="[size]" (click)="onAvatarClicked()">
+<div class="avatar-wrapper" (click)="onAvatarClicked()">
+  <div class="image-wrapper" [ngClass]="[size]">
     <img class="fit-image" [src]="image" />
   </div>
+  <div class="label">UserName</div>
 </div>

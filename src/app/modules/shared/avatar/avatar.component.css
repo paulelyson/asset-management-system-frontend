@@ -1,3 +1,27 @@
+.avatar-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-200);
+  }
+
+  .label {
+    position: relative;
+    font-size: 1rem;
+    font-weight: 550;
+    line-height: 1.5;
+    color: var(--accent);
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
 .image-wrapper.md {
   width: 40px;
   height: 40px;

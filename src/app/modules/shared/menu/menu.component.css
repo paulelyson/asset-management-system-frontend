@@ -1,8 +1,19 @@
 .menu-container {
   position: absolute;
   display: none;
+  width: 250px;
+  right: 3.5rem;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--primary-100);
+  border: 1px solid var(--primary-700);
 }
 
 .menu-container.show {
   display: block;
+}
+
+.action-wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
