@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
@@ -9,6 +9,8 @@ import { ButtonComponent } from '../button/button.component';
 })
 export class MenuComponent{
   @Input() show: boolean = false;
-
-
+  @Output() onActionClicked: EventEmitter<string> = new EventEmitter<string>()
+  logout() {
+    this.onActionClicked.emit('logout')
+  }
 }

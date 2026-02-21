@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconComponent } from '../icon/icon.component';
 import { RouterLink } from '@angular/router';
@@ -16,13 +16,13 @@ import { AuthService } from '../../../services/auth.service';
 export class HeaderComponent implements OnInit {
   sidenav_opened: boolean = false;
   showAvatarMenu: boolean = false;
-  isLoggedIn: boolean = false;
+  isLoggedIn: WritableSignal<boolean> = signal(false)
 
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,
   ) {
-    this.authService.isLoggedIn().subscribe((resp) => (this.isLoggedIn = resp));
+    this.authService.isLoggedIn().subscribe((resp) => (this.isLoggedIn.set(resp)));
   }
 
   ngOnInit(): void {
@@ -30,10 +30,22 @@ export class HeaderComponent implements OnInit {
   }
 
   login(): void {
-    this.dialogService.openLoginDialog();
+    this.dialogService.openLoginDialog().subscribe((resp) => {
+      if(resp == 'login_success') {
+        this.isLoggedIn.set(true);
+      }
+    });
   }
 
   onAvatarClicked() {
     this.showAvatarMenu = !this.showAvatarMenu;
+  }
+
+  onActionClicked(event: string) {
+    console.log(event);
+    if (event === 'logout') {
+      this.showAvatarMenu = false;
+      this.authService.logout();
+    }
   }
 }

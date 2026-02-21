@@ -7,13 +7,13 @@
       </div>
       <span class="spacer"></span>
       <ul class="navigation">
-        @if (isLoggedIn) {
+        @if (isLoggedIn()) {
           <li><a routerLink="/inventory">Inventory</a></li>
           <li><a routerLink="/borrow">Borrow</a></li>
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">
             <app-avatar (avatarclicked)="onAvatarClicked()" />
-            <app-menu [show]="showAvatarMenu"></app-menu>
+            <app-menu [show]="showAvatarMenu" (onActionClicked)="onActionClicked($event)"></app-menu>
           </div>
         } @else {
           <li><a (click)="login()">Login</a></li>

@@ -11,6 +11,7 @@ type AvatarSize = 'sm' | 'md' | 'lg';
 })
 export class AvatarComponent {
   @Input() size: AvatarSize = 'md';
+  @Input() label: string = ''
   @Output() avatarclicked: EventEmitter<string> = new EventEmitter();
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
 

@@ -29,7 +29,7 @@ export class LoginDialogComponent {
       next: (resp) => {
         localStorage.setItem('token', resp);
         this.router.navigate(['/borrow']);
-        this.dialogRef.close();
+        this.dialogRef.close('login_success');
       },
       error: (err) => {
         this.snackBarService.openSnackbar({
