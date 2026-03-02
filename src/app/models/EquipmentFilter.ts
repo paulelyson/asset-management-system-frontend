@@ -2,7 +2,7 @@ import { Department } from "./User";
 
 export interface IEquipmentFilter {
   page: number;
-  department: Department
+  department: Department | string;
   search?: string;
   categories?: string;
   brand?: string;

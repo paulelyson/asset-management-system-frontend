@@ -32,7 +32,7 @@ import { convertToAmericanFormat, get24HourTime } from '../../../utils/date.util
 })
 export class ClassScheduleComponent implements OnInit, OnChanges {
   @Input() user!: TokenData;
-  @Input() department!: Department;
+  @Input() department!: Department | string;
   @Input() resetForm: boolean = false;
   @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
   departments = DEPARTMENTS;

@@ -36,7 +36,7 @@ export class BorrowComponent implements OnInit {
     private router: Router
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = { page: 1, department: this.user.department[0] };
+    this.equipmentFilter = { page: 1, department: this.user.roles[0].department.code };
   }
 
   ngOnInit(): void {

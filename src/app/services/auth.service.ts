@@ -33,12 +33,14 @@ export class AuthService {
     return decoded;
   }
 
-  isDepartmentChair(user: IUser, department: Department) {
-    return user.role.includes('chairman') && user.department.includes(department);
+  isDepartmentChair(user: IUser, deptCode: string) {
+    const found = user.roles.find(u=> u.role == 'chairman' && u.department.code == deptCode);
+    return !!found
   }
 
-  isDepartmentOIC(user: IUser, department: Department) {
-    return user.role.includes('oic') && user.department.includes(department);
+  isDepartmentOIC(user: IUser, deptCode: string) {
+      const found = user.roles.find(u=> u.role == 'chairman' && u.department.code == deptCode);
+    return !!found
   }
 
   login(accoundId: string, password: string) {

@@ -27,7 +27,7 @@ export class EquipmentService {
       fromObject: {
         page: filter.page,
         search: filter.search ?? '',
-        department: filter.department ?? '',
+        // department: filter.department ?? '',
         brand: filter.brand ?? '',
         categories: filter.categories ?? '',
         equipmentType: filter.equipmentType ?? '',
