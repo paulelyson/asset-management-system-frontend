@@ -1,5 +1,13 @@
-type UserRole = 'administrator' | 'chairman' | 'oic' | 'faculty' | 'reads' | 'student';
+import { IDepartment } from "./Department";
+import { IMongoDocument } from "./MongoDocument";
+
+// type UserRole = 'administrator' | 'chairman' | 'oic' | 'faculty' | 'reads' | 'student';
 type UserStatus = 'pending_approval' | 'active' | 'deactivated' | 'rejected';
+
+interface UserRole {
+  role: 'administrator' | 'chairman' | 'oic' | 'faculty' | 'reads' | 'student';
+  department: IDepartment
+}
 
 export type Department =
   | 'civil_engineering'
@@ -23,19 +31,15 @@ export const DEPARTMENTS: Department[] = [
 ];
 
 
-export interface IUser {
-  _id: string;
+export interface IUser extends IMongoDocument{
   firstName: string;
   middleName: string;
   lastName: string;
   age: number;
   email: string;
-  schoolId: string;
-  department: Department[];
-  assignedTo: Department[];
-  role: UserRole[];
-  password: string;
+  idNumber: string;
+  roles: UserRole[];
   activated: boolean;
   account_status: UserStatus;
-  dis: boolean;
+  deleted?: boolean;
 }
