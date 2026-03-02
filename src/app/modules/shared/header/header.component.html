@@ -12,8 +12,12 @@
           <li><a routerLink="/borrow">Borrow</a></li>
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">
-            <app-avatar (avatarclicked)="onAvatarClicked()" />
-            <app-menu [show]="showAvatarMenu" (onActionClicked)="onActionClicked($event)"></app-menu>
+            <app-avatar (avatarclicked)="onAvatarClicked()" [label]="user?.name ?? ''" />
+            <app-menu
+              [show]="showAvatarMenu"
+              (onActionClicked)="onActionClicked($event)"
+              [title]="user?.name ?? ''"
+            />
           </div>
         } @else {
           <li><a (click)="login()">Login</a></li>

@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MenuComponent } from '../menu/menu.component';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService, TokenData } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -16,13 +16,16 @@ import { AuthService } from '../../../services/auth.service';
 export class HeaderComponent implements OnInit {
   sidenav_opened: boolean = false;
   showAvatarMenu: boolean = false;
-  isLoggedIn: WritableSignal<boolean> = signal(false)
+  isLoggedIn: WritableSignal<boolean> = signal(false);
+  user: TokenData | null = null;
 
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,
   ) {
-    this.authService.isLoggedIn().subscribe((resp) => (this.isLoggedIn.set(resp)));
+    this.authService.isLoggedIn().subscribe((resp) => {
+      this.onLogin(resp)
+    });
   }
 
   ngOnInit(): void {
@@ -31,10 +34,15 @@ export class HeaderComponent implements OnInit {
 
   login(): void {
     this.dialogService.openLoginDialog().subscribe((resp) => {
-      if(resp == 'login_success') {
-        this.isLoggedIn.set(true);
+      if (resp == 'login_success') {
+        this.onLogin(true);
       }
     });
+  }
+
+  onLogin(isLoggedIn: boolean = false) {
+    this.isLoggedIn.set(isLoggedIn);
+    this.user = this.authService.getUser();
   }
 
   onAvatarClicked() {
@@ -45,6 +53,7 @@ export class HeaderComponent implements OnInit {
     console.log(event);
     if (event === 'logout') {
       this.showAvatarMenu = false;
+      this.isLoggedIn.set(false);
       this.authService.logout();
     }
   }
