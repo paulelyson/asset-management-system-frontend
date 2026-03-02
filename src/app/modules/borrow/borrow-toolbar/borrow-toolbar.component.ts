@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
+import { SideMenuService } from '../../../services/side-menu.service';
 
 @Component({
   selector: 'app-borrow-toolbar',
@@ -17,7 +18,11 @@ export class BorrowToolbarComponent {
   searchControl = new FormControl('');
   url: string = '';
 
-  constructor(private dialogService: DialogService, private router: Router) {
+  constructor(
+    private dialogService: DialogService,
+    private router: Router,
+    private sideMenuService: SideMenuService,
+  ) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
@@ -40,7 +45,8 @@ export class BorrowToolbarComponent {
 
   onToggleBorrowForm() {
     this.sidenav_opened = !this.sidenav_opened;
-    this.toggleSideNav.emit(this.sidenav_opened);
+    // this.toggleSideNav.emit(this.sidenav_opened);
+    this.sideMenuService.openSideMenu.next(this.sidenav_opened);
   }
 
   onSearch(): void {
