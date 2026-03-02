@@ -9,7 +9,7 @@ import { AuthService, TokenData } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [MatMenuModule, IconComponent, RouterLink, AvatarComponent, MenuComponent],
+  imports: [MatMenuModule, RouterLink, AvatarComponent, MenuComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
