@@ -73,7 +73,7 @@ export class AutocompleteComponent implements ControlValueAccessor {
   constructor() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map((value) => this._filter(value || ''))
+      map((value) => this._filter(value || '')),
     );
   }
 
@@ -102,6 +102,13 @@ export class AutocompleteComponent implements ControlValueAccessor {
 
   onFocus() {
     this.myControl.setValue(this.myControl.value ?? '', { emitEvent: true });
+  }
+
+  displayFn(value: string): string {
+    // TO DO
+    // options is an AutoComplete options in this function but a query list
+    // might chage the 'options' variable to something else
+    return  this.options.find((opt) => opt.value == value)?.view ?? ''
   }
 
   private _filter(value: string): IAutocompleteOption[] {

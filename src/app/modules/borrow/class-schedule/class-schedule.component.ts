@@ -40,41 +40,25 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
   departments = DEPARTMENTS;
   classScheduleForm: FormGroup;
   initialSchedule: string;
-  faculty: WritableSignal<IUser[]> = signal([]);
-  courseOffering:  WritableSignal<CourseOffering[]> = signal([]);
-  
+  courseOffering: WritableSignal<CourseOffering[]> = signal([]);
 
   // facultyAutoCompleteOptions: IAutocompleteOption[] = []
   constructor(
     private fb: FormBuilder,
     private snackBarService: SnackbarService,
-    private userService: UserService,
     private courseOfferingService: CourseOfferingService,
     private autocompleteService: AutocompleteService,
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
-      classDepartment: ['', Validators.required],
-      faculty: ['', Validators.required],
       purpose: ['class_use', Validators.required],
-      classCode: ['', Validators.required],
-      className: ['', Validators.required],
-      dateOfUseStart: ['', Validators.required],
-      dateOfUseEnd: ['', Validators.required],
-      timeOfUseStart: [get24HourTime(), Validators.required],
-      timeOfUseEnd: [get24HourTime(undefined, true, 1), Validators.required],
+      courseOffer: ['', Validators.required],
     });
     this.initialSchedule =
       convertToAmericanFormat(new Date()) + '-' + convertToAmericanFormat(new Date());
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe({
-      next: (resp) => {
-        this.faculty.set(resp);
-      },
-    });
-
     this.courseOfferingService.getCourseOfferings().subscribe({
       next: (resp) => this.courseOffering.set(resp),
     });
@@ -94,16 +78,21 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
     }
   }
 
-  get facultyAutoCompleteOptions() {
-    return this.faculty().map((user) => ({ view: getDisplayName(user), value: user._id }));
-  }
-
   get courseOfferingAutoCompleteOptions() {
-    return this.courseOffering().map((course) => ({ view: course.course.title, value: course._id }));
+    return this.courseOffering().map((course) => ({
+      view: course.course.title,
+      value: course._id,
+    }));
   }
 
   get purposeOptions() {
     return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
+  }
+
+  get instructor() {
+    const courseOfferId = this.classScheduleForm.controls['courseOffer'].value;
+    const found = this.courseOffering().find((c) => c._id == courseOfferId);
+    return found?.instructor.firstName ?? '';
   }
 
   onClassDateChanged(event: IDateRange) {

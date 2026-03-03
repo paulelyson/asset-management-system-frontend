@@ -33,7 +33,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() inputType: string = 'text';
   @Input() width: InputSize = 'md';
   // accessor
-  value: string = '';
+  @Input() value: string = '';
   disabled: boolean = false;
   public changed = (_: any) => {};
   public touched = () => {};
