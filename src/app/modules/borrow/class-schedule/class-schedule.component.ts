@@ -23,6 +23,8 @@ import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
 import { convertToAmericanFormat, get24HourTime } from '../../../utils/date.util';
+import { CourseOfferingService } from '../../../services/course-offering.service';
+import CourseOffering from '../../../models/CourseOffering';
 
 @Component({
   selector: 'app-class-schedule',
@@ -39,13 +41,16 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
   classScheduleForm: FormGroup;
   initialSchedule: string;
   faculty: WritableSignal<IUser[]> = signal([]);
+  courseOffering:  WritableSignal<CourseOffering[]> = signal([]);
+  
 
   // facultyAutoCompleteOptions: IAutocompleteOption[] = []
   constructor(
     private fb: FormBuilder,
     private snackBarService: SnackbarService,
     private userService: UserService,
-    private autocompleteService: AutocompleteService
+    private courseOfferingService: CourseOfferingService,
+    private autocompleteService: AutocompleteService,
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
@@ -69,6 +74,10 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
         this.faculty.set(resp);
       },
     });
+
+    this.courseOfferingService.getCourseOfferings().subscribe({
+      next: (resp) => this.courseOffering.set(resp),
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -87,6 +96,10 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
 
   get facultyAutoCompleteOptions() {
     return this.faculty().map((user) => ({ view: getDisplayName(user), value: user._id }));
+  }
+
+  get courseOfferingAutoCompleteOptions() {
+    return this.courseOffering().map((course) => ({ view: course.course.title, value: course._id }));
   }
 
   get purposeOptions() {

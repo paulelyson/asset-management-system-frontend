@@ -12,7 +12,7 @@ interface SideMenuConfig {
 export class SideMenuService {
   openSideMenu = new BehaviorSubject<SideMenuConfig>({
     opened: false,
-    template: 'borrow-request-form',
+    template: '',
   });
 
   onOpenSideMenu() {

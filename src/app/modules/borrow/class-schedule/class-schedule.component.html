@@ -1,13 +1,14 @@
 <form [formGroup]="classScheduleForm" (ngSubmit)="onSubmit()">
   <div class="class-detail-container">
-    <app-autocomplete
+    <!-- <app-autocomplete
       label="Faculty*"
       formControlName="faculty"
       [options]="facultyAutoCompleteOptions"
     />
+    <app-input label="Class/Subject" formControlName="classCode" />
+    <app-input label="Class Name" formControlName="className" /> -->
+    <app-autocomplete label="Class/Subject*" formControlName="classCode" [options]="courseOfferingAutoCompleteOptions" />
     <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
-    <app-input label="Class Code" formControlName="classCode" />
-    <app-input label="Class Name" formControlName="className" />
     <app-datepicker
       label="Choose date"
       type="daterange"
