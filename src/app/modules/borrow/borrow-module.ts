@@ -48,5 +48,8 @@ import { BadgeComponent } from '../shared/badge/badge.component';
     IconComponent,
     BadgeComponent
   ],
+  exports: [
+    ClassScheduleComponent
+  ]
 })
 export class BorrowModule {}

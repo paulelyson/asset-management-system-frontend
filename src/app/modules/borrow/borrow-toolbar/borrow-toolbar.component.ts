@@ -46,7 +46,10 @@ export class BorrowToolbarComponent {
   onToggleBorrowForm() {
     this.sidenav_opened = !this.sidenav_opened;
     // this.toggleSideNav.emit(this.sidenav_opened);
-    this.sideMenuService.openSideMenu.next(this.sidenav_opened);
+    this.sideMenuService.openSideMenu.next({
+      opened: this.sidenav_opened,
+      template: 'borrow-request-form'
+    });
   }
 
   onSearch(): void {

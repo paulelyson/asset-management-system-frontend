@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+interface SideMenuConfig {
+  opened: boolean;
+  template: 'borrow-request-form' | string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class SideMenuService {
-  openSideMenu = new BehaviorSubject<boolean>(false);
+  openSideMenu = new BehaviorSubject<SideMenuConfig>({
+    opened: false,
+    template: 'borrow-request-form',
+  });
 
   onOpenSideMenu() {
     return this.openSideMenu.asObservable();
