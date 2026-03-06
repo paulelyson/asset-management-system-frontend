@@ -1,6 +1,6 @@
 import { ICourse } from './Course';
 import { IMongoDocument } from './MongoDocument';
-import { IUser } from './User';
+import User, { IUser } from './User';
 
 interface CourseOfferingSchedule {
   day: string;
@@ -12,14 +12,14 @@ interface CourseOfferingSchedule {
 export interface ICourseOffering extends IMongoDocument {
   code: string;
   course: ICourse;
-  instructor: IUser;
+  instructor: User;
   schedule: CourseOfferingSchedule[];
 }
 
 class CourseOffering implements ICourseOffering {
   code: string;
   course: ICourse;
-  instructor: IUser;
+  instructor: User;
   schedule: CourseOfferingSchedule[];
   _id: string;
   createdAt: Date;
