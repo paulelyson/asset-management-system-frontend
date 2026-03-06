@@ -7,6 +7,8 @@
     autocomplete="off"
     [(ngModel)]="value"
     (input)="onInput($event)"
+    [disabled]="disabled"
+    [readonly]="readonly"
   />
   <mat-icon *ngIf="suffix_icon.length" matSuffix>{{ suffix_icon }}</mat-icon>
 </mat-form-field>
