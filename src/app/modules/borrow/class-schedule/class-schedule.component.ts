@@ -69,10 +69,6 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
       this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
     }
 
-    if (changes['department']) {
-      this.classScheduleForm.controls['classDepartment'].patchValue(this.department);
-    }
-
     if (changes['resetForm'] && this.resetForm == true) {
       this.classScheduleForm.reset();
     }
@@ -90,14 +86,11 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
   }
 
   get instructor() {
+    let display: string = ''
     const courseOfferId = this.classScheduleForm.controls['courseOffer'].value;
     const found = this.courseOffering().find((c) => c._id == courseOfferId);
-    return found?.instructor.firstName ?? '';
-  }
-
-  onClassDateChanged(event: IDateRange) {
-    this.classScheduleForm.controls['dateOfUseStart'].patchValue(event.start);
-    this.classScheduleForm.controls['dateOfUseEnd'].patchValue(event.end);
+    if(found) display = getDisplayName(found.instructor)
+    return display;
   }
 
   onSubmit() {
