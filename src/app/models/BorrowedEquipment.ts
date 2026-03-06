@@ -1,5 +1,7 @@
+import CourseOffering from './CourseOffering';
 import { IConditionAndQuantity, IEquipment } from './Equipment';
-import { Department, IUser } from './User';
+import { IMongoDocument } from './MongoDocument';
+import User, { Department, IUser } from './User';
 
 export type BorrowedEquipmentStatusType =
   | 'requested'
@@ -15,53 +17,6 @@ export type BorrowedEquipmentStatusType =
   | 'system_reset';
 
 export type BorrowedEquipmentPurpose = 'class_use' | 'research' | 'instructional' | 'others';
-
-export interface BorrowedEquipmentStatus extends IConditionAndQuantity {
-  status: BorrowedEquipmentStatusType;
-  remarks?: string;
-}
-
-export interface IBorrowedEquipment {
-  _id?: string;
-  equipment: string;
-  quantity: number;
-  borrowedEquipmentStatus: BorrowedEquipmentStatus[];
-}
-
-export interface IBorrowingDetails {
-  borrower: string;
-  classDepartment: Department;
-  faculty: string;
-  purpose: string;
-  classCode: string;
-  className: string;
-  dateOfUseStart: Date;
-  dateOfUseEnd: Date;
-  timeOfUseStart: string;
-  timeOfUseEnd: string;
-  borrowedEquipment: IBorrowedEquipment[];
-  dis: boolean;
-}
-
-export interface BorrowedEquipment {
-  _id: string;
-  trackId: string;
-  borrower: IUser;
-  classDepartment: Department;
-  faculty: IUser;
-  purpose: string;
-  classCode: string;
-  className: string;
-  dateOfUseStart: Date;
-  dateOfUseEnd: Date;
-  timeOfUseStart: string;
-  timeOfUseEnd: string;
-  equipment: IEquipment;
-  quantity: number;
-  borrowedEquipmentStatus: BorrowedEquipmentStatus[];
-  latestStatus: string[];
-  remarks: string;
-}
 
 export const BORROWED_EQUIPMENT_PURPOSE: BorrowedEquipmentPurpose[] = [
   'class_use',
@@ -83,3 +38,70 @@ export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'cancelled',
   'system_reset',
 ];
+
+interface BorrowedEquipmentTransaction extends IMongoDocument {
+  quantity: number;
+  condition: string;
+  status: string;
+}
+
+export interface IBorrowedEquipment extends IMongoDocument {
+  borrower: User;
+  purpose: BorrowedEquipmentPurpose;
+  courseOffering: CourseOffering;
+  dateOfUse: {
+    start: Date;
+    end: Date;
+  };
+  equipment: IEquipment;
+  quantity: number;
+  transactions: BorrowedEquipmentTransaction[];
+  deleted?: boolean;
+}
+
+export interface BorrowedEquipmentPayload {
+  borrower: string;
+  purpose: BorrowedEquipmentPurpose;
+  courseOffering: string;
+  dateOfUse: {
+    start: Date;
+    end: Date;
+  };
+  borrowedEquipment: {
+    equipment: string;
+    quantity: number;
+    transactions: (Partial<BorrowedEquipmentTransaction> &
+      Pick<BorrowedEquipmentTransaction, 'quantity' | 'condition' | 'status'>)[];
+  };
+}
+
+class BorrowedEquipment implements IBorrowedEquipment {
+  borrower: User;
+  purpose: BorrowedEquipmentPurpose;
+  courseOffering: CourseOffering;
+  dateOfUse: { start: Date; end: Date };
+  equipment: IEquipment;
+  quantity: number;
+  transactions: BorrowedEquipmentTransaction[];
+  deleted?: boolean | undefined;
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+
+  constructor(borrowedEquipment: IBorrowedEquipment) {
+    this.borrower = borrowedEquipment.borrower;
+    this.purpose = borrowedEquipment.purpose;
+    this.courseOffering = borrowedEquipment.courseOffering;
+    this.dateOfUse = borrowedEquipment.dateOfUse;
+    this.equipment = borrowedEquipment.equipment;
+    this.quantity = borrowedEquipment.quantity;
+    this.transactions = borrowedEquipment.transactions;
+    this._id = borrowedEquipment._id;
+    this.createdAt = borrowedEquipment.createdAt;
+    this.updatedAt = borrowedEquipment.updatedAt;
+    this.__v = borrowedEquipment.__v;
+  }
+}
+
+export default BorrowedEquipment;
