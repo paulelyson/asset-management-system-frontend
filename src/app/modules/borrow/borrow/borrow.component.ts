@@ -6,7 +6,7 @@ import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
-import { IBorrowedEquipment, IBorrowingDetails } from '../../../models/BorrowedEquipment';
+import BorrowedEquipment, { BorrowedEquipmentPayload, IBorrowedEquipment } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
@@ -83,32 +83,32 @@ export class BorrowComponent implements OnInit {
     this.addedEquipment = this.addedEquipment.filter((eqpmnt) => eqpmnt._id !== equipment._id);
   }
 
-  onSubmitRequest(event: IBorrowingDetails): void {
-    const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
-      equipment: eqpmnt._id,
-      quantity: eqpmnt.borrowedQty,
-      borrowedEquipmentStatus: [],
-      remarks: '',
-    }));
+  onSubmitRequest(event: BorrowedEquipmentPayload): void {
+    // const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
+    //   equipment: eqpmnt._id,
+    //   quantity: eqpmnt.borrowedQty,
+    //   borrowedEquipmentStatus: [],
+    //   remarks: '',
+    // }));
 
-    let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
-    this.borrowService.createBorrowedEquipment(body).subscribe({
-      next: (resp) => {
-        this.snackBarService.openSnackbar({
-          type: 'success',
-          message: [resp.message],
-          icon: '',
-        });
-        this.addedEquipment = [];
-        this.resetForm.set(true);
-      },
-      error: (err) =>
-        this.snackBarService.openSnackbar({
-          type: 'error',
-          message: [err.message],
-          icon: '',
-        }),
-    });
+    // let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
+    // this.borrowService.createBorrowedEquipment(body).subscribe({
+    //   next: (resp) => {
+    //     this.snackBarService.openSnackbar({
+    //       type: 'success',
+    //       message: [resp.message],
+    //       icon: '',
+    //     });
+    //     this.addedEquipment = [];
+    //     this.resetForm.set(true);
+    //   },
+    //   error: (err) =>
+    //     this.snackBarService.openSnackbar({
+    //       type: 'error',
+    //       message: [err.message],
+    //       icon: '',
+    //     }),
+    // });
   }
 
   onToggleSideNav(event: boolean) {

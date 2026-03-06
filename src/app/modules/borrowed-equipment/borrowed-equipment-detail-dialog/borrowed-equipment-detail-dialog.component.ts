@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { BorrowedEquipment } from '../../../models/BorrowedEquipment';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { getDisplayName } from '../../../utils/string.util';
+import BorrowedEquipment from '../../../models/BorrowedEquipment';
 
 @Component({
   selector: 'app-borrowed-equipment-detail-dialog',
@@ -18,6 +18,6 @@ export class BorrowedEquipmentDetailDialogComponent {
   }
 
   get instructorName(): string {
-    return getDisplayName(this.data.faculty);
+    return getDisplayName(this.data.courseOffering.instructor);
   }
 }

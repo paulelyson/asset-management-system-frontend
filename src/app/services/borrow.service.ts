@@ -1,10 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BorrowedEquipment,
-  BorrowedEquipmentStatus,
+import BorrowedEquipment, {
+  BorrowedEquipmentPayload,
   BorrowedEquipmentStatusType,
-  IBorrowingDetails,
 } from '../models/BorrowedEquipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -25,26 +23,6 @@ interface ApiResponse {
   success: boolean;
 }
 
-interface ProgressLogsApiResponse {
-  data: IBorrowedEquipmentHistory[];
-  message: string;
-  success: boolean;
-}
-
-const STATUS_FLOW: BorrowedEquipmentStatusType[] = [
-  'requested',
-  'faculty_approved',
-  'oic_approved',
-  'released',
-  'mark_returned',
-  'returned',
-];
-
-export interface BorrowedEquipmentStatusExt extends BorrowedEquipmentStatus {
-  id: string;
-  equipment: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -58,21 +36,21 @@ export class BorrowService {
     this.token = localStorage.getItem('token')!;
   }
 
-  createBorrowedEquipment(body: IBorrowingDetails): Observable<ApiResponse> {
+  createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
     const headers = { Authorization: this.token };
     return this.http
       .post<ApiResponse>(environment.api_url + '/api/borrowequipment', body, { headers })
       .pipe(catchError(this.handleError));
   }
 
-  updateBorrowedEquipmentStatus(body: BorrowedEquipmentStatusExt[]) {
-    const headers = { Authorization: this.token };
-    return this.http
-      .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, {
-        headers,
-      })
-      .pipe(catchError(this.handleError));
-  }
+  // updateBorrowedEquipmentStatus(body: BorrowedEquipmentStatusExt[]) {
+  //   const headers = { Authorization: this.token };
+  //   return this.http
+  //     .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, {
+  //       headers,
+  //     })
+  //     .pipe(catchError(this.handleError));
+  // }
 
   isEquipmentRequested(equipmentid: string) {
     const headers = { Authorization: this.token };
@@ -99,36 +77,39 @@ export class BorrowService {
       );
   }
 
-  getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
-    let params = new HttpParams();
-    const headers = { Authorization: this.token };
-    params = params.append('borrowId', borrowId ?? '');
-    params = params.append('equipment', equipment ?? '');
-    return this.http
-      .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', {
-        params,
-        headers,
-      })
-      .pipe(
-        map((resp) => resp.data),
-        catchError(this.handleError),
-      );
-  }
+  // getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
+  //   let params = new HttpParams();
+  //   const headers = { Authorization: this.token };
+  //   params = params.append('borrowId', borrowId ?? '');
+  //   params = params.append('equipment', equipment ?? '');
+  //   return this.http
+  //     .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', {
+  //       params,
+  //       headers,
+  //     })
+  //     .pipe(
+  //       map((resp) => resp.data),
+  //       catchError(this.handleError),
+  //     );
+  // }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    const statuses = borrowedEquipment.latestStatus;
-    const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
-    const name = getDisplayName(borrowedEquipment.borrower);
-    const faculty = getDisplayName(borrowedEquipment.faculty);
-    let contents: RowDisplayContent[] = [
-      { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
-      { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
-      { id: 2, type: 'text', content: [name], span: 'mid' },
-      { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
-      { id: 4, type: 'badge', content: statuses, span: 'mid' },
-      { id: 5, type: 'text', content: [date as string], span: 'narrow' },
-    ];
-    return contents;
+    // const statuses = borrowedEquipment.latestStatus;
+    // const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
+    // const name = getDisplayName(borrowedEquipment.borrower);
+    // const faculty = getDisplayName(borrowedEquipment.faculty);
+    // let contents: RowDisplayContent[] = [
+    //   { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
+    //   { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
+    //   { id: 2, type: 'text', content: [name], span: 'mid' },
+    //   { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
+    //   { id: 4, type: 'badge', content: statuses, span: 'mid' },
+    //   { id: 5, type: 'text', content: [date as string], span: 'narrow' },
+    // ];
+    // return contents;
+
+    return [];
+
   }
 
   getBorrowStatusPlaceholder(status: BorrowedEquipmentStatusType) {
@@ -178,99 +159,101 @@ export class BorrowService {
     borrowedEquipment: BorrowedEquipment,
     displayInfoAndHistory?: boolean,
   ): RowDisplayActionConfig[] {
-    let actions: RowDisplayActionConfig[] = [];
-    let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
-    let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
-    //  approver | class faculty / oic / chairman of the borrowed equipment
-    if (
-      (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
-      this.getCurrentStatus(borrowedEquipment.latestStatus).includes('requested')
-    ) {
-      actions.push({
-        name: 'Approve',
-        tooltip: 'Approve Request',
-        type: 'primary',
-        size: 'md',
-        icon: 'thumb_up',
-      });
-    }
+    // let actions: RowDisplayActionConfig[] = [];
+    // let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
+    // let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
+    // //  approver | class faculty / oic / chairman of the borrowed equipment
+    // if (
+    //   (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
+    //   this.getCurrentStatus(borrowedEquipment.latestStatus).includes('requested')
+    // ) {
+    //   actions.push({
+    //     name: 'Approve',
+    //     tooltip: 'Approve Request',
+    //     type: 'primary',
+    //     size: 'md',
+    //     icon: 'thumb_up',
+    //   });
+    // }
 
-    // can release as reads
-    if (
-      // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-      this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
-        ['oic_approved', 'faculty_approved'].includes(x),
-      )
-    ) {
-      actions.push({
-        name: 'Release',
-        tooltip: 'Release Equipment',
-        type: 'primary',
-        size: 'md',
-        icon: 'lock_open',
-      });
-    }
+    // // can release as reads
+    // if (
+    //   // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
+    //   this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
+    //     ['oic_approved', 'faculty_approved'].includes(x),
+    //   )
+    // ) {
+    //   actions.push({
+    //     name: 'Release',
+    //     tooltip: 'Release Equipment',
+    //     type: 'primary',
+    //     size: 'md',
+    //     icon: 'lock_open',
+    //   });
+    // }
 
-    // mark as return
-    if (
-      user._id == borrowedEquipment.borrower._id &&
-      this.getCurrentStatus(borrowedEquipment.latestStatus).includes('released')
-    ) {
-      actions.push({
-        icon: 'keyboard_return',
-        name: 'Return',
-        tooltip: 'Return Equipment',
-        type: 'primary',
-        size: 'md',
-      });
-    }
+    // // mark as return
+    // if (
+    //   user._id == borrowedEquipment.borrower._id &&
+    //   this.getCurrentStatus(borrowedEquipment.latestStatus).includes('released')
+    // ) {
+    //   actions.push({
+    //     icon: 'keyboard_return',
+    //     name: 'Return',
+    //     tooltip: 'Return Equipment',
+    //     type: 'primary',
+    //     size: 'md',
+    //   });
+    // }
 
-    // confirm returns
-    if (
-      // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-      this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
-        ['mark_returned'].includes(x),
-      )
-    ) {
-      actions.push({
-        icon: 'keyboard_return',
-        name: 'Confirm Returns',
-        tooltip: 'Confirm Returns',
-        type: 'primary',
-        size: 'md',
-      });
-    }
+    // // confirm returns
+    // if (
+    //   // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
+    //   this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
+    //     ['mark_returned'].includes(x),
+    //   )
+    // ) {
+    //   actions.push({
+    //     icon: 'keyboard_return',
+    //     name: 'Confirm Returns',
+    //     tooltip: 'Confirm Returns',
+    //     type: 'primary',
+    //     size: 'md',
+    //   });
+    // }
 
-    // cancelled
-    // actions.push({
-    //   name: 'Cancel Request',
-    //   tooltip: 'Cancel Request',
-    //   type: 'primary',
-    //   size: 'sm',
-    //   icon: 'cancel',
-    // });
+    // // cancelled
+    // // actions.push({
+    // //   name: 'Cancel Request',
+    // //   tooltip: 'Cancel Request',
+    // //   type: 'primary',
+    // //   size: 'sm',
+    // //   icon: 'cancel',
+    // // });
 
-    // add view details
-    if (displayInfoAndHistory) {
-      actions.push({
-        name: 'View Detail',
-        tooltip: 'View Detail',
-        type: 'primary',
-        size: 'md',
-        icon: 'info',
-      });
+    // // add view details
+    // if (displayInfoAndHistory) {
+    //   actions.push({
+    //     name: 'View Detail',
+    //     tooltip: 'View Detail',
+    //     type: 'primary',
+    //     size: 'md',
+    //     icon: 'info',
+    //   });
 
-      // add progress logs
-      actions.push({
-        name: 'Progress Logs',
-        tooltip: 'Progress Logs',
-        type: 'primary',
-        size: 'md',
-        icon: 'history',
-      });
-    }
+    //   // add progress logs
+    //   actions.push({
+    //     name: 'Progress Logs',
+    //     tooltip: 'Progress Logs',
+    //     type: 'primary',
+    //     size: 'md',
+    //     icon: 'history',
+    //   });
+    // }
 
-    return actions;
+    // return actions;
+
+    return []
   }
 
   handleError(err: HttpErrorResponse) {

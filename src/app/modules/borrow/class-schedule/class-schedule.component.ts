@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDateRange } from '../../shared/datepicker/datepicker.component';
-import { BORROWED_EQUIPMENT_PURPOSE, IBorrowingDetails } from '../../../models/BorrowedEquipment';
+import { BORROWED_EQUIPMENT_PURPOSE, BorrowedEquipmentPayload } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 import { Department, DEPARTMENTS, IUser } from '../../../models/User';
@@ -36,7 +36,7 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
   @Input() user!: TokenData;
   @Input() department!: Department | string;
   @Input() resetForm: boolean = false;
-  @Output() onFormSubmit: EventEmitter<IBorrowingDetails> = new EventEmitter<IBorrowingDetails>();
+  @Output() onFormSubmit: EventEmitter<BorrowedEquipmentPayload> = new EventEmitter<BorrowedEquipmentPayload>();
   departments = DEPARTMENTS;
   classScheduleForm: FormGroup;
   initialSchedule: string;

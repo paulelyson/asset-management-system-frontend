@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
-import { BorrowedEquipment, BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
-import { BorrowedEquipmentStatusExt, BorrowService } from '../../../services/borrow.service';
+import BorrowedEquipment, { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
+import { BorrowService } from '../../../services/borrow.service';
 import {
   RowDisplayActionConfig,
   RowDisplayContent,
@@ -75,28 +75,28 @@ export class BorrowedEquipmentComponent implements OnInit {
     status: BorrowedEquipmentStatusType,
     quantity: number,
   ): void {
-    let updated: BorrowedEquipmentStatusExt[] = [
-      {
-        id: borrowedEquipment._id,
-        equipment: borrowedEquipment.equipment._id,
-        status: status,
-        quantity: quantity,
-        condition: 'functional',
-        remarks: '',
-      },
-    ];
-    this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
-      next: (resp) => {
-        (this.snackBarService.openSnackbar({
-          icon: 'info',
-          type: 'success',
-          message: [resp.message],
-        }),
-          this.getBorrowedEquipment());
-      },
-      error: (err) =>
-        this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
-    });
+    // let updated: BorrowedEquipmentStatusExt[] = [
+    //   {
+    //     id: borrowedEquipment._id,
+    //     equipment: borrowedEquipment.equipment._id,
+    //     status: status,
+    //     quantity: quantity,
+    //     condition: 'functional',
+    //     remarks: '',
+    //   },
+    // ];
+    // this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
+    //   next: (resp) => {
+    //     (this.snackBarService.openSnackbar({
+    //       icon: 'info',
+    //       type: 'success',
+    //       message: [resp.message],
+    //     }),
+    //       this.getBorrowedEquipment());
+    //   },
+    //   error: (err) =>
+    //     this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
+    // });
   }
 
   getBorrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
@@ -165,11 +165,11 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   onDisplayProgressLogs(borrowId: string, equipment: string): void {
-    this.borrowService.getProgressLogs(borrowId, equipment).subscribe({
-      next: (resp) => {
-        this.dialogService.openBorrowedEquipmentHistoryDialog(resp);
-      },
-    });
+    // this.borrowService.getProgressLogs(borrowId, equipment).subscribe({
+    //   next: (resp) => {
+    //     this.dialogService.openBorrowedEquipmentHistoryDialog(resp);
+    //   },
+    // });
   }
 
   loadMoreBorrowedEquipment() {

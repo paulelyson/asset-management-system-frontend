@@ -9,9 +9,7 @@ import {
   UpdateQuantityStatusDialogComponent,
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { IButtonConfig } from '../modules/shared/button/button.component';
-import {
-  BorrowedEquipment,
-  BorrowedEquipmentStatus,
+import BorrowedEquipment, {
   BorrowedEquipmentStatusType,
 } from '../models/BorrowedEquipment';
 import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
