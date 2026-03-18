@@ -70,7 +70,7 @@ export class BorrowService {
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment', { params, headers })
+      .get<ApiResponse>(environment.api_url + '/api/borrowed-equipment', { params, headers })
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),
@@ -94,22 +94,20 @@ export class BorrowService {
   // }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    // const statuses = borrowedEquipment.latestStatus;
-    // const date = this.datePipe.transform(borrowedEquipment.dateOfUseStart, 'mediumDate');
-    // const name = getDisplayName(borrowedEquipment.borrower);
-    // const faculty = getDisplayName(borrowedEquipment.faculty);
-    // let contents: RowDisplayContent[] = [
-    //   { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
-    //   { id: 1, type: 'text', content: [borrowedEquipment.className], span: 'mid' },
-    //   { id: 2, type: 'text', content: [name], span: 'mid' },
-    //   { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
-    //   { id: 4, type: 'badge', content: statuses, span: 'mid' },
-    //   { id: 5, type: 'text', content: [date as string], span: 'narrow' },
-    // ];
-    // return contents;
+    const status = borrowedEquipment.accumulatedStatus.map(x => x.quantity + " " + x.status)
+    const course = borrowedEquipment.courseOffering.code;
+    const borrower = getDisplayName(borrowedEquipment.borrower);
+    const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
 
-    return [];
-
+    let contents: RowDisplayContent[] = [
+      { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
+      { id: 1, type: 'text', content: [course], span: 'mid' },
+      { id: 2, type: 'text', content: [borrower], span: 'mid' },
+      { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
+      { id: 4, type: 'badge', content: status, span: 'mid' },
+      { id: 5, type: 'text', content: [dateOfUse as string], span: 'narrow' },
+    ];
+    return contents;
   }
 
   getBorrowStatusPlaceholder(status: BorrowedEquipmentStatusType) {
@@ -253,7 +251,7 @@ export class BorrowService {
 
     // return actions;
 
-    return []
+    return [];
   }
 
   handleError(err: HttpErrorResponse) {

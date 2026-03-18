@@ -4,7 +4,7 @@
   <span style="text-align: center;"> {{ user.name }}</span>
   <div class="borrowed-equipment-wrapper">
     <app-row-header />
-    <!-- @for(eqpmnt of borrowed_equipment(); track eqpmnt.trackId) {
+    @for(eqpmnt of borrowed_equipment(); track eqpmnt._id) {
     <app-row-display
       [image]="eqpmnt.equipment.images[0]?.thumbnail ?? ''"
       [title]="eqpmnt.equipment.name"
@@ -15,7 +15,7 @@
     />
     }@empty {
     <app-empty-placeholder />
-    } -->
+    }
     <div class="bottom-action-wrapper">
       @if(!disable_showmore) {
       <app-button (btnclicked)="loadMoreBorrowedEquipment()">Show more... </app-button>

@@ -58,8 +58,6 @@ class User implements IUser {
   createdAt: Date;
   updatedAt: Date;
   __v: number;
-  displayName: string;
-  
 
   constructor(user: IUser) {
     this.firstName = user.firstName;
@@ -75,7 +73,6 @@ class User implements IUser {
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
     this.__v = 0;
-    this.displayName = user.firstName + ' ' + user.lastName
   }
 }
 

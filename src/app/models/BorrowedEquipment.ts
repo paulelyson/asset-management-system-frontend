@@ -56,6 +56,7 @@ export interface IBorrowedEquipment extends IMongoDocument {
   equipment: IEquipment;
   quantity: number;
   transactions: BorrowedEquipmentTransaction[];
+  accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
   deleted?: boolean;
 }
 
@@ -70,8 +71,7 @@ export interface BorrowedEquipmentPayload {
   borrowedEquipment: {
     equipment: string;
     quantity: number;
-    transactions: (Partial<BorrowedEquipmentTransaction> &
-      Pick<BorrowedEquipmentTransaction, 'quantity' | 'condition' | 'status'>)[];
+    transactions: Pick<BorrowedEquipmentTransaction, 'quantity' | 'condition' | 'status'>[];
   };
 }
 
@@ -83,6 +83,7 @@ class BorrowedEquipment implements IBorrowedEquipment {
   equipment: IEquipment;
   quantity: number;
   transactions: BorrowedEquipmentTransaction[];
+  accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
   deleted?: boolean | undefined;
   _id: string;
   createdAt: Date;
@@ -98,6 +99,7 @@ class BorrowedEquipment implements IBorrowedEquipment {
     this.quantity = borrowedEquipment.quantity;
     this.transactions = borrowedEquipment.transactions;
     this._id = borrowedEquipment._id;
+    this.accumulatedStatus = borrowedEquipment.accumulatedStatus;
     this.createdAt = borrowedEquipment.createdAt;
     this.updatedAt = borrowedEquipment.updatedAt;
     this.__v = borrowedEquipment.__v;
