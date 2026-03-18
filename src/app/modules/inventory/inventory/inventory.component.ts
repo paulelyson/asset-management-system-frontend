@@ -57,10 +57,10 @@ export class InventoryComponent implements OnInit {
     }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.disable_showmore = resp.length < 15;
+        this.disable_showmore = !resp.hasNextPage;
         this.equipment.update((eqpmnt) =>
           [...eqpmnt]
-            .concat(resp)
+            .concat(resp.data as IEquipment[])
             .filter((item, index, arr) => index === arr.findIndex((x) => x._id === item._id)),
         );
       },

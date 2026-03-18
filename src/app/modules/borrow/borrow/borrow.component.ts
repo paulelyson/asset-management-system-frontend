@@ -6,7 +6,10 @@ import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilt
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
-import BorrowedEquipment, { BorrowedEquipmentPayload, IBorrowedEquipment } from '../../../models/BorrowedEquipment';
+import BorrowedEquipment, {
+  BorrowedEquipmentPayload,
+  IBorrowedEquipment,
+} from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
@@ -39,7 +42,10 @@ export class BorrowComponent implements OnInit {
     private filterService: FilterService,
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = new EquipmentFilter({ department: this.user.roles[0].department._id, borrow: true });
+    this.equipmentFilter = new EquipmentFilter({
+      department: this.user.roles[0].department._id,
+      borrow: true,
+    });
   }
 
   ngOnInit(): void {
@@ -52,11 +58,11 @@ export class BorrowComponent implements OnInit {
     }
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.disable_showmore = resp.length < 15;
+        this.disable_showmore = !resp.hasNextPage;
         this.equipment.update((eqpmnt) =>
           [...eqpmnt]
-            .concat(resp)
-            .filter((item, ndx, arr) => ndx === arr.findIndex((x) => x._id === item._id))
+            .concat(resp.data as IEquipment[])
+            .filter((item, ndx, arr) => ndx === arr.findIndex((x) => x._id === item._id)),
         );
       },
     });
@@ -86,7 +92,6 @@ export class BorrowComponent implements OnInit {
     //   borrowedEquipmentStatus: [],
     //   remarks: '',
     // }));
-
     // let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
     // this.borrowService.createBorrowedEquipment(body).subscribe({
     //   next: (resp) => {
@@ -117,9 +122,13 @@ export class BorrowComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
-    this.equipmentFilter.department = params['department'] ??  this.equipmentFilter.department;
-    this.equipmentFilter.borrow = Boolean(params['borrow']) ??  true;
-    this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);  
+    this.equipmentFilter.department = params['department'] ?? this.equipmentFilter.department;
+    this.equipmentFilter.borrow = Boolean(params['borrow']) ?? true;
+    this.filterDisplay = this.filterService.getFilterDisplay(
+      this.equipmentFilter,
+      ['page'],
+      this.user,
+    );
     this.getEquipment();
   }
 }

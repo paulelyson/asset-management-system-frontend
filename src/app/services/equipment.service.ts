@@ -14,6 +14,10 @@ interface ApiResponse {
   data: IEquipment[] | string[];
   message: string;
   success: boolean;
+  page: number;
+  limit: number;
+  total: number;
+  hasNextPage: boolean;
 }
 
 @Injectable({
@@ -22,11 +26,11 @@ interface ApiResponse {
 export class EquipmentService {
   constructor(private http: HttpClient) {}
 
-  getEquipment(filter: EquipmentFilter): Observable<IEquipment[]> {
+  getEquipment(filter: EquipmentFilter) {
     console.log({filter});
     let params = new HttpParams({
       fromObject: {
-        // page: filter.page,
+        page: filter.page,
         search: filter.search,
         department: filter.department,
         // brand: filter.brand ?? '',
@@ -36,7 +40,6 @@ export class EquipmentService {
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
-      map((resp) => resp.data as IEquipment[]),
       catchError(this.handleError),
     );
   }
