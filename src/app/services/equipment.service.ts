@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IEquipmentFilter } from '../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../models/EquipmentFilter';
 import { Department } from '../models/User';
 import {
   RowDisplayActionConfig,
@@ -22,16 +22,17 @@ interface ApiResponse {
 export class EquipmentService {
   constructor(private http: HttpClient) {}
 
-  getEquipment(filter: IEquipmentFilter): Observable<IEquipment[]> {
+  getEquipment(filter: EquipmentFilter): Observable<IEquipment[]> {
+    console.log({filter});
     let params = new HttpParams({
       fromObject: {
-        page: filter.page,
-        search: filter.search ?? '',
-        // department: filter.department ?? '',
-        brand: filter.brand ?? '',
-        categories: filter.categories ?? '',
-        equipmentType: filter.equipmentType ?? '',
-        borrow: filter.borrow ?? '',
+        // page: filter.page,
+        search: filter.search,
+        department: filter.department,
+        // brand: filter.brand ?? '',
+        // categories: filter.categories ?? '',
+        // equipmentType: filter.equipmentType ?? '',
+        // borrow: filter.borrow ?? '',
       },
     });
     return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(

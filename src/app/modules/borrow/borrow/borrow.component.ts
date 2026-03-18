@@ -2,7 +2,7 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
-import { IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
@@ -11,6 +11,7 @@ import { BorrowService } from '../../../services/borrow.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { FilterService } from '../../../services/filter.service';
 
 @Component({
   selector: 'app-borrow',
@@ -21,11 +22,12 @@ import { SnackbarService } from '../../../services/snackbar.service';
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = false;
   disable_showmore: boolean = false;
-  equipmentFilter: IEquipmentFilter;
+  equipmentFilter: EquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
   resetForm: WritableSignal<boolean> = signal(false);
   user: TokenData;
+  filterDisplay: Record<string, any>[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,21 +35,15 @@ export class BorrowComponent implements OnInit {
     private borrowService: BorrowService,
     private authService: AuthService,
     private snackBarService: SnackbarService,
-    private router: Router
+    private router: Router,
+    private filterService: FilterService,
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = { page: 1, department: this.user.roles[0].department.code };
+    this.equipmentFilter = new EquipmentFilter({ department: this.user.roles[0].department._id, borrow: true });
   }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
-  }
-
-  get filterValues(): Record<string, string>[] {
-    const notIncludeFields = ['page'];
-    return Object.entries(this.equipmentFilter)
-      .map(([key, val]) => ({ field: key, value: val }))
-      .filter((x) => x.value && !notIncludeFields.includes(x.field));
   }
 
   getEquipment(): void {
@@ -117,12 +113,13 @@ export class BorrowComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.equipmentFilter.search = params['search'];
+    this.equipmentFilter.search = params['search'] ?? '';
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
     this.equipmentFilter.department = params['department'] ??  this.equipmentFilter.department;
     this.equipmentFilter.borrow = Boolean(params['borrow']) ??  true;
+    this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);  
     this.getEquipment();
   }
 }

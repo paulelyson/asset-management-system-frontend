@@ -11,7 +11,10 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { IEquipment } from '../../../models/Equipment';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
-import { IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { AuthService } from '../../../services/auth.service';
+import User from '../../../models/User';
+import { FilterService } from '../../../services/filter.service';
 
 @Component({
   selector: 'app-inventory',
@@ -22,28 +25,27 @@ import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 })
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
-  equipmentFilter: IEquipmentFilter;
+  equipmentFilter: EquipmentFilter;
   disable_showmore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
-  constructor(
+  user: User;
+  filterDisplay: Record<string, string>[] = [];
+  constructor( 
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private authService: AuthService,
+    private filterService: FilterService,
   ) {
-    this.equipmentFilter = { page: 1, department: 'computer_engineering' };
+    this.user = this.authService.getUser();
+    this.equipmentFilter = new EquipmentFilter({ department: this.user.roles[0].department._id });
   }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
-  get filterValues(): Record<string, string>[] {
-    const notIncludeFields = ['page'];
-    return Object.entries(this.equipmentFilter)
-      .map(([key, val]) => ({ field: key, value: val }))
-      .filter((x) => x.value && !notIncludeFields.includes(x.field));
-  }
 
   get rowDisplayActions() {
     return this.equipmentService.getRowDisplayActions();
@@ -102,10 +104,11 @@ export class InventoryComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.equipmentFilter.search = params['search'];
+    this.equipmentFilter.search = params['search'] ?? '';
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
+    this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);
     this.getEquipment();
   }
 }
