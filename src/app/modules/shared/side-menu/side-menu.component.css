@@ -17,3 +17,10 @@
   width: 25vw;
   display: block;
 }
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 0;
+}

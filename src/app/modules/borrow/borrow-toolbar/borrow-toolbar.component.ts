@@ -13,7 +13,6 @@ import { SideMenuService } from '../../../services/side-menu.service';
 })
 export class BorrowToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
-  @Input() sidenav_opened: boolean = false;
   @Output() toggleSideNav: EventEmitter<boolean> = new EventEmitter<boolean>();
   searchControl = new FormControl('');
   url: string = '';
@@ -44,10 +43,8 @@ export class BorrowToolbarComponent {
   }
 
   onToggleBorrowForm() {
-    this.sidenav_opened = !this.sidenav_opened;
-    // this.toggleSideNav.emit(this.sidenav_opened);
     this.sideMenuService.openSideMenu.next({
-      opened: this.sidenav_opened,
+      opened: true,
       template: 'borrow-request-form'
     });
   }

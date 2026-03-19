@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { ClassScheduleComponent } from '../../borrow/class-schedule/class-schedule.component';
 import { BorrowModule } from '../../borrow/borrow-module';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-side-menu',
-  imports: [BorrowModule],
+  imports: [BorrowModule, ButtonComponent],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.css',
 })
 export class SideMenuComponent implements OnInit {
+  @Input() title: string = '';
   opened: boolean = false;
   template: string = ''
   constructor(private sideMenuService: SideMenuService) {}
