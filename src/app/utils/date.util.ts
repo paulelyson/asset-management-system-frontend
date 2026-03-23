@@ -27,3 +27,10 @@ export const get24HourTime = (
     hour12: false,
   });
 };
+
+export const concatDateAndTime = (date: Date, time: string) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  const combinedDate = new Date(date);
+  combinedDate.setHours(hours, minutes, 0, 0);
+  return combinedDate.toISOString();
+}

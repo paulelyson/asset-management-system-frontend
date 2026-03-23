@@ -9,11 +9,11 @@
     <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
     <app-input label="Instructor" [value]="instructor" [readonly]="true"/>
     <div class="subtitle">Start Date of Use</div>
-    <app-datepicker label="Start date"></app-datepicker>
-    <app-input label="Start Time*" inputType="time"/>
+    <app-datepicker label="Start date" formControlName="startDate"></app-datepicker>
+    <app-input label="Start Time*" inputType="time" formControlName="startTime"/>
     <div class="subtitle">End Date of Use</div>
-    <app-datepicker label="End date"></app-datepicker>
-    <app-input label="End Time*" inputType="time"/>
+    <app-datepicker label="End date" formControlName="endDate"></app-datepicker>
+    <app-input label="End Time*" inputType="time" formControlName="endTime"/>
     <!-- <app-datepicker
       label="Choose date"
       type="daterange"

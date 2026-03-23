@@ -65,14 +65,14 @@ export interface BorrowedEquipmentPayload {
   purpose: BorrowedEquipmentPurpose;
   courseOffering: string;
   dateOfUse: {
-    start: Date;
-    end: Date;
+    start: Date | string;
+    end: Date | string;
   };
   borrowedEquipment: {
     equipment: string;
     quantity: number;
     transactions: Pick<BorrowedEquipmentTransaction, 'quantity' | 'condition' | 'status'>[];
-  };
+  }[];
 }
 
 class BorrowedEquipment implements IBorrowedEquipment {
