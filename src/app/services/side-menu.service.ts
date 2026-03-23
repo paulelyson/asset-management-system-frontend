@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 interface SideMenuConfig {
   opened: boolean;
   template: 'borrow-request-form' | string;
+  data?: any;
 }
 
 @Injectable({

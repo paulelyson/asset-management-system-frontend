@@ -3,6 +3,6 @@
     <app-button variant="link" icon="close" size="sm" (btnclicked)="opened = !opened">Close</app-button>
   </div>
   @if (template == 'borrow-request-form') {
-    <app-class-schedule></app-class-schedule>
+    <app-class-schedule [user]="data.user"></app-class-schedule>
   }
 </div>

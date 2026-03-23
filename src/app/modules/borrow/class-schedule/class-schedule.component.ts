@@ -32,7 +32,7 @@ import CourseOffering from '../../../models/CourseOffering';
   styleUrl: './class-schedule.component.css',
   standalone: false,
 })
-export class ClassScheduleComponent implements OnInit, OnChanges {
+export class ClassScheduleComponent implements OnInit {
   @Input() user!: TokenData;
   @Input() department!: Department | string;
   @Input() resetForm: boolean = false;
@@ -64,16 +64,6 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['user']) {
-      this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
-    }
-
-    if (changes['resetForm'] && this.resetForm == true) {
-      this.classScheduleForm.reset();
-    }
-  }
-
   get courseOfferingAutoCompleteOptions() {
     return this.courseOffering().map((course) => ({
       view: course.course.title,
@@ -94,6 +84,8 @@ export class ClassScheduleComponent implements OnInit, OnChanges {
   }
 
   onSubmit() {
+    this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
+    console.log('on submit', this.classScheduleForm.value);
     if (this.classScheduleForm.invalid) {
       const config: ISnackBarConfig = {
         type: 'error',

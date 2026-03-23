@@ -14,12 +14,14 @@ export class SideMenuComponent implements OnInit {
   @Input() title: string = '';
   opened: boolean = false;
   template: string = ''
+  data: any = null;
   constructor(private sideMenuService: SideMenuService) {}
 
   ngOnInit(): void {
     this.sideMenuService.onOpenSideMenu().subscribe((resp) => {
       this.opened = resp.opened;
       this.template = resp.template;
+      this.data = resp.data;
     });
   }
 }

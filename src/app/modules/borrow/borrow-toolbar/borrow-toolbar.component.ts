@@ -13,14 +13,13 @@ import { SideMenuService } from '../../../services/side-menu.service';
 })
 export class BorrowToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
-  @Output() toggleSideNav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() toggleSideMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
   searchControl = new FormControl('');
   url: string = '';
 
   constructor(
     private dialogService: DialogService,
     private router: Router,
-    private sideMenuService: SideMenuService,
   ) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
@@ -43,10 +42,8 @@ export class BorrowToolbarComponent {
   }
 
   onToggleBorrowForm() {
-    this.sideMenuService.openSideMenu.next({
-      opened: true,
-      template: 'borrow-request-form'
-    });
+    
+    this.toggleSideMenu.emit(true);
   }
 
   onSearch(): void {

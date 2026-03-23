@@ -15,6 +15,7 @@ import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { FilterService } from '../../../services/filter.service';
+import { SideMenuService } from '../../../services/side-menu.service';
 
 @Component({
   selector: 'app-borrow',
@@ -40,6 +41,7 @@ export class BorrowComponent implements OnInit {
     private snackBarService: SnackbarService,
     private router: Router,
     private filterService: FilterService,
+    private sideMenuService: SideMenuService,
   ) {
     this.user = this.authService.getUser();
     this.equipmentFilter = new EquipmentFilter({
@@ -86,6 +88,7 @@ export class BorrowComponent implements OnInit {
   }
 
   onSubmitRequest(event: BorrowedEquipmentPayload): void {
+    console.log('on submit',event);
     // const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
     //   equipment: eqpmnt._id,
     //   quantity: eqpmnt.borrowedQty,
@@ -112,8 +115,14 @@ export class BorrowComponent implements OnInit {
     // });
   }
 
-  onToggleSideNav(event: boolean) {
-    this.sidenav_opened = event;
+  onToggleSideMenu(event: boolean) {
+    this.sideMenuService.openSideMenu.next({
+      opened: true,
+      template: 'borrow-request-form',
+      data: {
+        user: this.user,
+      }
+    });
   }
 
   queryParamsHandling(params: Params): void {
