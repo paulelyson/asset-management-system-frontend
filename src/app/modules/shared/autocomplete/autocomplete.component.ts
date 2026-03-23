@@ -73,7 +73,10 @@ export class AutocompleteComponent implements ControlValueAccessor {
   constructor() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map((value) => this._filter(value || '')),
+      map((value: string | IAutocompleteOption | null) => {
+        const val = typeof value === 'string' ? value : value?.view;
+        return this._filter(val);
+      }),
     );
   }
 
@@ -92,8 +95,9 @@ export class AutocompleteComponent implements ControlValueAccessor {
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.changed(this.myControl.value);
-    this.optionselected.emit(this.myControl.value as string);
+    const selected =  event.option.value;
+    this.changed(selected.value);
+    this.optionselected.emit(selected.value as string);
   }
 
   onInput(event: Event) {
@@ -104,15 +108,12 @@ export class AutocompleteComponent implements ControlValueAccessor {
     this.myControl.setValue(this.myControl.value ?? '', { emitEvent: true });
   }
 
-  displayFn(value: string): string {
-    // TO DO
-    // options is an AutoComplete options in this function but a query list
-    // might chage the 'options' variable to something else
-    return  this.options.find((opt) => opt.value == value)?.view ?? ''
-  }
+  displayFn = (option?: IAutocompleteOption): string => {
+    return option?.view ?? '';
+  };
 
-  private _filter(value: string): IAutocompleteOption[] {
-    const filterValue = value.toLowerCase();
+  private _filter(value?: string): IAutocompleteOption[] {
+    const filterValue = value?.toLowerCase() ?? '';
     return this.options.filter((option) => option.view.toLowerCase().includes(filterValue));
   }
 }
