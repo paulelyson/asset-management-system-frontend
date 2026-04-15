@@ -28,8 +28,7 @@ export class BorrowService {
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
-  ) {
-  }
+  ) {}
 
   createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
     return this.http
@@ -39,7 +38,11 @@ export class BorrowService {
 
   addTransaction(body: BorrowedEquipmentTransaction, borrowId: string, equipmentId: string) {
     return this.http
-      .patch<ApiResponse>(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body)
+      .patch<ApiResponse>(
+        environment.api_url +
+          `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`,
+        body,
+      )
       .pipe(catchError(this.handleError));
   }
 
@@ -55,12 +58,10 @@ export class BorrowService {
     params = params.append('search', filter.search ?? '');
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
-    return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowed-equipment')
-      .pipe(
-        map((resp) => resp.data),
-        catchError(this.handleError),
-      );
+    return this.http.get<ApiResponse>(environment.api_url + '/api/borrowed-equipment').pipe(
+      map((resp) => resp.data),
+      catchError(this.handleError),
+    );
   }
 
   // getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
@@ -101,11 +102,20 @@ export class BorrowService {
     displayInfoAndHistory?: boolean,
   ): RowDisplayActionConfig[] {
     let actions: RowDisplayActionConfig[] = [];
-
-    let isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
+    const isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
+    const isLabAssistant = user.roles.some(role => {
+      const dept = borrowedEquipment.courseOffering.course.department._id;
+      return role.department._id == dept && role.role == 'assistant';
+    })
+    const canRelease = borrowedEquipment.accumulatedStatus.some((x) =>
+      ['instructor_approved', 'oic_approved'].includes(x.status),
+    );
     //  approver | class faculty / oic / chairman of the borrowed equipment
     // TODO add is Chairman / IsOIC for override approvals
-    if (isFaculty && borrowedEquipment.transactions.some((x) => ['requested'].includes(x.status))) {
+    if (
+      isFaculty &&
+      borrowedEquipment.accumulatedStatus.some((x) => ['requested'].includes(x.status))
+    ) {
       actions.push({
         name: 'Approve',
         tooltip: 'Approve Request',
@@ -115,21 +125,16 @@ export class BorrowService {
       });
     }
 
-    // // can release as reads
-    // if (
-    //   // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-    //   this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
-    //     ['oic_approved', 'instructor_approved'].includes(x),
-    //   )
-    // ) {
-    //   actions.push({
-    //     name: 'Release',
-    //     tooltip: 'Release Equipment',
-    //     type: 'primary',
-    //     size: 'md',
-    //     icon: 'lock_open',
-    //   });
-    // }
+    // // can release as lab assistant
+    if (isLabAssistant && canRelease) {
+      actions.push({
+        name: 'Release',
+        tooltip: 'Release Equipment',
+        type: 'primary',
+        size: 'md',
+        icon: 'lock_open',
+      });
+    }
 
     // // mark as return
     // if (
