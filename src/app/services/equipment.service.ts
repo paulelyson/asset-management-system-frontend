@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IEquipment } from '../models/Equipment';
+import { IConditionAndQuantity, IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { EquipmentFilter, IEquipmentFilter } from '../models/EquipmentFilter';
@@ -9,9 +9,16 @@ import {
   RowDisplayActionConfig,
   RowDisplayContent,
 } from '../modules/shared/row-display/row-display.component';
+import { BorrowedEquipmentStatusType } from '../models/BorrowedEquipment';
 
-interface ApiResponse {
-  data: IEquipment[] | string[];
+type BorrowedEquipmentStatusTypeAndQuantity = { 
+  status: BorrowedEquipmentStatusType;
+  quantity: number 
+};
+
+
+interface ApiResponse<T> {
+  data: T; // IEquipment[] | string[] | IConditionAndQuantity[];
   message: string;
   success: boolean;
   page: number;
@@ -39,7 +46,13 @@ export class EquipmentService {
         // borrow: filter.borrow ?? '',
       },
     });
-    return this.http.get<ApiResponse>(environment.api_url + '/api/equipment', { params }).pipe(
+    return this.http.get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params }).pipe(
+      catchError(this.handleError),
+    );
+  }
+
+  getStatus(equipmentId: string) {
+    return this.http.get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`).pipe(
       catchError(this.handleError),
     );
   }
@@ -49,7 +62,7 @@ export class EquipmentService {
     params = params.append('field', field);
     params = params.append('department', department);
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/equipment/distinct', { params })
+      .get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct', { params })
       .pipe(
         map((resp) => resp.data as string[]),
         catchError(this.handleError),
@@ -58,7 +71,7 @@ export class EquipmentService {
 
   updateEquipment(equipment: IEquipment) {
     return this.http
-      .patch<ApiResponse>(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
+      .patch<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),

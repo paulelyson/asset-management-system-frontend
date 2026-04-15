@@ -10,6 +10,8 @@ import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-stat
 import ButtonConfig from '../../../models/ButtonConfig';
 import { BorrowService } from '../../../services/borrow.service';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { EquipmentService } from '../../../services/equipment.service';
+import { IN_CIRCULATION_STATUS } from '../../../models/BorrowedEquipment';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -35,7 +37,8 @@ export class EquipmentCardComponent {
   constructor(
     private dialogService: DialogService,
     private borrowService: BorrowService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private equipmentService: EquipmentService,
   ) {}
 
   onAddEquipment(): void {
@@ -63,10 +66,27 @@ export class EquipmentCardComponent {
   }
 
   addEquipment(addedEqmnt: IAddedEquipment) {
-    this.borrowService.isEquipmentRequested(addedEqmnt._id).subscribe({
-      next: (resp) => this.addequipment.emit(addedEqmnt),
-      error: (err) =>
-        this.snackbarService.openSnackbar({ type: 'error', message: [err.message], icon: '' }),
+    // this.borrowService.isEquipmentRequested(addedEqmnt._id).subscribe({
+    //   next: (resp) => this.addequipment.emit(addedEqmnt),
+    //   error: (err) =>
+    //     this.snackbarService.openSnackbar({ type: 'error', message: [err.message], icon: '' }),
+    // });
+
+    this.equipmentService.getStatus(addedEqmnt._id).subscribe({
+      next: (resp) => {
+        const totalBorrowed = resp.data.reduce((acc, curr) => {
+          if (IN_CIRCULATION_STATUS.includes(curr.status)) {
+            return acc + curr.quantity;
+          }
+          return acc;
+        }, 0);
+
+        const availableQuantity = addedEqmnt.totalQuantity - totalBorrowed;
+
+        if (availableQuantity > 0) {
+          this.addequipment.emit(addedEqmnt);
+        }
+      },
     });
   }
 

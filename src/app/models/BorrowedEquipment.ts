@@ -39,6 +39,9 @@ export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'system_reset',
 ];
 
+export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'faculty_approved', 'oic_approved', 'released', 'mark_returned'];
+
+
 interface BorrowedEquipmentTransaction extends IMongoDocument {
   quantity: number;
   condition: string;
