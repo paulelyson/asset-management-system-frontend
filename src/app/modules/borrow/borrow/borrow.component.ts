@@ -115,14 +115,8 @@ export class BorrowComponent implements OnInit {
     // });
   }
 
-  onToggleSideMenu(event: boolean) {
-    this.sideMenuService.openSideMenu.next({
-      opened: true,
-      template: 'borrow-request-form',
-      data: {
-        user: this.user,
-      }
-    });
+  onToggleBorrowForm(event: boolean): void {
+    this.sidenav_opened = !this.sidenav_opened;
   }
 
   queryParamsHandling(params: Params): void {

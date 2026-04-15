@@ -3,6 +3,8 @@ import { SideMenuService } from '../../../services/side-menu.service';
 import { ClassScheduleComponent } from '../../borrow/class-schedule/class-schedule.component';
 import { BorrowModule } from '../../borrow/borrow-module';
 import { ButtonComponent } from '../button/button.component';
+import { EquipmentCardComponent } from '../../borrow/equipment-card/equipment-card.component';
+import { EmptyPlaceholderComponent } from '../empty-placeholder/empty-placeholder.component';
 
 @Component({
   selector: 'app-side-menu',

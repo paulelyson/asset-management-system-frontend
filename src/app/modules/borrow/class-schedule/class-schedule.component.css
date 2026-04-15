@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
+  border-radius: 7px;
   gap: 5px;
+  border: 1px solid var(--accent);
+  background-color: var(--card-bg);
 }
 
 .subtitle {

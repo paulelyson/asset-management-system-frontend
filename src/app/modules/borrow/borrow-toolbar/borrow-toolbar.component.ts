@@ -13,7 +13,8 @@ import { SideMenuService } from '../../../services/side-menu.service';
 })
 export class BorrowToolbarComponent {
   @Input() filters: Record<string, string>[] = [];
-  @Output() toggleSideMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() toggleBorrowForm: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   searchControl = new FormControl('');
   url: string = '';
 
@@ -42,8 +43,7 @@ export class BorrowToolbarComponent {
   }
 
   onToggleBorrowForm() {
-    
-    this.toggleSideMenu.emit(true);
+    this.toggleBorrowForm.emit(true);
   }
 
   onSearch(): void {
