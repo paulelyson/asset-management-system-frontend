@@ -107,7 +107,7 @@ export class BorrowedEquipmentComponent implements OnInit {
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'Approve') {
-      this.onUpdateStatus(borrowedEquipment, 'faculty_approved', 'Approve');
+      this.onUpdateStatus(borrowedEquipment, 'instructor_approved', 'Approve');
     } else if (action == 'Release') {
       this.onUpdateStatus(borrowedEquipment, 'released', 'Release');
     } else if (action == 'Return') {

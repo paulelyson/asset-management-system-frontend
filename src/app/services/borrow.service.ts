@@ -2,7 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import BorrowedEquipment, {
   BorrowedEquipmentPayload,
-  BorrowedEquipmentStatusType,
   BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
@@ -15,8 +14,6 @@ import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
-import { AuthService } from './auth.service';
-import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 
 interface ApiResponse {
   data: BorrowedEquipment[];
@@ -28,50 +25,38 @@ interface ApiResponse {
   providedIn: 'root',
 })
 export class BorrowService {
-  token: string;
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
-    private authService: AuthService,
   ) {
-    this.token = localStorage.getItem('token')!;
   }
 
   createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
-    const headers = { Authorization: this.token };
     return this.http
-      .post<ApiResponse>(environment.api_url + '/api/borrowed-equipment', body, { headers })
+      .post<ApiResponse>(environment.api_url + '/api/borrowed-equipment', body)
       .pipe(catchError(this.handleError));
   }
 
   addTransaction(body: BorrowedEquipmentTransaction, borrowId: string, equipmentId: string) {
-    const headers = { Authorization: this.token };
     return this.http
-      .patch<ApiResponse>(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body, {
-        headers,
-      })
+      .patch<ApiResponse>(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body)
       .pipe(catchError(this.handleError));
   }
 
   isEquipmentRequested(equipmentid: string) {
-    const headers = { Authorization: this.token };
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid, {
-        headers,
-      })
+      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid)
       .pipe(catchError(this.handleError));
   }
 
   getBorrowedEquipment(filter: IBorrowedEquimentFilter): Observable<BorrowedEquipment[]> {
     let params = new HttpParams();
-    const headers = { Authorization: this.token };
-
     params = params.append('page', filter.page ?? '');
     params = params.append('search', filter.search ?? '');
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
     return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowed-equipment', { params, headers })
+      .get<ApiResponse>(environment.api_url + '/api/borrowed-equipment')
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),
@@ -80,7 +65,6 @@ export class BorrowService {
 
   // getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
   //   let params = new HttpParams();
-  //   const headers = { Authorization: this.token };
   //   params = params.append('borrowId', borrowId ?? '');
   //   params = params.append('equipment', equipment ?? '');
   //   return this.http
@@ -135,7 +119,7 @@ export class BorrowService {
     // if (
     //   // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
     //   this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
-    //     ['oic_approved', 'faculty_approved'].includes(x),
+    //     ['oic_approved', 'instructor_approved'].includes(x),
     //   )
     // ) {
     //   actions.push({

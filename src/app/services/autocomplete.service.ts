@@ -12,7 +12,7 @@ export class AutocompleteService {
         view: 'Request',
       },
       {
-        value: 'faculty_approved',
+        value: 'instructor_approved',
         view: 'Approve as faculty',
       },
       {
