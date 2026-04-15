@@ -1,6 +1,9 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
-import BorrowedEquipment, { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
+import BorrowedEquipment, {
+  BorrowedEquipmentStatusType,
+  BorrowedEquipmentTransaction,
+} from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
 import {
   RowDisplayActionConfig,
@@ -57,46 +60,37 @@ export class BorrowedEquipmentComponent implements OnInit {
           this.filter.page = (this.filter.page as number) - 1;
         }
         this.disable_showmore = resp.length < 15;
-        this.borrowed_equipment.update((eqpmnt) =>
-          [...eqpmnt]
-            .concat(resp)
-            .filter(
-              (item, index, arr) =>
-                index ===
-                arr.findIndex((x) => x._id === item._id && x.equipment === item.equipment),
-            ),
-        );
+        this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
       },
     });
   }
 
-  updateBorrowedEquipmentStatus(
+  addTransaction(
     borrowedEquipment: BorrowedEquipment,
     status: BorrowedEquipmentStatusType,
     quantity: number,
   ): void {
-    // let updated: BorrowedEquipmentStatusExt[] = [
-    //   {
-    //     id: borrowedEquipment._id,
-    //     equipment: borrowedEquipment.equipment._id,
-    //     status: status,
-    //     quantity: quantity,
-    //     condition: 'functional',
-    //     remarks: '',
-    //   },
-    // ];
-    // this.borrowService.updateBorrowedEquipmentStatus(updated).subscribe({
-    //   next: (resp) => {
-    //     (this.snackBarService.openSnackbar({
-    //       icon: 'info',
-    //       type: 'success',
-    //       message: [resp.message],
-    //     }),
-    //       this.getBorrowedEquipment());
-    //   },
-    //   error: (err) =>
-    //     this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
-    // });
+    // TODO add updatedBy, functional
+    const equipmentId = borrowedEquipment.equipment._id;
+    const borrowId = borrowedEquipment._id;
+    let updated: BorrowedEquipmentTransaction = {
+      quantity: quantity,
+      condition: 'functional',
+      status: status,
+      updatedBy: ''
+    };
+    this.borrowService.addTransaction(updated, borrowId, equipmentId).subscribe({
+      next: (resp) => {
+        (this.snackBarService.openSnackbar({
+          icon: 'info',
+          type: 'success',
+          message: [resp.message],
+        }),
+          this.getBorrowedEquipment());
+      },
+      error: (err) =>
+        this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
+    });
   }
 
   getBorrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
@@ -123,16 +117,17 @@ export class BorrowedEquipmentComponent implements OnInit {
     }
 
     // cancelled
-    else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
-      const status = 'cancelled';
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    } else if (action == 'Cancel Request' && borrowedEquipment.quantity > 1) {
-      // TODO
-      const status = 'cancelled';
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    }
+    // else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
+    //   const status = 'cancelled';
+    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
+    // } else if (action == 'Cancel Request' && borrowedEquipment.quantity > 1) {
+    //   // TODO
+    //   const status = 'cancelled';
+    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
+    // }
     // view info
     else if (action == 'View Detail') {
+      console.log('View Detail');
       this.dialogService.openBorrowedEquipmentDetailDialog(borrowedEquipment);
     }
     // view
@@ -152,13 +147,13 @@ export class BorrowedEquipmentComponent implements OnInit {
     const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
     const actions: ButtonConfig[] = [new ButtonConfig({ name: action })];
     if (borrowedEquipment.quantity == 1) {
-      this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
+      this.addTransaction(borrowedEquipment, status, borrowedEquipment.quantity);
     } else {
       this.dialogService
         .openUpdateQuantityStatusDialog(fields, actions, [status])
         .subscribe((resp) => {
           if (resp) {
-            this.updateBorrowedEquipmentStatus(borrowedEquipment, resp.status, resp.quantity);
+            this.addTransaction(borrowedEquipment, resp.status, resp.quantity);
           }
         });
     }

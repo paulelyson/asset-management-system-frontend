@@ -51,6 +51,7 @@ export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
 }
 
 export interface IBorrowedEquipment extends IMongoDocument {
+  trackId: string;
   borrower: User;
   purpose: BorrowedEquipmentPurpose;
   courseOffering: CourseOffering;
@@ -81,6 +82,7 @@ export interface BorrowedEquipmentPayload {
 }
 
 class BorrowedEquipment implements IBorrowedEquipment {
+  trackId: string;
   borrower: User;
   purpose: BorrowedEquipmentPurpose;
   courseOffering: CourseOffering;
@@ -96,6 +98,7 @@ class BorrowedEquipment implements IBorrowedEquipment {
   __v: number;
 
   constructor(borrowedEquipment: IBorrowedEquipment) {
+    this.trackId = borrowedEquipment.trackId;
     this.borrower = borrowedEquipment.borrower;
     this.purpose = borrowedEquipment.purpose;
     this.courseOffering = borrowedEquipment.courseOffering;

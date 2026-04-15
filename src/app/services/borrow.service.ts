@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import BorrowedEquipment, {
   BorrowedEquipmentPayload,
   BorrowedEquipmentStatusType,
+  BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -43,14 +44,14 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
-  // updateBorrowedEquipmentStatus(body: BorrowedEquipmentStatusExt[]) {
-  //   const headers = { Authorization: this.token };
-  //   return this.http
-  //     .patch<ApiResponse>(environment.api_url + '/api/borrowequipment/updatestatus', body, {
-  //       headers,
-  //     })
-  //     .pipe(catchError(this.handleError));
-  // }
+  addTransaction(body: BorrowedEquipmentTransaction, borrowId: string, equipmentId: string) {
+    const headers = { Authorization: this.token };
+    return this.http
+      .patch<ApiResponse>(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body, {
+        headers,
+      })
+      .pipe(catchError(this.handleError));
+  }
 
   isEquipmentRequested(equipmentid: string) {
     const headers = { Authorization: this.token };
@@ -94,7 +95,7 @@ export class BorrowService {
   // }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    const status = borrowedEquipment.accumulatedStatus.map(x => x.quantity + " " + x.status)
+    const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
     const course = borrowedEquipment.courseOffering.code;
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
@@ -110,69 +111,25 @@ export class BorrowService {
     return contents;
   }
 
-  getBorrowStatusPlaceholder(status: BorrowedEquipmentStatusType) {
-    const statusPlaceHolder: Record<BorrowedEquipmentStatusType, string> = {
-      requested: 'For Approval',
-      faculty_approved: 'For Release',
-      oic_approved: 'For Release',
-      faculty_rejected: 'Rejected by Instructor',
-      oic_rejected: 'Rejected by LIC',
-      released: 'Release',
-      mark_returned: 'Mark as Returned',
-      returned: 'Return Confirmed',
-      unreturned: '',
-      system_reset: '',
-      cancelled: 'cancelled',
-    };
-
-    return statusPlaceHolder[status] ?? '';
-  }
-
-  getNextBorrowStatus(current: BorrowedEquipmentStatusType) {
-    const statusTransitions: Record<BorrowedEquipmentStatusType, BorrowedEquipmentStatusType[]> = {
-      requested: ['faculty_approved', 'faculty_rejected', 'oic_approved', 'oic_rejected'],
-      faculty_approved: ['released'],
-      oic_approved: ['released'],
-      faculty_rejected: [], // no next state
-      oic_rejected: [], // no next state
-      released: ['mark_returned'],
-      mark_returned: ['returned'],
-      returned: [], // final state,
-      unreturned: [],
-      system_reset: [],
-      cancelled: [],
-    };
-    return statusTransitions[current] ?? [];
-  }
-
-  getCurrentStatus(latestStatus: string[]): BorrowedEquipmentStatusType[] {
-    const status_only = latestStatus.map(
-      (status) => status.split(' ')[1],
-    ) as BorrowedEquipmentStatusType[];
-    return status_only;
-  }
-
   getRowDisplayActions(
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
     displayInfoAndHistory?: boolean,
   ): RowDisplayActionConfig[] {
-    // let actions: RowDisplayActionConfig[] = [];
-    // let isDeptChair = this.authService.isDepartmentChair(user, borrowedEquipment.classDepartment);
-    // let isDeptOIC = this.authService.isDepartmentOIC(user, borrowedEquipment.classDepartment);
-    // //  approver | class faculty / oic / chairman of the borrowed equipment
-    // if (
-    //   (user._id == borrowedEquipment.faculty._id || isDeptChair || isDeptOIC) &&
-    //   this.getCurrentStatus(borrowedEquipment.latestStatus).includes('requested')
-    // ) {
-    //   actions.push({
-    //     name: 'Approve',
-    //     tooltip: 'Approve Request',
-    //     type: 'primary',
-    //     size: 'md',
-    //     icon: 'thumb_up',
-    //   });
-    // }
+    let actions: RowDisplayActionConfig[] = [];
+
+    let isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
+    //  approver | class faculty / oic / chairman of the borrowed equipment
+    // TODO add is Chairman / IsOIC for override approvals
+    if (isFaculty && borrowedEquipment.transactions.some((x) => ['requested'].includes(x.status))) {
+      actions.push({
+        name: 'Approve',
+        tooltip: 'Approve Request',
+        type: 'primary',
+        size: 'md',
+        icon: 'thumb_up',
+      });
+    }
 
     // // can release as reads
     // if (
@@ -229,29 +186,27 @@ export class BorrowService {
     // //   icon: 'cancel',
     // // });
 
-    // // add view details
-    // if (displayInfoAndHistory) {
-    //   actions.push({
-    //     name: 'View Detail',
-    //     tooltip: 'View Detail',
-    //     type: 'primary',
-    //     size: 'md',
-    //     icon: 'info',
-    //   });
+    // add view details
+    if (displayInfoAndHistory) {
+      actions.push({
+        name: 'View Detail',
+        tooltip: 'View Detail',
+        type: 'primary',
+        size: 'md',
+        icon: 'info',
+      });
 
-    //   // add progress logs
-    //   actions.push({
-    //     name: 'Progress Logs',
-    //     tooltip: 'Progress Logs',
-    //     type: 'primary',
-    //     size: 'md',
-    //     icon: 'history',
-    //   });
-    // }
+      // add progress logs
+      actions.push({
+        name: 'Progress Logs',
+        tooltip: 'Progress Logs',
+        type: 'primary',
+        size: 'md',
+        icon: 'history',
+      });
+    }
 
-    // return actions;
-
-    return [];
+    return actions;
   }
 
   handleError(err: HttpErrorResponse) {
