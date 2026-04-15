@@ -102,20 +102,27 @@ export class BorrowService {
     displayInfoAndHistory?: boolean,
   ): RowDisplayActionConfig[] {
     let actions: RowDisplayActionConfig[] = [];
+    const isBorrower = borrowedEquipment.borrower._id == user._id;
     const isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
-    const isLabAssistant = user.roles.some(role => {
+    const isLabAssistant = user.roles.some((role) => {
       const dept = borrowedEquipment.courseOffering.course.department._id;
       return role.department._id == dept && role.role == 'assistant';
-    })
+    });
+    const canApprove = borrowedEquipment.accumulatedStatus.some((x) =>
+      ['requested'].includes(x.status),
+    );
     const canRelease = borrowedEquipment.accumulatedStatus.some((x) =>
       ['instructor_approved', 'oic_approved'].includes(x.status),
     );
+    const canReturn = borrowedEquipment.accumulatedStatus.some((x) =>
+      ['released'].includes(x.status),
+    );
+    const confirmReturns = borrowedEquipment.accumulatedStatus.some((x) =>
+      ['mark_returned'].includes(x.status),
+    );
     //  approver | class faculty / oic / chairman of the borrowed equipment
     // TODO add is Chairman / IsOIC for override approvals
-    if (
-      isFaculty &&
-      borrowedEquipment.accumulatedStatus.some((x) => ['requested'].includes(x.status))
-    ) {
+    if (isFaculty && canApprove) {
       actions.push({
         name: 'Approve',
         tooltip: 'Approve Request',
@@ -125,7 +132,7 @@ export class BorrowService {
       });
     }
 
-    // // can release as lab assistant
+    // can release as lab assistant
     if (isLabAssistant && canRelease) {
       actions.push({
         name: 'Release',
@@ -137,34 +144,26 @@ export class BorrowService {
     }
 
     // // mark as return
-    // if (
-    //   user._id == borrowedEquipment.borrower._id &&
-    //   this.getCurrentStatus(borrowedEquipment.latestStatus).includes('released')
-    // ) {
-    //   actions.push({
-    //     icon: 'keyboard_return',
-    //     name: 'Return',
-    //     tooltip: 'Return Equipment',
-    //     type: 'primary',
-    //     size: 'md',
-    //   });
-    // }
+    if (isBorrower && canReturn) {
+      actions.push({
+        icon: 'keyboard_return',
+        name: 'Return',
+        tooltip: 'Return Equipment',
+        type: 'primary',
+        size: 'md',
+      });
+    }
 
-    // // confirm returns
-    // if (
-    //   // user.assignedTo.includes(borrowedEquipment.classDepartment) &&
-    //   this.getCurrentStatus(borrowedEquipment.latestStatus).some((x) =>
-    //     ['mark_returned'].includes(x),
-    //   )
-    // ) {
-    //   actions.push({
-    //     icon: 'keyboard_return',
-    //     name: 'Confirm Returns',
-    //     tooltip: 'Confirm Returns',
-    //     type: 'primary',
-    //     size: 'md',
-    //   });
-    // }
+    // confirm returns
+    if (isLabAssistant && confirmReturns) {
+      actions.push({
+        icon: 'keyboard_return',
+        name: 'Confirm Returns',
+        tooltip: 'Confirm Returns',
+        type: 'primary',
+        size: 'md',
+      });
+    }
 
     // // cancelled
     // // actions.push({
