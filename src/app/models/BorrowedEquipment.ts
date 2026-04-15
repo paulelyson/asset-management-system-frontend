@@ -42,10 +42,12 @@ export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
 export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'faculty_approved', 'oic_approved', 'released', 'mark_returned'];
 
 
-interface BorrowedEquipmentTransaction extends IMongoDocument {
+export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
   quantity: number;
   condition: string;
   status: string;
+  updatedBy: string;
+  remarks?: string;
 }
 
 export interface IBorrowedEquipment extends IMongoDocument {

@@ -61,11 +61,7 @@ export class BorrowComponent implements OnInit {
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
         this.disable_showmore = !resp.hasNextPage;
-        this.equipment.update((eqpmnt) =>
-          [...eqpmnt]
-            .concat(resp.data as IEquipment[])
-            .filter((item, ndx, arr) => ndx === arr.findIndex((x) => x._id === item._id)),
-        );
+        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
       },
     });
   }
@@ -79,40 +75,42 @@ export class BorrowComponent implements OnInit {
   }
 
   onAddEquipment(addedEqmnt: IAddedEquipment) {
-    const found = this.addedEquipment.some((eqpmnt) => eqpmnt._id == addedEqmnt._id);
+    const found = this.addedEquipment.some((eqpmnt) => eqpmnt.equipment == addedEqmnt.equipment);
     if (!found) this.addedEquipment.push(addedEqmnt);
   }
 
   onRemoveEquipment(equipment: IAddedEquipment) {
-    this.addedEquipment = this.addedEquipment.filter((eqpmnt) => eqpmnt._id !== equipment._id);
+    this.addedEquipment = this.addedEquipment.filter((eqpmnt) => eqpmnt.equipment !== equipment.equipment);
   }
 
   onSubmitRequest(event: BorrowedEquipmentPayload): void {
-    console.log('on submit',event);
-    // const borrowedEquipment: IBorrowedEquipment[] = this.addedEquipment.map((eqpmnt) => ({
-    //   equipment: eqpmnt._id,
-    //   quantity: eqpmnt.borrowedQty,
-    //   borrowedEquipmentStatus: [],
-    //   remarks: '',
-    // }));
-    // let body: IBorrowingDetails = { ...event, borrowedEquipment: borrowedEquipment };
-    // this.borrowService.createBorrowedEquipment(body).subscribe({
-    //   next: (resp) => {
-    //     this.snackBarService.openSnackbar({
-    //       type: 'success',
-    //       message: [resp.message],
-    //       icon: '',
-    //     });
-    //     this.addedEquipment = [];
-    //     this.resetForm.set(true);
-    //   },
-    //   error: (err) =>
-    //     this.snackBarService.openSnackbar({
-    //       type: 'error',
-    //       message: [err.message],
-    //       icon: '',
-    //     }),
-    // });
+
+    event.borrowedEquipment = this.addedEquipment.map((eqpmnt) => ({
+      equipment: eqpmnt.equipment._id,
+      quantity: eqpmnt.quantity,
+      transactions: eqpmnt.transactions,
+    }));
+
+
+    console.log('payload', event);
+
+    this.borrowService.createBorrowedEquipment(event).subscribe({
+      next: (resp) => {
+        this.snackBarService.openSnackbar({
+          type: 'success',
+          message: [resp.message],
+          icon: '',
+        });
+        this.addedEquipment = [];
+        this.resetForm.set(true);
+      },
+      error: (err) =>
+        this.snackBarService.openSnackbar({
+          type: 'error',
+          message: [err.message],
+          icon: '',
+        }),
+    });
   }
 
   onToggleBorrowForm(event: boolean): void {

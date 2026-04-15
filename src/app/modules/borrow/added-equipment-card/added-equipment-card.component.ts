@@ -2,9 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { IEquipment } from '../../../models/Equipment';
+import { BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
 
-export interface IAddedEquipment extends IEquipment {
-  borrowedQty: number;
+export interface IAddedEquipment {
+  equipment: IEquipment;
+  quantity: number;
+  transactions: BorrowedEquipmentTransaction[];
 }
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -32,7 +35,7 @@ export class AddedEquipmentCardComponent {
   }
 
   get image() {
-    const img = this.equipment.images[0]?.thumbnail;
+    const img = this.equipment.equipment.images[0]?.thumbnail;
     return img ? img : this.default_img;
   }
 

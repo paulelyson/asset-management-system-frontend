@@ -3,9 +3,9 @@
     <img class="fit-image" [src]="image" />
   </div>
   <div class="content">
-    <span>{{ equipment.name }}</span>
-    <span>{{ equipment.brand }}</span>
+    <span>{{ equipment.equipment.name }}</span>
+    <span>{{ equipment.equipment.brand }}</span>
   </div>
-  <span class="quantity" matTooltip="Click to change quantity"> {{ equipment.borrowedQty }} </span>
+  <span class="quantity" matTooltip="Click to change quantity"> {{ equipment.quantity }} </span>
   <app-icon name="delete" size="md" (iconclicked)="onRemoveEquipment($event)" />
 </div>

@@ -47,32 +47,50 @@ export class EquipmentCardComponent {
       const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Add' })];
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         if (resp) {
-          let quantity = parseInt(resp.quantity);
+          let quantity = Math.min(
+            Math.max(parseInt(resp.quantity, 10) || 1, 1),
+            this.equipment.totalQuantity,
+          );
           const addedEqmnt: IAddedEquipment = {
-            ...this.equipment,
-            borrowedQty: quantity
-              ? quantity > this.equipment.totalQuantity
-                ? this.equipment.totalQuantity
-                : quantity
-              : 1,
+            equipment: this.equipment,
+            quantity: quantity,
+            transactions: [
+              {
+                quantity: quantity,
+                condition: 'functional',
+                status: 'requested',
+                updatedBy: ''
+              },
+            ],
           };
           this.addEquipment(addedEqmnt);
         }
       });
     } else {
-      const addedEqmnt: IAddedEquipment = { ...this.equipment, borrowedQty: 1 };
+      const addedEqmnt: IAddedEquipment = {
+        equipment: this.equipment,
+        quantity: 1,
+        transactions: [
+          {
+            quantity: 1,
+            condition: 'functional',
+            status: 'requested',
+            updatedBy: ''
+          },
+        ],
+      };
       this.addEquipment(addedEqmnt);
     }
   }
 
-  addEquipment(addedEqmnt: IAddedEquipment) {
+  addEquipment(equipment: IAddedEquipment) {
     // this.borrowService.isEquipmentRequested(addedEqmnt._id).subscribe({
     //   next: (resp) => this.addequipment.emit(addedEqmnt),
     //   error: (err) =>
     //     this.snackbarService.openSnackbar({ type: 'error', message: [err.message], icon: '' }),
     // });
 
-    this.equipmentService.getStatus(addedEqmnt._id).subscribe({
+    this.equipmentService.getStatus(equipment.equipment._id).subscribe({
       next: (resp) => {
         const totalBorrowed = resp.data.reduce((acc, curr) => {
           if (IN_CIRCULATION_STATUS.includes(curr.status)) {
@@ -81,10 +99,10 @@ export class EquipmentCardComponent {
           return acc;
         }, 0);
 
-        const availableQuantity = addedEqmnt.totalQuantity - totalBorrowed;
+        const availableQuantity = equipment.quantity - totalBorrowed;
 
         if (availableQuantity > 0) {
-          this.addequipment.emit(addedEqmnt);
+          this.addequipment.emit(equipment);
         }
       },
     });

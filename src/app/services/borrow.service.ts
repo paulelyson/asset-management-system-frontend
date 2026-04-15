@@ -39,7 +39,7 @@ export class BorrowService {
   createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
     const headers = { Authorization: this.token };
     return this.http
-      .post<ApiResponse>(environment.api_url + '/api/borrowequipment', body, { headers })
+      .post<ApiResponse>(environment.api_url + '/api/borrowed-equipment', body, { headers })
       .pipe(catchError(this.handleError));
   }
 
