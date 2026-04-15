@@ -131,11 +131,8 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.dialogService.openBorrowedEquipmentDetailDialog(borrowedEquipment);
     }
     // view
-    else if (action == 'Progress Logs') {
-      const borrowId = borrowedEquipment._id;
-      const equipment = borrowedEquipment.equipment._id;
-      // this.dialogService.openBorrowedEquipmentHistoryDialog();
-      this.onDisplayProgressLogs(borrowId, equipment);
+    else if (action == 'Transactions') {
+      this.onDisplayTransactions(borrowedEquipment.transactions);
     }
   }
 
@@ -159,12 +156,8 @@ export class BorrowedEquipmentComponent implements OnInit {
     }
   }
 
-  onDisplayProgressLogs(borrowId: string, equipment: string): void {
-    // this.borrowService.getProgressLogs(borrowId, equipment).subscribe({
-    //   next: (resp) => {
-    //     this.dialogService.openBorrowedEquipmentHistoryDialog(resp);
-    //   },
-    // });
+  onDisplayTransactions(transactions: BorrowedEquipmentTransaction[]): void {
+    this.dialogService.openBorrowedEquipmentTransactionsDialog(transactions)
   }
 
   loadMoreBorrowedEquipment() {

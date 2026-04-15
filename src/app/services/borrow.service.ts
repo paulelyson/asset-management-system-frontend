@@ -180,10 +180,10 @@ export class BorrowService {
         icon: 'info',
       });
 
-      // add progress logs
+      // add Transactions
       actions.push({
-        name: 'Progress Logs',
-        tooltip: 'Progress Logs',
+        name: 'Transactions',
+        tooltip: 'Transactions',
         type: 'primary',
         size: 'md',
         icon: 'history',

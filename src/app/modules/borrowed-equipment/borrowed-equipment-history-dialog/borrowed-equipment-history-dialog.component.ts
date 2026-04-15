@@ -4,6 +4,7 @@ import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHist
 import { IVerticalStepper } from '../../shared/vertical-stepper/vertical-stepper.component';
 import { getDisplayName } from '../../../utils/string.util';
 import { DatePipe } from '@angular/common';
+import { BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
@@ -12,18 +13,20 @@ import { DatePipe } from '@angular/common';
   standalone: false,
 })
 export class BorrowedEquipmentHistoryDialogComponent {
-  histories: IVerticalStepper[];
+  transaction: IVerticalStepper[];
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: IBorrowedEquipmentHistory[],
+    @Inject(MAT_DIALOG_DATA) public data: BorrowedEquipmentTransaction[],
     private datePipe: DatePipe,
   ) {
-    this.histories = data.map((dt) => ({
-      title: dt.updatedStatus,
+    this.transaction = data.map((dt) => ({
+      title: dt.status,
       contents: [
-        'Qty: ' + dt.updatedConditionQuantity.quantity,
-        getDisplayName(dt.responsibleUser),
-        this.datePipe.transform(dt.createdAt, 'medium') ?? dt.createdAt,
-        dt.remarks,
+        'Qty: ' + dt.quantity,
+        'Lorem Ipsum',
+        dt.createdAt
+          ? (this.datePipe.transform(dt.createdAt, 'medium') ?? dt.createdAt.toISOString())
+          : '',
+        dt.remarks?? '',
       ],
     }));
   }
