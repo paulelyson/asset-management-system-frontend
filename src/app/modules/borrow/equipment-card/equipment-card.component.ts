@@ -72,7 +72,6 @@ export class EquipmentCardComponent {
                 quantity: quantity,
                 condition: 'functional',
                 status: 'requested',
-                updatedBy: '',
               },
             ],
           };
@@ -88,7 +87,6 @@ export class EquipmentCardComponent {
             quantity: 1,
             condition: 'functional',
             status: 'requested',
-            updatedBy: '',
           },
         ],
       };

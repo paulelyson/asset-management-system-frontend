@@ -70,14 +70,13 @@ export class BorrowedEquipmentComponent implements OnInit {
     status: BorrowedEquipmentStatusType,
     quantity: number,
   ): void {
-    // TODO add updatedBy, functional
+    // TODO add functional
     const equipmentId = borrowedEquipment.equipment._id;
     const borrowId = borrowedEquipment._id;
     let updated: BorrowedEquipmentTransaction = {
       quantity: quantity,
       condition: 'functional',
       status: status,
-      updatedBy: ''
     };
     this.borrowService.addTransaction(updated, borrowId, equipmentId).subscribe({
       next: (resp) => {

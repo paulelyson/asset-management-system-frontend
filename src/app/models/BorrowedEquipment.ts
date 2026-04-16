@@ -51,7 +51,7 @@ export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
   quantity: number;
   condition: string;
   status: BorrowedEquipmentStatusType;
-  updatedBy: string;
+  updatedBy?: IUser;
   remarks?: string;
 }
 

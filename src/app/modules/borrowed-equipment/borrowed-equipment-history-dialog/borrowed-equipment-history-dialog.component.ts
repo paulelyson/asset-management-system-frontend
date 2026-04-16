@@ -5,6 +5,7 @@ import { IVerticalStepper } from '../../shared/vertical-stepper/vertical-stepper
 import { getDisplayName } from '../../../utils/string.util';
 import { DatePipe } from '@angular/common';
 import { BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
+import { IUser } from '../../../models/User';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
@@ -22,11 +23,11 @@ export class BorrowedEquipmentHistoryDialogComponent {
       title: dt.status,
       contents: [
         'Qty: ' + dt.quantity,
-        'Lorem Ipsum',
+        dt.updatedBy ? getDisplayName(dt.updatedBy) : '',
         dt.createdAt
           ? (this.datePipe.transform(dt.createdAt, 'medium') ?? dt.createdAt.toISOString())
           : '',
-        dt.remarks?? '',
+        dt.remarks ?? '',
       ],
     }));
   }
