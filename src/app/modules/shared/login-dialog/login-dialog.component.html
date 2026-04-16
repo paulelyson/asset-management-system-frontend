@@ -1,7 +1,16 @@
 <div class="login-container">
   <app-input [formControl]="schoolId" suffix_icon="person" placeholder="School Id" />
-  <app-input [formControl]="password" suffix_icon="password" placeholder="Password" />
+  <app-input
+    [inputType]="inputType"
+    [formControl]="password"
+    suffix_icon="password"
+    [suffix_icon_clickable]="true"
+    placeholder="Password"
+    (suffixIconClick)="onPasswordSuffixIconClick()"
+  />
   <div class="action-wrapper">
-    <app-button icon="login" width="width-filled" type="primary" (click)="login()">Login </app-button>
+    <app-button icon="login" width="width-filled" type="primary" (click)="login()">
+      Login
+    </app-button>
   </div>
 </div>

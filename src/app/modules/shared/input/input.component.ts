@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   FloatLabelType,
@@ -28,6 +28,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() suffix_icon: string = '';
+  @Input() suffix_icon_clickable: boolean = false;
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() inputType: string = 'text';
@@ -36,6 +37,8 @@ export class InputComponent implements ControlValueAccessor {
   @Input() value: string = '';
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
+  @Output() suffixIconClick = new EventEmitter<void>();
+
   public changed = (_: any) => {};
   public touched = () => {};
 
@@ -54,5 +57,9 @@ export class InputComponent implements ControlValueAccessor {
 
   onInput(event: Event) {
     this.changed(this.value);
+  }
+
+  onSuffixIconClick() {
+    this.suffixIconClick.emit();
   }
 }

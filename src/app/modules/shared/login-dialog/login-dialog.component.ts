@@ -16,6 +16,8 @@ import { AuthService } from '../../../services/auth.service';
 export class LoginDialogComponent {
   schoolId = new FormControl('', { nonNullable: true });
   password = new FormControl('', { nonNullable: true });
+  passwordVisible: boolean = false;
+  inputType: string = 'password';
 
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -39,5 +41,10 @@ export class LoginDialogComponent {
         });
       },
     });
+  }
+
+  onPasswordSuffixIconClick() {
+    this.passwordVisible = !this.passwordVisible;
+    this.inputType = this.passwordVisible ? 'text' : 'password';
   }
 }

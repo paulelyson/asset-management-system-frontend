@@ -1,3 +1,7 @@
 mat-form-field.sm {
- width: 100px;
+  width: 100px;
+}
+
+.clickable {
+  cursor: pointer;
 }
