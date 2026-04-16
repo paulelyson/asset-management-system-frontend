@@ -7,8 +7,8 @@
     <span>{{ equipment.brand }}</span>
   </div>
   <div class="availability">
-    <app-badge [type]="equipment.totalQuantity ? 'success' : 'danger'" size="sm">
-      {{ equipment.totalQuantity }} Available
+    <app-badge [type]="totalAvailable > 0 ? 'success' : 'danger'" size="sm">
+      {{ availability }}
     </app-badge>
     <app-icon name="info" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
   </div>
@@ -18,7 +18,6 @@
       width="width-filled"
       type="primary"
       (click)="onAddEquipment()"
-      [disabled]="!equipment.totalQuantity" 
       >Add
     </app-button>
   </div>

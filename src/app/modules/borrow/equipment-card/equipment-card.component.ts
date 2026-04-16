@@ -42,14 +42,23 @@ export class EquipmentCardComponent {
   ) {}
 
   onAddEquipment(): void {
-    if (this.equipment.totalQuantity > 1) {
+    if (this.totalAvailable <= 0) {
+      this.snackbarService.openSnackbar({
+        type: 'error',
+        message: ['This equipment is currently unavailable.'],
+        icon: '',
+      });
+      return;
+    }
+
+    if (this.totalAvailable > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
       const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Add' })];
       this.dialogService.openUpdateQuantityStatusDialog(fields, actions).subscribe((resp) => {
         if (resp) {
           let quantity = Math.min(
             Math.max(parseInt(resp.quantity, 10) || 1, 1),
-            this.equipment.totalQuantity,
+            this.totalAvailable,
           );
           const addedEqmnt: IAddedEquipment = {
             equipment: this.equipment,
@@ -59,7 +68,7 @@ export class EquipmentCardComponent {
                 quantity: quantity,
                 condition: 'functional',
                 status: 'requested',
-                updatedBy: ''
+                updatedBy: '',
               },
             ],
           };
@@ -75,7 +84,7 @@ export class EquipmentCardComponent {
             quantity: 1,
             condition: 'functional',
             status: 'requested',
-            updatedBy: ''
+            updatedBy: '',
           },
         ],
       };
@@ -84,12 +93,6 @@ export class EquipmentCardComponent {
   }
 
   addEquipment(equipment: IAddedEquipment) {
-    // this.borrowService.isEquipmentRequested(addedEqmnt._id).subscribe({
-    //   next: (resp) => this.addequipment.emit(addedEqmnt),
-    //   error: (err) =>
-    //     this.snackbarService.openSnackbar({ type: 'error', message: [err.message], icon: '' }),
-    // });
-
     this.equipmentService.getStatus(equipment.equipment._id).subscribe({
       next: (resp) => {
         const totalBorrowed = resp.data.reduce((acc, curr) => {
@@ -115,5 +118,20 @@ export class EquipmentCardComponent {
   get image() {
     const img = this.equipment.images[0]?.thumbnail;
     return img ? img : this.default_img;
+  }
+
+  get totalAvailable() {
+    const totalQuantity = this.equipment.totalQuantity;
+    const totalBorrowed = this.equipment.accumulatedStatus.reduce((acc, curr) => {
+      if (IN_CIRCULATION_STATUS.includes(curr.status)) {
+        return acc + curr.quantity;
+      }
+      return acc;
+    }, 0);
+    return totalQuantity - totalBorrowed;
+  }
+
+  get availability() {
+    return this.totalAvailable > 0 ? this.totalAvailable + ' Available' : 'Unavailable';
   }
 }

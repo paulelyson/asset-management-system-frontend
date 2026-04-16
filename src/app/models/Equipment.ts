@@ -1,3 +1,4 @@
+import { BorrowedEquipmentTransaction } from "./BorrowedEquipment";
 import { Department } from "./User";
 
 export type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
@@ -47,4 +48,5 @@ export interface IEquipment {
   availability: EquipmentAvailability;
   conditionAndQuantity: IConditionAndQuantity[];
   dis: boolean;
+  accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
 }

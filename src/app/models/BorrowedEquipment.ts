@@ -6,7 +6,7 @@ import User, { Department, IUser } from './User';
 export type BorrowedEquipmentStatusType =
   | 'requested'
   | 'instructor_approved'
-  | 'faculty_rejected'
+  | 'instructor_rejected'
   | 'oic_approved'
   | 'oic_rejected'
   | 'released'
@@ -28,7 +28,7 @@ export const BORROWED_EQUIPMENT_PURPOSE: BorrowedEquipmentPurpose[] = [
 export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'requested',
   'instructor_approved',
-  'faculty_rejected',
+  'instructor_rejected',
   'oic_approved',
   'oic_rejected',
   'released',
@@ -45,7 +45,7 @@ export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested'
 export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
   quantity: number;
   condition: string;
-  status: string;
+  status: BorrowedEquipmentStatusType;
   updatedBy: string;
   remarks?: string;
 }
