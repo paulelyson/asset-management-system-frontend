@@ -131,7 +131,10 @@ export class BorrowedEquipmentComponent implements OnInit {
     }
     // view
     else if (action == 'Transactions') {
-      this.onDisplayTransactions(borrowedEquipment.transactions);
+      const transactions = borrowedEquipment.transactions.sort((a, b) => {
+        return new Date(b.createdAt as Date).getTime() - new Date(a.createdAt as Date).getTime();
+      });
+      this.onDisplayTransactions(transactions);
     }
   }
 

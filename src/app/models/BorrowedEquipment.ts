@@ -75,6 +75,8 @@ export interface BorrowedEquipmentPayload {
   borrower: string;
   purpose: BorrowedEquipmentPurpose;
   courseOffering: string;
+  instructor: string;
+  department: string;
   dateOfUse: {
     start: Date | string;
     end: Date | string;

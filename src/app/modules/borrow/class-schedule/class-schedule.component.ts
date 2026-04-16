@@ -105,8 +105,9 @@ export class ClassScheduleComponent implements OnInit {
         end: concatDateAndTime(endDate, endTime),
       },
       borrowedEquipment: [],
+      instructor: this.courseOffer?.instructor._id ?? '',
+      department: this.courseOffer?.course?.department?._id ?? '',
     };
-    console.log('on submit', payload);
     if (this.classScheduleForm.invalid) {
       const config: ISnackBarConfig = {
         type: 'error',

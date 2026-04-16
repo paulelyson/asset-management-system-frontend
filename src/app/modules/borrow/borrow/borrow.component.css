@@ -8,6 +8,7 @@
 }
 
 .equipment-wrapper {
+  justify-content: center;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;

@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
+import { DisplayNamePipe } from '../pipes/displayname.pipe';
 
 interface ApiResponse {
   data: BorrowedEquipment[];
@@ -28,6 +29,7 @@ export class BorrowService {
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
+    private displayNamePipe: DisplayNamePipe,
   ) {}
 
   createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
@@ -64,24 +66,9 @@ export class BorrowService {
     );
   }
 
-  // getProgressLogs(borrowId: string, equipment: string): Observable<IBorrowedEquipmentHistory[]> {
-  //   let params = new HttpParams();
-  //   params = params.append('borrowId', borrowId ?? '');
-  //   params = params.append('equipment', equipment ?? '');
-  //   return this.http
-  //     .get<ProgressLogsApiResponse>(environment.api_url + '/api/borrowequipment/history', {
-  //       params,
-  //       headers,
-  //     })
-  //     .pipe(
-  //       map((resp) => resp.data),
-  //       catchError(this.handleError),
-  //     );
-  // }
-
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
     const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
-    const course = borrowedEquipment.courseOffering.code;
+    const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
 

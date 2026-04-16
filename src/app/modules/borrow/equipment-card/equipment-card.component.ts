@@ -76,6 +76,12 @@ export class EquipmentCardComponent {
             ],
           };
           this.addEquipment(addedEqmnt);
+
+          this.snackbarService.openSnackbar({
+            type: 'success',
+            message: ['Equipment added to the list.'],
+            icon: '',
+          });
         }
       });
     } else {
@@ -91,6 +97,12 @@ export class EquipmentCardComponent {
         ],
       };
       this.addEquipment(addedEqmnt);
+
+      this.snackbarService.openSnackbar({
+        type: 'success',
+        message: ['Equipment added to the list.'],
+        icon: '',
+      });
     }
   }
 
@@ -104,7 +116,9 @@ export class EquipmentCardComponent {
         } else {
           this.snackbarService.openSnackbar({
             type: 'error',
-            message: ['This equipment is already unavailable. Refesh the page to get the updated availability.'],
+            message: [
+              'This equipment is already unavailable. Refesh the page to get the updated availability.',
+            ],
             icon: '',
           });
         }

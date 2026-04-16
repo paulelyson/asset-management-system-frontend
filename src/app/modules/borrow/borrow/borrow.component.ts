@@ -84,7 +84,6 @@ export class BorrowComponent implements OnInit {
   }
 
   onSubmitRequest(event: BorrowedEquipmentPayload): void {
-
     event.borrowedEquipment = this.addedEquipment.map((eqpmnt) => ({
       equipment: eqpmnt.equipment._id,
       quantity: eqpmnt.quantity,
