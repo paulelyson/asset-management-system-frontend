@@ -19,6 +19,7 @@ import { IconComponent } from '../shared/icon/icon.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BorrowToolbarComponent } from './borrow-toolbar/borrow-toolbar.component';
 import { BadgeComponent } from '../shared/badge/badge.component';
+import { CourseOfferDetailCardComponent } from '../shared/course-offer-detail-card/course-offer-detail-card.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { BadgeComponent } from '../shared/badge/badge.component';
     CommonModule,
     ButtonComponent,
     IconComponent,
-    BadgeComponent
+    BadgeComponent,
+    CourseOfferDetailCardComponent
   ],
   exports: [
     ClassScheduleComponent
