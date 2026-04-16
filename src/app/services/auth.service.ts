@@ -7,7 +7,9 @@ import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 interface ApiResponse {
-  data: string;
+  data: {
+    access_token: string;
+  };
   message: string;
   success: boolean;
 }
@@ -44,8 +46,8 @@ export class AuthService {
   }
 
   login(accoundId: string, password: string) {
-    const body = { schoolId: accoundId, password };
-    return this.http.post<ApiResponse>(environment.api_url + '/api/login', body).pipe(
+    const body = { username: accoundId, password };
+    return this.http.post<ApiResponse>(environment.api_url + '/api/auth/login', body).pipe(
       map((resp) => resp.data),
       catchError(this.handleError),
     );

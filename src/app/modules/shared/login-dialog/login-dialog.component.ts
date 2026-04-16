@@ -27,7 +27,7 @@ export class LoginDialogComponent {
   login() {
     this.authService.login(this.schoolId.value, this.password.value).subscribe({
       next: (resp) => {
-        localStorage.setItem('token', resp);
+        localStorage.setItem('token', resp.access_token);
         this.router.navigate(['/borrow']);
         this.dialogRef.close('login_success');
       },
