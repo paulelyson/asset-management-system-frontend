@@ -39,6 +39,11 @@ export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'system_reset',
 ];
 
+export type BorrowedEquipmentStatusTypeAndQuantity = { 
+  status: BorrowedEquipmentStatusType;
+  quantity: number 
+};
+
 export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'instructor_approved', 'oic_approved', 'released', 'mark_returned'];
 
 

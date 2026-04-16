@@ -49,6 +49,8 @@ export class UpdateQuantityStatusDialogComponent {
   }
 
   onClicked(action: string) {
+    const quantity = this.borrowedEquipmentStatusForm.get('quantity')?.value;
+    this.borrowedEquipmentStatusForm.get('quantity')?.setValue(Number(quantity));
     if (action !== 'Cancel') {
       this.dialogRef.close(this.borrowedEquipmentStatusForm.value);
     }

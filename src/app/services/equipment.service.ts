@@ -9,12 +9,7 @@ import {
   RowDisplayActionConfig,
   RowDisplayContent,
 } from '../modules/shared/row-display/row-display.component';
-import { BorrowedEquipmentStatusType } from '../models/BorrowedEquipment';
-
-type BorrowedEquipmentStatusTypeAndQuantity = { 
-  status: BorrowedEquipmentStatusType;
-  quantity: number 
-};
+import { BorrowedEquipmentStatusType, BorrowedEquipmentStatusTypeAndQuantity } from '../models/BorrowedEquipment';
 
 
 interface ApiResponse<T> {

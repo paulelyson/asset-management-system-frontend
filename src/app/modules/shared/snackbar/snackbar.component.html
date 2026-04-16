@@ -9,6 +9,6 @@
         <li *ngFor="let message of config.message">{{ message }}</li>
       </ul>
     </div>
-    <app-icon name="close" size="md" />
+    <app-icon name="close" size="md" (iconclicked)="onClose()" />
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { MAT_SNACK_BAR_DATA, MatSnackBarModule, MatSnackBarRef } from '@angular/material/snack-bar';
 import { IconComponent } from '../icon/icon.component';
 
 type SnackBarType = 'primary' | 'success' | 'warning' | 'error' | 'dafault';
@@ -16,7 +16,7 @@ export interface ISnackBarConfig {
 
 @Component({
   selector: 'app-snackbar',
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, MatSnackBarModule],
   templateUrl: './snackbar.component.html',
   styleUrl: './snackbar.component.css',
 })
@@ -24,5 +24,13 @@ export class SnackbarComponent {
   isList: boolean = false;
   hasHeader: boolean = false;
   type = 'primary';
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public config: ISnackBarConfig) {}
+  constructor(
+    @Inject(MAT_SNACK_BAR_DATA) public config: ISnackBarConfig,
+    private snackbarRef: MatSnackBarRef<SnackbarComponent>,
+  ) {}
+
+  onClose() {
+    console.log('snackbar closedks')
+    this.snackbarRef.dismiss()
+  }
 }

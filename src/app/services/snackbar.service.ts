@@ -8,11 +8,11 @@ import { ISnackBarConfig, SnackbarComponent } from '../modules/shared/snackbar/s
 export class SnackbarService {
   constructor(private snackBar: MatSnackBar) {}
   openSnackbar(data: ISnackBarConfig) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
+    const snackbarRef = this.snackBar.openFromComponent(SnackbarComponent, {
       panelClass: ['snackbar-override'],
       data: data,
       verticalPosition: 'top',
-      duration: data.duration ?? 10 * 1000
+      duration: data.duration ?? 10 * 1000,
     });
   }
 }
