@@ -1,1 +1,18 @@
-<p>course-offer-detail-card works!</p>
+<div class="course-offer-detail-container">
+  <span>Offer Code: {{ courseOffer.code }}</span>
+  <span>
+    Course:
+    {{ courseOffer.course | displayName: 'code' : 'title' }}
+  </span>
+  <span>
+    Instructor:
+    {{ courseOffer.instructor | displayName: 'firstName' : 'lastName' }}
+  </span>
+  <span>Schedule:</span>
+  @for (sched of courseOffer.schedule; track sched) {
+    <span>
+      {{ sched | displayName: 'day' : 'startTime' }} -
+      {{ sched | displayName: 'endTime' }}
+    </span>
+  }
+</div>

@@ -6,22 +6,19 @@
       formControlName="courseOffer"
       [options]="courseOfferingAutoCompleteOptions"
     />
+    @if(courseOffer) {
+      <app-course-offer-detail-card [courseOffer]="courseOffer"></app-course-offer-detail-card>
+    }
+    <!-- Purpose -->
+    <div class="subtitle">Purpose</div>
     <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
-    <app-input label="Instructor" [value]="instructor" [readonly]="true"/>
+    <!-- Dates of Use -->
     <div class="subtitle">Start Date of Use</div>
     <app-datepicker label="Start date" formControlName="startDate"></app-datepicker>
-    <app-input label="Start Time*" inputType="time" formControlName="startTime"/>
+    <app-input label="Start Time*" inputType="time" formControlName="startTime" />
     <div class="subtitle">End Date of Use</div>
     <app-datepicker label="End date" formControlName="endDate"></app-datepicker>
-    <app-input label="End Time*" inputType="time" formControlName="endTime"/>
-    <!-- <app-datepicker
-      label="Choose date"
-      type="daterange"
-      (dateRangeChanged)="onClassDateChanged($event)"
-      [initialDateRange]="initialSchedule"
-    />
-    <app-input label="Start Period*" inputType="time" formControlName="timeOfUseStart" />
-    <app-input label="End Period*" inputType="time" formControlName="timeOfUseEnd" /> -->
+    <app-input label="End Time*" inputType="time" formControlName="endTime" />
   </div>
   <div class="action-wrapper">
     <app-button btnType="submit" width="width-filled" type="accent">Submit Request</app-button>

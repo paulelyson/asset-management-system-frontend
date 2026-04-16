@@ -25,7 +25,11 @@ import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.comp
 import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
-import { concatDateAndTime, convertToAmericanFormat, get24HourTime } from '../../../utils/date.util';
+import {
+  concatDateAndTime,
+  convertToAmericanFormat,
+  get24HourTime,
+} from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
 
@@ -60,7 +64,7 @@ export class ClassScheduleComponent implements OnInit {
       startDate: [this.dateNow, Validators.required],
       endDate: [this.dateNow, Validators.required],
       startTime: [get24HourTime(this.dateNow.toISOString(), true), Validators.required],
-      endTime: [get24HourTime(this.dateNow.toISOString(), true, 1) , Validators.required],
+      endTime: [get24HourTime(this.dateNow.toISOString(), true, 1), Validators.required],
     });
   }
 
@@ -68,6 +72,11 @@ export class ClassScheduleComponent implements OnInit {
     this.courseOfferingService.getCourseOfferings().subscribe({
       next: (resp) => this.courseOffering.set(resp),
     });
+  }
+
+  get courseOffer() {
+    const courseOfferId = this.classScheduleForm.controls['courseOffer'].value;
+    return this.courseOffering().find((offer) => offer._id === courseOfferId);
   }
 
   get courseOfferingAutoCompleteOptions() {
@@ -79,14 +88,6 @@ export class ClassScheduleComponent implements OnInit {
 
   get purposeOptions() {
     return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
-  }
-
-  get instructor() {
-    let display: string = '';
-    const courseOfferId = this.classScheduleForm.controls['courseOffer'].value;
-    const found = this.courseOffering().find((c) => c._id == courseOfferId);
-    if (found) display = getDisplayName(found.instructor);
-    return display;
   }
 
   onSubmit() {

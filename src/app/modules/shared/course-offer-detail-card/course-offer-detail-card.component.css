@@ -1,0 +1,10 @@
+.course-offer-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #cbe7d2;
+  color: #324f2f;
+	font-size: 10px;
+}
