@@ -1,18 +1,13 @@
 import {
   Component,
-  computed,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  Signal,
   signal,
-  SimpleChanges,
   WritableSignal,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IDateRange } from '../../shared/datepicker/datepicker.component';
 import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
@@ -20,18 +15,15 @@ import {
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 import { Department, DEPARTMENTS, IUser } from '../../../models/User';
-import { UserService } from '../../../services/user.service';
-import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
-import { getDisplayName } from '../../../utils/string.util';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
 import {
   concatDateAndTime,
-  convertToAmericanFormat,
   get24HourTime,
 } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
+import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 
 @Component({
   selector: 'app-class-schedule',
@@ -56,10 +48,12 @@ export class ClassScheduleComponent implements OnInit {
     private snackBarService: SnackbarService,
     private courseOfferingService: CourseOfferingService,
     private autocompleteService: AutocompleteService,
+    private displayNamePipe: DisplayNamePipe,
+    
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
-      purpose: ['class_use', Validators.required],
+      purpose: ['', Validators.required],
       courseOffer: ['', Validators.required],
       startDate: [this.dateNow, Validators.required],
       endDate: [this.dateNow, Validators.required],
@@ -80,10 +74,13 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   get courseOfferingAutoCompleteOptions() {
-    return this.courseOffering().map((course) => ({
-      view: course.course.title,
-      value: course._id,
-    }));
+    
+    return this.courseOffering().map((course) => {
+      return {
+        view: course.code + ' - ' + this.displayNamePipe.transform(course.course, 'code', 'title'),
+        value: course._id,
+      };
+    });
   }
 
   get purposeOptions() {
