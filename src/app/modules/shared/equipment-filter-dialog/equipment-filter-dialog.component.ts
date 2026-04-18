@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { ButtonComponent } from '../button/button.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
@@ -9,6 +9,8 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { forkJoin, map, of } from 'rxjs';
 import { DEPARTMENTS } from '../../../models/User';
+import { DepartmentService } from '../../../services/department.service';
+import { IDepartment } from '../../../models/Department';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
@@ -16,22 +18,21 @@ import { DEPARTMENTS } from '../../../models/User';
   templateUrl: './equipment-filter-dialog.component.html',
   styleUrl: './equipment-filter-dialog.component.css',
 })
-export class EquipmentFilterDialogComponent implements OnInit {
+export class EquipmentFilterDialogComponent implements OnInit, OnChanges {
   filterForm: FormGroup;
   url: string = '';
-  equipment_types: IAutocompleteOption[];
   categories: IAutocompleteOption[] = [];
   brands: IAutocompleteOption[] = [];
   equipmentTypes: IAutocompleteOption[] = [];
   departments: IAutocompleteOption[] = [];
-  
 
   constructor(
     public dialogRef: MatDialogRef<EquipmentFilterDialogComponent>,
     private fb: FormBuilder,
     private router: Router,
     private equipmentService: EquipmentService,
-    private autocompleteService: AutocompleteService
+    private autocompleteService: AutocompleteService,
+    private departmentService: DepartmentService,
   ) {
     this.url = this.router.url.split('?')[0];
 
@@ -42,34 +43,27 @@ export class EquipmentFilterDialogComponent implements OnInit {
       equipmentType: [''],
       location: [''],
     });
-
-    this.equipment_types = this.autocompleteService.mapIntoAutocompleteOption([
-      'bar',
-      'foo',
-      'waa',
-    ]);
   }
+ 
 
   ngOnInit(): void {
     forkJoin({
-    categories: this.equipmentService.getDistinctValues('categories', 'computer_engineering'),
-    brands: this.equipmentService.getDistinctValues('brand', 'computer_engineering'),
-    equipmentTypes: this.equipmentService.getDistinctValues('equipmentType', 'computer_engineering'),
-    departments: of(DEPARTMENTS)
-  })
-    .pipe(map(({ categories, brands, equipmentTypes, departments }) => ({
-        categories: this.autocompleteService.mapIntoAutocompleteOption(categories),
-        brands: this.autocompleteService.mapIntoAutocompleteOption(brands),
-        equipmentTypes: this.autocompleteService.mapIntoAutocompleteOption(equipmentTypes),
-        departments: this.autocompleteService.mapIntoAutocompleteOption(departments),
-      }))
-    )
-    .subscribe(result => {
-      this.categories = result.categories;
-      this.brands = result.brands;
-      this.equipmentTypes = result.equipmentTypes;
-      this.departments = result.departments
-    });
+      departments: this.departmentService.getDepartments(),
+    })
+      .pipe(
+        map(({ departments }) => ({
+          departments: departments.data.map((dept) => ({ value: dept._id, view: dept.name })),
+        })),
+      )
+      .subscribe((result) => {
+        this.departments = result.departments;
+      });
+  }
+
+   ngOnChanges(changes: SimpleChanges): void {
+    if(changes['department']) {
+
+    }
   }
 
   navigate() {
