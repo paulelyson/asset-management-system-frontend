@@ -7,7 +7,6 @@
     [formControl]="myControl"
     [matAutocomplete]="auto"
     (input)="onInput($event)"
-    (focus)="onFocus()"
   />
   <mat-autocomplete
     [displayWith]="displayFn"
@@ -16,7 +15,7 @@
     (optionSelected)="onOptionSelected($event)"
   >
     @for (option of filteredOptions | async; track option.value) {
-    <mat-option [value]="option">{{ option.view }}</mat-option>
+      <mat-option [value]="option">{{ option.view }}</mat-option>
     }
   </mat-autocomplete>
 </mat-form-field>

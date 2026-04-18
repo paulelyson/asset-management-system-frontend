@@ -53,7 +53,7 @@ export class ClassScheduleComponent implements OnInit {
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
-      purpose: ['', Validators.required],
+      purpose: ['class_use', Validators.required],
       courseOffer: ['', Validators.required],
       startDate: [this.dateNow, Validators.required],
       endDate: [this.dateNow, Validators.required],

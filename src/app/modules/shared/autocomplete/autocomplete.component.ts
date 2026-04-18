@@ -8,6 +8,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -19,6 +20,7 @@ import {
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import {
   FloatLabelType,
@@ -53,15 +55,16 @@ export interface IAutocompleteOption {
     },
   ],
 })
-export class AutocompleteComponent implements ControlValueAccessor {
+export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
   @Input() label: string = '';
   @Input() options: IAutocompleteOption[] = [];
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() placeholder: string = '';
 
-  myControl = new FormControl('');
+  myControl = new FormControl<IAutocompleteOption | string | null>(null);
   filteredOptions!: Observable<IAutocompleteOption[]>;
+  private pendingValue: any = null; // store raw value if options not ready yet
   @Output() optionselected: EventEmitter<string> = new EventEmitter();
 
   // accessor
@@ -72,17 +75,30 @@ export class AutocompleteComponent implements ControlValueAccessor {
 
   constructor() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
+      startWith(this.myControl.value),
       map((value: string | IAutocompleteOption | null) => {
-        const val = typeof value === 'string' ? value : value?.view;
+        const val = typeof value === 'string' ? value : (value?.view ?? '');
         return this._filter(val);
       }),
     );
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['options'] && this.pendingValue !== null) {
+      // options just arrived, now we can match
+      this._setValueFromRaw(this.pendingValue);
+    }
+  }
+
   writeValue(value: any): void {
     this.value = value;
-    this.myControl.setValue(this.value ?? '', { emitEvent: true });
+    if (this.options.length) {
+      this._setValueFromRaw(value);
+    } else {
+      // options not loaded yet, hold the value
+      this.pendingValue = value;
+      this.myControl.setValue(null, { emitEvent: false });
+    }
   }
   registerOnChange(fn: any): void {
     this.changed = fn;
@@ -95,17 +111,16 @@ export class AutocompleteComponent implements ControlValueAccessor {
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    const selected =  event.option.value;
+    const selected = event.option.value;
     this.changed(selected.value);
     this.optionselected.emit(selected.value as string);
   }
 
   onInput(event: Event) {
-    this.changed(this.myControl.value);
-  }
-
-  onFocus() {
-    this.myControl.setValue(this.myControl.value ?? '', { emitEvent: true });
+    const input = (event.target as HTMLInputElement).value;
+    if (!input) {
+      this.changed(null); // clear the form control value if input is empty
+    }
   }
 
   displayFn = (option?: IAutocompleteOption): string => {
@@ -115,5 +130,11 @@ export class AutocompleteComponent implements ControlValueAccessor {
   private _filter(value?: string): IAutocompleteOption[] {
     const filterValue = value?.toLowerCase() ?? '';
     return this.options.filter((option) => option.view.toLowerCase().includes(filterValue));
+  }
+
+  private _setValueFromRaw(raw: any): void {
+    const matched = this.options.find((opt) => opt.value === raw);
+    this.myControl.setValue(matched ?? null, { emitEvent: false });
+    this.pendingValue = null;
   }
 }
