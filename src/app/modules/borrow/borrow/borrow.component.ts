@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
@@ -16,6 +16,8 @@ import { Department } from '../../../models/User';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { FilterService } from '../../../services/filter.service';
 import { SideMenuService } from '../../../services/side-menu.service';
+import { IDepartment } from '../../../models/Department';
+import { DepartmentService } from '../../../services/department.service';
 
 @Component({
   selector: 'app-borrow',
@@ -26,12 +28,17 @@ import { SideMenuService } from '../../../services/side-menu.service';
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = false;
   disable_showmore: boolean = false;
-  equipmentFilter: EquipmentFilter;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
   resetForm: WritableSignal<boolean> = signal(false);
   user: TokenData;
-  filterDisplay: Record<string, any>[] = [];
+  departments: WritableSignal<IDepartment[]> = signal([]);
+
+  equipmentFilter = signal<EquipmentFilter>(new EquipmentFilter());
+  filterDisplay = computed(() => {
+    const excluded = ['page'];
+    return this.filterService.getFilterDisplay(this.equipmentFilter(), excluded, this.departments());
+  });
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,23 +49,26 @@ export class BorrowComponent implements OnInit {
     private router: Router,
     private filterService: FilterService,
     private sideMenuService: SideMenuService,
+    private departmentService: DepartmentService,
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = new EquipmentFilter({
-      department: this.user.roles[0].department._id,
-      borrow: true,
-    });
   }
 
   ngOnInit(): void {
+    this.departmentService.getDepartments().subscribe({
+      next: (resp) => {
+        this.departments.set(resp.data);
+        this.filterDisplay;
+      },
+    });
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
   getEquipment(): void {
-    if (this.equipmentFilter.page == 1) {
+    if (this.equipmentFilter().page == 1) {
       this.equipment.set([]);
     }
-    this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
+    this.equipmentService.getEquipment(this.equipmentFilter()).subscribe({
       next: (resp) => {
         this.disable_showmore = !resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
@@ -68,7 +78,7 @@ export class BorrowComponent implements OnInit {
 
   loadMoreEquipment() {
     const navigationExtras: NavigationExtras = {
-      queryParams: { page: this.equipmentFilter.page + 1 },
+      queryParams: { page: this.equipmentFilter().page + 1 },
       queryParamsHandling: 'merge',
     };
     this.router.navigate(['/borrow'], navigationExtras);
@@ -80,7 +90,9 @@ export class BorrowComponent implements OnInit {
   }
 
   onRemoveEquipment(equipment: IAddedEquipment) {
-    this.addedEquipment = this.addedEquipment.filter((eqpmnt) => eqpmnt.equipment !== equipment.equipment);
+    this.addedEquipment = this.addedEquipment.filter(
+      (eqpmnt) => eqpmnt.equipment !== equipment.equipment,
+    );
   }
 
   onSubmitRequest(event: BorrowedEquipmentPayload): void {
@@ -89,7 +101,6 @@ export class BorrowComponent implements OnInit {
       quantity: eqpmnt.quantity,
       transactions: eqpmnt.transactions,
     }));
-
 
     console.log('payload', event);
 
@@ -117,18 +128,15 @@ export class BorrowComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
-    this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.equipmentFilter.search = params['search'] ?? '';
-    this.equipmentFilter.brand = params['brand'];
-    this.equipmentFilter.categories = params['categories'];
-    this.equipmentFilter.equipmentType = params['equipmentType'];
-    this.equipmentFilter.department = params['department'] ?? this.equipmentFilter.department;
-    this.equipmentFilter.borrow = Boolean(params['borrow']) ?? true;
-    this.filterDisplay = this.filterService.getFilterDisplay(
-      this.equipmentFilter,
-      ['page'],
-      this.user,
-    );
+    this.equipmentFilter.set({
+      ... this.equipmentFilter(),
+      page: params['page'] ? parseInt(params['page']) : 1,
+      search: params['search'] ?? '',
+      brand: params['brand'] ?? undefined,
+      categories: params['categories'] ?? undefined,
+      equipmentType: params['equipmentType'] ?? undefined,
+      department: params['department'] ?? this.user.roles[0].department._id,
+    });
     this.getEquipment();
   }
 }

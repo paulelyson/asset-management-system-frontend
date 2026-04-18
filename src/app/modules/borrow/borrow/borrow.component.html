@@ -1,7 +1,7 @@
 <app-title-section>Borrow Equipment</app-title-section>
 <app-borrow-toolbar
   (toggleBorrowForm)="onToggleBorrowForm($event)"
-  [filters]="filterDisplay"
+  [filters]="filterDisplay()"
 />
 <mat-drawer-container>
   <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">
@@ -14,7 +14,7 @@
     </div>
     <app-class-schedule
       [user]="user"
-      [department]="equipmentFilter.department"
+      [department]="equipmentFilter().department"
       [resetForm]="resetForm()"
       (onFormSubmit)="onSubmitRequest($event)"
     />
