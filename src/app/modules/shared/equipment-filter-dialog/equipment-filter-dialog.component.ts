@@ -30,8 +30,6 @@ export class EquipmentFilterDialogComponent implements OnInit, OnChanges {
     public dialogRef: MatDialogRef<EquipmentFilterDialogComponent>,
     private fb: FormBuilder,
     private router: Router,
-    private equipmentService: EquipmentService,
-    private autocompleteService: AutocompleteService,
     private departmentService: DepartmentService,
   ) {
     this.url = this.router.url.split('?')[0];

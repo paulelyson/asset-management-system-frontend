@@ -1,21 +1,24 @@
 <section id="toolbar">
   <div class="toolbar-container">
     <div class="filter-badge-wrapper">
-      @for(filter of filters; track filter['field']) {
-      <app-badge size="md" [hasCloseIcon]="true" type="default" (closed)="onBadgeClosed(filter)">
-        {{ filter['value'] }}
-      </app-badge>
+      @for (filter of filters(); track filter['field']) {
+        <app-badge
+          size="md"
+          [hasCloseIcon]="filter['field'] !== 'department'"
+          type="default"
+          (closed)="onBadgeClosed(filter)"
+        >
+          {{ filter['value'] }}
+        </app-badge>
       }
     </div>
     <span class="spacer"></span>
-    @if(filters.length) {
-    <app-button variant="link" icon="history" (btnclicked)="clearFilter()"> Clear Filters </app-button>
+    @if (showClearFilter()) {
+      <app-button variant="link" icon="history" (btnclicked)="clearFilter()">
+        Clear Filters
+      </app-button>
     }
-    <app-button
-      variant="link"
-      icon="assignment"
-      (btnclicked)="onToggleBorrowForm()"
-    >
+    <app-button variant="link" icon="assignment" (btnclicked)="onToggleBorrowForm()">
       Open Borrow Form
     </app-button>
     <app-button variant="link" icon="filter_list" (btnclicked)="openFilterDialog()">

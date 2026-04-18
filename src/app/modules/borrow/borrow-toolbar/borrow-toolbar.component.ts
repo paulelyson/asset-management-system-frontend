@@ -1,9 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Input,
+  Output,
+  Signal,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { SideMenuService } from '../../../services/side-menu.service';
+import { FilterDisplay } from '../../../models/EquipmentFilter';
 
 @Component({
   selector: 'app-borrow-toolbar',
@@ -12,11 +23,12 @@ import { SideMenuService } from '../../../services/side-menu.service';
   standalone: false,
 })
 export class BorrowToolbarComponent {
-  @Input() filters: Record<string, string>[] = [];
+  filters = input<FilterDisplay[]>([]);
   @Output() toggleBorrowForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   searchControl = new FormControl('');
   url: string = '';
+  showClearFilter = computed(() => this.filters().some((x) => x['field'] !== 'department'));
 
   constructor(
     private dialogService: DialogService,
@@ -34,7 +46,7 @@ export class BorrowToolbarComponent {
     this.router.navigate([this.url]);
   }
 
-  onBadgeClosed(filter: Record<string, string>): void {
+  onBadgeClosed(filter: FilterDisplay): void {
     let navigationExtras: NavigationExtras = {
       queryParams: { [filter['field']]: null },
       queryParamsHandling: 'merge',

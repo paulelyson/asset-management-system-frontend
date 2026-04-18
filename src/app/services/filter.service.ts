@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import User from '../models/User';
 import { IDepartment } from '../models/Department';
+import { FilterDisplay } from '../models/EquipmentFilter';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class FilterService {
     filter: Record<string, any>,
     excludeFields: string[],
     departments: IDepartment[],
-  ) {
+  ): FilterDisplay[] {
     return Object.entries(filter)
       .map(([key, val]) => {
         if (key === 'department' && val) {

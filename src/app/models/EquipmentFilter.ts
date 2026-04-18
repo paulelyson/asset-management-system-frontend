@@ -10,6 +10,11 @@ export interface IEquipmentFilter {
   borrow: boolean;
 }
 
+export interface FilterDisplay {
+  field: string;
+  value: any;
+}
+
 export class EquipmentFilter implements IEquipmentFilter {
   page: number;
   department: string;

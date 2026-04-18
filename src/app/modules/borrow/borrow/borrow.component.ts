@@ -2,7 +2,7 @@ import { Component, computed, OnInit, signal, WritableSignal } from '@angular/co
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
-import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { EquipmentFilter, FilterDisplay, IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
@@ -35,7 +35,7 @@ export class BorrowComponent implements OnInit {
   departments: WritableSignal<IDepartment[]> = signal([]);
 
   equipmentFilter = signal<EquipmentFilter>(new EquipmentFilter());
-  filterDisplay = computed(() => {
+  filterDisplay = computed((): FilterDisplay[] => {
     const excluded = ['page'];
     return this.filterService.getFilterDisplay(this.equipmentFilter(), excluded, this.departments());
   });

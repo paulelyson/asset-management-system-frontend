@@ -108,7 +108,7 @@ export class InventoryComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
-    this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);
+    // this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);
     this.getEquipment();
   }
 }
