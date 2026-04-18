@@ -44,8 +44,10 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  openEquipmentFilterDialog(): void {
-    const dialogRef = this.dialog.open(EquipmentFilterDialogComponent, {});
+  openEquipmentFilterDialog(department: string): void {
+    const dialogRef = this.dialog.open(EquipmentFilterDialogComponent, {
+      data: { department },
+    });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The filter dialog was closed');
     });

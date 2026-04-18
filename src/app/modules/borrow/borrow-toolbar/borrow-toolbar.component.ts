@@ -24,6 +24,7 @@ import { FilterDisplay } from '../../../models/EquipmentFilter';
 })
 export class BorrowToolbarComponent {
   filters = input<FilterDisplay[]>([]);
+  @Input() department: string = '';
   @Output() toggleBorrowForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   searchControl = new FormControl('');
@@ -39,7 +40,7 @@ export class BorrowToolbarComponent {
   }
 
   openFilterDialog() {
-    this.dialogService.openEquipmentFilterDialog();
+    this.dialogService.openEquipmentFilterDialog(this.department);
   }
 
   clearFilter(): void {

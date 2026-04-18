@@ -2,6 +2,7 @@
 <app-borrow-toolbar
   (toggleBorrowForm)="onToggleBorrowForm($event)"
   [filters]="filterDisplay()"
+  [department]="department()"
 />
 <mat-drawer-container>
   <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">

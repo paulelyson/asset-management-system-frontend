@@ -1,16 +1,17 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { ButtonComponent } from '../button/button.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EquipmentService } from '../../../services/equipment.service';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { forkJoin, map, of } from 'rxjs';
 import { DEPARTMENTS } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
 import { IDepartment } from '../../../models/Department';
+import { IQuantityStatusDialogConfig } from '../update-quantity-status-dialog/update-quantity-status-dialog.component';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
@@ -18,7 +19,7 @@ import { IDepartment } from '../../../models/Department';
   templateUrl: './equipment-filter-dialog.component.html',
   styleUrl: './equipment-filter-dialog.component.css',
 })
-export class EquipmentFilterDialogComponent implements OnInit, OnChanges {
+export class EquipmentFilterDialogComponent implements OnInit {
   filterForm: FormGroup;
   url: string = '';
   categories: IAutocompleteOption[] = [];
@@ -31,6 +32,8 @@ export class EquipmentFilterDialogComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private router: Router,
     private departmentService: DepartmentService,
+    private equipmentService: EquipmentService,
+    @Inject(MAT_DIALOG_DATA) public data: { department: string },
   ) {
     this.url = this.router.url.split('?')[0];
 
@@ -42,26 +45,22 @@ export class EquipmentFilterDialogComponent implements OnInit, OnChanges {
       location: [''],
     });
   }
- 
 
   ngOnInit(): void {
     forkJoin({
       departments: this.departmentService.getDepartments(),
+      brands: this.equipmentService.getDistinct('brand', this.data.department),
     })
       .pipe(
-        map(({ departments }) => ({
+        map(({ departments, brands }) => ({
           departments: departments.data.map((dept) => ({ value: dept._id, view: dept.name })),
+          brands: brands.map((brand) => ({ value: brand, view: brand })),
         })),
       )
       .subscribe((result) => {
         this.departments = result.departments;
+        this.brands = result.brands;
       });
-  }
-
-   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['department']) {
-
-    }
   }
 
   navigate() {

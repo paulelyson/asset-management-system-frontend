@@ -9,9 +9,11 @@ import {
   RowDisplayActionConfig,
   RowDisplayContent,
 } from '../modules/shared/row-display/row-display.component';
-import { BorrowedEquipmentStatusType, BorrowedEquipmentStatusTypeAndQuantity } from '../models/BorrowedEquipment';
+import {
+  BorrowedEquipmentStatusType,
+  BorrowedEquipmentStatusTypeAndQuantity,
+} from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';
-
 
 @Injectable({
   providedIn: 'root',
@@ -20,35 +22,35 @@ export class EquipmentService {
   constructor(private http: HttpClient) {}
 
   getEquipment(filter: EquipmentFilter) {
-    console.log({filter});
+    console.log({ filter });
     let params = new HttpParams({
       fromObject: {
         page: filter.page,
         search: filter.search,
         department: filter.department,
-        // brand: filter.brand ?? '',
+        brand: filter.brand ?? '',
         // categories: filter.categories ?? '',
         // equipmentType: filter.equipmentType ?? '',
         // borrow: filter.borrow ?? '',
       },
     });
-    return this.http.get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params }).pipe(
-      catchError(this.handleError),
-    );
+    return this.http
+      .get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params })
+      .pipe(catchError(this.handleError));
   }
 
   getStatus(equipmentId: string) {
-    return this.http.get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`).pipe(
-      catchError(this.handleError),
-    );
+    return this.http
+      .get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`)
+      .pipe(catchError(this.handleError));
   }
 
-  getDistinctValues(field: string, department: Department): Observable<string[]> {
+  getDistinct(field: string, department?: string): Observable<string[]> {
     let params = new HttpParams();
-    params = params.append('field', field);
-    params = params.append('department', department);
+    department && (params = params.append('department', department));
+    
     return this.http
-      .get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct', { params })
+      .get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct/' + field, { params })
       .pipe(
         map((resp) => resp.data as string[]),
         catchError(this.handleError),
@@ -57,7 +59,9 @@ export class EquipmentService {
 
   updateEquipment(equipment: IEquipment) {
     return this.http
-      .patch<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
+      .patch<
+        ApiResponse<IEquipment>
+      >(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),

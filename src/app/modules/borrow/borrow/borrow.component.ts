@@ -40,6 +40,10 @@ export class BorrowComponent implements OnInit {
     return this.filterService.getFilterDisplay(this.equipmentFilter(), excluded, this.departments());
   });
 
+  department = computed((): string => {
+    return this.equipmentFilter().department;
+  });
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private equipmentService: EquipmentService,
