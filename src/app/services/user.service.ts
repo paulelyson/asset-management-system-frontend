@@ -3,12 +3,7 @@ import { Injectable } from '@angular/core';
 import { IUser } from '../models/User';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-interface ApiResponse {
-  data: IUser[];
-  message: string;
-  success: boolean;
-}
+import { ApiResponse } from '../models/ApiResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +12,9 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<IUser[]> {
-    return this.http.get<ApiResponse>(environment.api_url + '/api/user', {}).pipe(
+    return this.http.get<ApiResponse<IUser[]>>(environment.api_url + '/api/user', {}).pipe(
       map((resp) => resp.data),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 

@@ -10,17 +10,8 @@ import {
   RowDisplayContent,
 } from '../modules/shared/row-display/row-display.component';
 import { BorrowedEquipmentStatusType, BorrowedEquipmentStatusTypeAndQuantity } from '../models/BorrowedEquipment';
+import { ApiResponse } from '../models/ApiResponse';
 
-
-interface ApiResponse<T> {
-  data: T; // IEquipment[] | string[] | IConditionAndQuantity[];
-  message: string;
-  success: boolean;
-  page: number;
-  limit: number;
-  total: number;
-  hasNextPage: boolean;
-}
 
 @Injectable({
   providedIn: 'root',

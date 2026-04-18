@@ -5,14 +5,9 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ApiResponse } from '../models/ApiResponse';
 
-interface ApiResponse {
-  data: {
-    access_token: string;
-  };
-  message: string;
-  success: boolean;
-}
+type AccessToken = { access_token: string };
 
 export interface TokenData extends IUser {
   name: string;
@@ -36,18 +31,18 @@ export class AuthService {
   }
 
   isDepartmentChair(user: IUser, deptCode: string) {
-    const found = user.roles.find(u=> u.role == 'chairman' && u.department.code == deptCode);
-    return !!found
+    const found = user.roles.find((u) => u.role == 'chairman' && u.department.code == deptCode);
+    return !!found;
   }
 
   isDepartmentOIC(user: IUser, deptCode: string) {
-      const found = user.roles.find(u=> u.role == 'chairman' && u.department.code == deptCode);
-    return !!found
+    const found = user.roles.find((u) => u.role == 'chairman' && u.department.code == deptCode);
+    return !!found;
   }
 
   login(accoundId: string, password: string) {
     const body = { username: accoundId, password };
-    return this.http.post<ApiResponse>(environment.api_url + '/api/auth/login', body).pipe(
+    return this.http.post<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/login', body).pipe(
       map((resp) => resp.data),
       catchError(this.handleError),
     );

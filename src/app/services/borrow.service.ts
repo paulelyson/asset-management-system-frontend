@@ -15,12 +15,7 @@ import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
-
-interface ApiResponse {
-  data: BorrowedEquipment[];
-  message: string;
-  success: boolean;
-}
+import { ApiResponse } from '../models/ApiResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -32,25 +27,17 @@ export class BorrowService {
     private displayNamePipe: DisplayNamePipe,
   ) {}
 
-  createBorrowedEquipment(body: BorrowedEquipmentPayload): Observable<ApiResponse> {
+  createBorrowedEquipment(body: BorrowedEquipmentPayload) {
     return this.http
-      .post<ApiResponse>(environment.api_url + '/api/borrowed-equipment', body)
+      .post<ApiResponse<BorrowedEquipment>>(environment.api_url + '/api/borrowed-equipment', body)
       .pipe(catchError(this.handleError));
   }
 
   addTransaction(body: BorrowedEquipmentTransaction, borrowId: string, equipmentId: string) {
     return this.http
-      .patch<ApiResponse>(
-        environment.api_url +
-          `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`,
-        body,
-      )
-      .pipe(catchError(this.handleError));
-  }
-
-  isEquipmentRequested(equipmentid: string) {
-    return this.http
-      .get<ApiResponse>(environment.api_url + '/api/borrowequipment/isrequested/' + equipmentid)
+      .patch<
+        ApiResponse<BorrowedEquipmentTransaction>
+      >(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body)
       .pipe(catchError(this.handleError));
   }
 
@@ -60,7 +47,7 @@ export class BorrowService {
     params = params.append('search', filter.search ?? '');
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
-    return this.http.get<ApiResponse>(environment.api_url + '/api/borrowed-equipment').pipe(
+    return this.http.get<ApiResponse<BorrowedEquipment[]>>(environment.api_url + '/api/borrowed-equipment').pipe(
       map((resp) => resp.data),
       catchError(this.handleError),
     );
@@ -68,7 +55,11 @@ export class BorrowService {
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
     const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
-    const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
+    const course = this.displayNamePipe.transform(
+      borrowedEquipment.courseOffering.course,
+      'code',
+      'title',
+    );
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
 
