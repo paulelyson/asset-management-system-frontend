@@ -22,7 +22,7 @@ export class InventoryToolbarComponent {
   }
 
   openFilterDialog() {
-    this.dialogService.openEquipmentFilterDialog();
+    // this.dialogService.openEquipmentFilterDialog();
   }
 
   clearFilter(): void {
