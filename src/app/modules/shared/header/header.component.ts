@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconComponent } from '../icon/icon.component';
 import { RouterLink } from '@angular/router';
@@ -17,14 +17,18 @@ export class HeaderComponent implements OnInit {
   sidenav_opened: boolean = false;
   showAvatarMenu: boolean = false;
   isLoggedIn: WritableSignal<boolean> = signal(false);
-  user: TokenData | null = null;
+  user: WritableSignal<TokenData | null> = signal(null);
+
+  subtitles = computed(() => {
+    return this.user()?.roles.map((role) => `${role.role.toUpperCase()} - ${role.department.code}`);
+  });
 
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,
   ) {
     this.authService.isLoggedIn().subscribe((resp) => {
-      this.onLogin(resp)
+      this.onLogin(resp);
     });
   }
 
@@ -42,7 +46,7 @@ export class HeaderComponent implements OnInit {
 
   onLogin(isLoggedIn: boolean = false) {
     this.isLoggedIn.set(isLoggedIn);
-    this.user = this.authService.getUser();
+    this.user.set(this.authService.getUser());
   }
 
   onAvatarClicked() {
@@ -50,7 +54,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onActionClicked(event: string) {
-    console.log(event);
     if (event === 'logout') {
       this.showAvatarMenu = false;
       this.isLoggedIn.set(false);

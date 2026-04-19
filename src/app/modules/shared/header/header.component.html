@@ -12,11 +12,12 @@
           <li><a routerLink="/borrow">Borrow</a></li>
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">
-            <app-avatar (avatarclicked)="onAvatarClicked()" [label]="user?.name ?? ''" />
+            <app-avatar (avatarclicked)="onAvatarClicked()" [label]="user()?.name ?? ''" />
             <app-menu
               [show]="showAvatarMenu"
               (onActionClicked)="onActionClicked($event)"
-              [title]="user?.name ?? ''"
+              [title]="user()?.name ?? ''"
+              [subtitles]="subtitles() ?? []"
             />
           </div>
         } @else {

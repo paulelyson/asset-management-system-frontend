@@ -1,7 +1,9 @@
 <div class="menu-container" [class.show]="show">
   <div class="title-wrapper">
     <div class="title">{{ title }}</div>
-    <div class="subtitle">{{ subtitle }}</div>
+    @for (sub of subtitles; track sub) {
+      <div class="subtitle">{{ sub }}</div>
+    }
   </div>
   <app-button variant="link" icon="password">Change Password</app-button>
   <mat-divider></mat-divider>

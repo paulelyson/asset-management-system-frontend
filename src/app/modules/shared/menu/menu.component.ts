@@ -11,7 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 export class MenuComponent {
   @Input() show: boolean = false;
   @Input() title: string  = ''
-  @Input() subtitle: string  = 'computer engineering'
+  @Input() subtitles: string[]  = []
   @Output() onActionClicked: EventEmitter<string> = new EventEmitter<string>();
   logout() {
     this.onActionClicked.emit('logout');
