@@ -20,7 +20,11 @@ export class HeaderComponent implements OnInit {
   user: WritableSignal<TokenData | null> = signal(null);
 
   subtitles = computed(() => {
-    return this.user()?.roles.map((role) => `${role.role.toUpperCase()} - ${role.department.code}`);
+    let contents: string[] = [];
+    const roles = this.user()?.roles.map((role) => `${role.role.toUpperCase()} - ${role.department.code}`) || [];
+    contents.push('ID NUMBER: '+ this.user()?.idNumber || '')
+    contents = contents.concat(roles)
+    return contents;
   });
 
   constructor(

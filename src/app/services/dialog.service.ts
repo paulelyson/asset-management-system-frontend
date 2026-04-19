@@ -18,6 +18,7 @@ import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equi
 import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialog.component';
+import { ChangePasswordDialogComponent } from '../modules/shared/change-password-dialog/change-password-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -97,5 +98,10 @@ export class DialogService {
   openLoginDialog() {
     const dialogRef = this.dialog.open(LoginDialogComponent, {});
     return dialogRef.afterClosed()
+  }
+
+  openChangePasswordDialog() {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {});
+    return dialogRef.afterClosed();
   }
 }

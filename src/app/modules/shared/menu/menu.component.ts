@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-menu',
@@ -9,11 +10,17 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrl: './menu.component.css',
 })
 export class MenuComponent {
+  constructor(private dialogService: DialogService) {}
+
   @Input() show: boolean = false;
-  @Input() title: string  = ''
-  @Input() subtitles: string[]  = []
+  @Input() title: string = '';
+  @Input() subtitles: string[] = [];
   @Output() onActionClicked: EventEmitter<string> = new EventEmitter<string>();
   logout() {
     this.onActionClicked.emit('logout');
+  }
+
+  onChangePassword() {
+    this.dialogService.openChangePasswordDialog()
   }
 }

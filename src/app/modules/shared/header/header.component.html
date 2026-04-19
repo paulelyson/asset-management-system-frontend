@@ -17,7 +17,7 @@
               [show]="showAvatarMenu"
               (onActionClicked)="onActionClicked($event)"
               [title]="user()?.name ?? ''"
-              [subtitles]="subtitles() ?? []"
+              [subtitles]="subtitles()"
             />
           </div>
         } @else {
