@@ -38,7 +38,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
     this.url = this.router.url.split('?')[0];
 
     this.filterForm = this.fb.group({
-      department: [''],
+      department: [this.data.department],
       categories: [''],
       brand: [''],
       equipmentType: [''],

@@ -22,7 +22,6 @@ export class EquipmentService {
   constructor(private http: HttpClient) {}
 
   getEquipment(filter: EquipmentFilter) {
-    console.log({ filter });
     let params = new HttpParams({
       fromObject: {
         page: filter.page,
