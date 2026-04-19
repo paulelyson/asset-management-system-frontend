@@ -123,6 +123,12 @@ export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
     }
   }
 
+  onFocus() {
+    if (!this.myControl.value) {
+      this.myControl.setValue('')
+    }
+  }
+
   displayFn = (option?: IAutocompleteOption): string => {
     return option?.view ?? '';
   };

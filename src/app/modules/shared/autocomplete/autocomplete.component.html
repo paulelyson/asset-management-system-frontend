@@ -7,6 +7,7 @@
     [formControl]="myControl"
     [matAutocomplete]="auto"
     (input)="onInput($event)"
+    (focus)="onFocus()"
   />
   <mat-autocomplete
     [displayWith]="displayFn"
