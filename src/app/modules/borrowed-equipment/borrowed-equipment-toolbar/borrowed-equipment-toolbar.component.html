@@ -3,7 +3,7 @@
     <div class="filter-badge-wrapper">
       @for(filter of filters; track filter.field) {
       <app-badge size="sm" [hasCloseIcon]="true" type="default" (closed)="onBadgeClosed(filter)">
-        {{ filter.field == 'info_and_transaction'? filter.field : filter.value }}
+        {{ ['info_and_transaction', 'enable_cancel'].includes(filter.field) ? filter.field : filter.value }}
       </app-badge>
       }
     </div>
@@ -12,7 +12,7 @@
     <app-button variant="link" icon="history" (btnclicked)="clearFilter()"> Clear Filters </app-button>
     }
     <app-toggle label="Show Info and Transaction" [isChecked]="infoAndHistory" (toggle)="onShowInfoAndHistoryToggle($event)"/>
-    <!-- <app-toggle label="Needed Actions"/> -->
+    <app-toggle label="Enable Cancel" [isChecked]="enableCancel" (toggle)="onEnableCancelToggle($event)" tooltip="Cancel allowed only before approval."/>
     <app-button variant="link" icon="filter_list" (btnclicked)="openFilterDialog()">
       Filter
     </app-button>

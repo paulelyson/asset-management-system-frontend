@@ -180,6 +180,9 @@ export class BorrowedEquipmentComponent implements OnInit {
       info_and_transaction: params['info_and_transaction']
         ? params['info_and_transaction'] === 'true'
         : false,
+      enable_cancel: params['enable_cancel']
+        ? params['enable_cancel'] === 'true'
+        : false,
     });
     this.getBorrowedEquipment();
   }

@@ -43,13 +43,15 @@ export class BorrowService {
 
   getBorrowedEquipment(filter: IBorrowedEquimentFilter) {
     let params = new HttpParams();
-    params = params.append('page', filter.page ?? '');
-    params = params.append('search', filter.search ?? '');
-    params = params.append('purpose', filter.purpose ?? '');
-    params = params.append('status', filter.status ?? '');
-    return this.http.get<ApiResponse<BorrowedEquipment[]>>(environment.api_url + '/api/borrowed-equipment').pipe(
-      catchError(this.handleError),
-    );
+    // params = params.append('page', filter.page ?? '');
+    // params = params.append('search', filter.search ?? '');
+    // params = params.append('purpose', filter.purpose ?? '');
+    filter.status && (params = params.append('status', filter.status ?? ''));
+    return this.http
+      .get<
+        ApiResponse<BorrowedEquipment[]>
+      >(environment.api_url + '/api/borrowed-equipment', { params })
+      .pipe(catchError(this.handleError));
   }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
@@ -77,10 +79,19 @@ export class BorrowService {
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
     displayInfoAndHistory?: boolean,
+    enableCancel: boolean = false,
   ): RowDisplayActionConfig[] {
     let actions: RowDisplayActionConfig[] = [];
     const isBorrower = borrowedEquipment.borrower._id == user._id;
     const isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
+    const isLabInCharge = user.roles.some((role) => {
+      const dept = borrowedEquipment.courseOffering.course.department._id;
+      return role.department._id == dept && role.role == 'lab_in_charge';
+    });
+    const isChairman = user.roles.some((role) => {
+      const dept = borrowedEquipment.courseOffering.course.department._id;
+      return role.department._id == dept && role.role == 'chairman';
+    });
     const isLabAssistant = user.roles.some((role) => {
       const dept = borrowedEquipment.courseOffering.course.department._id;
       return role.department._id == dept && role.role == 'assistant';
@@ -98,8 +109,7 @@ export class BorrowService {
       ['mark_returned'].includes(x.status),
     );
     //  approver | class faculty / oic / chairman of the borrowed equipment
-    // TODO add is Chairman / IsOIC for override approvals
-    if (isFaculty && canApprove) {
+    if ((isChairman || isLabInCharge || isFaculty) && canApprove) {
       actions.push({
         name: 'Approve',
         tooltip: 'Approve Request',
@@ -107,6 +117,16 @@ export class BorrowService {
         size: 'md',
         icon: 'thumb_up',
       });
+
+      if (enableCancel) {
+        actions.push({
+          name: 'Cancel Request',
+          tooltip: 'Cancel Request',
+          type: 'primary',
+          size: 'sm',
+          icon: 'cancel',
+        });
+      }
     }
 
     // can release as lab assistant
@@ -141,15 +161,6 @@ export class BorrowService {
         size: 'md',
       });
     }
-
-    // // cancelled
-    // // actions.push({
-    // //   name: 'Cancel Request',
-    // //   tooltip: 'Cancel Request',
-    // //   type: 'primary',
-    // //   size: 'sm',
-    // //   icon: 'cancel',
-    // // });
 
     // add view details
     if (displayInfoAndHistory) {
