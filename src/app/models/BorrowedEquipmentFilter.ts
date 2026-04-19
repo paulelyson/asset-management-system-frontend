@@ -1,12 +1,25 @@
 import { BorrowedEquipmentPurpose, BorrowedEquipmentStatusType } from './BorrowedEquipment';
-import { Department } from './User';
 
 export interface IBorrowedEquimentFilter {
-  page?: number;
-  department?: Department;
-  search?: string;
+  page: number;
+  search: string;
   status?: BorrowedEquipmentStatusType;
   purpose?: BorrowedEquipmentPurpose;
-  needed_action?: boolean;
-  info_and_history?: boolean;
+  info_and_transaction: boolean;
+}
+
+export class BorrowedEquimentFilter implements IBorrowedEquimentFilter {
+  page: number;
+  search: string;
+  status?: BorrowedEquipmentStatusType;
+  purpose?: BorrowedEquipmentPurpose;
+  info_and_transaction: boolean;
+
+  constructor(filter?: Partial<IBorrowedEquimentFilter>) {
+    this.page = filter?.page || 1;
+    this.search = filter?.search || '';
+    this.status = filter?.status;
+    this.purpose = filter?.purpose;
+    this.info_and_transaction = filter?.info_and_transaction || false;
+  }
 }

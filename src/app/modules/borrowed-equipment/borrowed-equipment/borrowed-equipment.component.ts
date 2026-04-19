@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import BorrowedEquipment, {
   BorrowedEquipmentStatusType,
@@ -12,9 +12,14 @@ import {
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
-import { IBorrowedEquimentFilter } from '../../../models/BorrowedEquipmentFilter';
+import {
+  BorrowedEquimentFilter,
+  IBorrowedEquimentFilter,
+} from '../../../models/BorrowedEquipmentFilter';
 import ButtonConfig from '../../../models/ButtonConfig';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { FilterService } from '../../../services/filter.service';
+import { FilterDisplay } from '../../../models/EquipmentFilter';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -26,7 +31,12 @@ export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
   disable_showmore: boolean = false;
   user: TokenData;
-  filter: IBorrowedEquimentFilter = {};
+
+  filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
+  filterDisplay = computed((): FilterDisplay[] => {
+    const excluded = ['page'];
+    return this.filterService.getFilterDisplay(this.filter(), excluded, []);
+  });
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +45,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBarService: SnackbarService,
+    private filterService: FilterService,
   ) {
     this.user = this.authService.getUser();
   }
@@ -43,24 +54,12 @@ export class BorrowedEquipmentComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
-  get filterValues(): Record<string, string>[] {
-    const notIncludeFields = ['page'];
-    return Object.entries(this.filter)
-      .map(([key, val]) => ({ field: key, value: val }))
-      .filter((x) => x.value && !notIncludeFields.includes(x.field));
-  }
-
   getBorrowedEquipment(): void {
-    if (this.filter.page == 1) {
-      this.borrowed_equipment.set([]);
-    }
-    this.borrowService.getBorrowedEquipment(this.filter).subscribe({
+    if (this.filter().page == 1) this.borrowed_equipment.set([]);
+    this.borrowService.getBorrowedEquipment(this.filter()).subscribe({
       next: (resp) => {
-        if (resp.length < 1) {
-          this.filter.page = (this.filter.page as number) - 1;
-        }
-        this.disable_showmore = resp.length < 15;
-        this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp));
+        this.disable_showmore = !resp.hasNextPage;
+        this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
       },
     });
   }
@@ -100,7 +99,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     return this.borrowService.getRowDisplayActions(
       this.user,
       borrowedEquipment,
-      this.filter.info_and_history,
+      this.filter().info_and_transaction,
     );
   }
 
@@ -159,12 +158,12 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   onDisplayTransactions(transactions: BorrowedEquipmentTransaction[]): void {
-    this.dialogService.openBorrowedEquipmentTransactionsDialog(transactions)
+    this.dialogService.openBorrowedEquipmentTransactionsDialog(transactions);
   }
 
   loadMoreBorrowedEquipment() {
     const navigationExtras: NavigationExtras = {
-      queryParams: { page: (this.filter.page as number) + 1 },
+      queryParams: { page: (this.filter().page as number) + 1 },
       queryParamsHandling: 'merge',
     };
 
@@ -172,13 +171,16 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
-    this.filter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.filter.search = params['search'];
-    this.filter.purpose = params['purpose'];
-    this.filter.status = params['status'];
-    this.filter.info_and_history = params['info_and_history']
-      ? params['info_and_history'] === 'true'
-      : false;
+    this.filter.set({
+      ...this.filter(),
+      page: params['page'] ? parseInt(params['page']) : 1,
+      search: params['search'] ?? '',
+      status: params['status'] ?? undefined,
+      purpose: params['purpose'] ?? undefined,
+      info_and_transaction: params['info_and_transaction']
+        ? params['info_and_transaction'] === 'true'
+        : false,
+    });
     this.getBorrowedEquipment();
   }
 }

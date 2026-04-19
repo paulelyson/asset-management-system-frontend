@@ -41,14 +41,13 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
-  getBorrowedEquipment(filter: IBorrowedEquimentFilter): Observable<BorrowedEquipment[]> {
+  getBorrowedEquipment(filter: IBorrowedEquimentFilter) {
     let params = new HttpParams();
     params = params.append('page', filter.page ?? '');
     params = params.append('search', filter.search ?? '');
     params = params.append('purpose', filter.purpose ?? '');
     params = params.append('status', filter.status ?? '');
     return this.http.get<ApiResponse<BorrowedEquipment[]>>(environment.api_url + '/api/borrowed-equipment').pipe(
-      map((resp) => resp.data),
       catchError(this.handleError),
     );
   }

@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
+import { FilterDisplay } from '../../../models/EquipmentFilter';
 
 @Component({
   selector: 'app-borrowed-equipment-toolbar',
@@ -11,7 +12,7 @@ import { debounceTime } from 'rxjs';
   standalone: false,
 })
 export class BorrowedEquipmentToolbarComponent implements OnChanges {
-  @Input() filters: Record<string, string>[] = [];
+  @Input() filters: FilterDisplay[] = [];
   searchControl = new FormControl('');
   url: string = '';
   infoAndHistory: boolean = false;
@@ -26,7 +27,7 @@ export class BorrowedEquipmentToolbarComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['filters']) {
-      const found = this.filters.find((filter) => filter['field'] == 'info_and_history');
+      const found = this.filters.find((filter) => filter['field'] == 'info_and_transaction');
       this.infoAndHistory = found ? JSON.parse(found['value']) : false;
     }
   }
@@ -39,7 +40,7 @@ export class BorrowedEquipmentToolbarComponent implements OnChanges {
     this.router.navigate([this.url]);
   }
 
-  onBadgeClosed(filter: Record<string, string>): void {
+  onBadgeClosed(filter: FilterDisplay): void {
     let navigationExtras: NavigationExtras = {
       queryParams: { [filter['field']]: null },
       queryParamsHandling: 'merge',
@@ -57,7 +58,7 @@ export class BorrowedEquipmentToolbarComponent implements OnChanges {
 
   onShowInfoAndHistoryToggle(event: boolean): void {
     let navigationExtras: NavigationExtras = {
-      queryParams: { page: 1, info_and_history: event },
+      queryParams: { page: 1, info_and_transaction: event },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);

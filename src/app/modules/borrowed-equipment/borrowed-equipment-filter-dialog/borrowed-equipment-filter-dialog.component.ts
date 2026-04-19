@@ -29,10 +29,9 @@ export class BorrowedEquipmentFilterDialogComponent {
     private router: Router
   ) {
     this.filterForm = this.fb.group({
-      purpose: [''],
       status: [''],
+      purpose: [''],
     });
-    this.purposes = this.autocompleteService.mapIntoAutocompleteOption(DEPARTMENTS);
     this.purposes = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
     this.status = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_STATUS);
     this.url = this.router.url.split('?')[0];
