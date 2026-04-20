@@ -30,16 +30,6 @@ export class AuthService {
     return decoded;
   }
 
-  isDepartmentChair(user: IUser, deptCode: string) {
-    const found = user.roles.find((u) => u.role == 'chairman' && u.department.code == deptCode);
-    return !!found;
-  }
-
-  isDepartmentOIC(user: IUser, deptCode: string) {
-    const found = user.roles.find((u) => u.role == 'chairman' && u.department.code == deptCode);
-    return !!found;
-  }
-
   login(accoundId: string, password: string) {
     const body = { username: accoundId, password };
     return this.http.post<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/login', body).pipe(
@@ -57,11 +47,18 @@ export class AuthService {
     this.router.navigate(['']);
   }
 
+  changePassword(idNumber: string, currentPassword: string, newPassword: string) {
+    const body = { username: idNumber, currentPassword, newPassword };
+    return this.http.patch<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/change-password', body).pipe(
+      catchError(this.handleError),
+    );
+  }
+
   private hasToken(): boolean {
     return !!localStorage.getItem('token');
   }
 
   private handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.error.message || err.error));
+    return throwError(() => new Error(err.error.errors || err.error));
   }
 }
