@@ -28,10 +28,7 @@ export class EquipmentService {
         page: filter.page,
         search: filter.search,
         department: filter.department,
-        brand: filter.brand ?? '',
-        // categories: filter.categories ?? '',
-        // equipmentType: filter.equipmentType ?? '',
-        // borrow: filter.borrow ?? '',
+        brand: filter.brand ?? ''
       },
     });
     return this.http
@@ -40,21 +37,14 @@ export class EquipmentService {
   }
 
   getStatus(equipmentId: string) {
-    return this.http
-      .get<
-        ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>
-      >(environment.api_url + `/api/equipment/${equipmentId}/status`)
+    return this.http.get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`)
       .pipe(catchError(this.handleError));
   }
 
   getDistinct(field: string, department?: string): Observable<string[]> {
     let params = new HttpParams();
     department && (params = params.append('department', department));
-
-    return this.http
-      .get<
-        ApiResponse<string[]>
-      >(environment.api_url + '/api/equipment/distinct/' + field, { params })
+    return this.http.get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct/' + field, { params })
       .pipe(
         map((resp) => resp.data as string[]),
         catchError(this.handleError),
@@ -62,10 +52,7 @@ export class EquipmentService {
   }
 
   updateEquipment(equipment: IEquipment) {
-    return this.http
-      .patch<
-        ApiResponse<IEquipment>
-      >(environment.api_url + '/api/equipment/' + equipment._id, equipment, {})
+    return this.http.patch<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/' + equipment._id, equipment)
       .pipe(
         map((resp) => resp.data),
         catchError(this.handleError),
