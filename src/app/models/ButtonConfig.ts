@@ -1,33 +1,27 @@
-import { IButtonConfig } from '../modules/shared/button/button.component';
+import { Size, Variant } from "./ui/common-config.model";
 
-type ButtonConfigOptions = Partial<IButtonConfig> & Pick<IButtonConfig, 'name'>;
+export type ButtonShade = 'default' | 'light';
+export type ButtonWidth = 'width-filled' | 'width-auto';
+export type ButtonAppearance =
+  | 'filled'
+  | 'outlined'
+  | 'ghost' // visual style
+  | 'link'
+  | 'icon'
+  | 'tonal';
 
-class ButtonConfig implements IButtonConfig {
-  id: number;
-  name: string;
-  size: 'md' | 'sm' | 'lg';
-  type: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'secondary' | 'accent';
-  shade: 'default' | 'light';
-  width: 'width-filled' | 'width-auto';
-  btnType: 'button' | 'submit' | 'reset';
 
- constructor({
-    id = 0,
-    name,
-    size = 'sm',
-    type = 'default',
-    shade = 'default',
-    width = 'width-auto',
-    btnType = 'button',
-  }: ButtonConfigOptions) {
-    this.id = id;
-    this.name = name;
-    this.size = size;
-    this.type = type;
-    this.shade = shade;
-    this.width = width;
-    this.btnType = btnType;
+export class ButtonConfig {
+  id: number = 0;
+  name: string = '';
+  size: Size = 'md';
+  variant: Variant = 'neutral';
+  appearance: ButtonAppearance = 'filled';
+  shade: ButtonShade = 'default';
+  width: ButtonWidth = 'width-auto';
+  type: 'submit' | 'button' | 'reset' = 'button';
+
+  constructor(partial?: Partial<ButtonConfig>) {
+    Object.assign(this, partial);
   }
 }
-
-export default ButtonConfig;

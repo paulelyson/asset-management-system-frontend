@@ -16,10 +16,10 @@ import {
   BorrowedEquimentFilter,
   IBorrowedEquimentFilter,
 } from '../../../models/BorrowedEquipmentFilter';
-import ButtonConfig from '../../../models/ButtonConfig';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { FilterService } from '../../../services/filter.service';
 import { FilterDisplay } from '../../../models/EquipmentFilter';
+import { ButtonConfig } from '../../../models/ButtonConfig';
 
 @Component({
   selector: 'app-borrowed-equipment',

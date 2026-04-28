@@ -7,7 +7,6 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
-import ButtonConfig from '../../../models/ButtonConfig';
 import { BorrowService } from '../../../services/borrow.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { EquipmentService } from '../../../services/equipment.service';
@@ -16,6 +15,7 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
   IN_CIRCULATION_STATUS,
 } from '../../../models/BorrowedEquipment';
+import { ButtonConfig } from '../../../models/ButtonConfig';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';

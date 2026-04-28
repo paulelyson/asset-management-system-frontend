@@ -19,6 +19,7 @@ import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equ
 import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialog.component';
 import { ChangePasswordDialogComponent } from '../modules/shared/change-password-dialog/change-password-dialog.component';
+import { ButtonConfig } from '../models/ButtonConfig';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -36,7 +37,7 @@ export class DialogService {
 
   openUpdateQuantityStatusDialog(
     fields: BorrowedEquipmentStatusFields[],
-    actions: IButtonConfig[],
+    actions: ButtonConfig[],
     status?: BorrowedEquipmentStatusType[],
   ) {
     const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, {
