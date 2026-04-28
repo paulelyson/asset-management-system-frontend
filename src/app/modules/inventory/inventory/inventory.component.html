@@ -1,23 +1,14 @@
-<div class="equipment-page-container">
+<div class="container">
   <app-title-section>Inventory</app-title-section>
-  <app-inventory-toolbar [filters]="filterDisplay"/>
-  <div class="equipment-wrapper">
-    @for(eqpmnt of equipment(); track eqpmnt._id) {
-    <!-- <app-row-display
-      [image]="eqpmnt.images[0]?.thumbnail ?? ''"
-      [title]="eqpmnt.name"
-      [subtitle]="eqpmnt.brand"
-      [contents]="equipmentContents(eqpmnt)"
-      [actions]="rowDisplayActions"
-      (actionclicked)="onActionClicked($event, eqpmnt)"
-    >
-    </app-row-display> -->
-    <app-data-row></app-data-row>
-    }@empty {
-    <span>No items.</span>
+  <app-inventory-toolbar [filters]="filterDisplay" />
+  <div class="list-wrapper">
+    @for (eqpmnt of equipment(); track eqpmnt._id; let first = $first) {
+      <app-data-row [columns]="getRowData(eqpmnt)" [showHeader]="first"></app-data-row>
+    } @empty {
+      <span>No items.</span>
     }
-    <div class="bottom-action-wrapper">
-      <app-button (btnclicked)="loadMoreEquipment()" [disabled]="disable_showmore">Show more...</app-button>
-    </div>
+  </div>
+  <div class="action-wrapper">
+    <app-button (btnclicked)="loadMoreEquipment()" [disabled]="hasMore"> Show more... </app-button>
   </div>
 </div>

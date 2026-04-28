@@ -30,11 +30,11 @@ import { DataRowComponent } from '../../shared/layout/data-row/data-row.componen
 export class InventoryComponent implements OnInit {
   sidenav_opened: boolean = true;
   equipmentFilter: EquipmentFilter;
-  disable_showmore: boolean = false;
+  hasMore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   user: User;
   filterDisplay: Record<string, string>[] = [];
-  constructor( 
+  constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
     private activatedRoute: ActivatedRoute,
@@ -50,29 +50,18 @@ export class InventoryComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
   }
 
-
-  get rowDisplayActions() {
-    return this.equipmentService.getRowDisplayActions();
-  }
-
   getEquipment(): void {
-    if (this.equipmentFilter.page == 1) {
-      this.equipment.set([]);
-    }
+    if (this.equipmentFilter.page == 1) this.equipment.set([]);
     this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
       next: (resp) => {
-        this.disable_showmore = !resp.hasNextPage;
-        this.equipment.update((eqpmnt) =>
-          [...eqpmnt]
-            .concat(resp.data as IEquipment[])
-            .filter((item, index, arr) => index === arr.findIndex((x) => x._id === item._id)),
-        );
+        this.hasMore = resp.hasNextPage;
+        this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data]);
       },
     });
   }
 
-  equipmentContents(equipment: IEquipment): RowDisplayContent[] {
-    return this.equipmentService.getRowDisplayContent(equipment);
+  getRowData(equipment: IEquipment) {
+    return this.equipmentService.getRowData(equipment)
   }
 
   onActionClicked(action: string, equipment: IEquipment) {

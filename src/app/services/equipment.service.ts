@@ -14,6 +14,7 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
 } from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';
+import { RowColumnConfig } from '../models/ui/data-row.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,16 +41,20 @@ export class EquipmentService {
 
   getStatus(equipmentId: string) {
     return this.http
-      .get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`)
+      .get<
+        ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>
+      >(environment.api_url + `/api/equipment/${equipmentId}/status`)
       .pipe(catchError(this.handleError));
   }
 
   getDistinct(field: string, department?: string): Observable<string[]> {
     let params = new HttpParams();
     department && (params = params.append('department', department));
-    
+
     return this.http
-      .get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct/' + field, { params })
+      .get<
+        ApiResponse<string[]>
+      >(environment.api_url + '/api/equipment/distinct/' + field, { params })
       .pipe(
         map((resp) => resp.data as string[]),
         catchError(this.handleError),
@@ -67,35 +72,15 @@ export class EquipmentService {
       );
   }
 
-  getRowDisplayContent(equipment: IEquipment) {
+  getRowData(equipment: IEquipment): RowColumnConfig[] {
     const conditions = equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition);
-    let contents: RowDisplayContent[] = [
-      { id: 0, type: 'text', content: [equipment.name], span: 'wide' },
-      { id: 1, type: 'text', content: equipment.categories, span: 'mid' },
-      { id: 2, type: 'text', content: [equipment.brand], span: 'mid' },
-      { id: 3, type: 'text', content: [equipment.totalQuantity.toString()], span: 'narrow' },
-      { id: 4, type: 'badge', content: conditions, span: 'mid' },
-      { id: 5, type: 'text', content: [equipment.location], span: 'narrow' },
-    ];
-    return contents;
-  }
-
-  getRowDisplayActions(): RowDisplayActionConfig[] {
     return [
-      {
-        name: 'Details',
-        tooltip: 'View Details',
-        type: 'primary',
-        size: 'sm',
-        icon: 'info',
-      },
-      {
-        name: 'Update',
-        tooltip: 'Update equipment',
-        type: 'primary',
-        size: 'sm',
-        icon: 'edit',
-      },
+      { id: 0, type: 'image', header: '', weight: 0.5 },
+      { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 2 },
+      { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 0.5 },
+      { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
+      { id: 4, type: 'badge', header: 'Condition', content: conditions, weight: 0.5 },
+      // { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
     ];
   }
 
