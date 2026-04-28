@@ -1,11 +1,7 @@
-<header id="header">
-  <div class="header">
+<div [class.transparent]="isTransparent">
+  <header id="header">
     <div class="nav-wrapper">
-      <div class="logo-wrapper">
-        <!-- <app-icon name="eco" size="lg"></app-icon> -->
-        <!-- <div class="title">Asset Management</div> -->
-      </div>
-      <span class="spacer"></span>
+      <span style="flex: 1"></span>
       <ul class="navigation">
         @if (isLoggedIn()) {
           <li><a routerLink="/inventory">Inventory</a></li>
@@ -21,15 +17,10 @@
             />
           </div>
         } @else {
-          <li><a (click)="login()">Login</a></li>
+          <app-button size="lg"> Login </app-button>
+          <app-button size="lg"> Register </app-button>
         }
       </ul>
     </div>
-  </div>
-
-  <div class="sidenav-container" [class.opened]="sidenav_opened">
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Profile</a>
-  </div>
-</header>
+  </header>
+</div>

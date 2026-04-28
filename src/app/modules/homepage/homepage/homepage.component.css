@@ -2,6 +2,7 @@
   width: 100%;
   height: 100vh;
   background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 80%), 
     linear-gradient(to right, #4b7947, rgba(0, 0, 0, 0)),
     url(https://images.website-d1e.workers.dev/50f3e603-2cf8-4e3c-8687-ed85f833be32.jpg);
   background-size: cover;
