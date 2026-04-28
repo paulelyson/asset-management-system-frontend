@@ -1,12 +1,12 @@
 <button
-  [type]="btnType"
+  [type]="type"
   class="btn-custom"
-  [ngClass]="[type, shade, size, width, variant]"
+  [ngClass]="[appearance, shade, size, width, variant]"
   (click)="onClicked()"
   [disabled]="disabled"
 >
-  @if(icon !== 'none') {
-  <app-icon [name]="icon"></app-icon>
+  @if (icon) {
+    <app-icon [name]="icon" [size]="size"></app-icon>
   }
   <ng-content></ng-content>
 </button>

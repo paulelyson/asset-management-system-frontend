@@ -1,6 +1,6 @@
 <div class="side-menu" [class.open]="opened">
   <div class="header">
-    <app-button variant="link" icon="close" size="sm" (btnclicked)="opened = !opened">Close</app-button>
+    <app-button appearance="link" icon="close" size="sm" (btnclicked)="opened = !opened">Close</app-button>
   </div>
   @if (template == 'borrow-request-form') {
     <app-class-schedule [user]="data.user"></app-class-schedule>

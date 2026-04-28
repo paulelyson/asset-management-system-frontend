@@ -1,17 +1,18 @@
 import { Component, Inject, Input } from '@angular/core';
 import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
-import { ButtonComponent, IButtonConfig } from '../button/button.component';
+import { ButtonComponent } from '../button/button.component';
 import { InputComponent } from '../input/input.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
+import { ButtonConfig } from '../../../models/ui/button-config.model';
 
 export type BorrowedEquipmentStatusFields = 'quantity' | 'status' | 'condition' | 'remarks';
 export interface IQuantityStatusDialogConfig {
   fields: BorrowedEquipmentStatusFields[];
-  actions: IButtonConfig[];
+  actions: ButtonConfig[];
   statusOptions?: BorrowedEquipmentStatusType[];
 }
 

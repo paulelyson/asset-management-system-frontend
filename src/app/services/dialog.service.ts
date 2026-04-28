@@ -8,7 +8,6 @@ import {
   BorrowedEquipmentStatusFields,
   UpdateQuantityStatusDialogComponent,
 } from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
-import { IButtonConfig } from '../modules/shared/button/button.component';
 import BorrowedEquipment, {
   BorrowedEquipmentStatusType,
   BorrowedEquipmentTransaction,
