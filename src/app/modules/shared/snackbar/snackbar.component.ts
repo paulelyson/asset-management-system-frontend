@@ -30,7 +30,6 @@ export class SnackbarComponent {
   ) {}
 
   onClose() {
-    console.log('snackbar closedks')
     this.snackbarRef.dismiss()
   }
 }

@@ -36,10 +36,6 @@ class CourseOffering implements ICourseOffering {
     this.updatedAt = courseOffering.updatedAt;
     this.__v = 0;
   }
-
-  get displayName() {
-    return this.code + ' ' + 'bakit di nalang';
-  }
 }
 
 export default CourseOffering;
