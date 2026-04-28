@@ -15,7 +15,7 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
   IN_CIRCULATION_STATUS,
 } from '../../../models/BorrowedEquipment';
-import { ButtonConfig } from '../../../models/ButtonConfig';
+import { ButtonConfig } from '../../../models/ui/button-config.model';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';

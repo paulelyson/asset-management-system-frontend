@@ -1,4 +1,4 @@
-import { Size, Variant } from "./ui/common-config.model";
+import { Size, Variant } from "./common-config.model";
 
 export type ButtonShade = 'default' | 'light';
 export type ButtonWidth = 'width-filled' | 'width-auto';
