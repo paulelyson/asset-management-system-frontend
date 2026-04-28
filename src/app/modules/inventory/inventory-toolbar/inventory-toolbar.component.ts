@@ -2,15 +2,17 @@ import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@
 import { DialogService } from '../../../services/dialog.service';
 import { IEquipmentFilter } from '../../../models/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';
 import { EquipmentService } from '../../../services/equipment.service';
+import { BadgeComponent } from '../../shared/badge/badge.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-inventory-toolbar',
   templateUrl: './inventory-toolbar.component.html',
   styleUrl: './inventory-toolbar.component.css',
-  standalone: false,
+  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule]
 })
 export class InventoryToolbarComponent {
   @Input() filters: Record<string, string>[] = [];

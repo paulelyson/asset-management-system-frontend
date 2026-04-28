@@ -1,13 +1,23 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IEquipment } from '../../../models/Equipment';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { InputComponent } from '../../shared/input/input.component';
+import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
+import { FileInputComponent } from '../../shared/file-input/file-input.component';
 
 @Component({
   selector: 'app-create-equipment-dialog',
   templateUrl: './create-equipment-dialog.component.html',
   styleUrl: './create-equipment-dialog.component.css',
-  standalone: false,
+  imports: [
+    ButtonComponent,
+    InputComponent,
+    AutocompleteComponent,
+    FileInputComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class CreateEquipmentDialogComponent {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
@@ -34,7 +44,7 @@ export class CreateEquipmentDialogComponent {
       remarks: [data?.remarks ?? ''],
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location ?? ''],
-      dateAcquired: [data?.dateAcquired?? ''],
+      dateAcquired: [data?.dateAcquired ?? ''],
       images: this.fb.array([]),
     });
   }
@@ -53,6 +63,6 @@ export class CreateEquipmentDialogComponent {
   }
 
   submit() {
-    this.dialogRef.close(this.equipmentForm.value)
+    this.dialogRef.close(this.equipmentForm.value);
   }
 }

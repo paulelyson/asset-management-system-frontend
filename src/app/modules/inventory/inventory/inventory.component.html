@@ -3,7 +3,7 @@
   <app-inventory-toolbar [filters]="filterDisplay"/>
   <div class="equipment-wrapper">
     @for(eqpmnt of equipment(); track eqpmnt._id) {
-    <app-row-display
+    <!-- <app-row-display
       [image]="eqpmnt.images[0]?.thumbnail ?? ''"
       [title]="eqpmnt.name"
       [subtitle]="eqpmnt.brand"
@@ -11,7 +11,8 @@
       [actions]="rowDisplayActions"
       (actionclicked)="onActionClicked($event, eqpmnt)"
     >
-    </app-row-display>
+    </app-row-display> -->
+    <app-data-row></app-data-row>
     }@empty {
     <span>No items.</span>
     }

@@ -15,12 +15,16 @@ import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilt
 import { AuthService } from '../../../services/auth.service';
 import User from '../../../models/User';
 import { FilterService } from '../../../services/filter.service';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
+import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
+import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
-  standalone: false,
+  imports: [ButtonComponent, TitleSectionComponent, DataRowComponent, InventoryToolbarComponent],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnInit {
