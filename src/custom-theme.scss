@@ -98,6 +98,27 @@
   // mat-slide-toggle .mdc-switch__track {
   //   height: 16px;
   // }
+
+  // Mat Tab overrides
+  mat-tab-group {
+    .mat-mdc-tab {
+      font-size: var(--mat-form-field-container-text-size, var(--mat-sys-body-small-size));
+    }
+    // remove background
+    .mat-mdc-tab .mdc-tab__ripple::before {
+      background-color: transparent;
+    }
+  }
+
+  @include mat.tabs-overrides(
+    (
+      active-focus-indicator-color: var(--color-text-primary-strong),
+      active-hover-indicator-color: var(--color-text-primary-strong),
+      active-indicator-color: var(--color-text-primary-strong),
+      divider-height: 0px, // bottom border,
+      container-height: 40px,
+    )
+  );
 }
 
 html {
@@ -106,7 +127,7 @@ html {
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
+    typography: 'Poppins',
     density: 0,
   ));
 }
