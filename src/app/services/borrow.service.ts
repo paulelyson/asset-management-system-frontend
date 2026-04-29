@@ -16,6 +16,7 @@ import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
+import { RowColumnConfig } from '../models/ui/data-row.model';
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +53,25 @@ export class BorrowService {
         ApiResponse<BorrowedEquipment[]>
       >(environment.api_url + '/api/borrowed-equipment', { params })
       .pipe(catchError(this.handleError));
+  }
+
+  getRowData(borrowedEquipment: BorrowedEquipment): RowColumnConfig[] {
+    const eqpmntName = borrowedEquipment.equipment.name;
+    const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
+    const borrower = getDisplayName(borrowedEquipment.borrower);
+    const quantity = borrowedEquipment.quantity.toString();
+    const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
+    const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
+    return [
+      { id: 0, type: 'image', header: '', weight: 0.5 },
+      { id: 1, type: 'title', header: 'Equipment', content: [eqpmntName], weight: 2 },
+      { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
+      { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
+      { id: 4, type: 'text', header: 'Quantity', content: quantity, weight: 0.5 },
+      { id: 5, type: 'text', header: 'Status', content: status, weight: 1 },
+      { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 1 },
+
+    ]
   }
 
   getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {

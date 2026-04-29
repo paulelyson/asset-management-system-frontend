@@ -20,31 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ToggleComponent } from '../shared/toggle/toggle.component';
 
 @NgModule({
-  declarations: [
-    BorrowedEquipmentComponent,
-    BorrowedEquipmentToolbarComponent,
-    BorrowedEquipmentFilterDialogComponent,
-    BorrowedEquipmentDetailDialogComponent,
-    BorrowedEquipmentHistoryDialogComponent
-  ],
-  imports: [
-    CommonModule,
-    BorrowedEquipmentRoutingModule,
-    TitleSectionComponent,
-    RowDisplayComponent,
-    InputComponent,
-    AutocompleteComponent,
-    ButtonComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    EmptyPlaceholderComponent,
-    RowHeaderComponent,
-    BadgeComponent,
-    ButtonComponent,
-    VerticalStepperComponent,
-    MatDividerModule,
-    ToggleComponent
-
-  ],
+  declarations: [],
+  imports: [CommonModule, BorrowedEquipmentRoutingModule],
 })
 export class BorrowedEquipmentModule {}

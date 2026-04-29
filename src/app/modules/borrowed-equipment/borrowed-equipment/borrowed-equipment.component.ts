@@ -20,12 +20,15 @@ import { SnackbarService } from '../../../services/snackbar.service';
 import { FilterService } from '../../../services/filter.service';
 import { FilterDisplay } from '../../../models/EquipmentFilter';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
+import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
+import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-borrowed-equipment',
   templateUrl: './borrowed-equipment.component.html',
   styleUrl: './borrowed-equipment.component.css',
-  standalone: false,
+  imports: [TitleSectionComponent, DataRowComponent, ButtonComponent]
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
@@ -89,6 +92,10 @@ export class BorrowedEquipmentComponent implements OnInit {
       error: (err) =>
         this.snackBarService.openSnackbar({ icon: 'info', type: 'error', message: [err] }),
     });
+  }
+
+  getRowData(borrowedEquipment: BorrowedEquipment) {
+    return this.borrowService.getRowData(borrowedEquipment)
   }
 
   getBorrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
