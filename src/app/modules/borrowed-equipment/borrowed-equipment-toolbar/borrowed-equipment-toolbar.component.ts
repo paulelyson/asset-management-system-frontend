@@ -1,15 +1,19 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { FilterDisplay } from '../../../models/EquipmentFilter';
+import { BadgeComponent } from '../../shared/badge/badge.component';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { ToggleComponent } from '../../shared/toggle/toggle.component';
+import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-borrowed-equipment-toolbar',
   templateUrl: './borrowed-equipment-toolbar.component.html',
   styleUrl: './borrowed-equipment-toolbar.component.css',
-  standalone: false,
+  imports: [BadgeComponent, ButtonComponent, ToggleComponent, InputComponent, ReactiveFormsModule]
 })
 export class BorrowedEquipmentToolbarComponent implements OnChanges {
   @Input() filters: FilterDisplay[] = [];

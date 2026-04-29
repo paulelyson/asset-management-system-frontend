@@ -23,12 +23,13 @@ import { ButtonConfig } from '../../../models/ui/button-config.model';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 
 @Component({
   selector: 'app-borrowed-equipment',
   templateUrl: './borrowed-equipment.component.html',
   styleUrl: './borrowed-equipment.component.css',
-  imports: [TitleSectionComponent, DataRowComponent, ButtonComponent]
+  imports: [TitleSectionComponent, DataRowComponent, ButtonComponent, BorrowedEquipmentToolbarComponent]
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);

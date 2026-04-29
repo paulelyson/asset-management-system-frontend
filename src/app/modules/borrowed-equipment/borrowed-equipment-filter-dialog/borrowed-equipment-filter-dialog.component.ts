@@ -4,17 +4,17 @@ import {
   BORROWED_EQUIPMENT_STATUS,
 } from '../../../models/BorrowedEquipment';
 import { AutocompleteService } from '../../../services/autocomplete.service';
-import { IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AutocompleteComponent, IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DEPARTMENTS } from '../../../models/User';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-borrowed-equipment-filter-dialog',
   templateUrl: './borrowed-equipment-filter-dialog.component.html',
   styleUrl: './borrowed-equipment-filter-dialog.component.css',
-  standalone: false,
+  imports: [ButtonComponent, AutocompleteComponent, ReactiveFormsModule]
 })
 export class BorrowedEquipmentFilterDialogComponent {
   purposes: IAutocompleteOption[] = [];
