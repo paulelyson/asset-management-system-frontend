@@ -7,12 +7,13 @@ import { debounceTime, switchMap } from 'rxjs';
 import { EquipmentService } from '../../../services/equipment.service';
 import { BadgeComponent } from '../../shared/badge/badge.component';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-inventory-toolbar',
   templateUrl: './inventory-toolbar.component.html',
   styleUrl: './inventory-toolbar.component.css',
-  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule]
+  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent]
 })
 export class InventoryToolbarComponent {
   @Input() filters: Record<string, string>[] = [];

@@ -29,7 +29,7 @@ import { ButtonConfig } from '../../../models/ui/button-config.model';
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
-  disable_showmore: boolean = false;
+  hasMore: boolean = false;
   user: TokenData;
 
   filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
@@ -58,8 +58,8 @@ export class BorrowedEquipmentComponent implements OnInit {
     if (this.filter().page == 1) this.borrowed_equipment.set([]);
     this.borrowService.getBorrowedEquipment(this.filter()).subscribe({
       next: (resp) => {
-        this.disable_showmore = !resp.hasNextPage;
-        this.borrowed_equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
+        this.hasMore = resp.hasNextPage;
+        this.borrowed_equipment.update((eqpmnt) => [...eqpmnt, ...resp.data]);
       },
     });
   }
