@@ -1,5 +1,6 @@
 <div class="container">
   <app-title-section>Inventory</app-title-section>
+  <app-tab></app-tab>
   <app-inventory-toolbar [filters]="filterDisplay" />
   <div class="list-wrapper">
     @for (eqpmnt of equipment(); track eqpmnt._id; let first = $first) {

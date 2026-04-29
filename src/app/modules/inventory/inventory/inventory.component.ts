@@ -19,12 +19,13 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
+import { TabComponent } from '../../shared/layout/tab/tab.component';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
-  imports: [ButtonComponent, TitleSectionComponent, DataRowComponent, InventoryToolbarComponent],
+  imports: [ButtonComponent, TitleSectionComponent, DataRowComponent, InventoryToolbarComponent, TabComponent],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnInit {

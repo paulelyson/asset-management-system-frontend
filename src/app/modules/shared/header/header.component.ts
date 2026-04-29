@@ -37,11 +37,9 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.isLoggedIn() == true) {
-      this.authService.isLoggedIn().subscribe((resp) => {
-        this.onLogin(resp);
-      });
-    }
+    this.authService.isLoggedIn().subscribe((resp) => {
+      this.onLogin(resp);
+    });
   }
 
   login(): void {
