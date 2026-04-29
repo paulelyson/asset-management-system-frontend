@@ -54,6 +54,12 @@ export class AuthService {
     );
   }
 
+  isTokenExpired(token: string): boolean {
+    const decoded: any = jwtDecode(token);
+    const expirationTime = decoded.exp * 1000; // Convert to milliseconds
+    return Date.now() >= expirationTime;
+  }
+
   private hasToken(): boolean {
     return !!localStorage.getItem('token');
   }

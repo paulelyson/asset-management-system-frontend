@@ -34,14 +34,14 @@ export class HeaderComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,
-  ) {
-    this.authService.isLoggedIn().subscribe((resp) => {
-      this.onLogin(resp);
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+    if (this.isLoggedIn() == true) {
+      this.authService.isLoggedIn().subscribe((resp) => {
+        this.onLogin(resp);
+      });
+    }
   }
 
   login(): void {
@@ -55,6 +55,7 @@ export class HeaderComponent implements OnInit {
   onLogin(isLoggedIn: boolean = false) {
     this.isLoggedIn.set(isLoggedIn);
     this.user.set(this.authService.getUser());
+    this.isTransparent = false;
   }
 
   onAvatarClicked() {
