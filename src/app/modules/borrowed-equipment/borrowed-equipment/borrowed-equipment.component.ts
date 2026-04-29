@@ -96,20 +96,16 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getRowData(borrowedEquipment: BorrowedEquipment) {
-    return this.borrowService.getRowData(borrowedEquipment)
+    return this.borrowService.getRowData(borrowedEquipment,this.user)
   }
 
-  getBorrowedEquipmentContents(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    return this.borrowService.getRowDisplayContent(borrowedEquipment);
-  }
-
-  getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
-    return this.borrowService.getRowDisplayActions(
-      this.user,
-      borrowedEquipment,
-      this.filter().info_and_transaction,
-    );
-  }
+  // getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
+  //   return this.borrowService.getRowDisplayActions(
+  //     this.user,
+  //     borrowedEquipment,
+  //     this.filter().info_and_transaction,
+  //   );
+  // }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'Approve') {

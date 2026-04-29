@@ -16,7 +16,7 @@ import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
-import { RowColumnConfig } from '../models/ui/data-row.model';
+import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 
 @Injectable({
   providedIn: 'root',
@@ -55,53 +55,33 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
-  getRowData(borrowedEquipment: BorrowedEquipment): RowColumnConfig[] {
+  getRowData(borrowedEquipment: BorrowedEquipment, user: IUser): RowColumnConfig[] {
     const eqpmntName = borrowedEquipment.equipment.name;
     const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const quantity = borrowedEquipment.quantity.toString();
     const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
+    const actions = this.getRowActions(user, borrowedEquipment);
     return [
       { id: 0, type: 'image', header: '', weight: 0.5 },
       { id: 1, type: 'title', header: 'Equipment', content: [eqpmntName], weight: 2 },
       { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
       { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
-      { id: 4, type: 'text', header: 'Quantity', content: quantity, weight: 0.5 },
+      { id: 4, type: 'text', header: 'Qty', content: quantity, weight: 0.3 },
       { id: 5, type: 'text', header: 'Status', content: status, weight: 1 },
       { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 1 },
-
+      { id: 7, type: 'action', header: '', actions: actions, weight: 1 },
     ]
   }
 
-  getRowDisplayContent(borrowedEquipment: BorrowedEquipment): RowDisplayContent[] {
-    const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
-    const course = this.displayNamePipe.transform(
-      borrowedEquipment.courseOffering.course,
-      'code',
-      'title',
-    );
-    const borrower = getDisplayName(borrowedEquipment.borrower);
-    const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
-
-    let contents: RowDisplayContent[] = [
-      { id: 0, type: 'text', content: [borrowedEquipment.equipment.name], span: 'wide' },
-      { id: 1, type: 'text', content: [course], span: 'mid' },
-      { id: 2, type: 'text', content: [borrower], span: 'mid' },
-      { id: 3, type: 'text', content: [borrowedEquipment.quantity.toString()], span: 'narrow' },
-      { id: 4, type: 'badge', content: status, span: 'mid' },
-      { id: 5, type: 'text', content: [dateOfUse as string], span: 'narrow' },
-    ];
-    return contents;
-  }
-
-  getRowDisplayActions(
+  getRowActions(
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
     displayInfoAndHistory?: boolean,
     enableCancel: boolean = false,
-  ): RowDisplayActionConfig[] {
-    let actions: RowDisplayActionConfig[] = [];
+  ): RowActionConfig[] {
+    let actions: RowActionConfig[] = [];
     const isBorrower = borrowedEquipment.borrower._id == user._id;
     const isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
     const isLabInCharge = user.roles.some((role) => {
@@ -133,8 +113,8 @@ export class BorrowService {
       actions.push({
         name: 'Approve',
         tooltip: 'Approve Request',
-        type: 'primary',
-        size: 'md',
+        type: 'button',
+        size: 'sm',
         icon: 'thumb_up',
       });
 
@@ -142,7 +122,7 @@ export class BorrowService {
         actions.push({
           name: 'Cancel Request',
           tooltip: 'Cancel Request',
-          type: 'primary',
+          type: 'button',
           size: 'sm',
           icon: 'cancel',
         });
@@ -154,8 +134,8 @@ export class BorrowService {
       actions.push({
         name: 'Release',
         tooltip: 'Release Equipment',
-        type: 'primary',
-        size: 'md',
+        type: 'button',
+        size: 'sm',
         icon: 'lock_open',
       });
     }
@@ -166,8 +146,8 @@ export class BorrowService {
         icon: 'keyboard_return',
         name: 'Return',
         tooltip: 'Return Equipment',
-        type: 'primary',
-        size: 'md',
+        type: 'button',
+        size: 'sm',
       });
     }
 
@@ -177,8 +157,8 @@ export class BorrowService {
         icon: 'keyboard_return',
         name: 'Confirm Returns',
         tooltip: 'Confirm Returns',
-        type: 'primary',
-        size: 'md',
+        type: 'button',
+        size: 'sm',
       });
     }
 
@@ -187,17 +167,17 @@ export class BorrowService {
       actions.push({
         name: 'View Detail',
         tooltip: 'View Detail',
-        type: 'primary',
-        size: 'md',
-        icon: 'info',
+        type: 'button',
+        size: 'sm',
+        icon: 'info_outlined',
       });
 
       // add Transactions
       actions.push({
         name: 'Transactions',
         tooltip: 'Transactions',
-        type: 'primary',
-        size: 'md',
+        type: 'button',
+        size: 'sm',
         icon: 'history',
       });
     }
