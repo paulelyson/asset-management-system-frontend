@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import BorrowedEquipment, {
+  BORROWED_STATUS_VARIANT,
   BorrowedEquipmentPayload,
   BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
@@ -69,9 +70,9 @@ export class BorrowService {
       { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
       { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
       { id: 4, type: 'text', header: 'Qty', content: quantity, weight: 0.3 },
-      { id: 5, type: 'text', header: 'Status', content: status, weight: 1 },
-      { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 1 },
-      { id: 7, type: 'action', header: '', actions: actions, weight: 1 },
+      { id: 5, type: 'badge', header: 'Status', content: status[0], weight: 1 },
+      { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 0.8 },
+      { id: 7, type: 'action', header: '', actions: actions, weight: 0.5 },
     ]
   }
 
