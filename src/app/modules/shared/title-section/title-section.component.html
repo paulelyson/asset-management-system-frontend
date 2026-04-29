@@ -1,6 +1,6 @@
-<div class="title-container">
-  <div class="h1-title underlined">
-   <ng-content></ng-content>
-  </div>
+<div class="title">
+  <ng-content></ng-content>
 </div>
-<hr class="divider" />
+@if(showBottomBorder) {
+  <hr class="divider" />
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-title-section',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './title-section.component.css',
 })
 export class TitleSectionComponent {
-
+  @Input() showBottomBorder: boolean = true;
 }
