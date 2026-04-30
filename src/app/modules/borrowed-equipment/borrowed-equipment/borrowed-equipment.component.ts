@@ -18,6 +18,8 @@ import { TitleSectionComponent } from '../../shared/title-section/title-section.
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
+import { getFilterDisplay } from '../../shared/utils/filter.util';
 
 @Component({
   selector: 'app-borrowed-equipment',
@@ -31,10 +33,8 @@ export class BorrowedEquipmentComponent implements OnInit {
   user: TokenData;
 
   filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
-  // filterDisplay = computed((): FilterDisplay[] => {
-  //   const excluded = ['page'];
-  //   return this.filterService.getFilterDisplay(this.filter(), excluded, []);
-  // });
+  filterDisplay = computed((): FilterDisplay[] => getFilterDisplay(this.filter())
+  );
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -89,7 +89,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getRowData(borrowedEquipment: BorrowedEquipment) {
-    return this.borrowService.getRowData(borrowedEquipment,this.user)
+    return this.borrowService.getRowData(borrowedEquipment,this.user, this.filter())
   }
 
   // getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {

@@ -1,6 +1,6 @@
 <div class="container">
   <app-title-section>Borrowed Equipment</app-title-section>
-  <app-borrowed-equipment-toolbar></app-borrowed-equipment-toolbar>
+  <app-borrowed-equipment-toolbar [filters]="filterDisplay()"/>
   <div class="list-wrapper">
     @for (eqpmnt of borrowed_equipment(); track eqpmnt.trackId; let first = $first) {
       <app-data-row [columns]="getRowData(eqpmnt)" [showHeader]="first"></app-data-row>

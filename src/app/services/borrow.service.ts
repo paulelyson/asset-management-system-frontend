@@ -9,7 +9,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
-import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
+import { BorrowedEquimentFilter, IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { IUser } from '../models/User';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
@@ -52,17 +52,18 @@ export class BorrowService {
       .pipe(catchError(this.handleError));
   }
 
-  getRowData(borrowedEquipment: BorrowedEquipment, user: IUser): RowColumnConfig[] {
+  getRowData(borrowedEquipment: BorrowedEquipment, user: IUser, filter: BorrowedEquimentFilter): RowColumnConfig[] {
     const eqpmntName = borrowedEquipment.equipment.name;
     const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const quantity = borrowedEquipment.quantity.toString();
     const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
-    const actions = this.getRowActions(user, borrowedEquipment);
+    const actions = this.getRowActions(user, borrowedEquipment, filter.info_and_transaction);
+    const purpose = borrowedEquipment.purpose;
     return [
       { id: 0, type: 'image', header: '', weight: 0.5 },
-      { id: 1, type: 'title', header: 'Equipment', content: [eqpmntName], weight: 2 },
+      { id: 1, type: 'title', header: 'Equipment', content: [eqpmntName], subtitle: purpose, weight: 2 },
       { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
       { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
       { id: 4, type: 'text', header: 'Qty', content: quantity, weight: 0.3 },
