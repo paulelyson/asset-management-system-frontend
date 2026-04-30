@@ -7,7 +7,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
@@ -17,19 +17,28 @@ import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
 import { Department, DEPARTMENTS, IUser } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { TokenData } from '../../../services/auth.service';
-import {
-  concatDateAndTime,
-  get24HourTime,
-} from '../../../utils/date.util';
+import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
+import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
+import { CourseOfferDetailCardComponent } from '../../shared/course-offer-detail-card/course-offer-detail-card.component';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
+import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-class-schedule',
   templateUrl: './class-schedule.component.html',
   styleUrl: './class-schedule.component.css',
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    AutocompleteComponent,
+    CourseOfferDetailCardComponent,
+    ButtonComponent,
+    DatepickerComponent,
+    InputComponent,
+  ],
 })
 export class ClassScheduleComponent implements OnInit {
   @Input() user!: TokenData;
@@ -49,7 +58,6 @@ export class ClassScheduleComponent implements OnInit {
     private courseOfferingService: CourseOfferingService,
     private autocompleteService: AutocompleteService,
     private displayNamePipe: DisplayNamePipe,
-    
   ) {
     this.classScheduleForm = this.fb.group({
       borrower: ['', Validators.required],
@@ -74,7 +82,6 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   get courseOfferingAutoCompleteOptions() {
-    
     return this.courseOffering().map((course) => {
       return {
         view: course.code + ' - ' + this.displayNamePipe.transform(course.course, 'code', 'title'),

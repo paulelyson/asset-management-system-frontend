@@ -10,10 +10,8 @@
     @if(courseOffer) {
       <app-course-offer-detail-card [courseOffer]="courseOffer"></app-course-offer-detail-card>
     }
-    <!-- Purpose -->
     <div class="subtitle">Purpose</div>
     <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
-    <!-- Dates of Use -->
     <div class="subtitle">Start Date of Use</div>
     <app-datepicker label="Start date" formControlName="startDate"></app-datepicker>
     <app-input label="Start Time*" inputType="time" formControlName="startTime" />

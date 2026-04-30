@@ -4,7 +4,10 @@ import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/route
 import { EquipmentService } from '../../../services/equipment.service';
 import { EquipmentFilter } from '../../../models/filters/equipment-filter.model';
 import { IEquipment } from '../../../models/Equipment';
-import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
+import {
+  AddedEquipmentCardComponent,
+  IAddedEquipment,
+} from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
 import BorrowedEquipment, {
   BorrowedEquipmentPayload,
@@ -22,12 +25,21 @@ import { TitleSectionComponent } from '../../shared/title-section/title-section.
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
+import { ClassScheduleComponent } from '../class-schedule/class-schedule.component';
+import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 
 @Component({
   selector: 'app-borrow',
   templateUrl: './borrow.component.html',
   styleUrl: './borrow.component.css',
-  imports: [TitleSectionComponent, MatSidenavModule, ButtonComponent, EquipmentCardComponent]
+  imports: [
+    TitleSectionComponent,
+    MatSidenavModule,
+    ButtonComponent,
+    EquipmentCardComponent,
+    ClassScheduleComponent,
+    AddedEquipmentCardComponent
+  ],
 })
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = false;
@@ -134,7 +146,7 @@ export class BorrowComponent implements OnInit {
 
   queryParamsHandling(params: Params): void {
     this.equipmentFilter.set({
-      ... this.equipmentFilter(),
+      ...this.equipmentFilter(),
       page: params['page'] ? parseInt(params['page']) : 1,
       search: params['search'] ?? '',
       brand: params['brand'] ?? undefined,
