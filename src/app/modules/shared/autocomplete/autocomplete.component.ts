@@ -61,6 +61,8 @@ export class AutocompleteComponent implements ControlValueAccessor, OnChanges {
   @Input() floatLabel: FloatLabelType = 'always';
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() placeholder: string = '';
+  @Input() readonly: boolean = false;
+
 
   myControl = new FormControl<IAutocompleteOption | string | null>(null);
   filteredOptions!: Observable<IAutocompleteOption[]>;

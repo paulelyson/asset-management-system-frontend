@@ -90,7 +90,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location ?? ''],
       dateAcquired: [data?.dateAcquired ?? new Date()],
-      department: [data?.department ?? ''],
+      department: [{ value: data?.department ?? '', disabled: true }],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
     });
@@ -112,7 +112,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
     this.departmentService.getDepartments().subscribe({
       next: (resp) => this.departments.set(resp.data),
-    })
+    });
   }
 
   get images(): FormArray {
