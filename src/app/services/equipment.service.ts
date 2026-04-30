@@ -33,12 +33,11 @@ export class EquipmentService {
       .pipe(catchError(this.handleError));
   }
 
-  getDistinct(field: string, department?: string): Observable<string[]> {
+  getDistinct(field: string, department?: string) {
     let params = new HttpParams();
     department && (params = params.append('department', department));
     return this.http.get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct/' + field, { params })
       .pipe(
-        map((resp) => resp.data as string[]),
         catchError(this.handleError),
       );
   }

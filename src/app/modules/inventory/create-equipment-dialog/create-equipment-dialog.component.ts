@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, Inject, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -20,6 +20,10 @@ import { DatepickerComponent } from '../../shared/datepicker/datepicker.componen
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { LocationService } from '../../../services/location.service';
 import { ClassLocation } from '../../../models/data/location.model';
+import { EquipmentService } from '../../../services/equipment.service';
+import { IDepartment } from '../../../models/Department';
+import { Department } from '../../../models/User';
+import { DepartmentService } from '../../../services/department.service';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -39,15 +43,33 @@ export class CreateEquipmentDialogComponent implements OnInit {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
   image: string | undefined;
   equipmentForm: FormGroup;
-  locations: WritableSignal<ClassLocation[]> = signal([]);
   conditions;
   matter;
-  locationOptions: IAutocompleteOption[] = [];
+  locations: WritableSignal<ClassLocation[]> = signal([]);
+  locationlist = computed((): IAutocompleteOption[] =>
+    this.locations().map((loc) => ({ view: loc.name, value: loc._id })),
+  );
+  brands: WritableSignal<string[]> = signal([]);
+  brandlist = computed((): IAutocompleteOption[] =>
+    this.brands().map((x) => ({ value: x, view: x })),
+  );
+
+  equipmenttypes: WritableSignal<string[]> = signal([]);
+  equipmenttypelist = computed((): IAutocompleteOption[] =>
+    this.equipmenttypes().map((x) => ({ value: x, view: x })),
+  );
+
+  departments: WritableSignal<IDepartment[]> = signal([]);
+  departmentlist = computed((): IAutocompleteOption[] =>
+    this.departments().map((dept) => ({ value: dept._id, view: dept.code })),
+  );
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateEquipmentDialogComponent>,
     private autocompleteService: AutocompleteService,
     private locationService: LocationService,
+    private departmentService: DepartmentService,
+    private equipmentService: EquipmentService,
     @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
   ) {
     this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
@@ -55,7 +77,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
     this.equipmentForm = this.fb.nonNullable.group({
       _id: [data?._id ?? ''],
       name: [data?.name ?? ''],
-      equipmentType: [data?.equipmentType ?? ''],
+      type: [data?.type ?? ''],
       serialNo: [data?.serialNo ?? ''],
       modelNo: [data?.modelNo ?? ''],
       categories: [data?.categories ?? ''],
@@ -68,6 +90,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location ?? ''],
       dateAcquired: [data?.dateAcquired ?? new Date()],
+      department: [data?.department ?? ''],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
     });
@@ -76,11 +99,20 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.locationService.getLocations().subscribe({
-      next: (resp) => {
-        this.locations.set(resp.data);
-        this.locationOptions = this.locations().map((loc) => ({ view: loc.name, value: loc._id }));
-      },
+      next: (resp) => this.locations.set(resp.data),
     });
+
+    this.equipmentService.getDistinct('brand', this.data?.department).subscribe({
+      next: (resp) => this.brands.set(resp.data),
+    });
+
+    this.equipmentService.getDistinct('type', this.data?.department).subscribe({
+      next: (resp) => this.equipmenttypes.set(resp.data),
+    });
+
+    this.departmentService.getDepartments().subscribe({
+      next: (resp) => this.departments.set(resp.data),
+    })
   }
 
   get images(): FormArray {

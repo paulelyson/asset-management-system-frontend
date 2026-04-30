@@ -37,7 +37,7 @@ export interface IEquipment {
   name: string;
   serialNo: string;
   modelNo: string;
-  equipmentType: string;
+  type: string;
   categories: string[];
   brand: string;
   color: string;

@@ -8,16 +8,16 @@
       <app-input label="Name*" formControlName="name" />
       <app-input label="Serial Number" formControlName="serialNo" />
       <app-input label="Model Number" formControlName="modelNo" />
-      <app-autocomplete label="Equipment Type" formControlName="equipmentType" />
+      <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
       <app-input label="Categories" formControlName="categories" />
-      <app-autocomplete label="Brand" formControlName="brand" />
+      <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/>
       <app-input label="Color" formControlName="color" />
       <app-input label="Unit" formControlName="unit" />
       <app-autocomplete label="Matter" formControlName="matter" [options]="matter"/>
       <app-input label="Description" formControlName="description" />
       <app-input label="Remarks" formControlName="remarks" />
-      <app-autocomplete label="Inventory Type" formControlName="inventorytype" />
-      <app-autocomplete label="Location" formControlName="location" [options]="locationOptions" placeholder="eg. SA-B"/>
+      <app-autocomplete label="Department" formControlName="department" [options]="departmentlist()"/>
+      <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder="eg. SA-B"/>
       <app-datepicker label="Date Acquired" formControlName="dateAcquired" />
     </div>
     <div formArrayName="conditionAndQuantity">

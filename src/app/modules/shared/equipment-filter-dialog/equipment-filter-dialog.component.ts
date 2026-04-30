@@ -58,7 +58,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
       .pipe(
         map(({ departments, brands }) => ({
           departments: departments.data.map((dept) => ({ value: dept._id, view: dept.code })),
-          brands: brands.map((brand) => ({ value: brand, view: brand })),
+          brands: brands.data.map((brand) => ({ value: brand, view: brand })),
         })),
       )
       .subscribe((result) => {
