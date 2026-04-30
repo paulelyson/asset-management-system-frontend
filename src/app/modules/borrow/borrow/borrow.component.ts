@@ -27,6 +27,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
 import { ClassScheduleComponent } from '../class-schedule/class-schedule.component';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
+import { BorrowToolbarComponent } from '../borrow-toolbar/borrow-toolbar.component';
 
 @Component({
   selector: 'app-borrow',
@@ -38,7 +39,8 @@ import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inv
     ButtonComponent,
     EquipmentCardComponent,
     ClassScheduleComponent,
-    AddedEquipmentCardComponent
+    AddedEquipmentCardComponent,
+    BorrowToolbarComponent
   ],
 })
 export class BorrowComponent implements OnInit {
