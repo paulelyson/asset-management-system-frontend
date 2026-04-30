@@ -17,7 +17,7 @@
       <app-input label="Description" formControlName="description" />
       <app-input label="Remarks" formControlName="remarks" />
       <app-autocomplete label="Department" formControlName="department" [options]="departmentlist()" [readonly]="true"/>
-      <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder="eg. SA-B"/>
+      <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder="eg. SA-B1-04"/>
       <app-datepicker label="Date Acquired" formControlName="dateAcquired" />
     </div>
     <div formArrayName="conditionAndQuantity">
@@ -33,7 +33,7 @@
       }
     </div>
     <div class="action-wrapper">
-      <app-button btnType="submit">Submit</app-button>
+      <app-button type="submit">Submit</app-button>
     </div>
   </div>
 </form>

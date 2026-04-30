@@ -54,12 +54,10 @@ export class DialogService {
     });
   }
 
-  openCreateEquipmentDialog(): void {
+  openCreateEquipmentDialog() {
     const dialogRef = this.dialog.open(CreateEquipmentDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The create dialog was closed');
-    });
+    return dialogRef.afterClosed();
   }
 
   openUpdateEquipmentDialog(equipment: IEquipment) {

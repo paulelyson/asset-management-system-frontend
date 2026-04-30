@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, IEquipment } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, IConditionAndQuantity, IEquipment } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import {
@@ -94,7 +94,6 @@ export class CreateEquipmentDialogComponent implements OnInit {
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
     });
-    this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
   }
 
   ngOnInit(): void {
@@ -113,6 +112,12 @@ export class CreateEquipmentDialogComponent implements OnInit {
     this.departmentService.getDepartments().subscribe({
       next: (resp) => this.departments.set(resp.data),
     });
+
+    this.populateForm(this.data?.conditionAndQuantity || []);
+
+    if (!this.data?.conditionAndQuantity) {
+      this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
+    }
   }
 
   get images(): FormArray {
@@ -121,6 +126,14 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
   get conditionAndQuantity(): FormArray {
     return this.equipmentForm.get('conditionAndQuantity') as FormArray;
+  }
+
+  populateForm(data: IConditionAndQuantity[]): void {
+    data.forEach((item) => {
+      const row = this.createConditionAndQuantityForm();
+      row.patchValue(item);
+      this.conditionAndQuantity.push(row);
+    });
   }
 
   createConditionAndQuantityForm(): FormGroup {

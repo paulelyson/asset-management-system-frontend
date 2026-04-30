@@ -2,9 +2,11 @@ import {
   ChangeDetectorRef,
   Component,
   computed,
+  EventEmitter,
   input,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
@@ -16,6 +18,7 @@ import { BadgeComponent } from '../../shared/badge/badge.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
+import { IEquipment } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-inventory-toolbar',
@@ -29,6 +32,7 @@ export class InventoryToolbarComponent {
   searchControl = new FormControl('');
   url: string = '';
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
+  @Output() addEquipment = new EventEmitter<IEquipment>()
   constructor(
     private dialogService: DialogService,
     private router: Router,
@@ -62,6 +66,8 @@ export class InventoryToolbarComponent {
   }
 
   addNewEquipment(): void {
-    this.dialogService.openCreateEquipmentDialog();
+    this.dialogService.openCreateEquipmentDialog().subscribe({
+      next: (resp) => this.addEquipment.emit(resp)
+    });
   }
 }

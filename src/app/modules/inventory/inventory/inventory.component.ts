@@ -23,6 +23,7 @@ import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { getFilterDisplay } from '../../shared/utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
 import { DepartmentService } from '../../../services/department.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-inventory',
@@ -43,13 +44,13 @@ export class InventoryComponent implements OnInit {
   user: User;
   filter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
-  selectedDept:  WritableSignal<string> = signal('');
+  selectedDept: WritableSignal<string> = signal('');
   filterEffect = effect(() => {
     const dept = this.filter().department;
     if (dept && isObjectId(dept)) {
       this.departmentService.getDepartmentById(dept).subscribe((resp) => {
         this.filter.update(({ department, ...rest }) => ({ department: resp.data.code, ...rest }));
-        this.selectedDept.set(resp.data._id)
+        this.selectedDept.set(resp.data._id);
       });
     }
   });
@@ -60,7 +61,8 @@ export class InventoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private departmentService: DepartmentService
+    private departmentService: DepartmentService,
+    private snackBarService: SnackbarService,
   ) {
     this.user = this.authService.getUser();
   }
@@ -96,9 +98,26 @@ export class InventoryComponent implements OnInit {
       if (resp) {
         this.equipmentService.updateEquipment(resp).subscribe({
           next: (resp) => console.log(resp),
-          error: (err) => console.error(err),
+          error: (err) =>
+            this.snackBarService.openSnackbar({
+              type: 'error',
+              message: [err],
+              icon: '',
+            }),
         });
       }
+    });
+  }
+
+  onAddNewEquipment(equipment: IEquipment) {
+    this.equipmentService.createEquipment(equipment).subscribe({
+      next: (resp) => console.log(resp),
+      error: (err) =>
+        this.snackBarService.openSnackbar({
+          type: 'error',
+          message: [err],
+          icon: '',
+        }),
     });
   }
 
