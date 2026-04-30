@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -8,12 +8,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { IEquipment } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, IEquipment } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
-import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
+import {
+  AutocompleteComponent,
+  IAutocompleteOption,
+} from '../../shared/autocomplete/autocomplete.component';
 import { FileInputComponent } from '../../shared/file-input/file-input.component';
 import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
+import { AutocompleteService } from '../../../services/autocomplete.service';
+import { LocationService } from '../../../services/location.service';
+import { ClassLocation } from '../../../models/data/location.model';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -29,16 +35,23 @@ import { DatepickerComponent } from '../../shared/datepicker/datepicker.componen
     DatepickerComponent,
   ],
 })
-export class CreateEquipmentDialogComponent {
+export class CreateEquipmentDialogComponent implements OnInit {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
   image: string | undefined;
   equipmentForm: FormGroup;
-
+  locations: WritableSignal<ClassLocation[]> = signal([]);
+  conditions;
+  matter;
+  locationOptions: IAutocompleteOption[] = [];
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateEquipmentDialogComponent>,
+    private autocompleteService: AutocompleteService,
+    private locationService: LocationService,
     @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
   ) {
+    this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
+    this.conditions = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION);
     this.equipmentForm = this.fb.nonNullable.group({
       _id: [data?._id ?? ''],
       name: [data?.name ?? ''],
@@ -49,17 +62,25 @@ export class CreateEquipmentDialogComponent {
       brand: [data?.brand ?? ''],
       color: [data?.color ?? ''],
       unit: [data?.unit ?? ''],
-      matter: [data?.matter ?? ''],
+      matter: [data?.matter ?? 'solid'],
       description: [data?.description ?? ''],
       remarks: [data?.remarks ?? ''],
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location ?? ''],
-      dateAcquired: [data?.dateAcquired ?? ''],
+      dateAcquired: [data?.dateAcquired ?? new Date()],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
     });
-
     this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
+  }
+
+  ngOnInit(): void {
+    this.locationService.getLocations().subscribe({
+      next: (resp) => {
+        this.locations.set(resp.data);
+        this.locationOptions = this.locations().map((loc) => ({ view: loc.name, value: loc._id }));
+      },
+    });
   }
 
   get images(): FormArray {
