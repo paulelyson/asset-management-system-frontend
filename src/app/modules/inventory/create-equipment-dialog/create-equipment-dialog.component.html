@@ -20,10 +20,17 @@
       <app-input label="Location" formControlName="location" />
       <app-datepicker label="Date Acquired" formControlName="dateAcquired" />
     </div>
-    <div class="condition-wrapper">
-      <app-input label="Quantity" width="sm" />
-      <app-autocomplete label="Condition" />
-      <app-button icon="add" appearance="link">Add</app-button>
+    <div formArrayName="conditionAndQuantity">
+      @for (item of conditionAndQuantity.controls; track $index; let last = $last; let first = $first) {
+        <div class="condition-wrapper" [formGroupName]="$index">
+          <app-input label="Quantity" width="sm" formControlName="quantity"/>
+          <app-autocomplete label="Condition" formControlName="condition" />
+          <app-button icon="delete_outlined" appearance="link" (btnclicked)="addConditionAndQuantity()">Remove</app-button>
+          @if(last) {
+            <app-button icon="add" appearance="link" (btnclicked)="addConditionAndQuantity()">Add</app-button>
+          }
+        </div>
+      }
     </div>
     <div class="action-wrapper">
       <app-button btnType="submit">Submit</app-button>

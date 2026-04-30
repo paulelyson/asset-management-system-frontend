@@ -1,5 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IEquipment } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
@@ -19,7 +26,7 @@ import { DatepickerComponent } from '../../shared/datepicker/datepicker.componen
     FileInputComponent,
     ReactiveFormsModule,
     FormsModule,
-    DatepickerComponent
+    DatepickerComponent,
   ],
 })
 export class CreateEquipmentDialogComponent {
@@ -49,11 +56,38 @@ export class CreateEquipmentDialogComponent {
       location: [data?.location ?? ''],
       dateAcquired: [data?.dateAcquired ?? ''],
       images: this.fb.array([]),
+      conditionAndQuantity: this.fb.array([]),
     });
+
+    this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
   }
 
   get images(): FormArray {
     return this.equipmentForm.get('images') as FormArray;
+  }
+
+  get conditionAndQuantity(): FormArray {
+    return this.equipmentForm.get('conditionAndQuantity') as FormArray;
+  }
+
+  createConditionAndQuantityForm(): FormGroup {
+    return this.fb.group({
+      condition: ['functional', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+    });
+  }
+
+  addConditionAndQuantity(): void {
+    this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
+  }
+
+  removeConditionAndQuantity(index: number): void {
+    if (this.conditionAndQuantity.length > 1) {
+      this.conditionAndQuantity.removeAt(index);
+    } else {
+      // Optionally handle the case where there is only one form group remaining
+      console.warn('Cannot remove the last condition and quantity');
+    }
   }
 
   addImage(event: string): void {
