@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, WritableSignal } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
@@ -28,6 +28,8 @@ import { EquipmentCardComponent } from '../equipment-card/equipment-card.compone
 import { ClassScheduleComponent } from '../class-schedule/class-schedule.component';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 import { BorrowToolbarComponent } from '../borrow-toolbar/borrow-toolbar.component';
+import { getFilterDisplay } from '../../shared/utils/filter.util';
+import { isObjectId } from '../../../utils/string.util';
 
 @Component({
   selector: 'app-borrow',
@@ -52,13 +54,16 @@ export class BorrowComponent implements OnInit {
   user: TokenData;
   departments: WritableSignal<IDepartment[]> = signal([]);
 
-  equipmentFilter = signal<EquipmentFilter>(new EquipmentFilter());
-  filterDisplay = computed((): FilterDisplay[] => {
-    return [];
-  });
 
-  department = computed((): string => {
-    return this.equipmentFilter().department;
+  filter = signal<EquipmentFilter>(new EquipmentFilter());
+  filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
+  filterEffect = effect(() => {
+    const dept = this.filter().department;
+    if (dept && isObjectId(dept)) {
+      this.departmentService.getDepartmentById(dept).subscribe((resp) => {
+        this.filter.update(({ department, ...rest }) => ({ department: resp.data.code, ...rest }));
+      });
+    }
   });
 
   constructor(
@@ -84,10 +89,10 @@ export class BorrowComponent implements OnInit {
   }
 
   getEquipment(): void {
-    if (this.equipmentFilter().page == 1) {
+    if (this.filter().page == 1) {
       this.equipment.set([]);
     }
-    this.equipmentService.getEquipment(this.equipmentFilter()).subscribe({
+    this.equipmentService.getEquipment(this.filter()).subscribe({
       next: (resp) => {
         this.disable_showmore = !resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
@@ -97,7 +102,7 @@ export class BorrowComponent implements OnInit {
 
   loadMoreEquipment() {
     const navigationExtras: NavigationExtras = {
-      queryParams: { page: this.equipmentFilter().page + 1 },
+      queryParams: { page: this.filter().page + 1 },
       queryParamsHandling: 'merge',
     };
     this.router.navigate(['/borrow'], navigationExtras);
@@ -147,13 +152,13 @@ export class BorrowComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
-    this.equipmentFilter.set({
-      ...this.equipmentFilter(),
+    this.filter.set({
+      ...this.filter(),
       page: params['page'] ? parseInt(params['page']) : 1,
-      search: params['search'] ?? '',
-      brand: params['brand'] ?? undefined,
-      categories: params['categories'] ?? undefined,
-      equipmentType: params['equipmentType'] ?? undefined,
+      search: params['search'],
+      brand: params['brand'],
+      categories: params['categories'],
+      equipmentType: params['equipmentType'],
       department: params['department'] ?? this.user.roles[0].department._id,
     });
     this.getEquipment();

@@ -52,13 +52,13 @@ export const BORROW_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant>
     instructor_approved: 'accent',
     oic_approved: 'accent',
     released: 'warning',
-    instructor_rejected: 'neutral',
     oic_rejected: 'neutral',
     mark_returned: 'warning',
     returned: 'success',
     unreturned: 'neutral',
-    cancelled: 'neutral',
-    system_reset: 'neutral'
+    system_reset: 'neutral',
+    cancelled: 'danger',
+    instructor_rejected: 'danger',
   }; {
 
 }

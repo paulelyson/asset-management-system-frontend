@@ -9,7 +9,7 @@
     }
   </div>
   <span class="spacer"></span>
-  @if (filters.length) {
+  @if (!filters.length) {
     <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
       Clear Filters
     </app-button>
