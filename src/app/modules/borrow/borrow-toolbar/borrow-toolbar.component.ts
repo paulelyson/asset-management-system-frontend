@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, input, Input, Output } from '@angular/core';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
@@ -15,10 +15,11 @@ import { InputComponent } from '../../shared/input/input.component';
   styleUrl: './borrow-toolbar.component.css',
 })
 export class BorrowToolbarComponent {
-  @Input() filters: FilterDisplay[] = [];
+  filters = input<FilterDisplay[]>([]);
   @Input() department: string = '';
   @Output() toggleBorrowForm: EventEmitter<boolean> = new EventEmitter<boolean>();
   searchControl = new FormControl('');
+  showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
   url: string = '';
   constructor(
     private dialogService: DialogService,

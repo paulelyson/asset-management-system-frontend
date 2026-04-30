@@ -1,6 +1,6 @@
 <div class="toolbar-container">
   <div class="filter-badge-wrapper">
-    @for(filter of filters; track filter.field) {
+    @for (filter of filters(); track filter.field) {
       @if (filter.show) {
         <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
           {{ filter['value'] }}
@@ -9,15 +9,19 @@
     }
   </div>
   <span class="spacer"></span>
-  @if(filters.length) {
-  <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
-    Clear Filters
-  </app-button>
+  @if (showClearFilter()) {
+    <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
+      Clear Filters
+    </app-button>
   }
   <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
     New Equipment
   </app-button>
-  <app-button appearance="link" icon="download" tooltip="Currently unavailable due to recent migration">
+  <app-button
+    appearance="link"
+    icon="download"
+    tooltip="Currently unavailable due to recent migration"
+  >
     Report
   </app-button>
   <app-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">

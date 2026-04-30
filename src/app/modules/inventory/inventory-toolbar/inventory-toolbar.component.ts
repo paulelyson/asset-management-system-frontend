@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  input,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -13,14 +21,18 @@ import { FilterDisplay } from '../../../models/ui/common-config.model';
   selector: 'app-inventory-toolbar',
   templateUrl: './inventory-toolbar.component.html',
   styleUrl: './inventory-toolbar.component.css',
-  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent]
+  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent],
 })
 export class InventoryToolbarComponent {
-  @Input() filters: FilterDisplay[] = [];
+  filters = input<FilterDisplay[]>([]);
   @Input() department: string = '';
   searchControl = new FormControl('');
   url: string = '';
-  constructor(private dialogService: DialogService, private router: Router) {
+  showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
+  constructor(
+    private dialogService: DialogService,
+    private router: Router,
+  ) {
     this.url = this.router.url.split('?')[0];
     this.searchControl.valueChanges.pipe(debounceTime(800)).subscribe(() => this.onSearch());
   }
