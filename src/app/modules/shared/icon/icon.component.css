@@ -1,29 +1,35 @@
 .icon-wrapper {
- display: flex;
-
+  display: flex;
 }
 
 mat-icon.xs {
-  height: 13px;
-  width: 13px;
-  font-size: 13px;
+  height: var(--font-size-xs);;
+  width: var(--font-size-xs);;
+  font-size: var(--font-size-xs);;
   aspect-ratio: 1/1;
 }
 
 mat-icon.sm {
-  height: 16px;
-  width: 16px;
-  font-size: 16px;
+  height: var(--font-size-sm);
+  width: var(--font-size-sm);
+  font-size: var(--font-size-sm);
+  aspect-ratio: 1/1;
+}
+
+mat-icon.md {
+  height: var(--font-size-md);
+  width: var(--font-size-md);
+  font-size: var(--font-size-md);
   aspect-ratio: 1/1;
 }
 
 mat-icon.lg {
-  height: 28px;
-  width: 28px;
-  font-size: 28px;
+  height: var(--font-size-lg);
+  width: var(--font-size-lg);
+  font-size: var(--font-size-lg);
   aspect-ratio: 1/1;
 }
 
 .icon-wrapper.clickable {
- cursor: pointer;
+  cursor: pointer;
 }

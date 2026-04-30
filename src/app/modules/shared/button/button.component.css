@@ -8,6 +8,7 @@
   background-color: transparent;
   font-weight: 550;
   font-family: 'Poppins';
+  border-radius: 4px;
 }
 
 /* variant */
@@ -57,26 +58,32 @@
 }
 
 
+/*
+* Sizes
+*/
+.btn-custom.xs {
+  padding: 4px 6px;
+  line-height: var(--font-size-xs);
+  font-size: var(--font-size-xs);
+}
 
 .btn-custom.sm {
-  /* height: 24px; */
   border-radius: 5px;
-  padding: 0px 8px;
-  font-size: 10px;
+  padding: 4px 8px;
+  line-height: var(--font-size-sm);
+  font-size: var(--font-size-sm);
 }
 
 .btn-custom.md {
-  height: 20px; /* TO DO */
-  border-radius: 5px; /* TO DO */
-  padding: 0px 8px; /* TO DO */
-  font-size: 12px;
+  padding: 4px 8px;
+  line-height: var(--font-size-md);
+  font-size: var(--font-size-md);
 }
 
 .btn-custom.lg {
-  padding: 0.5rem 2rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  line-height: 2;
+  padding: 7px 18px;
+  line-height: var(--font-size-lg);
+  font-size: var(--font-size-lg);
 }
 
 .btn-custom.width-filled {
