@@ -17,7 +17,6 @@ import {
   IBorrowedEquimentFilter,
 } from '../../../models/BorrowedEquipmentFilter';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { FilterService } from '../../../services/filter.service';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
@@ -48,7 +47,6 @@ export class BorrowedEquipmentComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBarService: SnackbarService,
-    private filterService: FilterService,
   ) {
     this.user = this.authService.getUser();
   }

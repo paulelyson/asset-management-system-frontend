@@ -14,7 +14,6 @@ import { BorrowService } from '../../../services/borrow.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { FilterService } from '../../../services/filter.service';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';
@@ -37,8 +36,7 @@ export class BorrowComponent implements OnInit {
 
   equipmentFilter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed((): FilterDisplay[] => {
-    const excluded = ['page'];
-    return this.filterService.getFilterDisplay(this.equipmentFilter(), excluded, this.departments());
+    return [];
   });
 
   department = computed((): string => {
@@ -52,7 +50,6 @@ export class BorrowComponent implements OnInit {
     private authService: AuthService,
     private snackBarService: SnackbarService,
     private router: Router,
-    private filterService: FilterService,
     private sideMenuService: SideMenuService,
     private departmentService: DepartmentService,
   ) {
@@ -63,7 +60,6 @@ export class BorrowComponent implements OnInit {
     this.departmentService.getDepartments().subscribe({
       next: (resp) => {
         this.departments.set(resp.data);
-        this.filterDisplay;
       },
     });
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));

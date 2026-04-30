@@ -14,7 +14,6 @@ import { RowDisplayContent } from '../../shared/row-display/row-display.componen
 import { EquipmentFilter, IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
 import { AuthService } from '../../../services/auth.service';
 import User from '../../../models/User';
-import { FilterService } from '../../../services/filter.service';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
@@ -41,7 +40,6 @@ export class InventoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private filterService: FilterService,
   ) {
     this.user = this.authService.getUser();
     this.equipmentFilter = new EquipmentFilter({ department: this.user.roles[0].department._id });
