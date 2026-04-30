@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import BorrowedEquipment, {
+  BORROW_STATUS_VARIANT,
   BorrowedEquipmentPayload,
   BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
@@ -59,12 +60,12 @@ export class BorrowService {
     const quantity = borrowedEquipment.quantity.toString();
     const status: RowActionConfig[] = borrowedEquipment.accumulatedStatus.map((x) => {
       return {
-        name: x.status,
+        name: x.quantity + ' ' +x.status,
         tooltip: '',
         type: 'badge',
         size: 'sm',
         icon: '',
-        variant: getVariantFromBorrowStatus(x.status)
+        variant: BORROW_STATUS_VARIANT[x.status]
       }
     });
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');

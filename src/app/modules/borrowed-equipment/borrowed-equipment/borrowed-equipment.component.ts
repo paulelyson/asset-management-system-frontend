@@ -92,14 +92,6 @@ export class BorrowedEquipmentComponent implements OnInit {
     return this.borrowService.getRowData(borrowedEquipment,this.user, this.filter())
   }
 
-  // getBorrowedEquipmentActions(borrowedEquipment: BorrowedEquipment): RowDisplayActionConfig[] {
-  //   return this.borrowService.getRowDisplayActions(
-  //     this.user,
-  //     borrowedEquipment,
-  //     this.filter().info_and_transaction,
-  //   );
-  // }
-
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'Approve') {
       this.onUpdateStatus(borrowedEquipment, 'instructor_approved', 'Approve');

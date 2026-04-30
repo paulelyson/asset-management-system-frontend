@@ -23,8 +23,8 @@ export function getVariantFromBorrowStatus(status: string): Variant {
     released: 'warning',
     instructor_rejected: 'neutral',
     oic_rejected: 'neutral',
-    mark_returned: 'neutral',
-    returned: 'neutral',
+    mark_returned: 'warning',
+    returned: 'success',
     unreturned: 'neutral',
     cancelled: 'neutral',
     system_reset: 'neutral'

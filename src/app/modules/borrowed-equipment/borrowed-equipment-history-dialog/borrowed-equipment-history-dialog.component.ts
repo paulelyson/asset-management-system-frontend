@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHistory';
-import { IVerticalStepper } from '../../shared/vertical-stepper/vertical-stepper.component';
+import { IVerticalStepper, VerticalStepperComponent } from '../../shared/vertical-stepper/vertical-stepper.component';
 import { getDisplayName } from '../../../utils/string.util';
 import { DatePipe } from '@angular/common';
 import { BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
@@ -11,7 +11,7 @@ import { IUser } from '../../../models/User';
   selector: 'app-borrowed-equipment-history-dialog',
   templateUrl: './borrowed-equipment-history-dialog.component.html',
   styleUrl: './borrowed-equipment-history-dialog.component.css',
-  standalone: false,
+  imports: [VerticalStepperComponent]
 })
 export class BorrowedEquipmentHistoryDialogComponent {
   transaction: IVerticalStepper[];
