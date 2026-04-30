@@ -1,0 +1,16 @@
+.toolbar-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 0 0 1.5rem 0;
+  gap: 5px;
+}
+
+.filter-badge-wrapper {
+  display: flex;
+  gap: 5px;
+}
+
+.spacer {
+  flex: 1;
+}
