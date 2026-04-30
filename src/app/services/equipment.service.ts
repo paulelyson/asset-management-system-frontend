@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IConditionAndQuantity, IEquipment } from '../models/Equipment';
+import { EQUIPMENT_STATUS_VARIANT, IConditionAndQuantity, IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { EquipmentFilter } from '../models/filters/equipment-filter.model';
@@ -8,7 +8,7 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
 } from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';
-import { RowColumnConfig } from '../models/ui/data-row.model';
+import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,14 +51,33 @@ export class EquipmentService {
   }
 
   getRowData(equipment: IEquipment): RowColumnConfig[] {
-    const conditions = equipment.conditionAndQuantity.map((x) => x.quantity + ' ' + x.condition);
+    const actions: RowActionConfig[] = [{
+      type: 'button',
+      name: 'Details',
+      icon: 'info_outlined',
+      size: 'xs'
+    },
+    {
+      type: 'button',
+      name: 'Update',
+      icon: 'edit',
+      size: 'xs'
+    }]
+    const conditions: RowActionConfig[] = equipment.conditionAndQuantity.map((x) => ({
+      name: x.quantity + ' ' + x.condition,
+      tooltip: '',
+      type: 'badge',
+      size: 'sm',
+      icon: '',
+      variant: EQUIPMENT_STATUS_VARIANT[x.condition]
+    }));
     return [
       { id: 0, type: 'image', header: '', weight: 0.5 },
-      { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 2 },
+      { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 2.5 },
       { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 0.5 },
       { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
-      { id: 4, type: 'badge', header: 'Condition', content: conditions, weight: 0.5 },
-      // { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
+      { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 0.5 },
+      { id: 5, type: 'action', header: '', actions: actions, weight: 0.5 },
     ];
   }
 

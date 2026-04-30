@@ -4,7 +4,7 @@
   <app-inventory-toolbar [filters]="filterDisplay()" />
   <div class="list-wrapper">
     @for (eqpmnt of equipment(); track eqpmnt._id; let first = $first) {
-      <app-data-row [columns]="getRowData(eqpmnt)" [showHeader]="first"></app-data-row>
+      <app-data-row [columns]="getRowData(eqpmnt)" [showHeader]="first" (actionclicked)="onActionClicked($event, eqpmnt)"/>
     } @empty {
       <span>No items.</span>
     }

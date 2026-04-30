@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IEquipment } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
 import { FileInputComponent } from '../../shared/file-input/file-input.component';
+import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -17,6 +18,8 @@ import { FileInputComponent } from '../../shared/file-input/file-input.component
     AutocompleteComponent,
     FileInputComponent,
     ReactiveFormsModule,
+    FormsModule,
+    DatepickerComponent
   ],
 })
 export class CreateEquipmentDialogComponent {

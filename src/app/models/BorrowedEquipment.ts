@@ -60,7 +60,6 @@ export const BORROW_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant>
     cancelled: 'danger',
     instructor_rejected: 'danger',
   }; {
-
 }
 
 

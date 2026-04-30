@@ -1,4 +1,5 @@
 import { BorrowedEquipmentTransaction } from "./BorrowedEquipment";
+import { Variant } from "./ui/common-config.model";
 import { Department } from "./User";
 
 export type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
@@ -9,6 +10,16 @@ type Matter = 'solid' | 'liquid' | 'gas';
 
 export const EQUIPMENT_CONDITION: EquipmentCondition[] = ['functional', 'defective', 'obsolete', 'lost', 'for_checkup', 'turned_over'];
 
+
+export const EQUIPMENT_STATUS_VARIANT: Record<EquipmentCondition, Variant> = {
+  functional: "success",
+  defective: "danger",
+  obsolete: "warning",
+  lost: "danger",
+  for_checkup: "warning",
+  turned_over: "success"
+}; {
+}
 
 export interface IConditionAndQuantity {
   condition: EquipmentCondition;
