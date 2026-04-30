@@ -2,7 +2,7 @@ import { Component, computed, OnInit, signal, WritableSignal } from '@angular/co
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
-import { EquipmentFilter, IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
+import { EquipmentFilter } from '../../../models/filters/equipment-filter.model';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';

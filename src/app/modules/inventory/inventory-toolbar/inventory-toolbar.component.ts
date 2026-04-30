@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
-import { IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';
@@ -8,6 +7,7 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { BadgeComponent } from '../../shared/badge/badge.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
 
 @Component({
   selector: 'app-inventory-toolbar',
@@ -16,7 +16,7 @@ import { InputComponent } from '../../shared/input/input.component';
   imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent]
 })
 export class InventoryToolbarComponent {
-  @Input() filters: Record<string, string>[] = [];
+  @Input() filters: FilterDisplay[] = [];
   searchControl = new FormControl('');
   url: string = '';
   constructor(private dialogService: DialogService, private router: Router) {
@@ -32,9 +32,9 @@ export class InventoryToolbarComponent {
     this.router.navigate([this.url]);
   }
 
-  onBadgeClosed(filter: Record<string, string>): void {
+  onBadgeClosed(filter: FilterDisplay): void {
     let navigationExtras: NavigationExtras = {
-      queryParams: { [filter['field']]: null },
+      queryParams: { [filter.field]: null },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);

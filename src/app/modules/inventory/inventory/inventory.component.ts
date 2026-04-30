@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   OnInit,
   signal,
   WritableSignal,
@@ -10,8 +11,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { IEquipment } from '../../../models/Equipment';
-import { RowDisplayContent } from '../../shared/row-display/row-display.component';
-import { EquipmentFilter, IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
+import { EquipmentFilter } from '../../../models/filters/equipment-filter.model';
 import { AuthService } from '../../../services/auth.service';
 import User from '../../../models/User';
 import { ButtonComponent } from '../../shared/button/button.component';
@@ -19,6 +19,7 @@ import { TitleSectionComponent } from '../../shared/title-section/title-section.
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { TabComponent } from '../../shared/layout/tab/tab.component';
+import { getFilterDisplay } from '../../shared/utils/filter.util';
 
 @Component({
   selector: 'app-inventory',
@@ -33,7 +34,9 @@ export class InventoryComponent implements OnInit {
   hasMore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   user: User;
-  filterDisplay: Record<string, string>[] = [];
+  filter = signal<EquipmentFilter>(new EquipmentFilter());
+  filterDisplay = computed(() => getFilterDisplay(this.filter()));
+
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
@@ -100,7 +103,6 @@ export class InventoryComponent implements OnInit {
     this.equipmentFilter.brand = params['brand'];
     this.equipmentFilter.categories = params['categories'];
     this.equipmentFilter.equipmentType = params['equipmentType'];
-    // this.filterDisplay = this.filterService.getFilterDisplay(this.equipmentFilter, ['page'], this.user);
     this.getEquipment();
   }
 }
