@@ -7,13 +7,13 @@
     <span>{{ equipment.brand }}</span>
   </div>
   <div class="availability">
-    <app-badge [variant]="totalAvailable > 0 ? 'success' : 'danger'" size="sm">
+    <app-badge [variant]="totalAvailable > 0 ? 'success' : 'danger'" size="xs">
       {{ availability }}
     </app-badge>
-    <app-icon name="info" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
+    <app-icon name="info_outlined" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
   </div>
   <div class="action-wrapper">
-    <app-button icon="add" width="width-filled" variant="primary" (click)="onAddEquipment()">
+    <app-button icon="add" width="width-filled" variant="primary" (click)="onAddEquipment()" size="md">
       Add
     </app-button>
   </div>

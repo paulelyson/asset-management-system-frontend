@@ -45,6 +45,11 @@
   border-radius: 5px;
 }
 
+.action-wrapper {
+  display: block;
+  padding: 10px 0;
+}
+
 /* sizes */
 .card-container.md {
   width: 180px;
