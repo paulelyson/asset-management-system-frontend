@@ -1,3 +1,4 @@
+import { EquipmentCondition } from "../Equipment";
 
 export class EquipmentFilter {
   page: number = 1;
@@ -6,6 +7,7 @@ export class EquipmentFilter {
   categories: string[] = [];
   brand: string = '';
   equipmentType: string = '';
+  condition?: EquipmentCondition;
   // borrow: boolean;
 
   constructor(partial?: Partial<EquipmentFilter>) {

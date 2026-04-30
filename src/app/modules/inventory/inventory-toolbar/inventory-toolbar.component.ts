@@ -17,6 +17,7 @@ import { FilterDisplay } from '../../../models/ui/common-config.model';
 })
 export class InventoryToolbarComponent {
   @Input() filters: FilterDisplay[] = [];
+  @Input() department: string = '';
   searchControl = new FormControl('');
   url: string = '';
   constructor(private dialogService: DialogService, private router: Router) {
@@ -25,7 +26,7 @@ export class InventoryToolbarComponent {
   }
 
   openFilterDialog() {
-    // this.dialogService.openEquipmentFilterDialog();
+    this.dialogService.openEquipmentFilterDialog(this.department);
   }
 
   clearFilter(): void {

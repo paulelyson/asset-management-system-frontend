@@ -12,6 +12,7 @@ import { DEPARTMENTS } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
 import { IDepartment } from '../../../models/Department';
 import { IQuantityStatusDialogConfig } from '../update-quantity-status-dialog/update-quantity-status-dialog.component';
+import { EQUIPMENT_CONDITION } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
@@ -26,6 +27,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
   brands: IAutocompleteOption[] = [];
   equipmentTypes: IAutocompleteOption[] = [];
   departments: IAutocompleteOption[] = [];
+  equipmentCondition;
 
   constructor(
     public dialogRef: MatDialogRef<EquipmentFilterDialogComponent>,
@@ -33,16 +35,18 @@ export class EquipmentFilterDialogComponent implements OnInit {
     private router: Router,
     private departmentService: DepartmentService,
     private equipmentService: EquipmentService,
+    private autocompleteService: AutocompleteService,
     @Inject(MAT_DIALOG_DATA) public data: { department: string },
   ) {
     this.url = this.router.url.split('?')[0];
-
+    this.equipmentCondition = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION)
     this.filterForm = this.fb.group({
       department: [this.data.department],
       categories: [''],
       brand: [''],
       equipmentType: [''],
       location: [''],
+      condition: [''],
     });
   }
 
@@ -53,7 +57,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
     })
       .pipe(
         map(({ departments, brands }) => ({
-          departments: departments.data.map((dept) => ({ value: dept._id, view: dept.name })),
+          departments: departments.data.map((dept) => ({ value: dept._id, view: dept.code })),
           brands: brands.map((brand) => ({ value: brand, view: brand })),
         })),
       )
@@ -65,7 +69,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
 
   navigate() {
     let navigationExtras: NavigationExtras = {
-      queryParams: {},
+      queryParams: { page: 1 },
       queryParamsHandling: 'merge',
     };
     Object.entries(this.filterForm.value).forEach(([key, val]) => {

@@ -43,11 +43,13 @@ export class InventoryComponent implements OnInit {
   user: User;
   filter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
+  selectedDept:  WritableSignal<string> = signal('');
   filterEffect = effect(() => {
     const dept = this.filter().department;
     if (dept && isObjectId(dept)) {
       this.departmentService.getDepartmentById(dept).subscribe((resp) => {
         this.filter.update(({ department, ...rest }) => ({ department: resp.data.code, ...rest }));
+        this.selectedDept.set(resp.data._id)
       });
     }
   });
@@ -120,6 +122,7 @@ export class InventoryComponent implements OnInit {
       brand: params['brand'],
       categories: params['categories'],
       equipmentType: params['equipmentType'],
+      condition: params['condition'],
       department: this.user.roles[0].department._id,
     });
     this.getEquipment();

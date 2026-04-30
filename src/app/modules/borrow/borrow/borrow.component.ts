@@ -159,6 +159,7 @@ export class BorrowComponent implements OnInit {
       brand: params['brand'],
       categories: params['categories'],
       equipmentType: params['equipmentType'],
+      condition: params['condition'],
       department: params['department'] ?? this.user.roles[0].department._id,
     });
     this.getEquipment();
