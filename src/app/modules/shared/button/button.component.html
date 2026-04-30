@@ -4,6 +4,7 @@
   [ngClass]="[appearance, shade, size, width, variant]"
   (click)="onClicked()"
   [disabled]="disabled"
+  [matTooltip]="tooltip"
 >
   @if (icon) {
     <app-icon [name]="icon" [size]="size"></app-icon>

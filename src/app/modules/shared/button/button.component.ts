@@ -4,10 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { IconComponent } from '../icon/icon.component';
 import { Size, Variant } from '../../../models/ui/common-config.model';
 import { ButtonAppearance, ButtonShade, ButtonWidth } from '../../../models/ui/button-config.model';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-button',
-  imports: [CommonModule, MatIconModule, IconComponent],
+  imports: [CommonModule, MatIconModule, IconComponent, MatTooltipModule],
   templateUrl: './button.component.html',
   styleUrl: './button.component.css',
 })
@@ -20,6 +21,7 @@ export class ButtonComponent {
   @Input() shade: ButtonShade = 'default';
   @Input() width: ButtonWidth = 'width-auto';
   @Input() icon: string = '';
+  @Input() tooltip: string = ''
   @Input() disabled: boolean = false;
   @Output() btnclicked: EventEmitter<string> = new EventEmitter<string>();
 
