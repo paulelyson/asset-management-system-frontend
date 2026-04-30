@@ -189,6 +189,134 @@
   --color-text-gray-strong: var(--gray-800);
   --color-text-gray-default: var(--gray-800);
   --color-text-gray-light: var(--gray-500);
+
+  /*
+   STARRRRRRRRRRT HEEEEEEEEEREEE
+  */
+
+  /* Header */
+  --color-bg-header: #eaefdb;
+  --color-bg-header-hover: #d2ead8;
+
+  --color-text: #1a1b1f;
+  --color-text-white: #e3e2e6;
+  --color-accent: #f1b12b;
+  /* ================================
+	FONTS
+	================================ */
+  --font-size-xs: 10px;
+  --font-size-sm: var(--mat-sys-body-small-size);
+  --font-size-md: var(--mat-sys-body-medium-size);
+  --font-size-lg: var(--mat-sys-body-large-size);
+
+  /* ================================
+	GREY / NEUTRAL
+	================================ */
+  /* Text */
+  --color-text-gray-strong: #6c757d;
+  --color-text-gray-default: #868e96;
+  --color-text-gray-light: #adb5bd;
+
+  /* Border */
+  --color-border-gray-idle: #ced4da;
+  --color-border-gray-hover: #adb5bd;
+  --color-border-gray-active: #6c757d;
+
+  /* Background */
+  --color-bg-gray-idle: #e7ecf3;
+  --color-bg-gray-hover: #adb5bd;
+  --color-bg-gray-active: #868e96;
+
+  /* ================================
+	PRIMARY
+	================================ */
+
+  /* Text */
+  --color-text-primary-strong: #4b7947;
+  --color-text-primary-default: #539364;
+  --color-text-primary-light: #6db681;
+
+  /* Border */
+  --color-border-primary-idle: #6db681;
+  --color-border-primary-hover: #539364;
+  --color-border-primary-active: #4b7947;
+
+  /* Background */
+  --color-bg-primary-idle: #cbe7ce;
+  --color-bg-primary-hover: #6db681;
+  --color-bg-primary-active: #539364;
+
+  /* ================================
+   BLUE / ACCENT
+   ================================ */
+
+  /* Text */
+  --color-text-accent-strong: #1d4ed8; /* blue-700 */
+  --color-text-accent-default: #2563eb; /* blue-600 */
+  --color-text-accent-light: #3b82f6; /* blue-500 */
+
+  /* Border */
+  --color-border-accent-idle: #60a5fa; /* blue-400 */
+  --color-border-accent-hover: #3b82f6; /* blue-500 */
+  --color-border-accent-active: #2563eb; /* blue-600 */
+
+  /* Background */
+  --color-bg-accent-idle: #dbeafe; /* blue-100 */
+  --color-bg-accent-hover: #bfdbfe; /* blue-200 */
+  --color-bg-accent-active: #93c5fd; /* blue-300 */
+
+  /* ================================
+	SUCCESS
+	================================ */
+
+  /* Text */
+  --color-text-success-strong: #4b7947;
+  --color-text-success-default: #539364;
+  --color-text-success-light: #6db681;
+
+  /* Border */
+  --color-border-success-idle: #6db681;
+  --color-border-success-hover: #539364;
+  --color-border-success-active: #4b7947;
+
+  /* Background */
+  --color-bg-success-idle: #cbe7ce;
+  --color-bg-success-hover: #6db681;
+  --color-bg-success-active: #539364;
+
+  /* ================================
+   WARNING
+   ================================ */
+
+  /* Text */
+  --color-text-warning-strong: #c2410c; /* orange-700 */
+  --color-text-warning-default: #ea580c; /* orange-600 */
+  --color-text-warning-light: #f97316; /* orange-500 */
+
+  /* Border */
+  --color-border-warning-idle: #fb923c; /* orange-400 */
+  --color-border-warning-hover: #f97316; /* orange-500 */
+  --color-border-warning-active: #ea580c; /* orange-600 */
+
+  /* Background */
+  --color-bg-warning-idle: #ffedd5; /* orange-100 */
+  --color-bg-warning-hover: #fed7aa; /* orange-200 */
+  --color-bg-warning-active: #fdba74; /* orange-300 */
+  /* ================================
+	DANGER
+	================================ */
+  /* Text */
+  --color-text-danger-strong: #991b1b;
+  --color-text-danger-default: #b91c1c;
+  --color-text-danger-light: #ef4444;
+  /* Border */
+  --color-border-danger-idle: #f87171;
+  --color-border-danger-hover: #ef4444;
+  --color-border-danger-active: #dc2626;
+  /* Background */
+  --color-bg-danger-idle: #fce8e6;
+  --color-bg-danger-hover: #ef4444;
+  --color-bg-danger-active: #dc2626;
 }
 
 html,
