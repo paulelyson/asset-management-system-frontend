@@ -17,7 +17,7 @@ type CardShade = 'default' | 'light';
   selector: 'app-added-equipment-card',
   templateUrl: './added-equipment-card.component.html',
   styleUrl: './added-equipment-card.component.css',
-  standalone: false,
+  imports: [IconComponent, CommonModule]
 })
 export class AddedEquipmentCardComponent {
   @Input() equipment!: IAddedEquipment;

@@ -18,12 +18,16 @@ import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
+import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
 
 @Component({
   selector: 'app-borrow',
   templateUrl: './borrow.component.html',
   styleUrl: './borrow.component.css',
-  standalone: false,
+  imports: [TitleSectionComponent, MatSidenavModule, ButtonComponent, EquipmentCardComponent]
 })
 export class BorrowComponent implements OnInit {
   sidenav_opened: boolean = false;

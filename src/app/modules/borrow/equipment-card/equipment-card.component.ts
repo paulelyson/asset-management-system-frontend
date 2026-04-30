@@ -16,6 +16,7 @@ import {
   IN_CIRCULATION_STATUS,
 } from '../../../models/BorrowedEquipment';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
+import { BadgeComponent } from '../../shared/badge/badge.component';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -25,7 +26,7 @@ type CardShade = 'default' | 'light';
   selector: 'app-equipment-card',
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
-  standalone: false,
+  imports:[ButtonComponent, IconComponent, BadgeComponent, CommonModule]
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;

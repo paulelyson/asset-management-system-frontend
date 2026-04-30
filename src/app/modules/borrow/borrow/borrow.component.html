@@ -1,35 +1,30 @@
 <div class="container">
   <app-title-section>Borrow Equipment</app-title-section>
-  <app-borrow-toolbar
-    (toggleBorrowForm)="onToggleBorrowForm($event)"
-    [filters]="filterDisplay()"
-    [department]="department()"
-  />
   <mat-drawer-container>
     <mat-drawer class="matdrawer-side" mode="side" [opened]="sidenav_opened" position="end">
       <div class="added-equipment-card-wrapper">
         @for (eqpmnt of addedEquipment; track eqpmnt) {
-          <app-added-equipment-card [equipment]="eqpmnt" (remove)="onRemoveEquipment($event)" />
+          <!-- <app-added-equipment-card [equipment]="eqpmnt" (remove)="onRemoveEquipment($event)" /> -->
         } @empty {
           <span>No equipment added yet.</span>
         }
       </div>
-      <app-class-schedule
+      <!-- <app-class-schedule
         [user]="user"
         [department]="equipmentFilter().department"
         [resetForm]="resetForm()"
         (onFormSubmit)="onSubmitRequest($event)"
-      />
+      /> -->
     </mat-drawer>
     <mat-drawer-content class="equipment-container">
       <div class="equipment-wrapper">
         @for (eqpmnt of equipment(); track eqpmnt) {
           <app-equipment-card [equipment]="eqpmnt" (addequipment)="onAddEquipment($event)" />
         } @empty {
-          <app-empty-placeholder />
+          <!-- <app-empty-placeholder /> -->
         }
       </div>
-      <div class="bottom-action-wrapper">
+      <div class="action-wrapper">
         @if (!disable_showmore) {
           <app-button (btnclicked)="loadMoreEquipment()">Show more... </app-button>
         }
