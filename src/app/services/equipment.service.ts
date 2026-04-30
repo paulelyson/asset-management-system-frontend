@@ -17,14 +17,11 @@ export class EquipmentService {
   constructor(private http: HttpClient) {}
 
   getEquipment(filter: EquipmentFilter) {
-    let params = new HttpParams({
-      fromObject: {
-        page: filter.page,
-        search: filter.search,
-        department: filter.department,
-        brand: filter.brand ?? ''
-      },
-    });
+    let params = new HttpParams({ fromObject: { page: filter.page } });
+    filter.search && (params = params.append('search', filter.search));
+    filter.department && (params = params.append('department', filter.department));
+    filter.brand && (params = params.append('brand', filter.brand));
+
     return this.http
       .get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params })
       .pipe(catchError(this.handleError));

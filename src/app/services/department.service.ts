@@ -4,6 +4,7 @@ import { catchError, map, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/ApiResponse';
 import { IDepartment } from '../models/Department';
+import { Department } from '../models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,10 @@ export class DepartmentService {
     return this.http
       .get<ApiResponse<IDepartment[]>>(environment.api_url + '/api/department', {})
       .pipe(catchError(this.handleError));
+  }
+
+  getDepartmentById(id: string) {
+    return this.http.get<ApiResponse<IDepartment>>(environment.api_url + '/api/department/' + id).pipe(catchError(this.handleError));
   }
 
   handleError(err: HttpErrorResponse) {

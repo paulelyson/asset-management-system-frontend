@@ -1,9 +1,11 @@
 <div class="toolbar-container">
   <div class="filter-badge-wrapper">
-    @for(filter of filters; track filter['field']) {
-    <app-badge size="sm" [hasCloseIcon]="true" (closed)="onBadgeClosed(filter)">
-      {{ filter['value'] }}
-    </app-badge>
+    @for(filter of filters; track filter.field) {
+      @if (filter.show) {
+        <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
+          {{ filter['value'] }}
+        </app-badge>
+      }
     }
   </div>
   <span class="spacer"></span>

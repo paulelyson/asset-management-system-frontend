@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   computed,
+  effect,
   OnInit,
   signal,
   WritableSignal,
@@ -20,22 +21,36 @@ import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolba
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { getFilterDisplay } from '../../shared/utils/filter.util';
+import { isObjectId } from '../../../utils/string.util';
+import { DepartmentService } from '../../../services/department.service';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
-  imports: [ButtonComponent, TitleSectionComponent, DataRowComponent, InventoryToolbarComponent, TabComponent],
+  imports: [
+    ButtonComponent,
+    TitleSectionComponent,
+    DataRowComponent,
+    InventoryToolbarComponent,
+    TabComponent,
+  ],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnInit {
-  sidenav_opened: boolean = true;
-  equipmentFilter: EquipmentFilter;
   hasMore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
   user: User;
   filter = signal<EquipmentFilter>(new EquipmentFilter());
-  filterDisplay = computed(() => getFilterDisplay(this.filter()));
+  filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
+  filterEffect = effect(() => {
+    const dept = this.filter().department;
+    if (dept && isObjectId(dept)) {
+      this.departmentService.getDepartmentById(dept).subscribe((resp) => {
+        this.filter.update(({ department, ...rest }) => ({ department: resp.data.code, ...rest }));
+      });
+    }
+  });
 
   constructor(
     private dialogService: DialogService,
@@ -43,9 +58,9 @@ export class InventoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private departmentService: DepartmentService
   ) {
     this.user = this.authService.getUser();
-    this.equipmentFilter = new EquipmentFilter({ department: this.user.roles[0].department._id });
   }
 
   ngOnInit(): void {
@@ -53,8 +68,8 @@ export class InventoryComponent implements OnInit {
   }
 
   getEquipment(): void {
-    if (this.equipmentFilter.page == 1) this.equipment.set([]);
-    this.equipmentService.getEquipment(this.equipmentFilter).subscribe({
+    if (this.filter().page == 1) this.equipment.set([]);
+    this.equipmentService.getEquipment(this.filter()).subscribe({
       next: (resp) => {
         this.hasMore = resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data]);
@@ -63,7 +78,7 @@ export class InventoryComponent implements OnInit {
   }
 
   getRowData(equipment: IEquipment) {
-    return this.equipmentService.getRowData(equipment)
+    return this.equipmentService.getRowData(equipment);
   }
 
   onActionClicked(action: string, equipment: IEquipment) {
@@ -88,7 +103,7 @@ export class InventoryComponent implements OnInit {
   loadMoreEquipment() {
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        page: this.equipmentFilter.page + 1,
+        page: this.filter().page + 1,
         // limit: event.pageSize,
       },
       queryParamsHandling: 'merge',
@@ -98,11 +113,15 @@ export class InventoryComponent implements OnInit {
   }
 
   queryParamsHandling(params: Params): void {
-    this.equipmentFilter.page = params['page'] ? parseInt(params['page']) : 1;
-    this.equipmentFilter.search = params['search'] ?? '';
-    this.equipmentFilter.brand = params['brand'];
-    this.equipmentFilter.categories = params['categories'];
-    this.equipmentFilter.equipmentType = params['equipmentType'];
+    this.filter.set({
+      ...this.filter(),
+      page: params['page'] ? parseInt(params['page']) : 1,
+      search: params['search'],
+      brand: params['brand'],
+      categories: params['categories'],
+      equipmentType: params['equipmentType'],
+      department: this.user.roles[0].department._id,
+    });
     this.getEquipment();
   }
 }
