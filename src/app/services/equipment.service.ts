@@ -4,13 +4,7 @@ import { IConditionAndQuantity, IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { EquipmentFilter } from '../models/filters/equipment-filter.model';
-import { Department } from '../models/User';
 import {
-  RowDisplayActionConfig,
-  RowDisplayContent,
-} from '../modules/shared/row-display/row-display.component';
-import {
-  BorrowedEquipmentStatusType,
   BorrowedEquipmentStatusTypeAndQuantity,
 } from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';

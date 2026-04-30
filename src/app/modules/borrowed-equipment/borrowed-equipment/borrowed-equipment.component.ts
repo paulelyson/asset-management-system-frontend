@@ -5,10 +5,6 @@ import BorrowedEquipment, {
   BorrowedEquipmentTransaction,
 } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
-import {
-  RowDisplayActionConfig,
-  RowDisplayContent,
-} from '../../shared/row-display/row-display.component';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { AuthService, TokenData } from '../../../services/auth.service';

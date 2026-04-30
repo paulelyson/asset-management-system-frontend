@@ -7,10 +7,6 @@ import BorrowedEquipment, {
 } from '../models/BorrowedEquipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import {
-  RowDisplayActionConfig,
-  RowDisplayContent,
-} from '../modules/shared/row-display/row-display.component';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
 import { IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
