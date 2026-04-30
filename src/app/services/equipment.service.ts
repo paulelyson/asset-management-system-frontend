@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IConditionAndQuantity, IEquipment } from '../models/Equipment';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { EquipmentFilter, IEquipmentFilter } from '../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../models/filters/EquipmentFilter';
 import { Department } from '../models/User';
 import {
   RowDisplayActionConfig,

@@ -14,7 +14,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { SideMenuService } from '../../../services/side-menu.service';
-import { FilterDisplay } from '../../../models/EquipmentFilter';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
 
 @Component({
   selector: 'app-borrow-toolbar',

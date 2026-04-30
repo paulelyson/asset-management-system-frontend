@@ -3,11 +3,11 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
-import { FilterDisplay } from '../../../models/EquipmentFilter';
 import { BadgeComponent } from '../../shared/badge/badge.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
 import { InputComponent } from '../../shared/input/input.component';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
 
 @Component({
   selector: 'app-borrowed-equipment-toolbar',

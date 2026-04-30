@@ -11,7 +11,7 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { IEquipment } from '../../../models/Equipment';
 import { RowDisplayContent } from '../../shared/row-display/row-display.component';
-import { EquipmentFilter, IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
 import { AuthService } from '../../../services/auth.service';
 import User from '../../../models/User';
 import { FilterService } from '../../../services/filter.service';

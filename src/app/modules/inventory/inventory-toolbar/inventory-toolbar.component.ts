@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
-import { IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';

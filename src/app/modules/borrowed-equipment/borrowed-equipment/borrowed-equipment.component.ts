@@ -18,7 +18,6 @@ import {
 } from '../../../models/BorrowedEquipmentFilter';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { FilterService } from '../../../services/filter.service';
-import { FilterDisplay } from '../../../models/EquipmentFilter';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
@@ -37,10 +36,10 @@ export class BorrowedEquipmentComponent implements OnInit {
   user: TokenData;
 
   filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
-  filterDisplay = computed((): FilterDisplay[] => {
-    const excluded = ['page'];
-    return this.filterService.getFilterDisplay(this.filter(), excluded, []);
-  });
+  // filterDisplay = computed((): FilterDisplay[] => {
+  //   const excluded = ['page'];
+  //   return this.filterService.getFilterDisplay(this.filter(), excluded, []);
+  // });
 
   constructor(
     private activatedRoute: ActivatedRoute,

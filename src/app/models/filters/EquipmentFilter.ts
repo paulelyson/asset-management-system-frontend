@@ -1,4 +1,4 @@
-import { Department } from "./User";
+import { Department } from "../User";
 
 export interface IEquipmentFilter {
   page: number;
@@ -8,11 +8,6 @@ export interface IEquipmentFilter {
   brand: string;
   equipmentType: string;
   borrow: boolean;
-}
-
-export interface FilterDisplay {
-  field: string;
-  value: any;
 }
 
 export class EquipmentFilter implements IEquipmentFilter {

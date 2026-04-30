@@ -2,7 +2,7 @@ import { Component, computed, OnInit, signal, WritableSignal } from '@angular/co
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { EquipmentService } from '../../../services/equipment.service';
-import { EquipmentFilter, FilterDisplay, IEquipmentFilter } from '../../../models/EquipmentFilter';
+import { EquipmentFilter, IEquipmentFilter } from '../../../models/filters/EquipmentFilter';
 import { IEquipment } from '../../../models/Equipment';
 import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.component';
 import { FormBuilder } from '@angular/forms';
@@ -18,6 +18,7 @@ import { FilterService } from '../../../services/filter.service';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
 
 @Component({
   selector: 'app-borrow',
