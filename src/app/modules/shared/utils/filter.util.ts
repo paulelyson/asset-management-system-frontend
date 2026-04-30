@@ -1,4 +1,4 @@
-import { FilterDisplay } from "../../../models/ui/common-config.model";
+import { FilterDisplay, Variant } from "../../../models/ui/common-config.model";
 
 export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[] = [] ,dontShow: string[] = ['page']): FilterDisplay[] => {
   return Object.entries(filter)
@@ -11,3 +11,24 @@ export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[]
     }))
     .filter((item) => item.value);
 };
+
+
+export function getVariantFromBorrowStatus(status: string): Variant {
+  const normalized = status.replace(/^\d+\s*/, '').trim().toLowerCase();
+
+  const map: Record<string, Variant> = {
+    requested: 'neutral',
+    instructor_approved: 'accent',
+    oic_approved: 'accent',
+    released: 'warning',
+    instructor_rejected: 'neutral',
+    oic_rejected: 'neutral',
+    mark_returned: 'neutral',
+    returned: 'neutral',
+    unreturned: 'neutral',
+    cancelled: 'neutral',
+    system_reset: 'neutral'
+  };
+
+  return map[normalized] ?? 'neutral';
+}

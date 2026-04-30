@@ -4,7 +4,7 @@ import { Size, Variant } from './common-config.model';
 export type RowContentType = 'image' | 'title' | 'text' | 'badge' | 'action';
 
 export class RowActionConfig {
-  type: 'icon' | 'button' = 'button';
+  type: 'icon' | 'button' | 'badge' = 'button';
   name: string = '';
   icon: string = '';
   size: Size = 'md';

@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import BorrowedEquipment, {
-  BORROWED_STATUS_VARIANT,
   BorrowedEquipmentPayload,
   BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
@@ -14,6 +13,7 @@ import { IUser } from '../models/User';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
+import { getVariantFromBorrowStatus } from '../modules/shared/utils/filter.util';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +57,16 @@ export class BorrowService {
     const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const quantity = borrowedEquipment.quantity.toString();
-    const status = borrowedEquipment.accumulatedStatus.map((x) => x.quantity + ' ' + x.status);
+    const status: RowActionConfig[] = borrowedEquipment.accumulatedStatus.map((x) => {
+      return {
+        name: x.status,
+        tooltip: '',
+        type: 'badge',
+        size: 'sm',
+        icon: '',
+        variant: getVariantFromBorrowStatus(x.status)
+      }
+    });
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
     const actions = this.getRowActions(user, borrowedEquipment, filter.info_and_transaction);
     const purpose = borrowedEquipment.purpose;
@@ -67,7 +76,7 @@ export class BorrowService {
       { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
       { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
       { id: 4, type: 'text', header: 'Qty', content: quantity, weight: 0.3 },
-      { id: 5, type: 'badge', header: 'Status', content: status[0], weight: 1 },
+      { id: 5, type: 'action', header: 'Status', actions: status, weight: 1 },
       { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 0.8 },
       { id: 7, type: 'action', header: '', actions: actions, weight: 0.5 },
     ]

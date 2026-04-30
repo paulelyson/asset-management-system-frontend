@@ -4,20 +4,6 @@ import { IMongoDocument } from './MongoDocument';
 import { Variant } from './ui/common-config.model';
 import User, { Department, IUser } from './User';
 
-export const BORROWED_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant> = {
-  requested: 'neutral',
-  instructor_approved: 'accent',
-  oic_approved: 'accent',
-  released: 'warning',
-  instructor_rejected: 'neutral',
-  oic_rejected: 'neutral',
-  mark_returned: 'neutral',
-  returned: 'neutral',
-  unreturned: 'neutral',
-  cancelled: 'neutral',
-  system_reset: 'neutral'
-};
-
 export type BorrowedEquipmentStatusType =
   | 'requested'
   | 'instructor_approved'
