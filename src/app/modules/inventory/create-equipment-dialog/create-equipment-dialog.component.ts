@@ -22,8 +22,11 @@ import { LocationService } from '../../../services/location.service';
 import { ClassLocation } from '../../../models/data/location.model';
 import { EquipmentService } from '../../../services/equipment.service';
 import { IDepartment } from '../../../models/Department';
-import { Department } from '../../../models/User';
+import { Department, IUser } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
+import { AuthService, TokenData } from '../../../services/auth.service';
+import { getDisplayName } from '../../../utils/string.util';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -63,6 +66,8 @@ export class CreateEquipmentDialogComponent implements OnInit {
   departmentlist = computed((): IAutocompleteOption[] =>
     this.departments().map((dept) => ({ value: dept._id, view: dept.code })),
   );
+
+  user: TokenData;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateEquipmentDialogComponent>,
@@ -70,8 +75,11 @@ export class CreateEquipmentDialogComponent implements OnInit {
     private locationService: LocationService,
     private departmentService: DepartmentService,
     private equipmentService: EquipmentService,
+    private authService: AuthService,
+    private snackBarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
   ) {
+    this.user = this.authService.getUser();
     this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
     this.conditions = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION);
     this.equipmentForm = this.fb.nonNullable.group({
@@ -90,9 +98,11 @@ export class CreateEquipmentDialogComponent implements OnInit {
       inventorytype: [data?.inventorytype ?? ''],
       location: [data?.location?._id ?? ''],
       dateAcquired: [data?.dateAcquired ?? new Date()],
-      department: [{ value: data?.department?._id ?? '', disabled: true }],
+      department: [data?.department?._id ?? this.user.roles[0].department._id],
+      updatedBy: [data?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
+      totalQuantity: [0],
     });
   }
 
@@ -113,6 +123,13 @@ export class CreateEquipmentDialogComponent implements OnInit {
       next: (resp) => this.departments.set(resp.data),
     });
 
+    this.conditionAndQuantity.valueChanges.subscribe({
+      next: (rows: { condition: string; quantity: number }[]) => {
+        const total = rows.reduce((sum, row) => sum + (row.quantity ?? 0), 0);
+        this.equipmentForm.controls['totalQuantity'].patchValue(total);
+      },
+    });
+
     this.populateForm(this.data?.conditionAndQuantity || []);
 
     if (!this.data?.conditionAndQuantity) {
@@ -126,6 +143,16 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
   get conditionAndQuantity(): FormArray {
     return this.equipmentForm.get('conditionAndQuantity') as FormArray;
+  }
+
+  getUpdatedByDisplayName() {
+    let displayName = '';
+    if (this.data) {
+      displayName = this.data?.updatedBy ? getDisplayName(this.data?.updatedBy) : '';
+    } else {
+      displayName = this.user.name;
+    }
+    return displayName;
   }
 
   populateForm(data: IConditionAndQuantity[]): void {
@@ -166,6 +193,47 @@ export class CreateEquipmentDialogComponent implements OnInit {
   }
 
   submit() {
-    this.dialogRef.close(this.equipmentForm.value);
+    this.equipmentForm.controls['updatedBy'].patchValue(this.user._id);
+    const payload = {
+      ...this.equipmentForm.value,
+    };
+
+    // new equipment
+    if (!this.data) {
+      delete payload._id;
+      this.equipmentService.createEquipment(payload).subscribe({
+        next: (resp) => {
+          this.snackBarService.openSnackbar({
+            type: 'success',
+            message: [resp.message],
+            icon: '',
+          });
+          this.dialogRef.close('create success');
+        },
+        error: (err) =>
+          this.snackBarService.openSnackbar({
+            type: 'error',
+            message: [err],
+            icon: '',
+          }),
+      });
+    } else {
+      this.equipmentService.updateEquipment(payload).subscribe({
+        next: (resp) => {
+          this.snackBarService.openSnackbar({
+            type: 'success',
+            message: [resp.message],
+            icon: '',
+          });
+          this.dialogRef.close('update success');
+        },
+        error: (err) =>
+          this.snackBarService.openSnackbar({
+            type: 'error',
+            message: [err],
+            icon: '',
+          }),
+      });
+    }
   }
 }

@@ -46,7 +46,6 @@ export class EquipmentService {
   createEquipment(equipment: IEquipment) {
     return this.http.post<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/', equipment)
       .pipe(
-        map((resp) => resp.data),
         catchError(this.handleError),
       );
   }
@@ -54,7 +53,6 @@ export class EquipmentService {
   updateEquipment(equipment: IEquipment) {
     return this.http.patch<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/' + equipment._id, equipment)
       .pipe(
-        map((resp) => resp.data),
         catchError(this.handleError),
       );
   }
@@ -93,6 +91,7 @@ export class EquipmentService {
   }
 
   handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.error.message || err.error));
+    return throwError(() => new Error(err.error.errors || err.error.message));
+
   }
 }

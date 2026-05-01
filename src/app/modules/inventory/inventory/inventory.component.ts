@@ -54,9 +54,9 @@ export class InventoryComponent implements OnInit {
       });
     }
   });
-  canAccessEquipment = computed(()=> {
-    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant'])
-  })
+  canAccessEquipment = computed(() => {
+    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant']);
+  });
 
   constructor(
     private dialogService: DialogService,
@@ -99,29 +99,13 @@ export class InventoryComponent implements OnInit {
   onUpdateEquipment(equipment: IEquipment) {
     this.dialogService.openUpdateEquipmentDialog(equipment).subscribe((resp: IEquipment | null) => {
       if (resp) {
-        this.equipmentService.updateEquipment(resp).subscribe({
-          next: (resp) => console.log(resp),
-          error: (err) =>
-            this.snackBarService.openSnackbar({
-              type: 'error',
-              message: [err],
-              icon: '',
-            }),
-        });
+        console.log(resp);
       }
     });
   }
 
   onAddNewEquipment(equipment: IEquipment) {
-    this.equipmentService.createEquipment(equipment).subscribe({
-      next: (resp) => console.log(resp),
-      error: (err) =>
-        this.snackBarService.openSnackbar({
-          type: 'error',
-          message: [err],
-          icon: '',
-        }),
-    });
+    console.log('create success');
   }
 
   loadMoreEquipment() {
