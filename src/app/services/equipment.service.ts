@@ -57,11 +57,24 @@ export class EquipmentService {
       );
   }
 
+  getChangeLogsByEquipment(equipmentId: string) {
+     return this.http.get<ApiResponse<any>>(environment.api_url + '/api/equipment-change-log/' + equipmentId)
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
   getRowData(equipment: IEquipment, canAccessEquipment: boolean): RowColumnConfig[] {
     const actions: RowActionConfig[] = [{
       type: 'button',
       name: 'Details',
       icon: 'info_outlined',
+      size: 'xs'
+    },
+    {
+      type: 'button',
+      name: 'Changes History',
+      icon: 'history',
       size: 'xs'
     }]
     if(canAccessEquipment) {
@@ -86,7 +99,7 @@ export class EquipmentService {
       { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 0.5 },
       { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
       { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 0.5 },
-      { id: 5, type: 'action', header: '', actions: actions, weight: 0.5 },
+      { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
     ];
   }
 

@@ -93,19 +93,21 @@ export class InventoryComponent implements OnInit {
       this.dialogService.openEquipmentDetailDialog(equipment);
     } else if (action == 'Update') {
       this.onUpdateEquipment(equipment);
+    } else if (action == 'Changes History') {
+      this.onDisplayChangeLogs(equipment)
     }
   }
 
   onUpdateEquipment(equipment: IEquipment) {
     this.dialogService.openUpdateEquipmentDialog(equipment).subscribe((resp: IEquipment | null) => {
-      if (resp) {
-        console.log(resp);
-      }
+      if (resp) console.log(resp);
     });
   }
 
-  onAddNewEquipment(equipment: IEquipment) {
-    console.log('create success');
+  onDisplayChangeLogs(equipment: IEquipment) {
+    this.equipmentService.getChangeLogsByEquipment(equipment._id).subscribe({
+      next: (resp)=> console.log(resp)
+    })
   }
 
   loadMoreEquipment() {
