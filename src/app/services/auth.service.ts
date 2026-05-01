@@ -44,7 +44,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.clear();
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 
   changePassword(idNumber: string, currentPassword: string, newPassword: string) {
@@ -60,7 +60,7 @@ export class AuthService {
     return Date.now() >= expirationTime;
   }
 
-  private hasToken(): boolean {
+  hasToken(): boolean {
     return !!localStorage.getItem('token');
   }
 
