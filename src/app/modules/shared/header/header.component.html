@@ -4,7 +4,9 @@
       <span style="flex: 1"></span>
       <ul class="navigation">
         @if (isLoggedIn()) {
-          <li><a routerLink="/inventory">Inventory</a></li>
+          @if(canAccessInventory()) {
+            <li><a routerLink="/inventory">Inventory</a></li>
+          }
           <li><a routerLink="/borrow">Borrow</a></li>
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">

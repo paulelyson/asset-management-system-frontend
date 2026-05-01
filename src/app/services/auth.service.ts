@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Department, IUser } from '../models/User';
+import { Department, IUser, UserRole } from '../models/User';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -32,10 +32,12 @@ export class AuthService {
 
   login(accoundId: string, password: string) {
     const body = { username: accoundId, password };
-    return this.http.post<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/login', body).pipe(
-      map((resp) => resp.data),
-      catchError(this.handleError),
-    );
+    return this.http
+      .post<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/login', body)
+      .pipe(
+        map((resp) => resp.data),
+        catchError(this.handleError),
+      );
   }
 
   isLoggedIn() {
@@ -44,14 +46,15 @@ export class AuthService {
 
   logout(): void {
     localStorage.clear();
+    this.loggedInSubject.next(false);
     this.router.navigate(['/login']);
   }
 
   changePassword(idNumber: string, currentPassword: string, newPassword: string) {
     const body = { username: idNumber, currentPassword, newPassword };
-    return this.http.patch<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/change-password', body).pipe(
-      catchError(this.handleError),
-    );
+    return this.http
+      .patch<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/change-password', body)
+      .pipe(catchError(this.handleError));
   }
 
   isTokenExpired(token: string): boolean {
@@ -62,6 +65,11 @@ export class AuthService {
 
   hasToken(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  hasRole(allowedRoles: UserRole['role'][], user: TokenData = this.getUser()): boolean {
+    if (!user) return false;
+    return user.roles.some((r) => allowedRoles.includes(r.role));
   }
 
   private handleError(err: HttpErrorResponse) {

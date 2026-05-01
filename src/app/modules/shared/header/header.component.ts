@@ -31,6 +31,12 @@ export class HeaderComponent implements OnInit {
     return contents;
   });
 
+  canAccessInventory = computed(()=> {
+    return this.isLoggedIn() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'instructor'])
+  })
+
+
+
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,
@@ -39,6 +45,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe((resp) => {
       if (resp) this.onLogin(resp);
+      else this.onLogout()
     });
   }
 
@@ -54,6 +61,11 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn.set(isLoggedIn);
     this.user.set(this.authService.getUser());
     this.isTransparent = false;
+  }
+
+  onLogout() {
+    this.isTransparent = true;
+    this.isLoggedIn.set(false);
   }
 
   onAvatarClicked() {

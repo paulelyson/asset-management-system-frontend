@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -14,7 +15,7 @@ export const routes: Routes = [
   {
     path: 'inventory',
     loadChildren: () => import('./modules/inventory/inventory-module').then((m) => m.InventoryModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard(['lab_in_charge', 'chairman', 'instructor', 'assistant'])]
   },
   {
     path: 'borrowed-equipment',
@@ -23,6 +24,11 @@ export const routes: Routes = [
   },
   {
     path: '',
+    redirectTo: '/borrow',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
     redirectTo: '/borrow',
     pathMatch: 'full'
   },
