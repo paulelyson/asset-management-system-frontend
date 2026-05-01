@@ -9,6 +9,7 @@ import {
 } from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
+import { IUser } from '../models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -58,19 +59,21 @@ export class EquipmentService {
       );
   }
 
-  getRowData(equipment: IEquipment): RowColumnConfig[] {
+  getRowData(equipment: IEquipment, canAccessEquipment: boolean): RowColumnConfig[] {
     const actions: RowActionConfig[] = [{
       type: 'button',
       name: 'Details',
       icon: 'info_outlined',
       size: 'xs'
-    },
-    {
-      type: 'button',
-      name: 'Update',
-      icon: 'edit',
-      size: 'xs'
     }]
+    if(canAccessEquipment) {
+      actions.push({
+        type: 'button',
+        name: 'Update',
+        icon: 'edit',
+        size: 'xs'
+      })
+    }
     const conditions: RowActionConfig[] = equipment.conditionAndQuantity.map((x) => ({
       name: x.quantity + ' ' + x.condition,
       tooltip: '',

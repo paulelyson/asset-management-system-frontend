@@ -14,16 +14,18 @@
       Clear Filters
     </app-button>
   }
-  <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
-    New Equipment
-  </app-button>
-  <app-button
-    appearance="link"
-    icon="download"
-    tooltip="Currently unavailable due to recent migration"
-  >
-    Report
-  </app-button>
+  @if (canAccessEquipment) {
+    <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
+      New Equipment
+    </app-button>
+    <app-button
+      appearance="link"
+      icon="download"
+      tooltip="Currently unavailable due to recent migration"
+    >
+      Report
+    </app-button>
+  }
   <app-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
   </app-button>

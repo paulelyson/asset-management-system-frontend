@@ -35,8 +35,6 @@ export class HeaderComponent implements OnInit {
     return this.isLoggedIn() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'instructor'])
   })
 
-
-
   constructor(
     private dialogService: DialogService,
     private authService: AuthService,

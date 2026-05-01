@@ -54,6 +54,9 @@ export class InventoryComponent implements OnInit {
       });
     }
   });
+  canAccessEquipment = computed(()=> {
+    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant'])
+  })
 
   constructor(
     private dialogService: DialogService,
@@ -82,7 +85,7 @@ export class InventoryComponent implements OnInit {
   }
 
   getRowData(equipment: IEquipment) {
-    return this.equipmentService.getRowData(equipment);
+    return this.equipmentService.getRowData(equipment, this.canAccessEquipment());
   }
 
   onActionClicked(action: string, equipment: IEquipment) {

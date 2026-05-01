@@ -29,6 +29,7 @@ import { IEquipment } from '../../../models/Equipment';
 export class InventoryToolbarComponent {
   filters = input<FilterDisplay[]>([]);
   @Input() department: string = '';
+  @Input() canAccessEquipment: boolean = false;
   searchControl = new FormControl('');
   url: string = '';
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
