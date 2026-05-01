@@ -1,12 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { IEquipment } from '../../../models/Equipment';
+import { EQUIPMENT_STATUS_VARIANT, EquipmentCondition, IEquipment } from '../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConditionQuantityPipe } from '../../../pipes/condition-quantity.pipe';
+import { BadgeComponent } from '../badge/badge.component';
+import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 
 @Component({
   selector: 'app-equipment-detail-dialog',
-  imports: [MatDividerModule, ConditionQuantityPipe],
+  imports: [MatDividerModule, ConditionQuantityPipe, BadgeComponent, DisplayNamePipe],
   templateUrl: './equipment-detail-dialog.component.html',
   styleUrl: './equipment-detail-dialog.component.css',
 })
@@ -19,5 +21,9 @@ export class EquipmentDetailDialogComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+  }
+
+  getVariant(cond: EquipmentCondition) {
+    return EQUIPMENT_STATUS_VARIANT[cond]
   }
 }

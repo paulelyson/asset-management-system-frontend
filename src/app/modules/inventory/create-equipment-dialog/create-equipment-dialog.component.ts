@@ -88,9 +88,9 @@ export class CreateEquipmentDialogComponent implements OnInit {
       description: [data?.description ?? ''],
       remarks: [data?.remarks ?? ''],
       inventorytype: [data?.inventorytype ?? ''],
-      location: [data?.location ?? ''],
+      location: [data?.location?._id ?? ''],
       dateAcquired: [data?.dateAcquired ?? new Date()],
-      department: [{ value: data?.department ?? '', disabled: true }],
+      department: [{ value: data?.department?._id ?? '', disabled: true }],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
     });
@@ -101,11 +101,11 @@ export class CreateEquipmentDialogComponent implements OnInit {
       next: (resp) => this.locations.set(resp.data),
     });
 
-    this.equipmentService.getDistinct('brand', this.data?.department).subscribe({
+    this.equipmentService.getDistinct('brand', this.data?.department?._id).subscribe({
       next: (resp) => this.brands.set(resp.data),
     });
 
-    this.equipmentService.getDistinct('type', this.data?.department).subscribe({
+    this.equipmentService.getDistinct('type', this.data?.department?._id).subscribe({
       next: (resp) => this.equipmenttypes.set(resp.data),
     });
 

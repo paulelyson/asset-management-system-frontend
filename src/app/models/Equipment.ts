@@ -1,6 +1,8 @@
 import { BorrowedEquipmentTransaction } from "./BorrowedEquipment";
+import { ClassLocation } from "./data/location.model";
+import { IDepartment } from "./Department";
 import { Variant } from "./ui/common-config.model";
-import { Department } from "./User";
+import { Department, IUser } from "./User";
 
 export type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
 type EquipmentStatus = 'acquired' | 'returned';
@@ -51,13 +53,15 @@ export interface IEquipment {
   remarks: string;
   inventorytag: boolean;
   checkedBy: string;
-  department: Department;
+  department: IDepartment;
   inventorytype: EquipmentInventoryType;
-  location: string;
+  location: ClassLocation;
   confirmed: boolean;
   warrantyPeriod: Date;
   availability: EquipmentAvailability;
   conditionAndQuantity: IConditionAndQuantity[];
   dis: boolean;
   accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
+  updatedBy: IUser;
+  hasTag: boolean;
 }

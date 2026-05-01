@@ -42,4 +42,10 @@
   .subtitle {
     color: rgba(0, 0, 0, 0.5);
   }
+
+  .badge-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
 }

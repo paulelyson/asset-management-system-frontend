@@ -9,6 +9,23 @@
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
+      <div class="subtitle">Condition</div>
+      <div class="badge-wrapper">
+        @for (cond of data.conditionAndQuantity; track cond) {
+          <app-badge [variant]="getVariant(cond.condition)">
+            {{ cond | conditionQuantity }}
+          </app-badge>
+        }
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Brand</div>
+      <div class="label">{{ data.brand }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <!-- Classification  -->
+    <div class="label-wrapper">
       <div class="subtitle">Equipment Type</div>
       <div class="label">{{ data.type }}</div>
     </div>
@@ -19,25 +36,11 @@
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
-      <div class="subtitle">Serial No</div>
-      <div class="label">{{ data.serialNo }}</div>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="label-wrapper">
       <div class="subtitle">Model</div>
       <div class="label">{{ data.modelNo }}</div>
     </div>
     <mat-divider></mat-divider>
-    <div class="label-wrapper">
-      <div class="subtitle">Brand</div>
-      <div class="label">{{ data.brand }}</div>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="label-wrapper">
-      <div class="subtitle">Matter</div>
-      <div class="label">{{ data.matter }}</div>
-    </div>
-    <mat-divider></mat-divider>
+    <!-- Physical Attributes  -->
     <div class="label-wrapper">
       <div class="subtitle">Color</div>
       <div class="label">{{ data.color }}</div>
@@ -49,15 +52,42 @@
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
-      <div class="subtitle">Location</div>
-      <div class="label">{{ data.location }}</div>
+      <div class="subtitle">Matter</div>
+      <div class="label">{{ data.matter }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <!-- Metadata -->
+    <div class="label-wrapper">
+      <div class="subtitle">Serial No</div>
+      <div class="label">{{ data.serialNo }}</div>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
-      <div class="subtitle">Condition</div>
-      @for(condition of data.conditionAndQuantity; track condition) {
-      <div class="label">{{ condition | conditionQuantity }}</div>
-      }
+      <div class="subtitle">Has Tag</div>
+      <app-badge [variant]="data.hasTag ? 'success' : 'warning'">
+        {{ data.hasTag ? 'Yes' : 'No' }}
+      </app-badge>
     </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Location</div>
+      <div class="label">{{ data.location ? data.location.name : '' }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Department</div>
+      <div class="label">
+        {{ data.department ? data.department.code : '' }}
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="label-wrapper">
+      <div class="subtitle">Updated By</div>
+      <div class="label">
+        {{ data.updatedBy ? (data.updatedBy | displayName: 'firstName' : 'lastName') : '' }}
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    
   </div>
 </div>
