@@ -1,19 +1,24 @@
-<div class="container">
-  <div class="wrapper-title underlined">History</div>
-  <!-- completed -->
-  @for (content of contents; track $index) {
-    <div class="step completed">
-      <div class="v-stepper">
-        <div class="circle"></div>
-        <div class="line"></div>
-      </div>
-
-      <div class="content">
-        <div class="title">{{ content.title }}</div>
-        @for (subtitle of content.contents; track subtitle) {
-          <div class="subtitle">{{ subtitle }}</div>
-        }
-      </div>
+<!-- <div class="container">
+  <div class="wrapper-title underlined">History</div> -->
+<div class="step">
+  <div class="v-stepper">
+    <div class="circle" [ngClass]="[variant]">
+      <div class="dot-icon"></div>
     </div>
-  }
+    <div class="line" [class.hasline]="showLine"></div>
+  </div>
+
+  <div class="step-content">
+    <div class="step-header">
+      @if(title) {
+        <div class="title">{{ title }}</div>
+      }
+      <app-badge [variant]="variant" size="xs">{{ badgeContent }}</app-badge>
+      <span style="flex: 1"></span>
+      <span class="time">{{ time }}</span>
+    </div>
+    <!-- sub contents -->
+    <ng-content></ng-content>
+  </div>
 </div>
+<!-- </div> -->

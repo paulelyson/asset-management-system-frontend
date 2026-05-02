@@ -48,17 +48,32 @@ export type BorrowedEquipmentStatusTypeAndQuantity = {
 export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'instructor_approved', 'oic_approved', 'released', 'mark_returned'];
 
 export const BORROW_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant> = {
-    requested: 'neutral',
+    requested: 'accent',
     instructor_approved: 'accent',
     oic_approved: 'accent',
     released: 'warning',
-    oic_rejected: 'neutral',
+    oic_rejected: 'danger',
     mark_returned: 'warning',
     returned: 'success',
-    unreturned: 'neutral',
-    system_reset: 'neutral',
+    unreturned: 'danger',
+    system_reset: 'danger',
     cancelled: 'danger',
     instructor_rejected: 'danger',
+  }; {
+}
+
+export const BORROW_STATUS_DISPLAY: Record<BorrowedEquipmentStatusType, string> = {
+    requested: 'Requested',
+    instructor_approved: 'Approved',
+    oic_approved: 'Approved',
+    released: 'Released',
+    oic_rejected: 'Cancelled',
+    mark_returned: 'Marked Returned',
+    returned: 'Returned',
+    unreturned: 'Unreturend',
+    system_reset: 'System Reset',
+    cancelled: 'Cancelled',
+    instructor_rejected: 'Cancelled',
   }; {
 }
 

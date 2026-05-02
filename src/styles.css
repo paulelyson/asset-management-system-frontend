@@ -200,6 +200,7 @@
 
   --color-text: #1a1b1f;
   --color-text-white: #e3e2e6;
+  --color-text-gray: rgba(0, 0, 0, 0.54);
   --color-accent: #f1b12b;
   /* ================================
 	FONTS

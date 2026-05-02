@@ -1,7 +1,3 @@
-/* .container {
-  width: 25%;
-} */
-
 .wrapper-title {
   text-align: center;
   font-size: 1.3em;
@@ -14,78 +10,103 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  background-color: cream;
+  gap: 15px;
 }
 
 .v-stepper {
   position: relative;
   /*   visibility: visible; */
 }
-
-/* regular step */
 .step .circle {
-  background-color: white;
-  /* border: 1px solid gray; */
-  border-radius: 100%;
-  width: 15px;
-  height: 15px;
-  display: inline-block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
 }
 
-.step .line {
-  top: 12px;
-  left: 6px;
-  height: calc(100% + 10px);
+.step .circle .dot-icon {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+/* Variant: Success */
+.step .circle.success {
+  border: 1px solid var(--color-border-success-idle);
+  background: var(--color-bg-success-idle);
+
+  .dot-icon {
+    background-color: var(--color-text-success-default);
+  }
+}
+
+/* Variant: Warning */
+.step .circle.warning {
+  border: 1px solid var(--color-border-warning-idle);
+  background: var(--color-bg-warning-idle);
+
+  .dot-icon {
+    background-color: var(--color-text-warning-default);
+  }
+}
+
+/* Variant: Warning */
+.step .circle.warning {
+  border: 1px solid var(--color-border-warning-idle);
+  background: var(--color-bg-warning-idle);
+
+  .dot-icon {
+    background-color: var(--color-text-warning-default);
+  }
+}
+
+/* Variant: accent */
+.step .circle.accent {
+  border: 1px solid var(--color-border-accent-idle);
+  background: var(--color-bg-accent-idle);
+
+  .dot-icon {
+    background-color: var(--color-text-accent-default);
+  }
+}
+
+/* Variant: danger */
+.step .circle.danger {
+  border: 1px solid var(--color-border-danger-idle);
+  background: var(--color-bg-danger-idle);
+
+  .dot-icon {
+    background-color: var(--color-text-danger-default);
+  }
+}
+
+.step .line.hasline {
+  /* .step:not(:last-child) .line { */
+  top: 24px;
+  left: 12px;
+  height: calc(100% + 15px);
   position: absolute;
+  border-left: 1px solid var(--color-border-gray-idle);
 }
 
-.step.completed .circle {
-  visibility: visible;
-  background-color: rgb(62, 112, 62);
-  border-color: rgb(62, 112, 62);
+.step-content {
+  flex: 1;
+  padding-bottom: 10px;
 }
 
-.step.completed .line {
-  border-left: 3px solid rgb(62, 112, 62);
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 10px;
 }
 
-.step.active .circle {
-  visibility: visible;
-  border-color: rgb(62, 112, 62);
-}
-
-.step.empty .circle {
-  visibility: hidden;
-}
-
-.step.empty .line {
-  /*     visibility: hidden; */
-  /*   height: 150%; */
-  top: 0;
-  height: 150%;
-}
-
-.step:last-child .line {
-  border-left: 3px solid white;
-  z-index: -1; /* behind the circle to completely hide */
-}
-
-.content {
-  margin-left: 20px;
-  display: inline-block;
-}
-
-.content .title {
-  padding: 2px 0;
-  min-width: 110px;
-  font-weight: 600;
-  font-size: 13px;
-  color: rgb(62, 112, 62);
-  display: inline-block;
-}
-
-.content .subtitle {
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 11px;
-  line-height: 1.2;
+.step-header .time {
+  color: var(--color-text-gray);
+  font-size: var(--font-size-xs);
 }

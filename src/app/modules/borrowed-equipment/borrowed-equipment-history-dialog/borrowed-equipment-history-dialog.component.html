@@ -1,1 +1,21 @@
-<app-vertical-stepper [contents]="transaction"></app-vertical-stepper>
+<div class="container">
+  @for (transc of transaction; track $index) {
+    <app-vertical-stepper
+      [badgeContent]="transc.badgeContent"
+      [variant]="transc.variant"
+      [time]="transc.time"
+      [showLine]="transc.showLine"
+    >
+      <div class="content-wrapper">
+        <div class="content">
+          <div class="avatar blue">{{ transc.contents[3] }}</div>
+          <span>{{ transc.contents[0] }}</span>
+        </div>
+        <div>Updated {{ transc.contents[1] }} quantity.</div>
+        @if (transc.contents[2]) {
+          <span class="remarks">"{{ transc.contents[2] }}"</span>
+        }
+      </div>
+    </app-vertical-stepper>
+  }
+</div>
