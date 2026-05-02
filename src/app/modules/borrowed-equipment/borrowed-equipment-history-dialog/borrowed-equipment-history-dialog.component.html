@@ -1,3 +1,11 @@
+<div class="dialog-header">
+  <div>
+    <p class="dialog-title">Transaction History</p>
+    <p class="dialog-sub"></p>
+  </div>
+  <app-icon size="lg" name="close" (iconclicked)="onClose()"/>
+</div>
+<mat-divider></mat-divider>
 <div class="container">
   @for (transc of transaction; track $index) {
     <app-vertical-stepper

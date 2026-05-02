@@ -48,7 +48,7 @@ export type BorrowedEquipmentStatusTypeAndQuantity = {
 export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'instructor_approved', 'oic_approved', 'released', 'mark_returned'];
 
 export const BORROW_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant> = {
-    requested: 'accent',
+    requested: 'neutral',
     instructor_approved: 'accent',
     oic_approved: 'accent',
     released: 'warning',

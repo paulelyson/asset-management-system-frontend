@@ -10,7 +10,7 @@ import { BadgeComponent } from '../badge/badge.component';
   styleUrl: './vertical-stepper.component.css',
 })
 export class VerticalStepperComponent {
-  @Input() variant: Variant = 'success';
+  @Input() variant: Variant = 'neutral';
   @Input() title: string = '';
   @Input() badgeContent: string = ''
   @Input() time = ''
