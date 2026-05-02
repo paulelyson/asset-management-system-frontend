@@ -1,1 +1,47 @@
-<p>equipment-change-log-dialog works!</p>
+@if (data.length) {
+  <div class="dialog-header">
+    <div>
+      <p class="dialog-title">Change Logs — {{ equipmentName }}</p>
+      <p class="dialog-sub">SN: {{ serialNo }} · {{ total }} entries</p>
+    </div>
+    <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+  </div>
+  <mat-divider></mat-divider>
+  <div class="container">
+    @for (cl of changeLogs; track $index; let last = $last) {
+      <app-vertical-stepper
+        [badgeContent]="cl.badgeContent"
+        [variant]="cl.variant"
+        [time]="cl.time"
+        [showLine]="!last"
+        [title]="cl.title"
+      >
+        <div class="content-wrapper">
+          <div class="content">
+            <div class="avatar blue">{{ cl.contents[1] }}</div>
+            <span>{{ cl.contents[0] }}</span>
+          </div>
+          @if (data[$index]?.changes?.length) {
+            <div class="changes-card">
+              <div class="title">{{ data[$index]?.changes?.length }} FIELDS CHANGED</div>
+              <mat-divider></mat-divider>
+              @for (change of data[$index]?.changes; track change.field) {
+                <div class="change-field">{{ change.field }}</div>
+                <div class="change-diff">
+                  <app-badge variant="accent">{{ change.previousValue || 'N/A' }}</app-badge>
+                  <app-icon name="arrow_forward" />
+                  <app-badge [variant]="cl.variant">{{ change.newValue }}</app-badge>
+                </div>
+              }
+            </div>
+          }
+          @if (data[$index]?.resolverRemarks) {
+            <span class="remarks">"{{ data[$index]?.resolverRemarks }}"</span>
+          }
+        </div>
+      </app-vertical-stepper>
+    }
+  </div>
+} @else {
+  <app-empty-placeholder></app-empty-placeholder>
+}

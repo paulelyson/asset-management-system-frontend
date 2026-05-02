@@ -10,6 +10,7 @@ import {
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 import { IUser } from '../models/User';
+import { EquipmentChangeLogs } from '../models/data/equipment-change-logs.model';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +59,7 @@ export class EquipmentService {
   }
 
   getChangeLogsByEquipment(equipmentId: string) {
-     return this.http.get<ApiResponse<any>>(environment.api_url + '/api/equipment-change-log/' + equipmentId)
+     return this.http.get<ApiResponse<EquipmentChangeLogs[]>>(environment.api_url + `/api/equipment/${equipmentId}/change-logs`)
       .pipe(
         catchError(this.handleError),
       );

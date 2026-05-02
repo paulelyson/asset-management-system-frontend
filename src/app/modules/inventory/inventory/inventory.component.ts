@@ -106,8 +106,11 @@ export class InventoryComponent implements OnInit {
 
   onDisplayChangeLogs(equipment: IEquipment) {
     this.equipmentService.getChangeLogsByEquipment(equipment._id).subscribe({
-      next: (resp)=> console.log(resp)
+      next: (resp)=> {
+        this.dialogService.openEquipmentChangeLogDialog(resp.data)
+      },
     })
+    
   }
 
   loadMoreEquipment() {
