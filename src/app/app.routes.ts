@@ -23,6 +23,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'equipment-changelog',
+    loadChildren: () => import('./modules/equipment-change-log/equipment-change-log.module').then((m) => m.EquipmentChangeLogModule),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/borrow',
     pathMatch: 'full'
