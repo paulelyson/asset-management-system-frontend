@@ -94,23 +94,27 @@ export class InventoryComponent implements OnInit {
     } else if (action == 'Update') {
       this.onUpdateEquipment(equipment);
     } else if (action == 'Changes History') {
-      this.onDisplayChangeLogs(equipment)
+      this.onDisplayChangeLogs(equipment);
     }
   }
 
   onUpdateEquipment(equipment: IEquipment) {
     this.dialogService.openUpdateEquipmentDialog(equipment).subscribe((resp: IEquipment | null) => {
-      if (resp) console.log(resp);
+      if (resp) {
+        this.equipment.update((eqpmnt) => {
+          const filtered = eqpmnt.filter((item) => item._id !== resp._id);
+          return [resp, ...filtered];
+        });
+      }
     });
   }
 
   onDisplayChangeLogs(equipment: IEquipment) {
     this.equipmentService.getChangeLogsByEquipment(equipment._id).subscribe({
-      next: (resp)=> {
-        this.dialogService.openEquipmentChangeLogDialog(resp.data)
+      next: (resp) => {
+        this.dialogService.openEquipmentChangeLogDialog(resp.data);
       },
-    })
-    
+    });
   }
 
   loadMoreEquipment() {

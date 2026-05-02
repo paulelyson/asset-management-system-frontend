@@ -5,6 +5,7 @@
   align-items: center;
   gap: 10px;
   padding: 2em;
+  max-height: 70vh;
 }
 .image-wrapper {
   width: 180px;

@@ -125,7 +125,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
     this.conditionAndQuantity.valueChanges.subscribe({
       next: (rows: { condition: string; quantity: number }[]) => {
-        const total = rows.reduce((sum, row) => sum + (row.quantity ?? 0), 0);
+        const total = rows.reduce((sum, row) => sum + (Number(row.quantity) ?? 0), 0);
         this.equipmentForm.controls['totalQuantity'].patchValue(total);
       },
     });
@@ -208,7 +208,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
             message: [resp.message],
             icon: '',
           });
-          this.dialogRef.close('create success');
+          this.dialogRef.close(resp.data);
         },
         error: (err) =>
           this.snackBarService.openSnackbar({
@@ -225,7 +225,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
             message: [resp.message],
             icon: '',
           });
-          this.dialogRef.close('update success');
+          this.dialogRef.close(resp.data);
         },
         error: (err) =>
           this.snackBarService.openSnackbar({

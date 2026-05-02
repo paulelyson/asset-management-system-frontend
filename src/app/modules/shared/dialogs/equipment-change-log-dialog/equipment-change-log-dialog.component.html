@@ -28,9 +28,21 @@
               @for (change of data[$index]?.changes; track change.field) {
                 <div class="change-field">{{ change.field }}</div>
                 <div class="change-diff">
-                  <app-badge variant="accent">{{ change.previousValue || 'N/A' }}</app-badge>
+                  <div class="badge-wrapper">
+                    @for (b of asArray(change.previousValue); track b) {
+                      <app-badge variant="accent">
+                        {{ typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b }}
+                      </app-badge>
+                    }
+                  </div>
                   <app-icon name="arrow_forward" />
-                  <app-badge [variant]="cl.variant">{{ change.newValue }}</app-badge>
+                  <div class="badge-wrapper">
+                    @for (b of asArray(change.newValue); track b) {
+                      <app-badge [variant]="cl.variant">
+                        {{ typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b }}
+                      </app-badge>
+                    }
+                  </div>
                 </div>
               }
             </div>

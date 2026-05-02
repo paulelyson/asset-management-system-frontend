@@ -14,10 +14,18 @@ import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../../../../utils/string.util';
 import { BadgeComponent } from '../../badge/badge.component';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
+import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
 
 @Component({
   selector: 'app-equipment-change-log-dialog',
-  imports: [IconComponent, VerticalStepperComponent, MatDividerModule, BadgeComponent, EmptyPlaceholderComponent],
+  imports: [
+    IconComponent,
+    VerticalStepperComponent,
+    MatDividerModule,
+    BadgeComponent,
+    EmptyPlaceholderComponent,
+    DisplayNamePipe
+  ],
   templateUrl: './equipment-change-log-dialog.component.html',
   styleUrl: './equipment-change-log-dialog.component.css',
 })
@@ -45,14 +53,17 @@ export class EquipmentChangeLogDialogComponent {
             ? (this.datePipe.transform(dt.createdAt, 'short') ?? dt.createdAt.toISOString())
             : '',
           contents: [
-            (dt.action == ChangeAction.CREATE
-              ? 'Added by '
-              : 'Updated by ') + getDisplayName(dt?.performedBy), 
+            (dt.action == ChangeAction.CREATE ? 'Added by ' : 'Updated by ') +
+              getDisplayName(dt?.performedBy),
             (dt.performedBy?.firstName[0] || '') + (dt.performedBy?.lastName[0] || ''),
-            
           ],
         }),
     );
+  }
+
+  asArray(content: string | any[] | undefined): string[] {
+    if (!content) return ["N/A"];
+    return Array.isArray(content) ? content : [content];
   }
 
   onClose() {
