@@ -1,7 +1,14 @@
 .container {
+  padding: 0;
+  max-height: 60vh;
+  min-width: 420px;
+}
+
+.content-body {
   padding: 1rem;
-  min-width: 320px;
-  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .content-wrapper {

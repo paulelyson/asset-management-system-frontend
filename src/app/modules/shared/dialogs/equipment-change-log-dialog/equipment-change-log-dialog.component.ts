@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {
   ChangeAction,
   CHANGELOG_STATUS_VARIANT,
+  ChangeStatus,
   EquipmentChangeLog,
 } from '../../../../models/data/equipment-change-logs.model';
 import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config';
@@ -15,6 +16,8 @@ import { getDisplayName } from '../../../../utils/string.util';
 import { BadgeComponent } from '../../badge/badge.component';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
 import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
+import { ButtonComponent } from '../../button/button.component';
+import { TextareaComponent } from '../../components/forms/textarea/textarea.component';
 
 @Component({
   selector: 'app-equipment-change-log-dialog',
@@ -24,7 +27,9 @@ import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
     MatDividerModule,
     BadgeComponent,
     EmptyPlaceholderComponent,
-    DisplayNamePipe
+    DisplayNamePipe,
+    ButtonComponent,
+    TextareaComponent
   ],
   templateUrl: './equipment-change-log-dialog.component.html',
   styleUrl: './equipment-change-log-dialog.component.css',
@@ -35,6 +40,7 @@ export class EquipmentChangeLogDialogComponent {
   total: number = 0;
   changeLogs: VerticalStepperConfig[] = [];
   performedBy: string = '';
+  showAction: boolean = false;
   constructor(
     private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: EquipmentChangeLog[],
@@ -43,6 +49,7 @@ export class EquipmentChangeLogDialogComponent {
     this.equipmentName = this.data[0]?.equipment?.name ?? '';
     this.serialNo = this.data[0]?.equipment?.serialNo ?? '';
     this.total = this.data?.length;
+    this.showAction = this.data.some((dt)=> dt.status == ChangeStatus.PENDING)
     this.changeLogs = this.data.map(
       (dt) =>
         new VerticalStepperConfig({

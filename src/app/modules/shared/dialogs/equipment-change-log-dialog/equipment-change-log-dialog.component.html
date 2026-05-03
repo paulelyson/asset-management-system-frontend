@@ -1,57 +1,69 @@
 @if (data.length) {
-  <div class="dialog-header">
-    <div>
-      <p class="dialog-title">Change Logs — {{ equipmentName }}</p>
-      <p class="dialog-sub">SN: {{ serialNo }} · {{ total }} entries</p>
-    </div>
-    <app-icon size="lg" name="close" (iconclicked)="onClose()" />
-  </div>
-  <mat-divider></mat-divider>
   <div class="container">
-    @for (cl of changeLogs; track $index; let last = $last) {
-      <app-vertical-stepper
-        [badgeContent]="cl.badgeContent"
-        [variant]="cl.variant"
-        [time]="cl.time"
-        [showLine]="!last"
-        [title]="cl.title"
-      >
-        <div class="content-wrapper">
-          <div class="content">
-            <div class="avatar blue">{{ cl.contents[1] }}</div>
-            <span>{{ cl.contents[0] }}</span>
-          </div>
-          @if (data[$index]?.changes?.length) {
-            <div class="changes-card">
-              <div class="title">{{ data[$index]?.changes?.length }} FIELDS CHANGED</div>
-              <mat-divider></mat-divider>
-              @for (change of data[$index]?.changes; track change.field) {
-                <div class="change-field">{{ change.field }}</div>
-                <div class="change-diff">
-                  <div class="badge-wrapper">
-                    @for (b of asArray(change.previousValue); track b) {
-                      <app-badge variant="accent">
-                        {{ typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b }}
-                      </app-badge>
-                    }
-                  </div>
-                  <app-icon name="arrow_forward" />
-                  <div class="badge-wrapper">
-                    @for (b of asArray(change.newValue); track b) {
-                      <app-badge [variant]="cl.variant">
-                        {{ typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b }}
-                      </app-badge>
-                    }
-                  </div>
-                </div>
-              }
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-title">Change Logs — {{ equipmentName }}</p>
+        <p class="dialog-sub">SN: {{ serialNo }} · {{ total }} entries</p>
+      </div>
+      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+    </div>
+    <mat-divider></mat-divider>
+    <div class="content-body">
+      @for (cl of changeLogs; track $index; let last = $last) {
+        <app-vertical-stepper
+          [badgeContent]="cl.badgeContent"
+          [variant]="cl.variant"
+          [time]="cl.time"
+          [showLine]="!last"
+          [title]="cl.title"
+        >
+          <div class="content-wrapper">
+            <div class="content">
+              <div class="avatar blue">{{ cl.contents[1] }}</div>
+              <span>{{ cl.contents[0] }}</span>
             </div>
-          }
-          @if (data[$index]?.resolverRemarks) {
-            <span class="remarks">"{{ data[$index]?.resolverRemarks }}"</span>
-          }
-        </div>
-      </app-vertical-stepper>
+            @if (data[$index]?.changes?.length) {
+              <div class="changes-card">
+                <div class="title">{{ data[$index]?.changes?.length }} FIELDS CHANGED</div>
+                <mat-divider></mat-divider>
+                @for (change of data[$index]?.changes; track change.field) {
+                  <div class="change-field">{{ change.field }}</div>
+                  <div class="change-diff">
+                    <div class="badge-wrapper">
+                      @for (b of asArray(change.previousValue); track b) {
+                        <app-badge variant="accent">
+                          {{
+                            typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b
+                          }}
+                        </app-badge>
+                      }
+                    </div>
+                    <app-icon name="arrow_forward" />
+                    <div class="badge-wrapper">
+                      @for (b of asArray(change.newValue); track b) {
+                        <app-badge [variant]="cl.variant">
+                          {{
+                            typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b
+                          }}
+                        </app-badge>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            @if (data[$index]?.resolverRemarks) {
+              <span class="remarks">"{{ data[$index]?.resolverRemarks }}"</span>
+            }
+          </div>
+        </app-vertical-stepper>
+      }
+    </div>
+    @if (showAction) {
+      <div class="action-wrapper">
+        <app-textarea></app-textarea>
+        <app-button>Approve</app-button>
+      </div>
     }
   </div>
 } @else {
