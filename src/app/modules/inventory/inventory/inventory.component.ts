@@ -34,7 +34,6 @@ import { SnackbarService } from '../../../services/snackbar.service';
     TitleSectionComponent,
     DataRowComponent,
     InventoryToolbarComponent,
-    TabComponent,
   ],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,6 +44,7 @@ export class InventoryComponent implements OnInit {
   filter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
   selectedDept: WritableSignal<string> = signal('');
+  pendingApproval: WritableSignal<number> = signal(0);
   filterEffect = effect(() => {
     const dept = this.filter().department;
     if (dept && isObjectId(dept)) {
@@ -79,7 +79,8 @@ export class InventoryComponent implements OnInit {
     this.equipmentService.getEquipment(this.filter()).subscribe({
       next: (resp) => {
         this.hasMore = resp.hasNextPage;
-        this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data]);
+        this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
+        this.pendingApproval.set(resp.data[1])
       },
     });
   }

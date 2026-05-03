@@ -15,6 +15,13 @@
     </app-button>
   }
   @if (canAccessEquipment) {
+      <!-- [isChecked]="infoAndHistory" -->
+
+    <app-toggle
+      [badge]="pendingApprovalCount"
+      label="Pending Approval"
+      (toggle)="onPendingToggle($event)"
+    />
     <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
       New Equipment
     </app-button>

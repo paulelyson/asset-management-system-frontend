@@ -27,7 +27,7 @@ export class EquipmentService {
     filter.condition && (params = params.append('condition', filter.condition));
 
     return this.http
-      .get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params })
+      .get<ApiResponse<[IEquipment[], number]>>(environment.api_url + '/api/equipment', { params })
       .pipe(catchError(this.handleError));
   }
 

@@ -95,7 +95,7 @@ export class BorrowComponent implements OnInit {
     this.equipmentService.getEquipment(this.filter()).subscribe({
       next: (resp) => {
         this.disable_showmore = !resp.hasNextPage;
-        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data));
+        this.equipment.update((eqpmnt) => [...eqpmnt].concat(resp.data[0]));
       },
     });
   }

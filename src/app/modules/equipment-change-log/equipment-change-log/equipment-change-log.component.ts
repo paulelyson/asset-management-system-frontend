@@ -15,7 +15,6 @@ import { ButtonComponent } from '../../shared/button/button.component';
     TabComponent,
     InventoryToolbarComponent,
     DataRowComponent,
-    ButtonComponent,
   ],
   templateUrl: './equipment-change-log.component.html',
   styleUrl: './equipment-change-log.component.css',

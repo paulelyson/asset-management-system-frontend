@@ -17,7 +17,7 @@ export class ToggleComponent {
   @Input() tooltip: string = '';
   @Output() toggle = new EventEmitter<boolean>();
 
-  badge = input<string>('0');
+  badge = input<string | number>('0');
   hideBadge = computed(() => this.badge() == '0');
 
   onToggleChange(event: boolean) {

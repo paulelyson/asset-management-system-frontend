@@ -1,4 +1,9 @@
-<div class="toggle-container" [matTooltip]="tooltip"  [matBadge]="badge()" [matBadgeHidden]="hideBadge()">
+<div
+  class="toggle-container"
+  [matTooltip]="tooltip"
+  [matBadge]="badge()"
+  [matBadgeHidden]="hideBadge()"
+>
   <label class="switch">
     <input type="checkbox" [(ngModel)]="isChecked" (ngModelChange)="onToggleChange($event)" />
     <span class="slider round"></span>

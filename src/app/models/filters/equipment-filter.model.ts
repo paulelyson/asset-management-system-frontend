@@ -8,6 +8,7 @@ export class EquipmentFilter {
   brand: string = '';
   equipmentType: string = '';
   condition?: EquipmentCondition;
+  pending: boolean = false;
   // borrow: boolean;
 
   constructor(partial?: Partial<EquipmentFilter>) {

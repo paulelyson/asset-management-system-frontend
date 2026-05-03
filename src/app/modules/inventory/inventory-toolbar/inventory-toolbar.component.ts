@@ -19,17 +19,19 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { IEquipment } from '../../../models/Equipment';
+import { ToggleComponent } from '../../shared/toggle/toggle.component';
 
 @Component({
   selector: 'app-inventory-toolbar',
   templateUrl: './inventory-toolbar.component.html',
   styleUrl: './inventory-toolbar.component.css',
-  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent],
+  imports: [BadgeComponent, ButtonComponent, ReactiveFormsModule, InputComponent, ToggleComponent],
 })
 export class InventoryToolbarComponent {
   filters = input<FilterDisplay[]>([]);
   @Input() department: string = '';
   @Input() canAccessEquipment: boolean = false;
+  @Input() pendingApprovalCount: number = 0;
   searchControl = new FormControl('');
   url: string = '';
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
@@ -61,6 +63,14 @@ export class InventoryToolbarComponent {
   onSearch(): void {
     let navigationExtras: NavigationExtras = {
       queryParams: { page: 1, search: this.searchControl.value },
+      queryParamsHandling: 'merge',
+    };
+    this.router.navigate([this.url], navigationExtras);
+  }
+
+  onPendingToggle(event: boolean) {
+    let navigationExtras: NavigationExtras = {
+      queryParams: { page: 1, pending: event },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);

@@ -1,7 +1,7 @@
 <div class="container">
   <app-title-section>Inventory</app-title-section>
-  <app-tab [tabs]="['Inventory', 'Change Logs']"></app-tab>
   <app-inventory-toolbar
+    [pendingApprovalCount]="pendingApproval()"
     [filters]="filterDisplay()"
     [department]="selectedDept()"
     [canAccessEquipment]="canAccessEquipment()"
