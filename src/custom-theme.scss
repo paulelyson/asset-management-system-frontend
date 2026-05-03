@@ -120,6 +120,12 @@
       container-height: 40px,
     )
   );
+
+  // count badge overrides
+  @include mat.badge-overrides((
+    background-color: var(--color-bg-danger-idle),
+    text-color: var(--color-text-danger-default)
+  ));
 }
 
 html {
