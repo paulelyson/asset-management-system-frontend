@@ -73,3 +73,13 @@
     align-items: center;
   }
 }
+
+.action-wrapper {
+  flex-direction: column;
+  padding: 10px 26px;
+  align-items: flex-end;
+}
+
+.action-wrapper .remarks {
+  width: 100%;
+}

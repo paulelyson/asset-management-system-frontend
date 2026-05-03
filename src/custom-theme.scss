@@ -10,7 +10,7 @@
   
   mat-form-field {
     --mat-sys-surface-variant: transparent;
-    width: -webkit-fill-available;
+    // width: -webkit-fill-available;
     font-family: var(--mat-form-field-container-text-font, var(--mat-sys-body-small-font) Roboto);
     line-height: var(--mat-form-field-container-text-line-height, var(--mat-sys-body-small-line-height));
     font-size: var(--mat-form-field-container-text-size, var(--mat-sys-body-small-size));

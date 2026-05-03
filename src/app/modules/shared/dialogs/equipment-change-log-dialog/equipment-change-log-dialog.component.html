@@ -59,9 +59,12 @@
         </app-vertical-stepper>
       }
     </div>
+    <mat-divider></mat-divider>
     @if (showAction) {
       <div class="action-wrapper">
-        <app-textarea></app-textarea>
+        <div class="remarks">
+          <app-textarea></app-textarea>
+        </div>
         <app-button>Approve</app-button>
       </div>
     }
