@@ -3,7 +3,7 @@
     @for (filter of filters(); track filter.field) {
       @if (filter.show) {
         <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
-          {{ filter['value'] }}
+          {{ ['pending'].includes(filter.field) ? filter.field : filter.value }}
         </app-badge>
       }
     }
@@ -15,12 +15,12 @@
     </app-button>
   }
   @if (canAccessEquipment) {
-      <!-- [isChecked]="infoAndHistory" -->
-
     <app-toggle
+      [isChecked]="isPending()"
       [badge]="pendingApprovalCount"
       label="Pending Approval"
       (toggle)="onPendingToggle($event)"
+      tooltip="Show equipment with unconfirmed changes awaiting approval"
     />
     <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
       New Equipment

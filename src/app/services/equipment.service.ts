@@ -25,6 +25,7 @@ export class EquipmentService {
     filter.department && (params = params.append('department', filter.department));
     filter.brand && (params = params.append('brand', filter.brand));
     filter.condition && (params = params.append('condition', filter.condition));
+    filter.pending && (params = params.append('confirmed', !filter.pending));
 
     return this.http
       .get<ApiResponse<[IEquipment[], number]>>(environment.api_url + '/api/equipment', { params })

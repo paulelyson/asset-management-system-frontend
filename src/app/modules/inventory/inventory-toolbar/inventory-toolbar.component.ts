@@ -35,6 +35,7 @@ export class InventoryToolbarComponent {
   searchControl = new FormControl('');
   url: string = '';
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
+  isPending = computed((): boolean => this.filters().find((x) => x.field == 'pending')?.value);
   @Output() addEquipment = new EventEmitter<IEquipment>()
   constructor(
     private dialogService: DialogService,

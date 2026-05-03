@@ -140,6 +140,7 @@ export class InventoryComponent implements OnInit {
       equipmentType: params['equipmentType'],
       condition: params['condition'],
       department: this.user.roles[0].department._id,
+      pending: params['pending'] ? JSON.parse(params['pending']) : false
     });
     this.getEquipment();
   }
