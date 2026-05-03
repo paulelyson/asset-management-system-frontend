@@ -7,7 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {
   ChangeAction,
   CHANGELOG_STATUS_VARIANT,
-  EquipmentChangeLogs,
+  EquipmentChangeLog,
 } from '../../../../models/data/equipment-change-logs.model';
 import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config';
 import { DatePipe } from '@angular/common';
@@ -37,7 +37,7 @@ export class EquipmentChangeLogDialogComponent {
   performedBy: string = '';
   constructor(
     private datePipe: DatePipe,
-    @Inject(MAT_DIALOG_DATA) public data: EquipmentChangeLogs[],
+    @Inject(MAT_DIALOG_DATA) public data: EquipmentChangeLog[],
     private dialogRef: MatDialogRef<BorrowedEquipmentHistoryDialogComponent>,
   ) {
     this.equipmentName = this.data[0]?.equipment?.name ?? '';

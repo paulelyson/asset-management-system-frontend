@@ -10,7 +10,8 @@ import {
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 import { IUser } from '../models/User';
-import { EquipmentChangeLogs } from '../models/data/equipment-change-logs.model';
+import { CHANGELOG_STATUS_VARIANT, EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
+import { getDisplayName } from '../utils/string.util';
 
 @Injectable({
   providedIn: 'root',
@@ -58,8 +59,17 @@ export class EquipmentService {
       );
   }
 
+
+
+  getChangeLogs() {
+    return this.http.get<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + '/api/equipment-change-log')
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
   getChangeLogsByEquipment(equipmentId: string) {
-     return this.http.get<ApiResponse<EquipmentChangeLogs[]>>(environment.api_url + `/api/equipment/${equipmentId}/change-logs`)
+     return this.http.get<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + `/api/equipment/${equipmentId}/change-logs`)
       .pipe(
         catchError(this.handleError),
       );
@@ -101,6 +111,24 @@ export class EquipmentService {
       { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
       { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 0.5 },
       { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
+    ];
+  }
+
+  getChangeLogRowData(log: EquipmentChangeLog): RowColumnConfig[]  {
+    const performedBy = getDisplayName(log.performedBy);
+    const status: RowActionConfig[] = [new RowActionConfig({
+      name: log.status,
+      type: 'badge',
+      variant: CHANGELOG_STATUS_VARIANT[log.status]
+    })]
+    const changes = log.changes.map(ch=> `${ch.field}: \n ${ch.previousValue} → ${ch.newValue} `)
+     return [
+      { id: 0, type: 'image', header: '', weight: 0.5 },
+      { id: 1, type: 'title', header: 'Name', content: [log.equipment.name], subtitle: log.action, weight: 1.5 },
+      { id: 2, type: 'text', header: 'Changes', content: changes, weight: 2.5 },
+      { id: 3, type: 'text', header: 'Performed By', content: [performedBy], weight: 1 },
+      { id: 4, type: 'action', header: 'Condition', actions: status, weight: 0.5 },
+      { id: 5, type: 'action', header: '', actions: [], weight: 1 },
     ];
   }
 

@@ -1,1 +1,16 @@
-<p>equipment-change-log works!</p>
+<div class="container">
+  <app-title-section>Inventory</app-title-section>
+  <app-tab [tabs]="['Inventory', 'Change Logs']"></app-tab>
+  <app-inventory-toolbar />
+  <div class="list-wrapper">
+    @for (log of changeLogs(); track log._id; let first = $first) {
+      <app-data-row
+        [columns]="getRowData(log)"
+        [showHeader]="first"
+        (actionclicked)="onActionClicked($event, log)"
+      />
+    } @empty {
+      <span>No items.</span>
+    }
+  </div>
+</div>

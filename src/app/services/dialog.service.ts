@@ -20,7 +20,7 @@ import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialo
 import { ChangePasswordDialogComponent } from '../modules/shared/change-password-dialog/change-password-dialog.component';
 import { ButtonConfig } from '../models/ui/button-config.model';
 import { EquipmentChangeLogDialogComponent } from '../modules/shared/dialogs/equipment-change-log-dialog/equipment-change-log-dialog.component';
-import { EquipmentChangeLogs } from '../models/data/equipment-change-logs.model';
+import { EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -105,7 +105,7 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  openEquipmentChangeLogDialog(changeLogs: EquipmentChangeLogs[]) {
+  openEquipmentChangeLogDialog(changeLogs: EquipmentChangeLog[]) {
     const dialogRef = this.dialog.open(EquipmentChangeLogDialogComponent, {
       data: changeLogs
     });

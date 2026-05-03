@@ -26,7 +26,7 @@ interface FieldChange {
   newValue: any;
 }
 
-export interface EquipmentChangeLogs extends IMongoDocument {
+export interface EquipmentChangeLog extends IMongoDocument {
   equipment: IEquipment;
   action: ChangeAction;
   changes: FieldChange[];
