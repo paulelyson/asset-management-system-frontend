@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, input, Input, Output } from '@angular/core';
 
 type AvatarSize = 'sm' | 'md' | 'lg';
 
@@ -11,13 +11,15 @@ type AvatarSize = 'sm' | 'md' | 'lg';
 })
 export class AvatarComponent {
   @Input() size: AvatarSize = 'md';
-  @Input() label: string = ''
+  // @Input() label: string = ''
+  label = input('');
   @Output() avatarclicked: EventEmitter<string> = new EventEmitter();
-  default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
 
-  get image() {
-    return this.default_img;
-  }
+  image = computed(() => {
+    const parts = this.label().split(' ');
+    const result = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    return `https://placehold.co/60?text=${result}&font=poppins`;
+  }); 
 
   onAvatarClicked() {
     this.avatarclicked.emit('');
