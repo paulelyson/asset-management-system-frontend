@@ -5,7 +5,7 @@ import { IMongoDocument } from './MongoDocument';
 type UserStatus = 'pending_approval' | 'active' | 'deactivated' | 'rejected';
 
 export interface UserRole {
-  role: 'administrator' | 'chairman' | 'lab_in_charge' | 'instructor' | 'assistant' | 'student';
+  role: 'administrator' | 'dean' | 'chairman' | 'lab_in_charge' | 'instructor' | 'assistant' | 'student';
   department: IDepartment;
 }
 

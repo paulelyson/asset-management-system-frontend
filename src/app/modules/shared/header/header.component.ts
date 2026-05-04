@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
   });
 
   canAccessInventory = computed(()=> {
-    return this.isLoggedIn() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'instructor'])
+    return this.isLoggedIn() && this.authService.hasRole(['lab_in_charge', 'chairman', 'instructor', 'assistant', 'administrator', 'dean'])
   })
 
   constructor(

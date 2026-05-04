@@ -15,16 +15,11 @@ export const routes: Routes = [
   {
     path: 'inventory',
     loadChildren: () => import('./modules/inventory/inventory-module').then((m) => m.InventoryModule),
-    canActivate: [authGuard, roleGuard(['lab_in_charge', 'chairman', 'instructor', 'assistant'])]
+    canActivate: [authGuard, roleGuard(['lab_in_charge', 'chairman', 'instructor', 'assistant', 'administrator', 'dean'])]
   },
   {
     path: 'borrowed-equipment',
     loadChildren: () => import('./modules/borrowed-equipment/borrowed-equipment.module').then((m) => m.BorrowedEquipmentModule),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'equipment-changelog',
-    loadChildren: () => import('./modules/equipment-change-log/equipment-change-log.module').then((m) => m.EquipmentChangeLogModule),
     canActivate: [authGuard]
   },
   {

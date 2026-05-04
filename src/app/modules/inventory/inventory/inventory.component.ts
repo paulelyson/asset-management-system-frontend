@@ -55,7 +55,7 @@ export class InventoryComponent implements OnInit {
     }
   });
   canAccessEquipment = computed(() => {
-    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant']);
+    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'administrator', 'dean']);
   });
 
   constructor(
