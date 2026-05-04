@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="label">
-   <span>{{ label }}&nbsp;</span>
-   <span class="tag">{{ tag }}</span>
+    <span>{{ label }}&nbsp;</span>
+    <span class="tag">{{ tag }}</span>
   </div>
-  <textarea [placeholder]="placeholder"> </textarea>
+  <textarea [placeholder]="placeholder" [(ngModel)]="value"> </textarea>
 </div>

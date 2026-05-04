@@ -18,6 +18,7 @@ import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeho
 import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
 import { ButtonComponent } from '../../button/button.component';
 import { TextareaComponent } from '../../components/forms/textarea/textarea.component';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-equipment-change-log-dialog',
@@ -29,7 +30,9 @@ import { TextareaComponent } from '../../components/forms/textarea/textarea.comp
     EmptyPlaceholderComponent,
     DisplayNamePipe,
     ButtonComponent,
-    TextareaComponent
+    TextareaComponent,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './equipment-change-log-dialog.component.html',
   styleUrl: './equipment-change-log-dialog.component.css',
@@ -41,6 +44,7 @@ export class EquipmentChangeLogDialogComponent {
   changeLogs: VerticalStepperConfig[] = [];
   performedBy: string = '';
   showAction: boolean = false;
+  remarksControl = new FormControl('');
   constructor(
     private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: EquipmentChangeLog[],

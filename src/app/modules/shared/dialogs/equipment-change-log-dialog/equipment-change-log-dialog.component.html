@@ -63,7 +63,7 @@
     @if (showAction) {
       <div class="action-wrapper">
         <div class="remarks">
-          <app-textarea></app-textarea>
+          <app-textarea [formControl]="remarksControl"></app-textarea>
         </div>
         <app-button>Approve</app-button>
       </div>
