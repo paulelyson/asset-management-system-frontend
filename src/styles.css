@@ -361,3 +361,29 @@
   color: var(--color-text-gray);
   margin: 0;
 }
+
+/* Responsive style */
+.container {
+  padding: 15px;
+}
+
+/* Tablet (≤1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1rem 2rem;
+  }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 1.25rem;
+  }
+}
+
+/* Small mobile (≤480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem 1rem;
+  }
+}
