@@ -32,3 +32,13 @@
   object-fit: cover;
   border-radius: 50%;
 }
+
+@media (max-width: 480px) {
+  .avatar-wrapper {
+    padding: 0;
+  }
+
+  .avatar-wrapper .label {
+    display: none;
+  }
+}
