@@ -23,6 +23,7 @@
 
 /* Title + subtitle */
 .title-col {
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -31,7 +32,11 @@
   font-size: 1rem;
   font-weight: 600;
   text-transform: capitalize;
+  
   color: var(--color-text-primary-strong);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .subtitle-text {
   /* font-size: 0.8rem; */
