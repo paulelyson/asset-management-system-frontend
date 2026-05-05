@@ -14,3 +14,63 @@
 .spacer {
   flex: 1;
 }
+
+/* @media (max-width: 480px) {
+  .toolbar-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "input input"
+      "btn1  btn2"
+      "badges badges";
+    gap: 8px;
+  }
+
+  .search-input {
+    grid-area: input;
+    width: 100%;
+  }
+
+  .button-1 {
+    grid-area: btn1;
+  }
+
+  .button-2 {
+    grid-area: btn2;
+  }
+
+  .filter-badge-wrapper {
+    grid-area: badges;
+  }
+
+  .spacer {
+    display: none; 
+  }
+} */
+
+@media (max-width: 480px) {
+  .toolbar-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .toolbar-container > app-input {
+    order: 1;
+    width: 100%;
+  }
+
+  .toolbar-container > app-button {
+    order: 2;
+    flex: 1;
+  }
+
+  .filter-badge-wrapper {
+    order: 3;
+    width: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+}
