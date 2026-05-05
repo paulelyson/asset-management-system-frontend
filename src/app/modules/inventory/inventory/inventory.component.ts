@@ -29,12 +29,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
-  imports: [
-    ButtonComponent,
-    TitleSectionComponent,
-    DataRowComponent,
-    InventoryToolbarComponent,
-  ],
+  imports: [ButtonComponent, TitleSectionComponent, DataRowComponent, InventoryToolbarComponent],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnInit {
@@ -55,7 +50,10 @@ export class InventoryComponent implements OnInit {
     }
   });
   canAccessEquipment = computed(() => {
-    return this.filter() && this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'administrator', 'dean']);
+    return (
+      this.filter() &&
+      this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'administrator', 'dean'])
+    );
   });
 
   constructor(
@@ -80,7 +78,7 @@ export class InventoryComponent implements OnInit {
       next: (resp) => {
         this.hasMore = resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
-        this.pendingApproval.set(resp.data[1])
+        this.pendingApproval.set(resp.data[1]);
       },
     });
   }
@@ -113,7 +111,22 @@ export class InventoryComponent implements OnInit {
   onDisplayChangeLogs(equipment: IEquipment) {
     this.equipmentService.getChangeLogsByEquipment(equipment._id).subscribe({
       next: (resp) => {
-        this.dialogService.openEquipmentChangeLogDialog(resp.data);
+        this.dialogService.openEquipmentChangeLogDialog(resp.data).subscribe((resp) => {
+          if (resp) {
+            this.equipmentService.resolveChangeLog(resp).subscribe({
+              next: (resp)=> this.snackBarService.openSnackbar({
+                icon: 'info',
+                message: [resp.message],
+                type: 'success'
+              }),
+              error: (err)=> this.snackBarService.openSnackbar({
+                icon: 'info',
+                message: [err],
+                type: 'success'
+              }),
+            });
+          }
+        });
       },
     });
   }
@@ -140,7 +153,7 @@ export class InventoryComponent implements OnInit {
       equipmentType: params['equipmentType'],
       condition: params['condition'],
       department: this.user.roles[0].department._id,
-      pending: params['pending'] ? JSON.parse(params['pending']) : false
+      pending: params['pending'] ? JSON.parse(params['pending']) : false,
     });
     this.getEquipment();
   }
