@@ -362,11 +362,6 @@
   margin: 0;
 }
 
-/* Responsive style */
-.container {
-  padding: 15px;
-}
-
 /* Tablet (≤1024px) */
 @media (max-width: 1024px) {
   .container {
