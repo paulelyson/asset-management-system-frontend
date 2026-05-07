@@ -76,6 +76,15 @@ export class EquipmentService {
       );
   }
 
+  resolveChangeLog(resolve: Pick<EquipmentChangeLog, '_id' | 'status' | 'resolverRemarks'>) {
+    const {_id, status, resolverRemarks} = resolve
+    const body = {status: status, resolverRemarks }
+    return this.http.patch<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + `/api/equipment-change-log/${_id}/resolve`, body)
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
   getRowData(equipment: IEquipment, canAccessEquipment: boolean): RowColumnConfig[] {
     const actions: RowActionConfig[] = [{
       type: 'button',
@@ -107,11 +116,11 @@ export class EquipmentService {
     }));
     return [
       { id: 0, type: 'image', header: '', weight: 0.5 },
-      { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 1.5 },
+      { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 2 },
       { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 0.5 },
       { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
       { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 0.5 },
-      { id: 5, type: 'action', header: '', actions: actions, weight: 0.5 },
+      { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
     ];
   }
 

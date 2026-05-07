@@ -77,6 +77,17 @@ export class EquipmentChangeLogDialogComponent {
     return Array.isArray(content) ? content : [content];
   }
 
+  onApprove() {
+    const pendingIds = this.data.filter(dt => dt.status == ChangeStatus.PENDING).map(cl => cl._id);
+    console.log({pendingIds})
+    const update = {
+      _id: pendingIds[0],
+      status: ChangeStatus.APPROVED,
+      resolverRemarks: this.remarksControl.value
+    }
+    this.dialogRef.close(update);
+  }
+
   onClose() {
     this.dialogRef.close();
   }

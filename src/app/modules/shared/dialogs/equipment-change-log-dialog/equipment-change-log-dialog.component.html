@@ -65,7 +65,7 @@
         <div class="remarks">
           <app-textarea [formControl]="remarksControl"></app-textarea>
         </div>
-        <app-button>Approve</app-button>
+        <app-button (btnclicked)="onApprove()">Approve</app-button>
       </div>
     }
   </div>
