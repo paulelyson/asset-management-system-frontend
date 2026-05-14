@@ -1,4 +1,4 @@
-<div class="equipment-detail-container">
+<!-- <div class="equipment-detail-container">
   <div class="image-wrapper">
     <img class="fit-image" [src]="data.images[0]?.thumbnail ?? default_img" />
   </div>
@@ -23,9 +23,9 @@
       <div class="subtitle">Brand</div>
       <div class="label">{{ data.brand }}</div>
     </div>
-    <mat-divider></mat-divider>
-    <!-- Classification  -->
-    <div class="label-wrapper">
+    <mat-divider></mat-divider> -->
+<!-- Classification  -->
+<!-- <div class="label-wrapper">
       <div class="subtitle">Equipment Type</div>
       <div class="label">{{ data.type }}</div>
     </div>
@@ -39,9 +39,9 @@
       <div class="subtitle">Model</div>
       <div class="label">{{ data.modelNo }}</div>
     </div>
-    <mat-divider></mat-divider>
-    <!-- Physical Attributes  -->
-    <div class="label-wrapper">
+    <mat-divider></mat-divider> -->
+<!-- Physical Attributes  -->
+<!-- <div class="label-wrapper">
       <div class="subtitle">Color</div>
       <div class="label">{{ data.color }}</div>
     </div>
@@ -55,9 +55,9 @@
       <div class="subtitle">Matter</div>
       <div class="label">{{ data.matter }}</div>
     </div>
-    <mat-divider></mat-divider>
-    <!-- Metadata -->
-    <div class="label-wrapper">
+    <mat-divider></mat-divider> -->
+<!-- Metadata -->
+<!-- <div class="label-wrapper">
       <div class="subtitle">Serial No</div>
       <div class="label">{{ data.serialNo }}</div>
     </div>
@@ -89,5 +89,90 @@
     </div>
     <mat-divider></mat-divider>
     
+  </div>
+</div> -->
+
+<div class="equipment-detail-container">
+  <div class="hero">
+    <div class="image-wrapper">
+      <img class="fit-image" [src]="data.images[0]?.thumbnail ?? default_img" />
+    </div>
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-title">{{ data.name }}</p>
+        <div class="dialog-meta">
+          @for (cond of data.conditionAndQuantity; track cond) {
+            <app-badge [variant]="getVariant(cond.condition)">
+              {{ cond | conditionQuantity }}
+            </app-badge>
+          }
+          <span>{{ data.brand }}</span>
+          <span>{{ data.categories }}</span>
+        </div>
+        <span>{{ data.modelNo }}</span>
+      </div>
+      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+    </div>
+  </div>
+  <div class="section">
+    <div class="title">Classification</div>
+    <div class="grid3">
+      <div class="field">
+        <div class="label">Equipment Type</div>
+        <div class="value">{{ data.type }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Categories</div>
+        <div class="value">{{ data.categories }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Brand</div>
+        <div class="value">{{ data.brand }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Serial No</div>
+        <div class="value">{{ data.serialNo }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="title">Physical Attributes</div>
+    <div class="grid3">
+      <div class="field">
+        <div class="label">Color</div>
+        <div class="value">{{ data.color }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Matter</div>
+        <div class="value">{{ data.matter }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Unit</div>
+        <div class="value">{{ data.unit }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Has Tag</div>
+        <div class="value">{{ data.hasTag ? 'Yes' : 'No' }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="title">Metadata</div>
+    <div class="grid3">
+      <div class="field">
+        <div class="label">Location</div>
+        <div class="value">{{ data.location.name || '-----' }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Department</div>
+        <div class="value">{{ data.department.code || '-----' }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Updated By</div>
+        <div class="value">
+          {{ data.updatedBy ? (data.updatedBy | displayName: 'firstName' : 'lastName') : '' }}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
