@@ -16,6 +16,7 @@ import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 import { getVariantFromBorrowStatus } from '../modules/shared/utils/filter.util';
+import { ExceptionService } from './exception.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,12 +26,13 @@ export class BorrowService {
     private http: HttpClient,
     private datePipe: DatePipe,
     private displayNamePipe: DisplayNamePipe,
+    private exceptionService: ExceptionService,
   ) {}
 
   createBorrowedEquipment(body: BorrowedEquipmentPayload) {
     return this.http
       .post<ApiResponse<BorrowedEquipment>>(environment.api_url + '/api/borrowed-equipment', body)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((err) => this.exceptionService.handleError(err)));
   }
 
   addTransaction(body: BorrowedEquipmentTransaction, borrowId: string, equipmentId: string) {
@@ -38,7 +40,7 @@ export class BorrowService {
       .patch<
         ApiResponse<BorrowedEquipmentTransaction>
       >(environment.api_url + `/api/borrowed-equipment/${borrowId}/equipment/${equipmentId}/transactions`, body)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((err) => this.exceptionService.handleError(err)));
   }
 
   getBorrowedEquipment(filter: IBorrowedEquimentFilter) {
@@ -51,44 +53,58 @@ export class BorrowService {
       .get<
         ApiResponse<BorrowedEquipment[]>
       >(environment.api_url + '/api/borrowed-equipment', { params })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((err) => this.exceptionService.handleError(err)));
   }
 
-  getRowData(borrowedEquipment: BorrowedEquipment, user: IUser, filter: BorrowedEquimentFilter): RowColumnConfig[] {
+  getRowData(
+    borrowedEquipment: BorrowedEquipment,
+    user: IUser,
+    filter: BorrowedEquimentFilter,
+  ): RowColumnConfig[] {
     const eqpmntName = borrowedEquipment.equipment.name;
-    const course = this.displayNamePipe.transform(borrowedEquipment.courseOffering.course, 'code', 'title');
+    const course = this.displayNamePipe.transform(
+      borrowedEquipment.courseOffering.course,
+      'code',
+      'title',
+    );
     const borrower = getDisplayName(borrowedEquipment.borrower);
     const quantity = borrowedEquipment.quantity.toString();
     const status: RowActionConfig[] = borrowedEquipment.accumulatedStatus.map((x) => {
       return {
-        name: x.quantity + ' ' +BORROW_STATUS_DISPLAY[x.status],
+        name: BORROW_STATUS_DISPLAY[x.status] + ' x' + x.quantity,
         tooltip: '',
         type: 'badge',
         size: 'sm',
         icon: '',
-        variant: BORROW_STATUS_VARIANT[x.status]
-      }
+        variant: BORROW_STATUS_VARIANT[x.status],
+      };
     });
     const dateOfUse = this.datePipe.transform(borrowedEquipment.dateOfUse.start, 'mediumDate');
-    const actions = this.getRowActions(user, borrowedEquipment, filter.info_and_transaction);
+    const actions = this.getRowActions(user, borrowedEquipment, filter);
     const purpose = borrowedEquipment.purpose;
     return [
       { id: 0, type: 'image', header: '', weight: 0.5 },
-      { id: 1, type: 'title', header: 'Equipment', content: [eqpmntName], subtitle: purpose, weight: 2 },
+      {
+        id: 1,
+        type: 'title',
+        header: 'Equipment',
+        content: [eqpmntName],
+        subtitle: purpose,
+        weight: 2,
+      },
       { id: 2, type: 'text', header: 'Course', content: course, weight: 1 },
       { id: 3, type: 'text', header: 'Borrower', content: borrower, weight: 1.5 },
       { id: 4, type: 'text', header: 'Qty', content: quantity, weight: 0.3 },
       { id: 5, type: 'action', header: 'Status', actions: status, weight: 1 },
       { id: 6, type: 'text', header: 'Date of Use', content: dateOfUse as string, weight: 0.8 },
-      { id: 7, type: 'action', header: '', actions: actions, weight: 0.5 },
-    ]
+      { id: 7, type: 'action', header: '', actions: actions, weight: 1 },
+    ];
   }
 
   getRowActions(
     user: IUser,
     borrowedEquipment: BorrowedEquipment,
-    displayInfoAndHistory?: boolean,
-    enableCancel: boolean = false,
+    filter: BorrowedEquimentFilter,
   ): RowActionConfig[] {
     let actions: RowActionConfig[] = [];
     const isBorrower = borrowedEquipment.borrower._id == user._id;
@@ -108,6 +124,9 @@ export class BorrowService {
     const canApprove = borrowedEquipment.accumulatedStatus.some((x) =>
       ['requested'].includes(x.status),
     );
+    const canCancel = borrowedEquipment.accumulatedStatus.some((x) =>
+      ['requested'].includes(x.status),
+    );
     const canRelease = borrowedEquipment.accumulatedStatus.some((x) =>
       ['instructor_approved', 'oic_approved'].includes(x.status),
     );
@@ -117,6 +136,17 @@ export class BorrowService {
     const confirmReturns = borrowedEquipment.accumulatedStatus.some((x) =>
       ['mark_returned'].includes(x.status),
     );
+    // enable cancel if the borrowed equipment is still in requested status
+    if (filter.enable_cancel && canCancel) {
+      actions.push({
+        name: 'Cancel',
+        tooltip: 'Cancel Request',
+        type: 'button',
+        size: 'sm',
+        icon: 'cancel_outlined',
+      });
+    }
+
     //  approver | class faculty / oic / chairman of the borrowed equipment
     if ((isChairman || isLabInCharge || isFaculty) && canApprove) {
       actions.push({
@@ -126,16 +156,6 @@ export class BorrowService {
         size: 'sm',
         icon: 'thumb_up',
       });
-
-      if (enableCancel) {
-        actions.push({
-          name: 'Cancel Request',
-          tooltip: 'Cancel Request',
-          type: 'button',
-          size: 'sm',
-          icon: 'cancel',
-        });
-      }
     }
 
     // can release as lab assistant
@@ -172,7 +192,7 @@ export class BorrowService {
     }
 
     // add view details
-    if (displayInfoAndHistory) {
+    if (filter.info_and_transaction) {
       actions.push({
         name: 'View Detail',
         tooltip: 'View Detail',
@@ -192,9 +212,5 @@ export class BorrowService {
     }
 
     return actions;
-  }
-
-  handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.error.message || err.error));
   }
 }

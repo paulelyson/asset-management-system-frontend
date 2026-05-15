@@ -28,7 +28,7 @@ export class BorrowedEquipmentHistoryDialogComponent {
         new VerticalStepperConfig({
           title: BORROW_STATUS_DISPLAY[dt.status],
           variant: BORROW_STATUS_VARIANT[dt.status],
-          badgeContent: BORROW_STATUS_DISPLAY[dt.status],
+          badgeContent: `${BORROW_STATUS_DISPLAY[dt.status]} x${dt.quantity}`,
           showLine: ndx !== (data.length - 1),
           time: dt.createdAt
               ? (this.datePipe.transform(dt.createdAt, 'short') ?? dt.createdAt.toISOString())

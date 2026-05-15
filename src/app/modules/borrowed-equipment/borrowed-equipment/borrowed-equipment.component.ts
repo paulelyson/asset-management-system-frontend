@@ -25,7 +25,12 @@ import { getFilterDisplay } from '../../shared/utils/filter.util';
   selector: 'app-borrowed-equipment',
   templateUrl: './borrowed-equipment.component.html',
   styleUrl: './borrowed-equipment.component.css',
-  imports: [TitleSectionComponent, DataRowComponent, ButtonComponent, BorrowedEquipmentToolbarComponent]
+  imports: [
+    TitleSectionComponent,
+    DataRowComponent,
+    ButtonComponent,
+    BorrowedEquipmentToolbarComponent,
+  ],
 })
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
@@ -33,8 +38,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   user: TokenData;
 
   filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
-  filterDisplay = computed((): FilterDisplay[] => getFilterDisplay(this.filter())
-  );
+  filterDisplay = computed((): FilterDisplay[] => getFilterDisplay(this.filter()));
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -89,7 +93,7 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getRowData(borrowedEquipment: BorrowedEquipment) {
-    return this.borrowService.getRowData(borrowedEquipment,this.user, this.filter())
+    return this.borrowService.getRowData(borrowedEquipment, this.user, this.filter());
   }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
@@ -101,17 +105,9 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.onUpdateStatus(borrowedEquipment, 'mark_returned', 'Return');
     } else if (action == 'Confirm Returns') {
       this.onUpdateStatus(borrowedEquipment, 'returned', 'Confirm Returns');
+    } else if (action == 'Cancel') {
+      this.onUpdateStatus(borrowedEquipment, 'cancelled', 'Cancel Request');
     }
-
-    // cancelled
-    // else if (action == 'Cancel Request' && borrowedEquipment.quantity == 1) {
-    //   const status = 'cancelled';
-    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    // } else if (action == 'Cancel Request' && borrowedEquipment.quantity > 1) {
-    //   // TODO
-    //   const status = 'cancelled';
-    //   this.updateBorrowedEquipmentStatus(borrowedEquipment, status, borrowedEquipment.quantity);
-    // }
     // view info
     else if (action == 'View Detail') {
       console.log('View Detail');
@@ -169,9 +165,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       info_and_transaction: params['info_and_transaction']
         ? params['info_and_transaction'] === 'true'
         : false,
-      enable_cancel: params['enable_cancel']
-        ? params['enable_cancel'] === 'true'
-        : false,
+      enable_cancel: params['enable_cancel'] ? params['enable_cancel'] === 'true' : false,
     });
     this.getBorrowedEquipment();
   }
