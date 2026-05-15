@@ -82,7 +82,8 @@
   // Dialog Override
   @include mat.dialog-overrides((
     container-color: var(--bg),
-    container-shape: 10px
+    container-shape: 10px,
+    container-max-width: 600px
   ));
 
   // slide toggle

@@ -64,4 +64,6 @@ export interface IEquipment {
   accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
   updatedBy: IUser;
   hasTag: boolean;
+  canBeBorrowed: boolean;
+  inventoryType: EquipmentInventoryType;
 }

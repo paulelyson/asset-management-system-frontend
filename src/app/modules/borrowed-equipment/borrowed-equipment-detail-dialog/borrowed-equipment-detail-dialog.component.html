@@ -1,12 +1,62 @@
 <div class="borrowed-equipment-detail-container">
-  <div class="image-wrapper">
-    <img class="fit-image" [src]="data.equipment.images[0]?.thumbnail ?? default_img" />
-  </div>
-  <div class="detail-wrapper">
-    <div class="label-wrapper">
-      <div class="subtitle">Class Name</div>
-      <div class="label">{{ data.courseOffering.code }}</div>
+  <div class="hero">
+    <div class="image-wrapper">
+      <img class="fit-image" [src]="data.equipment.images[0]?.thumbnail ?? default_img" />
     </div>
-    <mat-divider></mat-divider>
-    
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-title">{{ data.equipment.name }}</p>
+        <span>{{ data.equipment.type }}</span>
+        <div class="dialog-meta">
+          @for (status of data.accumulatedStatus; track status) {
+            <app-badge [variant]="getVariant(status)" size="xs">
+              {{ (status | displayName: 'quantity' : 'status') || '' }}
+            </app-badge>
+          }
+        </div>
+      </div>
+      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <p class="beq-field-label">BORROW INFO</p>
+  <div class="beq-grid">
+    <div class="beq-field">
+      <p class="beq-field-label">
+        <app-icon size="xs" name="person" />
+        Borrower
+      </p>
+      <p class="beq-field-value">
+        {{ data.borrower ? (data.borrower | displayName: 'firstName' : 'lastName') : '' }}
+      </p>
+    </div>
+    <div class="beq-field">
+      <p class="beq-field-label">
+        <app-icon size="xs" name="book_ribbon" />
+        Purpose
+      </p>
+      <p class="beq-field-value">{{ data.purpose }}</p>
+    </div>
+    <div class="beq-field">
+      <p class="beq-field-label">
+        <app-icon size="xs" name="school" />
+        Course
+      </p>
+      <p class="beq-field-value">{{ data.courseOffering | displayName: 'name' : 'code' }}</p>
+    </div>
+    <div class="beq-field">
+      <p class="beq-field-label">
+        <app-icon size="xs" name="date_range" />
+        Date Of Use
+      </p>
+      <p class="beq-field-value">{{ data.dateOfUse.start | date }} - {{ data.dateOfUse.end | date }}</p>
+    </div>
+    <div class="beq-field">
+      <p class="beq-field-label">
+        <app-icon size="xs" name="history" />
+        Requested On
+      </p>
+      <p class="beq-field-value">{{ data.createdAt | date }}</p>
+    </div>
+  </div>
 </div>

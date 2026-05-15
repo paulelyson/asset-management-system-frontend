@@ -102,12 +102,16 @@
         <p class="dialog-title">{{ data.name }}</p>
         <div class="dialog-meta">
           @for (cond of data.conditionAndQuantity; track cond) {
-            <app-badge [variant]="getVariant(cond.condition)">
+            <app-badge [variant]="getVariant(cond.condition)" size="xs">
               {{ cond | conditionQuantity }}
             </app-badge>
           }
-          <span>{{ data.brand }}</span>
-          <span>{{ data.categories }}</span>
+          <app-badge [variant]="data.canBeBorrowed ? 'success' : 'warning'" size="xs">
+            {{ data.canBeBorrowed ? 'Can be borrowed' : 'Cannot be borrowed' }}
+          </app-badge>
+          <app-badge [variant]="data.inventoryType === 'inventory' ? 'success' : 'warning'" size="xs">
+            {{ data.inventoryType === 'inventory' ? 'Inventory' : 'Non-inventory' }}
+          </app-badge>
         </div>
         <span>{{ data.modelNo }}</span>
       </div>
