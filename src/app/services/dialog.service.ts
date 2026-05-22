@@ -21,6 +21,7 @@ import { ChangePasswordDialogComponent } from '../modules/shared/change-password
 import { ButtonConfig } from '../models/ui/button-config.model';
 import { EquipmentChangeLogDialogComponent } from '../modules/shared/dialogs/equipment-change-log-dialog/equipment-change-log-dialog.component';
 import { EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
+import { DownloadReportDialogComponent } from '../modules/inventory/download-report-dialog/download-report-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 
@@ -109,6 +110,11 @@ export class DialogService {
     const dialogRef = this.dialog.open(EquipmentChangeLogDialogComponent, {
       data: changeLogs
     });
+    return dialogRef.afterClosed();
+  }
+
+  openDownloadReportDialog() {
+    const dialogRef = this.dialog.open(DownloadReportDialogComponent, {});
     return dialogRef.afterClosed();
   }
 }
