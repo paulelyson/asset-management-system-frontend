@@ -36,7 +36,8 @@ export class InventoryToolbarComponent {
   url: string = '';
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
   isPending = computed((): boolean => this.filters().find((x) => x.field == 'pending')?.value);
-  @Output() addEquipment = new EventEmitter<IEquipment>()
+  @Output() addEquipment = new EventEmitter<IEquipment>();
+  @Output() downloadReport = new EventEmitter<void>();
   constructor(
     private dialogService: DialogService,
     private router: Router,
@@ -81,5 +82,9 @@ export class InventoryToolbarComponent {
     this.dialogService.openCreateEquipmentDialog().subscribe({
       next: (resp) => this.addEquipment.emit(resp)
     });
+  }
+
+  onDownloadReport() {
+    this.downloadReport.emit();
   }
 }

@@ -5,6 +5,7 @@
     [filters]="filterDisplay()"
     [department]="selectedDept()"
     [canAccessEquipment]="canAccessEquipment()"
+    (downloadReport)="onDownloadReport()"
   />
   <div class="list-wrapper">
     @for (eqpmnt of equipment(); track eqpmnt._id; let first = $first) {

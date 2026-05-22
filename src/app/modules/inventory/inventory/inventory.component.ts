@@ -114,20 +114,33 @@ export class InventoryComponent implements OnInit {
         this.dialogService.openEquipmentChangeLogDialog(resp.data).subscribe((resp) => {
           if (resp) {
             this.equipmentService.resolveChangeLog(resp).subscribe({
-              next: (resp)=> this.snackBarService.openSnackbar({
-                icon: 'info',
-                message: [resp.message],
-                type: 'success'
-              }),
-              error: (err)=> this.snackBarService.openSnackbar({
-                icon: 'info',
-                message: [err],
-                type: 'success'
-              }),
+              next: (resp) =>
+                this.snackBarService.openSnackbar({
+                  icon: 'info',
+                  message: [resp.message],
+                  type: 'success',
+                }),
+              error: (err) =>
+                this.snackBarService.openSnackbar({
+                  icon: 'info',
+                  message: [err],
+                  type: 'success',
+                }),
             });
           }
         });
       },
+    });
+  }
+
+  onDownloadReport() {
+    this.equipmentService.downloadReport(this.filter()).subscribe((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'equipment-report.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
     });
   }
 

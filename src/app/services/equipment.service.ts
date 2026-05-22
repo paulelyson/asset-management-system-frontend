@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EQUIPMENT_STATUS_VARIANT, IConditionAndQuantity, IEquipment } from '../models/Equipment';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, last, lastValueFrom, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { EquipmentFilter } from '../models/filters/equipment-filter.model';
 import {
@@ -59,8 +59,6 @@ export class EquipmentService {
         catchError(this.handleError),
       );
   }
-
-
 
   getChangeLogs() {
     return this.http.get<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + '/api/equipment-change-log')
@@ -140,6 +138,20 @@ export class EquipmentService {
       { id: 4, type: 'action', header: 'Condition', actions: status, weight: 0.5 },
       { id: 5, type: 'action', header: '', actions: [], weight: 1 },
     ];
+  }
+
+  downloadReport(filter: EquipmentFilter) {
+    const body =  {
+      paperSize:   'LEGAL',
+      orientation: 'landscape',
+      fields:      ['serialNo', 'name', 'brand', 'totalQuantity', 'conditionAndQuantity'],
+      // department:  selectedDepartment,
+      confirmed:   false,
+    }
+    return  this.http.post(environment.api_url + `/api/equipment/report/download`, body, {responseType: 'blob'})
+      .pipe(
+        catchError(this.handleError),
+      );
   }
 
   handleError(err: HttpErrorResponse) {
