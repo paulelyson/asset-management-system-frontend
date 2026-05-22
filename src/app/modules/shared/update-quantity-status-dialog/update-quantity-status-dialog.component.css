@@ -1,8 +1,7 @@
-.update-borrowed-equipment-container {
+/* .update-borrowed-equipment-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  /* align-items: center; to make the button stretchable on flex*/ 
   justify-content: center;
   padding: 2.5em;
   gap: 10px;
@@ -13,4 +12,28 @@
 .action-wrapper {
  gap: 15px;
  padding: 10px;
+} */
+
+.container {
+  padding: 0;
+  max-height: 60vh;
+  min-width: 420px;
+}
+
+.action-wrapper {
+  padding: 10px 26px;
+  align-items: flex-end;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+  flex-direction: column;
+}
+
+.action-wrapper .input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-wrapper .remarks {
+  width: 100%;
 }

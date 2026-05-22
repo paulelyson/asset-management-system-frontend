@@ -71,7 +71,7 @@ export class BorrowService {
     const quantity = borrowedEquipment.quantity.toString();
     const status: RowActionConfig[] = borrowedEquipment.accumulatedStatus.map((x) => {
       return {
-        name: BORROW_STATUS_DISPLAY[x.status] + ' x' + x.quantity,
+        name: BORROW_STATUS_DISPLAY[x.status] + ' ×' + x.quantity,
         tooltip: '',
         type: 'badge',
         size: 'sm',
@@ -83,7 +83,7 @@ export class BorrowService {
     const actions = this.getRowActions(user, borrowedEquipment, filter);
     const purpose = borrowedEquipment.purpose;
     return [
-      { id: 0, type: 'image', header: '', weight: 0.5 },
+      { id: 0, type: 'image', header: '', image: borrowedEquipment.equipment.images[0].thumbnail, weight: 0.5 },
       {
         id: 1,
         type: 'title',

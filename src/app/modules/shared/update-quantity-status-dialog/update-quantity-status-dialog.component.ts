@@ -8,6 +8,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
+import { MatDividerModule } from '@angular/material/divider';
+import { IconComponent } from '../icon/icon.component';
+import { TextareaComponent } from '../components/forms/textarea/textarea.component';
 
 export type BorrowedEquipmentStatusFields = 'quantity' | 'status' | 'condition' | 'remarks';
 export interface IQuantityStatusDialogConfig {
@@ -24,6 +27,9 @@ export interface IQuantityStatusDialogConfig {
     AutocompleteComponent,
     FormsModule,
     ReactiveFormsModule,
+    MatDividerModule,
+    IconComponent,
+    TextareaComponent,
   ],
   templateUrl: './update-quantity-status-dialog.component.html',
   styleUrl: './update-quantity-status-dialog.component.css',
@@ -55,5 +61,9 @@ export class UpdateQuantityStatusDialogComponent {
     if (action !== 'Cancel') {
       this.dialogRef.close(this.borrowedEquipmentStatusForm.value);
     }
+  }
+
+  onClose() {
+    this.dialogRef.close();
   }
 }

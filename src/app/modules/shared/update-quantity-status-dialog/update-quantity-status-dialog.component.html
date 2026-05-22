@@ -1,11 +1,11 @@
-<form [formGroup]="borrowedEquipmentStatusForm">
+<!-- <form [formGroup]="borrowedEquipmentStatusForm">
   <div class="update-borrowed-equipment-container">
     @if(data.fields.includes('quantity')) {
     <app-input label="Quantity" formControlName="quantity" />
     } @if(data.fields.includes('status')) {
     <app-autocomplete label="Status" [options]="statuses" formControlName="status" />
     } @if(data.fields.includes('condition')) {
-    <!-- <app-autocomplete label="Condition" [options]="conditions" formControlName="condition" /> -->
+    <app-autocomplete label="Condition" [options]="conditions" formControlName="condition" />
     } @if(data.fields.includes('remarks')) {
     <app-input label="Remarks" formControlName="remarks" />
     }
@@ -14,6 +14,33 @@
       <app-button width="width-filled" (btnclicked)="onClicked(action.name)">{{
         action.name
       }}</app-button>
+      }
+    </div>
+  </div>
+</form> -->
+<form [formGroup]="borrowedEquipmentStatusForm">
+  <div class="container">
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-title">Flat Screw Driver 6.5×200mm</p>
+        <p class="dialog-sub">SN: entries</p>
+      </div>
+      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+    </div>
+    <mat-divider></mat-divider>
+    <div class="action-wrapper">
+      <div class="input-row">
+        <app-input label="Quantity" formControlName="quantity" />
+        <app-autocomplete label="Status" [options]="statuses" formControlName="status" />
+      </div>
+
+      <div class="remarks">
+        <app-textarea formControlName="remarks"></app-textarea>
+      </div>
+      @for (action of data.actions; track action.id) {
+        <app-button width="width-filled" (btnclicked)="onClicked(action.name)">
+          Add Transaction
+        </app-button>
       }
     </div>
   </div>
