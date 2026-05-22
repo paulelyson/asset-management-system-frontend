@@ -22,3 +22,9 @@
  padding: 5px 8px;
  background: var(--color-bg-gray-idle);
 }
+
+.action-wrapper {
+  flex-direction: column;
+  padding: 10px 26px;
+  align-items: flex-end;
+}

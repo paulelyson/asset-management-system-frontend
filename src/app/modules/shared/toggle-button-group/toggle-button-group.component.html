@@ -1,1 +1,6 @@
-<p>toggle-button-group works!</p>
+<div class="toggle-button-group-container">
+  <div class="label">{{ label }}</div>
+  @for (option of options; track option) {
+    <div class="option">{{ option }}</div>
+  }
+</div>

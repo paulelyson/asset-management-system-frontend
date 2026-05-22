@@ -134,13 +134,21 @@ export class InventoryComponent implements OnInit {
   }
 
   onDownloadReport() {
-    this.equipmentService.downloadReport(this.filter()).subscribe((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'equipment-report.pdf';
-      a.click();
-      URL.revokeObjectURL(url);
+    this.equipmentService.downloadReport(this.filter(), ['serialNo', 'name', 'brand', 'totalQuantity', 'conditionAndQuantity']).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'equipment-report.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) =>
+        this.snackBarService.openSnackbar({
+          icon: 'error',
+          message: [err],
+          type: 'error',
+        }),
     });
   }
 

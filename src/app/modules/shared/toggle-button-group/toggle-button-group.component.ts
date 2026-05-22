@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-toggle-button-group',
@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './toggle-button-group.component.css',
 })
 export class ToggleButtonGroupComponent {
-
+  @Input() options: string[] = [];
+  @Input() label: string = '';
 }

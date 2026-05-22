@@ -140,11 +140,11 @@ export class EquipmentService {
     ];
   }
 
-  downloadReport(filter: EquipmentFilter) {
+  downloadReport(filter: EquipmentFilter, fields: string[]) {
     const body =  {
       paperSize:   'LEGAL',
       orientation: 'landscape',
-      fields:      ['serialNo', 'name', 'brand', 'totalQuantity', 'conditionAndQuantity'],
+      fields:      fields,
       // department:  selectedDepartment,
       confirmed:   false,
     }

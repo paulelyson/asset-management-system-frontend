@@ -4,11 +4,17 @@ import { MatDividerModule } from '@angular/material/divider';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
-import { last } from 'rxjs';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-download-report-dialog',
-  imports: [ToggleButtonGroupComponent, MatDividerModule, IconComponent, ToggleComponent],
+  imports: [
+    ToggleButtonGroupComponent,
+    MatDividerModule,
+    IconComponent,
+    ToggleComponent,
+    ButtonComponent,
+  ],
   templateUrl: './download-report-dialog.component.html',
   styleUrl: './download-report-dialog.component.css',
 })
@@ -82,6 +88,10 @@ export class DownloadReportDialogComponent {
   ];
   constructor(private dialogRef: MatDialogRef<DownloadReportDialogComponent>) {}
 
+  onDownloadPDF() {
+    const fields = this.equipmentFields.filter((x) => x.checked).map((x) => x.value);
+    this.dialogRef.close(fields);
+  }
   onClose() {
     this.dialogRef.close();
   }

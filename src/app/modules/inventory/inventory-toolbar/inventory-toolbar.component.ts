@@ -87,7 +87,7 @@ export class InventoryToolbarComponent {
   onDownloadReport() {
     this.dialogService.openDownloadReportDialog().subscribe((resp) => {
       if (resp) {
-        this.downloadReport.emit();
+        this.downloadReport.emit(resp);
       }
     });
     // this.downloadReport.emit();
