@@ -1,0 +1,24 @@
+.container {
+  padding: 0;
+  max-height: 60vh;
+  min-width: 420px;
+}
+
+.content-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.field {
+ border-radius: 5px;
+ padding: 5px 8px;
+ background: var(--color-bg-gray-idle);
+}
