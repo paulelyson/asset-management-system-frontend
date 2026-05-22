@@ -24,6 +24,7 @@ import { getFilterDisplay } from '../../shared/utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
 import { DepartmentService } from '../../../services/department.service';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-inventory',
@@ -133,23 +134,30 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  onDownloadReport() {
-    this.equipmentService.downloadReport(this.filter(), ['serialNo', 'name', 'brand', 'totalQuantity', 'conditionAndQuantity']).subscribe({
-      next: (blob) => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'equipment-report.pdf';
-        a.click();
-        URL.revokeObjectURL(url);
-      },
-      error: (err) =>
-        this.snackBarService.openSnackbar({
-          icon: 'error',
-          message: [err],
-          type: 'error',
-        }),
-    });
+  onDownloadReport(event: PDFFormatConfig) {
+    this.equipmentService
+      .downloadReport(this.filter(), event)
+      .subscribe({
+        next: (blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'equipment-report.pdf';
+          a.click();
+          URL.revokeObjectURL(url);
+          this.snackBarService.openSnackbar({
+            icon: 'success',
+            message: ['Report downloaded successfully'],
+            type: 'success',
+          });
+        },
+        error: (err) =>
+          this.snackBarService.openSnackbar({
+            icon: 'error',
+            message: [err],
+            type: 'error',
+          }),
+      });
   }
 
   loadMoreEquipment() {

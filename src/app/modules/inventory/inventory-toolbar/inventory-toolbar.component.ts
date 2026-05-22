@@ -20,6 +20,7 @@ import { InputComponent } from '../../shared/input/input.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { IEquipment } from '../../../models/Equipment';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
+import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-inventory-toolbar',
@@ -37,7 +38,7 @@ export class InventoryToolbarComponent {
   showClearFilter = computed((): boolean => this.filters().some((x) => x.canClose && x.show));
   isPending = computed((): boolean => this.filters().find((x) => x.field == 'pending')?.value);
   @Output() addEquipment = new EventEmitter<IEquipment>();
-  @Output() downloadReport = new EventEmitter<void>();
+  @Output() downloadReport = new EventEmitter<PDFFormatConfig>();
   constructor(
     private dialogService: DialogService,
     private router: Router,
@@ -90,6 +91,5 @@ export class InventoryToolbarComponent {
         this.downloadReport.emit(resp);
       }
     });
-    // this.downloadReport.emit();
   }
 }

@@ -5,6 +5,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-download-report-dialog',
@@ -42,7 +43,7 @@ export class DownloadReportDialogComponent {
     },
     {
       label: 'Category',
-      value: 'category',
+      value: 'categories',
       checked: true,
     },
     {
@@ -89,10 +90,25 @@ export class DownloadReportDialogComponent {
   constructor(private dialogRef: MatDialogRef<DownloadReportDialogComponent>) {}
 
   onDownloadPDF() {
-    const fields = this.equipmentFields.filter((x) => x.checked).map((x) => x.value);
-    this.dialogRef.close(fields);
+    const pdfConfg = new PDFFormatConfig({
+      pageSize: 'A4',
+      orientation: 'landscape',
+      columns: this.equipmentFields.filter((x) => x.checked).map((x) => x.value),
+    });
+    this.dialogRef.close(pdfConfg);
   }
   onClose() {
     this.dialogRef.close();
+  }
+
+  onToggleAll(event: boolean) {
+    this.equipmentFields.forEach((field) => (field.checked = event));
+  }
+
+  onToggleField(event: boolean, fieldValue: string) {
+    const field = this.equipmentFields.find((f) => f.value === fieldValue);
+    if (field) {
+      field.checked = event;
+    }
   }
 }

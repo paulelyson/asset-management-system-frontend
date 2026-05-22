@@ -12,13 +12,19 @@
     <div class="fields-grid">
       @for (field of equipmentFields; track field) {
         <div class="field">
-          <app-toggle [label]="field.label" [isChecked]="field.checked" />
+          <app-toggle
+            [label]="field.label"
+            [isChecked]="field.checked"
+            (toggle)="onToggleField($event, field.value)"
+          />
         </div>
       }
     </div>
   </div>
   <mat-divider></mat-divider>
   <div class="action-wrapper">
-    <app-button (btnclicked)="onDownloadPDF()" appearance="link" icon="download">Download PDF</app-button>
+    <app-button (btnclicked)="onDownloadPDF()" appearance="link" icon="download">
+      Download PDF
+    </app-button>
   </div>
 </div>
