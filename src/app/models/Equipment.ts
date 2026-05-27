@@ -1,26 +1,76 @@
-import { BorrowedEquipmentTransaction } from "./BorrowedEquipment";
-import { ClassLocation } from "./data/location.model";
-import { IDepartment } from "./Department";
-import { Variant } from "./ui/common-config.model";
-import { Department, IUser } from "./User";
+import { BorrowedEquipmentTransaction } from './BorrowedEquipment';
+import { ClassLocation } from './data/location.model';
+import { IDepartment } from './Department';
+import { Variant } from './ui/common-config.model';
+import { Department, IUser } from './User';
 
-export type EquipmentCondition = 'functional' | 'defective' | 'obsolete' | 'lost' | 'for_checkup' | 'turned_over';
+export type EquipmentCondition =
+  | 'functional'
+  | 'defective'
+  | 'obsolete'
+  | 'lost'
+  | 'for_checkup'
+  | 'turned_over';
 type EquipmentStatus = 'acquired' | 'returned';
 type EquipmentAvailability = 'available' | 'borrowed' | 'unreturned';
 type EquipmentInventoryType = 'inventory' | 'non_inventory';
 type Matter = 'solid' | 'liquid' | 'gas';
 
-export const EQUIPMENT_CONDITION: EquipmentCondition[] = ['functional', 'defective', 'obsolete', 'lost', 'for_checkup', 'turned_over'];
-
+export const EQUIPMENT_CONDITION: EquipmentCondition[] = [
+  'functional',
+  'defective',
+  'obsolete',
+  'lost',
+  'for_checkup',
+  'turned_over',
+];
 
 export const EQUIPMENT_STATUS_VARIANT: Record<EquipmentCondition, Variant> = {
-  functional: "success",
-  defective: "danger",
-  obsolete: "warning",
-  lost: "danger",
-  for_checkup: "warning",
-  turned_over: "success"
-}; {
+  functional: 'success',
+  defective: 'danger',
+  obsolete: 'warning',
+  lost: 'danger',
+  for_checkup: 'warning',
+  turned_over: 'success',
+};
+
+export enum EquipmentUnit {
+  // General
+  PC = 'pc',
+  PCS = 'pcs',
+  UNIT = 'unit',
+  SET = 'set',
+  BOX = 'box',
+  PAIR = 'pair',
+  ROLL = 'roll',
+  SHEET = 'sheet',
+  REAM = 'ream',
+  BUNDLE = 'bundle',
+  BAG = 'bag',
+  CAN = 'can',
+  BOTTLE = 'bottle',
+  TUBE = 'tube',
+  PACK = 'pack',
+  LOT = 'lot',
+  CONTAINER = 'container',
+
+  // Weight
+  KG = 'kg',
+  GRAM = 'g',
+  LB = 'lb',
+  OZ = 'oz',
+
+  // Length / Measurement
+  METER = 'm',
+  CM = 'cm',
+  MM = 'mm',
+  FOOT = 'ft',
+  INCH = 'in',
+
+  // Volume
+  LITER = 'L',
+  ML = 'mL',
+  GALLON = 'gal',
 }
 
 export interface IConditionAndQuantity {
