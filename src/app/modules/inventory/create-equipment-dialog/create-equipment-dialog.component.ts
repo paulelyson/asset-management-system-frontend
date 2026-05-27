@@ -94,34 +94,34 @@ export class CreateEquipmentDialogComponent implements OnInit {
     private equipmentService: EquipmentService,
     private authService: AuthService,
     private snackBarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
+    @Inject(MAT_DIALOG_DATA) public data: {action: string, equipment?: IEquipment},
   ) {
     this.user = this.authService.getUser();
     // this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
     this.conditions = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION);
     this.equipmentForm = this.fb.nonNullable.group({
-      _id: [data?._id ?? ''],
-      name: [data?.name ?? ''],
-      type: [data?.type ?? ''],
-      serialNo: [data?.serialNo ?? ''],
-      modelNo: [data?.modelNo ?? ''],
-      categories: [data?.categories ?? ''],
-      brand: [data?.brand ?? ''],
-      color: [data?.color ?? ''],
-      unit: [data?.unit ?? EquipmentUnit.PC],
-      matter: [data?.matter ?? 'solid'],
-      description: [data?.description ?? ''],
-      remarks: [data?.remarks ?? ''],
-      inventorytype: [data?.inventorytype ?? 'inventory'],
-      location: [data?.location?._id ?? ''],
-      dateAcquired: [data?.dateAcquired ?? new Date()],
-      warrantyPeriod: [data?.warrantyPeriod ?? new Date()],
-      department: [data?.department?._id ?? this.user.roles[0].department._id],
-      updatedBy: [data?.updatedBy?._id ?? this.user._id],
+      _id: [data?.equipment?._id ?? ''],
+      name: [data?.equipment?.name ?? ''],
+      type: [data?.equipment?.type ?? ''],
+      serialNo: [data?.equipment?.serialNo && data?.action === 'update' ? data?.equipment?.serialNo : ''],
+      modelNo: [data?.equipment?.modelNo ?? ''],
+      categories: [data?.equipment?.categories ?? ''],
+      brand: [data?.equipment?.brand ?? ''],
+      color: [data?.equipment?.color ?? ''],
+      unit: [data?.equipment?.unit ?? EquipmentUnit.PC],
+      matter: [data?.equipment?.matter ?? 'solid'],
+      description: [data?.equipment?.description ?? ''],
+      remarks: [data?.equipment?.remarks ?? ''],
+      inventorytype: [data?.equipment?.inventorytype ?? 'inventory'],
+      location: [data?.equipment?.location?._id ?? ''],
+      dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
+      warrantyPeriod: [data?.equipment?.warrantyPeriod ?? new Date()],
+      department: [data?.equipment?.department?._id ?? this.user.roles[0].department._id],
+      updatedBy: [data?.equipment?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
-      canBeBorrowed: [data?.canBeBorrowed ?? true],
-      hasTag: [data?.hasTag ?? false],
+      canBeBorrowed: [data?.equipment?.canBeBorrowed ?? true],
+      hasTag: [data?.equipment?.hasTag ?? false],
       totalQuantity: [0],
     });
   }
@@ -131,15 +131,15 @@ export class CreateEquipmentDialogComponent implements OnInit {
       next: (resp) => this.locations.set(resp.data),
     });
 
-    this.equipmentService.getDistinct('brand', this.data?.department?._id).subscribe({
+    this.equipmentService.getDistinct('brand', this.data?.equipment?.department?._id).subscribe({
       next: (resp) => this.brands.set(resp.data),
     });
 
-    this.equipmentService.getDistinct('type', this.data?.department?._id).subscribe({
+    this.equipmentService.getDistinct('type', this.data?.equipment?.department?._id).subscribe({
       next: (resp) => this.equipmenttypes.set(resp.data),
     });
 
-    this.equipmentService.getDistinct('categoriesss').subscribe({
+    this.equipmentService.getDistinct('categories').subscribe({
       next: (resp) => this.categories.set(resp.data),
     });
 
@@ -154,9 +154,9 @@ export class CreateEquipmentDialogComponent implements OnInit {
       },
     });
 
-    this.populateForm(this.data?.conditionAndQuantity || []);
+    this.populateForm(this.data?.equipment?.conditionAndQuantity || []);
 
-    if (!this.data?.conditionAndQuantity) {
+    if (!this.data?.equipment?.conditionAndQuantity) {
       this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
     }
   }
@@ -172,7 +172,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
   getUpdatedByDisplayName() {
     let displayName = '';
     if (this.data) {
-      displayName = this.data?.updatedBy ? getDisplayName(this.data?.updatedBy) : '';
+      displayName = this.data?.equipment?.updatedBy ? getDisplayName(this.data?.equipment?.updatedBy) : '';
     } else {
       displayName = this.user.name;
     }
@@ -222,8 +222,8 @@ export class CreateEquipmentDialogComponent implements OnInit {
       ...this.equipmentForm.value,
     };
 
-    // new equipment
-    if (!this.data) {
+    // new equipment or make a copy
+    if (!this.data || this.data?.action === 'create') {
       delete payload._id;
       this.equipmentService.createEquipment(payload).subscribe({
         next: (resp) => {
@@ -241,7 +241,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
             icon: '',
           }),
       });
-    } else {
+    } else if (this.data && this.data.action === 'update') {
       this.equipmentService.updateEquipment(payload).subscribe({
         next: (resp) => {
           this.snackBarService.openSnackbar({
@@ -259,6 +259,14 @@ export class CreateEquipmentDialogComponent implements OnInit {
           }),
       });
     }
+  }
+
+  onToggleCanBeBorrowed(event: boolean) { 
+    this.equipmentForm.get('canBeBorrowed')?.setValue(event);
+  }
+
+  onToggleHasTag(event: boolean) {
+    this.equipmentForm.get('hasTag')?.setValue(event);
   }
 
   onClose() {

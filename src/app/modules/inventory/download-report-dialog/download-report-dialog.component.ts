@@ -10,7 +10,6 @@ import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 @Component({
   selector: 'app-download-report-dialog',
   imports: [
-    ToggleButtonGroupComponent,
     MatDividerModule,
     IconComponent,
     ToggleComponent,

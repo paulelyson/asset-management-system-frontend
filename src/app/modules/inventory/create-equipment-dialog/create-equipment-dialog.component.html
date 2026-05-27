@@ -14,13 +14,15 @@
       <div class="fields-grid">
         <app-input label="Serial Number" formControlName="serialNo"/>
         <app-input label="Name *" formControlName="name"/>
-        <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
-        <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/>
+        <!-- <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
+        <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/> -->
+        <app-input label="Equipment Type" formControlName="type"/>
+        <app-input label="Brand" formControlName="brand"/>
         <app-input label="Model Number" formControlName="modelNo" />
         <app-input label="Color" formControlName="color" />
         <div class="field full">
-          <!-- <app-input label="Categories" formControlName="categories" /> -->
-          <app-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/>
+          <app-input label="Categories" formControlName="categories" />
+          <!-- <app-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/> -->
         </div>
       </div>
       <div class="label">Condition and Quantity</div>
@@ -54,10 +56,10 @@
       <div class="label">Options</div>
       <div class="fields-grid">
         <div class="toggle-field">
-          <app-toggle label="Can be borrowed" />
+          <app-toggle label="Can be borrowed" [isChecked]="equipmentForm.get('canBeBorrowed')?.value" (toggle)="onToggleCanBeBorrowed($event)" />
         </div>
          <div class="toggle-field">
-          <app-toggle label="Has inventory tag" />
+          <app-toggle label="Has inventory tag" [isChecked]="equipmentForm.get('hasTag')?.value" (toggle)="onToggleHasTag($event)" />
         </div>
       </div>
       <div class="label">Additional Information</div>

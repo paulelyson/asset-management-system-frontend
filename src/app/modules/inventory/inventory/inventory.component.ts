@@ -82,7 +82,9 @@ export class InventoryComponent implements OnInit {
         this.hasMore = resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
         this.pendingApproval.set(resp.data[1]);
-        this.filter.update((f) => ({ ...f, limit: resp.total }));
+        if(resp.total > 0) {
+          this.filter.update((f) => ({ ...f, limit: resp.total }));
+        }
       },
     });
   }
@@ -98,11 +100,19 @@ export class InventoryComponent implements OnInit {
       this.onUpdateEquipment(equipment);
     } else if (action == 'Changes History') {
       this.onDisplayChangeLogs(equipment);
+    } else if (action == 'Create a Copy') {
+      this.onCloneEquipment(equipment);
     }
   }
 
+  onCloneEquipment(equipment: IEquipment) {
+    this.dialogService.openUpdateEquipmentDialog(equipment, 'create').subscribe((resp: IEquipment | null) => {
+      if (resp) {}
+    });
+  }
+
   onUpdateEquipment(equipment: IEquipment) {
-    this.dialogService.openUpdateEquipmentDialog(equipment).subscribe((resp: IEquipment | null) => {
+    this.dialogService.openUpdateEquipmentDialog(equipment, 'update').subscribe((resp: IEquipment | null) => {
       if (resp) {
         this.equipment.update((eqpmnt) => {
           const filtered = eqpmnt.filter((item) => item._id !== resp._id);

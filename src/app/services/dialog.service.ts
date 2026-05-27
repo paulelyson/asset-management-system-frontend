@@ -63,8 +63,8 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  openUpdateEquipmentDialog(equipment: IEquipment) {
-    const dialogRef = this.dialog.open(CreateEquipmentDialogComponent, { data: equipment });
+  openUpdateEquipmentDialog(equipment: IEquipment, action: string) {
+    const dialogRef = this.dialog.open(CreateEquipmentDialogComponent, { data: { action , equipment } });
     return dialogRef.afterClosed();
   }
 

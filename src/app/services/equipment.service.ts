@@ -93,6 +93,13 @@ export class EquipmentService {
         icon: 'edit',
         size: 'xs'
       })
+      actions.push({
+        type: 'button',
+        name: 'Create a Copy',
+        icon: 'content_copy',
+        size: 'xs',
+        tooltip: 'Create a new equipment with the same details as this one'
+      })
     }
     const conditions: RowActionConfig[] = equipment.conditionAndQuantity.map((x) => ({
       name: x.condition + ' ×' + x.quantity,
