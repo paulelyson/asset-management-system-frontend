@@ -1,41 +1,78 @@
+
 <form [formGroup]="equipmentForm" (ngSubmit)="submit()">
-  <div class="create-equipment-container">
-    <div class="image-wrapper">
-      <img class="fit-image" [src]="image ?? default_img" />
+  <div class="container">
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-title">Add Equipment</p>
+        <p class="dialog-sub">Fill in the details below to register new equipment</p>
+      </div>
+      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
     </div>
-    <app-file-input (filechanged)="addImage($event)"></app-file-input>
-    <div class="create-equipment-wrapper">
-      <app-input label="Name*" formControlName="name" />
-      <app-input label="Serial Number" formControlName="serialNo" />
-      <app-input label="Model Number" formControlName="modelNo" />
-      <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
-      <app-input label="Categories" formControlName="categories" />
-      <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/>
-      <app-input label="Color" formControlName="color" />
-      <app-input label="Unit" formControlName="unit" />
-      <app-autocomplete label="Matter" formControlName="matter" [options]="matter"/>
-      <app-input label="Description" formControlName="description" />
-      <app-input label="Remarks" formControlName="remarks" />
-      <app-autocomplete label="Department" formControlName="department" [options]="departmentlist()" [readonly]="true"/>
-      <app-input label="Total Quantity" formControlName="totalQuantity" [readonly]="true"/>
-      <app-input label="Updated By" [value]="getUpdatedByDisplayName()" [readonly]="true"/>
-      <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder=""/>
-      <app-datepicker label="Date Acquired" formControlName="dateAcquired" />
-    </div>
-    <div formArrayName="conditionAndQuantity">
-      @for (item of conditionAndQuantity.controls; track $index; let last = $last; let first = $first) {
-        <div class="condition-wrapper" [formGroupName]="$index">
-          <app-input label="Quantity" width="sm" formControlName="quantity"/>
-          <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
-          <app-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</app-button>
-          @if(last) {
-            <app-button icon="add" appearance="link" (btnclicked)="addConditionAndQuantity()">Add</app-button>
-          }
+    <mat-divider></mat-divider>
+    <div class="content-body">
+      <div class="label">Basic Information</div>
+      <div class="fields-grid">
+        <app-input label="Serial Number" formControlName="serialNo"/>
+        <app-input label="Name *" formControlName="name"/>
+        <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
+        <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/>
+        <app-input label="Model Number" formControlName="modelNo" />
+        <app-input label="Color" formControlName="color" />
+        <div class="field full">
+          <!-- <app-input label="Categories" formControlName="categories" /> -->
+          <app-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/>
         </div>
-      }
+      </div>
+      <div class="label">Condition and Quantity</div>
+      <div formArrayName="conditionAndQuantity" class="cond-qty-container">
+        @for (item of conditionAndQuantity.controls; track $index; let last = $last; let first = $first) {
+          <div class="condition-wrapper" [formGroupName]="$index">
+            <app-input label="Quantity" width="sm" formControlName="quantity"/>
+            <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
+            <app-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
+            <!-- <app-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</app-button> -->
+          </div>
+        }
+        <app-button icon="add" appearance="link" (btnclicked)="addConditionAndQuantity()">Add Quantity</app-button>
+      </div>
+      <div class="label">Unit and Classification</div>
+      <div class="fields-grid">
+        <app-dropdown label="Unit" formControlName="unit" [options]="units"/>
+        <app-dropdown label="Matter" formControlName="matter" [options]="matter"/>
+        <app-dropdown label="Inventory Type" formControlName="inventorytype" [options]="inventoryTypes"/>
+      </div>
+      <div class="label">Assignment</div>
+      <div class="fields-grid">
+        <app-autocomplete label="Department" formControlName="department" [options]="departmentlist()" [readonly]="true"/>
+        <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder=""/>
+      </div>
+      <div class="label">Dates</div>
+      <div class="fields-grid">
+        <app-datepicker label="Date Acquired" formControlName="dateAcquired" />
+        <app-datepicker label="Warranty Period" formControlName="warrantyPeriod" />
+      </div>
+      <div class="label">Options</div>
+      <div class="fields-grid">
+        <div class="toggle-field">
+          <app-toggle label="Can be borrowed" />
+        </div>
+         <div class="toggle-field">
+          <app-toggle label="Has inventory tag" />
+        </div>
+      </div>
+      <div class="label">Additional Information</div>
+      <div class="fields-grid">
+        <div class="field full">
+          <app-textarea label="Description" formControlName="description"></app-textarea>
+          <app-textarea label="Remarks" formControlName="remarks"></app-textarea>
+        </div>
+      </div>
+      <div class="label">Images</div>
+      <app-file-input (filechanged)="addImage($event)"></app-file-input>
     </div>
+    <mat-divider></mat-divider>
     <div class="action-wrapper">
-      <app-button type="submit">Submit</app-button>
+      <app-button appearance="link" icon="check" type="submit">Save Equipment</app-button>
     </div>
   </div>
 </form>

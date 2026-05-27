@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, IConditionAndQuantity, IEquipment } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentUnit, IConditionAndQuantity, IEquipment } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import {
@@ -27,6 +27,11 @@ import { DepartmentService } from '../../../services/department.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
+import { ToggleComponent } from '../../shared/toggle/toggle.component';
+import { TextareaComponent } from '../../shared/components/forms/textarea/textarea.component';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -40,6 +45,11 @@ import { SnackbarService } from '../../../services/snackbar.service';
     ReactiveFormsModule,
     FormsModule,
     DatepickerComponent,
+    IconComponent,
+    MatDividerModule,
+    DropdownComponent,
+    ToggleComponent,
+    TextareaComponent,
   ],
 })
 export class CreateEquipmentDialogComponent implements OnInit {
@@ -47,7 +57,9 @@ export class CreateEquipmentDialogComponent implements OnInit {
   image: string | undefined;
   equipmentForm: FormGroup;
   conditions;
-  matter;
+  matter: string[] = ['solid', 'liquid', 'gas'];
+  inventoryTypes: string[] = ['inventory', 'non_inventory'];
+  units: string[] = Object.values(EquipmentUnit);
   locations: WritableSignal<ClassLocation[]> = signal([]);
   locationlist = computed((): IAutocompleteOption[] =>
     this.locations().map((loc) => ({ view: loc.name, value: loc._id })),
@@ -67,6 +79,11 @@ export class CreateEquipmentDialogComponent implements OnInit {
     this.departments().map((dept) => ({ value: dept._id, view: dept.code })),
   );
 
+  categories: WritableSignal<string[]> = signal([]);
+  categorylist = computed((): IAutocompleteOption[] =>
+    this.categories().map((x) => ({ value: x, view: x })),
+  );
+
   user: TokenData;
   constructor(
     private fb: FormBuilder,
@@ -80,7 +97,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: IEquipment | null,
   ) {
     this.user = this.authService.getUser();
-    this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
+    // this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
     this.conditions = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION);
     this.equipmentForm = this.fb.nonNullable.group({
       _id: [data?._id ?? ''],
@@ -91,17 +108,20 @@ export class CreateEquipmentDialogComponent implements OnInit {
       categories: [data?.categories ?? ''],
       brand: [data?.brand ?? ''],
       color: [data?.color ?? ''],
-      unit: [data?.unit ?? ''],
+      unit: [data?.unit ?? EquipmentUnit.PC],
       matter: [data?.matter ?? 'solid'],
       description: [data?.description ?? ''],
       remarks: [data?.remarks ?? ''],
-      inventorytype: [data?.inventorytype ?? ''],
+      inventorytype: [data?.inventorytype ?? 'inventory'],
       location: [data?.location?._id ?? ''],
       dateAcquired: [data?.dateAcquired ?? new Date()],
+      warrantyPeriod: [data?.warrantyPeriod ?? new Date()],
       department: [data?.department?._id ?? this.user.roles[0].department._id],
       updatedBy: [data?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),
+      canBeBorrowed: [data?.canBeBorrowed ?? true],
+      hasTag: [data?.hasTag ?? false],
       totalQuantity: [0],
     });
   }
@@ -117,6 +137,10 @@ export class CreateEquipmentDialogComponent implements OnInit {
 
     this.equipmentService.getDistinct('type', this.data?.department?._id).subscribe({
       next: (resp) => this.equipmenttypes.set(resp.data),
+    });
+
+    this.equipmentService.getDistinct('categoriesss').subscribe({
+      next: (resp) => this.categories.set(resp.data),
     });
 
     this.departmentService.getDepartments().subscribe({
@@ -235,5 +259,9 @@ export class CreateEquipmentDialogComponent implements OnInit {
           }),
       });
     }
+  }
+
+  onClose() {
+    this.dialogRef.close();
   }
 }
