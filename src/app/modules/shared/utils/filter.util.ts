@@ -1,6 +1,6 @@
 import { FilterDisplay, Variant } from "../../../models/ui/common-config.model";
 
-export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[] = [] ,dontShow: string[] = ['page']): FilterDisplay[] => {
+export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[] = [] ,dontShow: string[] = ['page', 'limit']): FilterDisplay[] => {
   return Object.entries(filter)
     .map(([key, val]) => ({
       field: key,
