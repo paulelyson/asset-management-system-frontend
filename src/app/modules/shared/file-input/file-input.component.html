@@ -1,1 +1,13 @@
-<input type="file" [accept]="accept" (change)="loadImageFromFile($event)" disabled/>
+<div class="file-drop">
+  <input
+    class="file-input"
+    type="file"
+    [accept]="accept"
+    (change)="loadImageFromFile($event)"
+    #fileInput
+  />
+  <app-icon name="cloud_upload" size="lg" />
+  <!-- <p>Click or drag and drop to upload file</p> -->
+  <p>Image upload currently not available due to server migration.</p>
+
+</div>
