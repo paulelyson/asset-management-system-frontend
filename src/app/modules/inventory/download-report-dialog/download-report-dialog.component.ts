@@ -66,6 +66,11 @@ export class DownloadReportDialogComponent {
       value: 'unit',
       checked: true,
     },
+     {
+      label: 'Condition and Quantity',
+      value: 'conditionAndQuantity',
+      checked: true,
+    },
     {
       label: 'Has Tag',
       value: 'hasTag',
@@ -75,24 +80,13 @@ export class DownloadReportDialogComponent {
       label: 'Location',
       value: 'location',
       checked: true,
-    },
-    {
-      label: 'Department',
-      value: 'department',
-      checked: true,
-    },
-    {
-      label: 'Last Updated By',
-      value: 'updatedBy',
-      checked: false,
-    },
+    }
   ];
+
   constructor(private dialogRef: MatDialogRef<DownloadReportDialogComponent>) {}
 
   onDownloadPDF() {
     const pdfConfg = new PDFFormatConfig({
-      pageSize: 'A4',
-      orientation: 'landscape',
       columns: this.equipmentFields.filter((x) => x.checked).map((x) => x.value),
     });
     this.dialogRef.close(pdfConfg);

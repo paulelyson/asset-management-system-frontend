@@ -2,6 +2,7 @@ import { EquipmentCondition } from "../Equipment";
 
 export class EquipmentFilter {
   page: number = 1;
+  limit: number = 25;
   department: string = '';
   search: string = '';
   categories: string[] = [];

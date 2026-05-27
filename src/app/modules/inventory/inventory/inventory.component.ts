@@ -82,6 +82,7 @@ export class InventoryComponent implements OnInit {
         this.hasMore = resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
         this.pendingApproval.set(resp.data[1]);
+        this.filter.update((f) => ({ ...f, limit: resp.total }));
       },
     });
   }
@@ -146,8 +147,12 @@ export class InventoryComponent implements OnInit {
         department: this.selectedDept().name,
       }
     };
+    const filter = {
+      ...this.filter(),
+      department: this.selectedDept()._id,
+    }
     this.equipmentService
-      .downloadReport(this.filter(), config)
+      .downloadReport(filter, config)
       .subscribe({
         next: (blob) => {
           const url = URL.createObjectURL(blob);

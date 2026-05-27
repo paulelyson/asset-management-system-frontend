@@ -6,7 +6,7 @@ interface HeaderConfig {
 }
 
 export class PDFFormatConfig {
-  pageSize: 'A4' | 'Letter' | 'Legal' = 'A4';
+  pageSize: 'A4' | 'Letter' | 'Legal' = 'Legal';
   orientation: 'portrait' | 'landscape' = 'landscape';
   columns: string[] = [];
   header?: HeaderConfig; 

@@ -22,7 +22,7 @@ export class EquipmentService {
   constructor(private http: HttpClient, private exceptionService: ExceptionService) {}
 
   getEquipment(filter: EquipmentFilter) {
-    let params = new HttpParams({ fromObject: { page: filter.page } });
+    let params = new HttpParams({ fromObject: { page: filter.page, limit: filter.limit } });
     filter.search && (params = params.append('search', filter.search));
     filter.department && (params = params.append('department', filter.department));
     filter.brand && (params = params.append('brand', filter.brand));
@@ -95,7 +95,7 @@ export class EquipmentService {
       })
     }
     const conditions: RowActionConfig[] = equipment.conditionAndQuantity.map((x) => ({
-      name: x.quantity + ' ' + x.condition,
+      name: x.condition + ' ×' + x.quantity,
       tooltip: '',
       type: 'badge',
       size: 'sm',
@@ -131,7 +131,13 @@ export class EquipmentService {
   }
 
   downloadReport(filter: EquipmentFilter, pdfConfig: PDFFormatConfig) {
-    console.log('Downloading report with config:', pdfConfig);
+    let params = new HttpParams({ fromObject: { page: filter.page, limit: filter.limit } });
+    filter.search && (params = params.append('search', filter.search));
+    filter.department && (params = params.append('department', filter.department));
+    filter.brand && (params = params.append('brand', filter.brand));
+    filter.condition && (params = params.append('condition', filter.condition));
+    filter.pending && (params = params.append('confirmed', !filter.pending));
+
     const body =  {
       paperSize:   pdfConfig.pageSize,
       orientation: pdfConfig.orientation,
@@ -140,10 +146,10 @@ export class EquipmentService {
       schoolName: environment.school_name,
       collegeName: pdfConfig.header?.college || '',
       departmentName: pdfConfig.header?.department || '',
-
+      logoUrl: environment.logo_url,
       confirmed:   false,
     }
-    return  this.http.post(environment.api_url + `/api/equipment/report/download`, body, {responseType: 'blob'})
+    return  this.http.post(environment.api_url + `/api/equipment/report/download`, body, {params, responseType: 'blob'})
       .pipe(catchError((err) => this.exceptionService.handleError(err)));
   }
 }
