@@ -3,7 +3,7 @@
   <app-inventory-toolbar
     [pendingApprovalCount]="pendingApproval()"
     [filters]="filterDisplay()"
-    [department]="selectedDept()"
+    [department]="selectedDept()._id"
     [canAccessEquipment]="canAccessEquipment()"
     (downloadReport)="onDownloadReport($event)"
   />

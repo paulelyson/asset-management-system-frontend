@@ -12,12 +12,14 @@ import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
 import { IUser } from '../models/User';
 import { CHANGELOG_STATUS_VARIANT, EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
 import { getDisplayName } from '../utils/string.util';
+import { PDFFormatConfig } from '../models/ui/pdf-format-config.model';
+import { ExceptionService } from './exception.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EquipmentService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private exceptionService: ExceptionService) {}
 
   getEquipment(filter: EquipmentFilter) {
     let params = new HttpParams({ fromObject: { page: filter.page } });
@@ -29,58 +31,46 @@ export class EquipmentService {
 
     return this.http
       .get<ApiResponse<[IEquipment[], number]>>(environment.api_url + '/api/equipment', { params })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   getStatus(equipmentId: string) {
     return this.http.get<ApiResponse<BorrowedEquipmentStatusTypeAndQuantity[]>>(environment.api_url + `/api/equipment/${equipmentId}/status`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   getDistinct(field: string, department?: string) {
     let params = new HttpParams();
     department && (params = params.append('department', department));
     return this.http.get<ApiResponse<string[]>>(environment.api_url + '/api/equipment/distinct/' + field, { params })
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   createEquipment(equipment: IEquipment) {
     return this.http.post<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/', equipment)
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   updateEquipment(equipment: IEquipment) {
     return this.http.patch<ApiResponse<IEquipment>>(environment.api_url + '/api/equipment/' + equipment._id, equipment)
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   getChangeLogs() {
     return this.http.get<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + '/api/equipment-change-log')
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   getChangeLogsByEquipment(equipmentId: string) {
      return this.http.get<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + `/api/equipment/${equipmentId}/change-logs`)
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   resolveChangeLog(resolve: Pick<EquipmentChangeLog, '_id' | 'status' | 'resolverRemarks'>) {
     const {_id, status, resolverRemarks} = resolve
     const body = {status: status, resolverRemarks }
     return this.http.patch<ApiResponse<EquipmentChangeLog[]>>(environment.api_url + `/api/equipment-change-log/${_id}/resolve`, body)
-      .pipe(
-        catchError(this.handleError),
-      );
+      .pipe(catchError(this.exceptionService.handleError));
   }
 
   getRowData(equipment: IEquipment, canAccessEquipment: boolean): RowColumnConfig[] {
@@ -140,22 +130,20 @@ export class EquipmentService {
     ];
   }
 
-  downloadReport(filter: EquipmentFilter, fields: string[]) {
+  downloadReport(filter: EquipmentFilter, pdfConfig: PDFFormatConfig) {
+    console.log('Downloading report with config:', pdfConfig);
     const body =  {
-      paperSize:   'LEGAL',
-      orientation: 'landscape',
-      fields:      fields,
+      paperSize:   pdfConfig.pageSize,
+      orientation: pdfConfig.orientation,
+      fields:      pdfConfig.columns,
       // department:  selectedDepartment,
+      schoolName: environment.school_name,
+      collegeName: pdfConfig.header?.college || '',
+      departmentName: pdfConfig.header?.department || '',
+
       confirmed:   false,
     }
     return  this.http.post(environment.api_url + `/api/equipment/report/download`, body, {responseType: 'blob'})
-      .pipe(
-        catchError(this.handleError),
-      );
-  }
-
-  handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.error.errors || err.error.message));
-
+      .pipe(catchError((err) => this.exceptionService.handleError(err)));
   }
 }

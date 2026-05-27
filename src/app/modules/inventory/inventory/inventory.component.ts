@@ -25,6 +25,8 @@ import { isObjectId } from '../../../utils/string.util';
 import { DepartmentService } from '../../../services/department.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
+import { Department, IDepartment } from '../../../models/Department';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-inventory',
@@ -39,14 +41,14 @@ export class InventoryComponent implements OnInit {
   user: User;
   filter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
-  selectedDept: WritableSignal<string> = signal('');
+  selectedDept: WritableSignal<IDepartment> = signal(new Department());
   pendingApproval: WritableSignal<number> = signal(0);
   filterEffect = effect(() => {
     const dept = this.filter().department;
     if (dept && isObjectId(dept)) {
       this.departmentService.getDepartmentById(dept).subscribe((resp) => {
         this.filter.update(({ department, ...rest }) => ({ department: resp.data.code, ...rest }));
-        this.selectedDept.set(resp.data._id);
+        this.selectedDept.set(resp.data);
       });
     }
   });
@@ -135,8 +137,17 @@ export class InventoryComponent implements OnInit {
   }
 
   onDownloadReport(event: PDFFormatConfig) {
+    const config = {
+      ...event,
+      header: {
+        title: environment.school_name,
+        // logoUrl: '/assets/images/logo.png',
+        college: this.selectedDept().school.name,
+        department: this.selectedDept().name,
+      }
+    };
     this.equipmentService
-      .downloadReport(this.filter(), event)
+      .downloadReport(this.filter(), config)
       .subscribe({
         next: (blob) => {
           const url = URL.createObjectURL(blob);
