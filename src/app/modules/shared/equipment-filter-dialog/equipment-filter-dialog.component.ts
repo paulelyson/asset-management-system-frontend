@@ -16,7 +16,7 @@ import { EQUIPMENT_CONDITION } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
-  imports: [ButtonComponent, FormsModule, ReactiveFormsModule, AutocompleteComponent],
+  imports: [ButtonComponent, FormsModule, ReactiveFormsModule, AutocompleteComponent, DropdownComponent],
   templateUrl: './equipment-filter-dialog.component.html',
   styleUrl: './equipment-filter-dialog.component.css',
 })
@@ -47,6 +47,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
       equipmentType: [''],
       location: [''],
       condition: [''],
+      canBeBorrowed: ['']
     });
   }
 
@@ -67,13 +68,19 @@ export class EquipmentFilterDialogComponent implements OnInit {
       });
   }
 
+  onCanBeBorrowedChange(event: any) {
+    console.log(event);
+    this.filterForm.get('canBeBorrowed')?.setValue(event === 'Yes' ? true : event === 'No' ? false : '');
+    console.log(this.filterForm.value);
+  }
+
   navigate() {
     let navigationExtras: NavigationExtras = {
       queryParams: { page: 1 },
       queryParamsHandling: 'merge',
     };
     Object.entries(this.filterForm.value).forEach(([key, val]) => {
-      if (val) (navigationExtras.queryParams as Params)[key] = val;
+      if (val || typeof val === 'boolean') (navigationExtras.queryParams as Params)[key] = val;
     });
     this.router.navigate([this.url], navigationExtras);
 

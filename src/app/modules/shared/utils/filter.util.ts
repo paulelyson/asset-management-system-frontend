@@ -9,7 +9,7 @@ export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[]
       canClose: !unClosed.includes(key),
       // canClose: false
     }))
-    .filter((item) => item.value);
+    .filter((item) => item.value || typeof item.value === 'boolean');
 };
 
 
