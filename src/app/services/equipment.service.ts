@@ -28,6 +28,7 @@ export class EquipmentService {
     filter.brand && (params = params.append('brand', filter.brand));
     filter.condition && (params = params.append('condition', filter.condition));
     filter.pending && (params = params.append('confirmed', !filter.pending));
+    filter.canBeBorrowed !== undefined && (params = params.append('canBeBorrowed', filter.canBeBorrowed));
 
     return this.http
       .get<ApiResponse<[IEquipment[], number]>>(environment.api_url + '/api/equipment', { params })

@@ -10,6 +10,7 @@ export class EquipmentFilter {
   equipmentType: string = '';
   condition?: EquipmentCondition;
   pending: boolean = false;
+  canBeBorrowed?: boolean;
   // borrow: boolean;
 
   constructor(partial?: Partial<EquipmentFilter>) {

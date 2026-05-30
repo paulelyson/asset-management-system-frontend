@@ -56,7 +56,7 @@ export class BorrowComponent implements OnInit {
 
 
   filter = signal<EquipmentFilter>(new EquipmentFilter());
-  filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
+  filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department'], ['page', 'limit', 'canBeBorrowed']));
   filterEffect = effect(() => {
     const dept = this.filter().department;
     if (dept && isObjectId(dept)) {
@@ -161,6 +161,7 @@ export class BorrowComponent implements OnInit {
       equipmentType: params['equipmentType'],
       condition: params['condition'],
       department: params['department'] ?? this.user.roles[0].department._id,
+      canBeBorrowed: true
     });
     this.getEquipment();
   }

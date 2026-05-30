@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { BorrowedEquipmentHistoryDialogComponent } from '../../../borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -38,6 +38,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './equipment-change-log-dialog.component.css',
 })
 export class EquipmentChangeLogDialogComponent {
+  ChangeStatus = ChangeStatus;
   equipmentName: string = '';
   serialNo: string = '';
   total: number = 0;
@@ -77,12 +78,12 @@ export class EquipmentChangeLogDialogComponent {
     return Array.isArray(content) ? content : [content];
   }
 
-  onApprove() {
+  onResolve(status: ChangeStatus) {
     const pendingIds = this.data.filter(dt => dt.status == ChangeStatus.PENDING).map(cl => cl._id);
     console.log({pendingIds})
     const update = {
       _id: pendingIds[0],
-      status: ChangeStatus.APPROVED,
+      status: status,
       resolverRemarks: this.remarksControl.value
     }
     this.dialogRef.close(update);

@@ -61,11 +61,19 @@
     </div>
     <mat-divider></mat-divider>
     @if (showAction) {
+      <div class="remarks">
+        <app-textarea [formControl]="remarksControl"></app-textarea>
+      </div>
+    }
+    <mat-divider></mat-divider>
+    @if (showAction) {
       <div class="action-wrapper">
-        <div class="remarks">
-          <app-textarea [formControl]="remarksControl"></app-textarea>
-        </div>
-        <app-button (btnclicked)="onApprove()">Approve</app-button>
+        <app-button appearance="link" icon="close" (btnclicked)="onResolve(ChangeStatus.REJECTED)">
+          Reject
+        </app-button>
+        <app-button appearance="link" icon="check" (btnclicked)="onResolve(ChangeStatus.APPROVED)">
+          Approve
+        </app-button>
       </div>
     }
   </div>

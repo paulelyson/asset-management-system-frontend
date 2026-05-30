@@ -74,12 +74,13 @@
   }
 }
 
-.action-wrapper {
-  flex-direction: column;
-  padding: 10px 26px;
-  align-items: flex-end;
+.remarks {
+  padding: 10px 20px;
 }
 
-.action-wrapper .remarks {
-  width: 100%;
+.action-wrapper {
+  padding: 10px 26px;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
 }
