@@ -9,7 +9,7 @@ export class EquipmentFilter {
   brand: string = '';
   equipmentType: string = '';
   condition?: EquipmentCondition;
-  pending: boolean = false;
+  pending?: boolean;
   canBeBorrowed?: boolean;
   // borrow: boolean;
 

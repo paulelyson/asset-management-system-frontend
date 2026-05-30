@@ -69,6 +69,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     borrowedEquipment: BorrowedEquipment,
     status: BorrowedEquipmentStatusType,
     quantity: number,
+    remarks?: string,
   ): void {
     // TODO add functional
     const equipmentId = borrowedEquipment.equipment._id;
@@ -77,6 +78,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       quantity: quantity,
       condition: 'functional',
       status: status,
+      remarks: remarks
     };
     this.borrowService.addTransaction(updated, borrowId, equipmentId).subscribe({
       next: (resp) => {
@@ -106,7 +108,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     } else if (action == 'Confirm Returns') {
       this.onUpdateStatus(borrowedEquipment, 'returned', 'Confirm Returns');
     } else if (action == 'Cancel') {
-      this.onUpdateStatus(borrowedEquipment, 'cancelled', 'Cancel Request');
+      this.onUpdateStatus(borrowedEquipment, 'cancelled', 'Cancel Request', true);
     }
     // view info
     else if (action == 'View Detail') {
@@ -126,17 +128,18 @@ export class BorrowedEquipmentComponent implements OnInit {
     borrowedEquipment: BorrowedEquipment,
     status: BorrowedEquipmentStatusType,
     action: string,
+    openDialog: boolean = false,
   ) {
     const fields: BorrowedEquipmentStatusFields[] = ['quantity', 'status'];
     const actions: ButtonConfig[] = [new ButtonConfig({ name: action })];
-    if (borrowedEquipment.quantity == 1) {
+    if (!openDialog) {
       this.addTransaction(borrowedEquipment, status, borrowedEquipment.quantity);
     } else {
       this.dialogService
         .openUpdateQuantityStatusDialog(fields, actions, [status])
         .subscribe((resp) => {
           if (resp) {
-            this.addTransaction(borrowedEquipment, resp.status, resp.quantity);
+            this.addTransaction(borrowedEquipment, resp.status, resp.quantity, resp.remarks);
           }
         });
     }
