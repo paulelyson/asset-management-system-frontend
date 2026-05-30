@@ -3,5 +3,11 @@
     <span>{{ label }}&nbsp;</span>
     <span class="tag">{{ tag }}</span>
   </div>
-  <textarea [placeholder]="placeholder" [(ngModel)]="value"> </textarea>
+  <textarea
+    [placeholder]="placeholder"
+    [(ngModel)]="value"
+    (input)="onInput($event)"
+    [disabled]="disabled"
+  >
+  </textarea>
 </div>

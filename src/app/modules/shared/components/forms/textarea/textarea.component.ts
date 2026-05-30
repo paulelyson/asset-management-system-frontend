@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-textarea',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './textarea.component.html',
   styleUrl: './textarea.component.css',
   providers: [
