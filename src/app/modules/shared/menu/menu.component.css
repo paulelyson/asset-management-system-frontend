@@ -33,4 +33,5 @@
 .action-wrapper {
   display: flex;
   justify-content: flex-start;
+  padding: 6px 0;
 }

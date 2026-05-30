@@ -58,7 +58,7 @@ export class InventoryComponent implements OnInit {
       this.authService.hasRole(['lab_in_charge', 'chairman', 'assistant', 'administrator', 'dean'])
     );
   });
-
+  isLoading: boolean = false;
   constructor(
     private dialogService: DialogService,
     private equipmentService: EquipmentService,
@@ -82,7 +82,7 @@ export class InventoryComponent implements OnInit {
         this.hasMore = resp.hasNextPage;
         this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
         this.pendingApproval.set(resp.data[1]);
-        if(resp.total > 0) {
+        if(resp.total > 25) {
           this.filter.update((f) => ({ ...f, limit: resp.total }));
         }
       },
@@ -148,6 +148,12 @@ export class InventoryComponent implements OnInit {
   }
 
   onDownloadReport(event: PDFFormatConfig) {
+    this.isLoading = true;
+    this.snackBarService.openSnackbar({
+      icon: 'info',
+      message: ['Generating report...'],
+      type: 'warning',
+    });
     const config = {
       ...event,
       header: {

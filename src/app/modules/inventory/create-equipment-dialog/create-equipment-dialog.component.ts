@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, EquipmentUnit, IConditionAndQuantity, IEquipment } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentUnit, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import {
@@ -115,7 +115,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       inventorytype: [data?.equipment?.inventorytype ?? 'inventory'],
       location: [data?.equipment?.location?._id ?? ''],
       dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
-      warrantyPeriod: [data?.equipment?.warrantyPeriod ?? new Date()],
+      warrantyPeriod: [data.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
       department: [data?.equipment?.department?._id ?? this.user.roles[0].department._id],
       updatedBy: [data?.equipment?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
@@ -155,6 +155,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
     });
 
     this.populateForm(this.data?.equipment?.conditionAndQuantity || []);
+    this.populateImages(this.data?.equipment?.images || []);
 
     if (!this.data?.equipment?.conditionAndQuantity) {
       this.conditionAndQuantity.push(this.createConditionAndQuantityForm());
@@ -184,6 +185,17 @@ export class CreateEquipmentDialogComponent implements OnInit {
       const row = this.createConditionAndQuantityForm();
       row.patchValue(item);
       this.conditionAndQuantity.push(row);
+    });
+  }
+
+  populateImages(data: IEquipmentImage[]): void {
+    data.forEach((item) => {
+      const imageForm = this.fb.group({
+        thumbnail: [item.thumbnail],
+        midsize: [item.midsize],
+        original: [item.original],
+      });
+      this.images.push(imageForm);
     });
   }
 

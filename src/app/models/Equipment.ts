@@ -78,7 +78,7 @@ export interface IConditionAndQuantity {
   quantity: number;
 }
 
-interface IEquipmentImage {
+export interface IEquipmentImage {
   thumbnail: string;
   midsize: string;
   original: string;
