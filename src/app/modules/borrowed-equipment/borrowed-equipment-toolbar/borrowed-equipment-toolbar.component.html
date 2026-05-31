@@ -4,7 +4,7 @@
       @if (filter.show) {
         <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
             {{
-            ['info_and_transaction', 'enable_cancel'].includes(filter.field)
+            ['advanced', 'enable_cancel'].includes(filter.field)
               ? filter.field
               : filter.value
             }}
@@ -19,8 +19,9 @@
     </app-button>
   }
   <app-toggle
-    label="More options"
+    label="Advance Options"
     [isChecked]="infoAndHistory"
+    tooltip="Display additional option on adding transaction and viewing details"
     (toggle)="onShowInfoAndHistoryToggle($event)"
   />
   <app-toggle

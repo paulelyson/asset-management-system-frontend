@@ -165,9 +165,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       search: params['search'] ?? '',
       status: params['status'] ?? undefined,
       purpose: params['purpose'] ?? undefined,
-      info_and_transaction: params['info_and_transaction']
-        ? params['info_and_transaction'] === 'true'
-        : false,
+      advanced: params['advanced'] && JSON.parse(params['advanced']) == true ? true : undefined,
       enable_cancel: params['enable_cancel'] ? params['enable_cancel'] === 'true' : false,
     });
     this.getBorrowedEquipment();

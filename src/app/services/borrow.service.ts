@@ -192,7 +192,7 @@ export class BorrowService {
     }
 
     // add view details
-    if (filter.info_and_transaction) {
+    if (filter.advanced) {
       actions.push({
         name: 'View Detail',
         tooltip: 'View Detail',

@@ -32,7 +32,7 @@ export class BorrowedEquipmentToolbarComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['filters']) {
-      const info_and_trans = this.filters.find((filter) => filter.field == 'info_and_transaction');
+      const info_and_trans = this.filters.find((filter) => filter.field == 'advanced');
       this.infoAndHistory = info_and_trans ? JSON.parse(info_and_trans.value) : false;
 
       const enableCancel = this.filters.find((filter) => filter.field == 'enable_cancel');
@@ -66,7 +66,7 @@ export class BorrowedEquipmentToolbarComponent implements OnChanges {
 
   onShowInfoAndHistoryToggle(event: boolean): void {
     let navigationExtras: NavigationExtras = {
-      queryParams: { page: 1, info_and_transaction: event },
+      queryParams: { page: 1, advanced: event },
       queryParamsHandling: 'merge',
     };
     this.router.navigate([this.url], navigationExtras);
