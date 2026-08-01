@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(npm test:*)",
+      "Bash(npm run:*)",
+      "Bash(node:*)",
+      "Bash(npx:*)",
+      "Powershell(npm test:*)",
+      "Powershell(npm run:*)",
+      "Powershell(node:*)",
+      "Powershell(npx:*)"
+    ]
+  },
+  "includeCoAuthoredBy": false
+}
