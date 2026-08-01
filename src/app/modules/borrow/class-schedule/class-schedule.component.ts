@@ -109,7 +109,7 @@ export class ClassScheduleComponent implements OnInit {
         end: concatDateAndTime(endDate, endTime),
       },
       borrowedEquipment: [],
-      instructor: this.courseOffer?.instructor._id ?? '',
+      instructor: this.courseOffer?.instructor?._id ?? '',
       department: this.courseOffer?.course?.department?._id ?? '',
     };
     if (this.classScheduleForm.invalid) {

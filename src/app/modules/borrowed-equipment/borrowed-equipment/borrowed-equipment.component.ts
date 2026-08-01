@@ -136,7 +136,7 @@ export class BorrowedEquipmentComponent implements OnInit {
       this.addTransaction(borrowedEquipment, status, borrowedEquipment.quantity);
     } else {
       this.dialogService
-        .openUpdateQuantityStatusDialog(fields, actions, [status])
+        .openUpdateQuantityStatusDialog(fields, actions, [status], borrowedEquipment.equipment)
         .subscribe((resp) => {
           if (resp) {
             this.addTransaction(borrowedEquipment, resp.status, resp.quantity, resp.remarks);

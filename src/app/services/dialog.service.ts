@@ -41,9 +41,16 @@ export class DialogService {
     fields: BorrowedEquipmentStatusFields[],
     actions: ButtonConfig[],
     status?: BorrowedEquipmentStatusType[],
+    equipment?: IEquipment,
   ) {
     const dialogRef = this.dialog.open(UpdateQuantityStatusDialogComponent, {
-      data: { fields, actions, statusOptions: status },
+      data: {
+        fields,
+        actions,
+        statusOptions: status,
+        equipmentName: equipment?.name,
+        equipmentSerialNo: equipment?.serialNo,
+      },
     });
     return dialogRef.afterClosed();
   }

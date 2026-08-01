@@ -1,29 +1,11 @@
-<!-- <form [formGroup]="borrowedEquipmentStatusForm">
-  <div class="update-borrowed-equipment-container">
-    @if(data.fields.includes('quantity')) {
-    <app-input label="Quantity" formControlName="quantity" />
-    } @if(data.fields.includes('status')) {
-    <app-autocomplete label="Status" [options]="statuses" formControlName="status" />
-    } @if(data.fields.includes('condition')) {
-    <app-autocomplete label="Condition" [options]="conditions" formControlName="condition" />
-    } @if(data.fields.includes('remarks')) {
-    <app-input label="Remarks" formControlName="remarks" />
-    }
-    <div class="action-wrapper">
-      @for(action of data.actions; track action.id) {
-      <app-button width="width-filled" (btnclicked)="onClicked(action.name)">{{
-        action.name
-      }}</app-button>
-      }
-    </div>
-  </div>
-</form> -->
 <form [formGroup]="borrowedEquipmentStatusForm">
   <div class="container">
     <div class="dialog-header">
       <div>
-        <p class="dialog-title">Flat Screw Driver 6.5×200mm</p>
-        <p class="dialog-sub">SN: entries</p>
+        <p class="dialog-title">{{ data.equipmentName || 'Equipment' }}</p>
+        @if (data.equipmentSerialNo) {
+          <p class="dialog-sub">SN: {{ data.equipmentSerialNo }}</p>
+        }
       </div>
       <app-icon size="lg" name="close" (iconclicked)="onClose()" />
     </div>
@@ -39,7 +21,7 @@
       </div>
       @for (action of data.actions; track action.id) {
         <app-button width="width-filled" (btnclicked)="onClicked(action.name)">
-          Add Transaction
+          {{ action.name }}
         </app-button>
       }
     </div>

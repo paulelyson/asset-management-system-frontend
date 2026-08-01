@@ -59,7 +59,7 @@ export class EquipmentCardComponent {
     if (this.totalAvailable > 1) {
       const fields: BorrowedEquipmentStatusFields[] = ['quantity'];
       const actions: ButtonConfig[] = [new ButtonConfig({ name: 'Add' })];
-      this.dialogService.openUpdateQuantityStatusDialog(fields, actions, ['requested']).subscribe((resp) => {
+      this.dialogService.openUpdateQuantityStatusDialog(fields, actions, ['requested'], this.equipment).subscribe((resp) => {
         if (resp) {
           let quantity = Math.min(
             Math.max(parseInt(resp.quantity, 10) || 1, 1),

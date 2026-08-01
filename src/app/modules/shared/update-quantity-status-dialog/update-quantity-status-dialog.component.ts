@@ -17,6 +17,8 @@ export interface IQuantityStatusDialogConfig {
   fields: BorrowedEquipmentStatusFields[];
   actions: ButtonConfig[];
   statusOptions?: BorrowedEquipmentStatusType[];
+  equipmentName?: string;
+  equipmentSerialNo?: string;
 }
 
 @Component({

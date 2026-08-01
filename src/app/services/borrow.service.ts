@@ -44,10 +44,9 @@ export class BorrowService {
   }
 
   getBorrowedEquipment(filter: IBorrowedEquimentFilter) {
-    let params = new HttpParams();
-    // params = params.append('page', filter.page ?? '');
-    // params = params.append('search', filter.search ?? '');
-    // params = params.append('purpose', filter.purpose ?? '');
+    let params = new HttpParams({ fromObject: { page: filter.page } });
+    filter.search && (params = params.append('search', filter.search));
+    filter.purpose && (params = params.append('purpose', filter.purpose));
     filter.status && (params = params.append('status', filter.status ?? ''));
     return this.http
       .get<
