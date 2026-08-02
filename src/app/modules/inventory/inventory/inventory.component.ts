@@ -80,8 +80,8 @@ export class InventoryComponent implements OnInit {
     this.equipmentService.getEquipment(this.filter()).subscribe({
       next: (resp) => {
         this.hasMore = resp.hasNextPage;
-        this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data[0]]);
-        this.pendingApproval.set(resp.data[1]);
+        this.equipment.update((eqpmnt) => [...eqpmnt, ...resp.data]);
+        this.pendingApproval.set((resp.meta?.['pendingApprovalCount'] as number) ?? 0);
         if(resp.total > 25) {
           this.filter.update((f) => ({ ...f, limit: resp.total }));
         }

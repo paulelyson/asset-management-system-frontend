@@ -30,8 +30,10 @@ export class EquipmentService {
     filter.pending && (params = params.append('confirmed', !filter.pending));
     filter.canBeBorrowed !== undefined && (params = params.append('canBeBorrowed', filter.canBeBorrowed));
 
+    // `data` is the equipment array now; the pending-approval count moved to
+    // `meta.pendingApprovalCount` (it was `data[1]` of a tuple).
     return this.http
-      .get<ApiResponse<[IEquipment[], number]>>(environment.api_url + '/api/equipment', { params })
+      .get<ApiResponse<IEquipment[]>>(environment.api_url + '/api/equipment', { params })
       .pipe(catchError(this.exceptionService.handleError));
   }
 
