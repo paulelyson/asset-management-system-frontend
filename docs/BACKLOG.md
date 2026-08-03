@@ -314,9 +314,27 @@ they aren't. See Phase 3.1 above.
 
 ## Frontend — auth, still open
 
-- [ ] **Refresh-token flow.** `AuthService.login()` now stores `refresh_token`, but nothing
-  spends it: no interceptor retries a 401 via `POST /auth/refresh`. Access tokens are **15
-  minutes**, so expect to be logged out that often until this lands. This is the next item.
+- [X] **Refresh-token flow.** The interceptor now refreshes instead of logging you out. Two
+  paths: if the access token is already expired it refreshes *before* sending (rather than
+  spending a request it knows will 401), and if a request 401s anyway — revoked token,
+  changed signing secret — it refreshes once and retries. Anything other than a 401 is left
+  alone for the caller to handle, and logout only happens after a refresh attempt has
+  already failed.
+  **The subtle part:** `refreshAccessToken()` shares one in-flight exchange across all
+  callers. The server *rotates* the refresh token on every exchange and treats reuse of a
+  spent one as theft by revoking the whole family — so without deduplication, a page that
+  fires several requests at once would refresh several times, and the second exchange would
+  log the user out. That sharing isn't an optimization, it's a correctness requirement.
+  `logout()` now also POSTs `/auth/logout` to revoke server-side (fire-and-forget: clearing
+  the local session must happen even if the server is unreachable). `isTokenExpired` no
+  longer throws on a malformed token — the interceptor calls it on every request, so
+  throwing there would take down the whole app.
+  **Test:** log in, wait out the 15 minutes (or edit the stored token), then click around —
+  you should stay logged in, with a single `POST /auth/refresh` in the network tab. Open a
+  page that fires several requests at once and confirm you still see only **one** refresh.
+  Then `POST /auth/logout` and confirm the old refresh token is rejected.
+  **One-time:** anyone logged in from before this change has no `refresh_token` stored and
+  will be logged out once on their next 401. Log back in and it's fine.
 - [ ] Migrate `localStorage` → httpOnly cookies (backend already sets `credentials: true`
   CORS and is cookie-transport-ready per the plan; not wired up yet).
 

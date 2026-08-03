@@ -2,7 +2,18 @@ import { Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  finalize,
+  map,
+  of,
+  shareReplay,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/ApiResponse';
 import { AssignmentRole, UserAssignment, UserProfile } from '../models/data/user-profile.model';
@@ -38,6 +49,9 @@ export class AuthService {
   private profileSignal = signal<UserProfile | null>(null);
   readonly profile = this.profileSignal.asReadonly();
 
+  /** The in-flight token exchange, shared by every caller — see refreshAccessToken. */
+  private refreshInFlight: Observable<string> | null = null;
+
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -59,14 +73,52 @@ export class AuthService {
         // Token storage lives here rather than in the login dialog so that the
         // profile can be fetched as part of logging in — everything downstream
         // reads roles synchronously and would see an empty profile otherwise.
-        tap((tokens) => {
-          localStorage.setItem('token', tokens.access_token);
-          localStorage.setItem('refresh_token', tokens.refresh_token);
-        }),
+        tap((tokens) => this.storeTokens(tokens)),
         switchMap((tokens) => this.loadProfile().pipe(map(() => tokens))),
         tap(() => this.loggedInSubject.next(true)),
         catchError(this.handleError),
       );
+  }
+
+  private storeTokens(tokens: TokenPair): void {
+    localStorage.setItem('token', tokens.access_token);
+    localStorage.setItem('refresh_token', tokens.refresh_token);
+  }
+
+  /**
+   * Exchanges the refresh token for a new pair.
+   *
+   * Shared while in flight: a page that fires several requests at once would
+   * otherwise send several refreshes, and since the server *rotates* on every
+   * exchange, the second one would present an already-used token — which it
+   * treats as theft and responds to by revoking the entire token family. So
+   * deduplicating here isn't an optimization, it's what stops a burst of
+   * parallel requests from logging the user out.
+   */
+  refreshAccessToken(): Observable<string> {
+    if (this.refreshInFlight) return this.refreshInFlight;
+
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token available.'));
+    }
+
+    this.refreshInFlight = this.http
+      .post<ApiResponse<TokenPair>>(environment.api_url + '/api/auth/refresh', {
+        refresh_token: refreshToken,
+      })
+      .pipe(
+        map((resp) => resp.data),
+        tap((tokens) => this.storeTokens(tokens)),
+        map((tokens) => tokens.access_token),
+        // Before shareReplay, so it runs once when the request settles rather
+        // than once per subscriber. Clearing the handle here means the *next*
+        // 401 starts a fresh exchange instead of replaying a spent one.
+        finalize(() => (this.refreshInFlight = null)),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
+
+    return this.refreshInFlight;
   }
 
   /** Fetches and caches the caller's assignments. */
@@ -97,8 +149,20 @@ export class AuthService {
   }
 
   logout(): void {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (refreshToken) {
+      // Fire-and-forget: revoke the refresh token server-side so it can't be
+      // replayed. Errors are swallowed on purpose — clearing the session
+      // locally must happen whether or not the server can be reached.
+      this.http
+        .post(environment.api_url + '/api/auth/logout', { refresh_token: refreshToken })
+        .pipe(catchError(() => of(null)))
+        .subscribe();
+    }
+
     localStorage.clear();
     this.profileSignal.set(null);
+    this.refreshInFlight = null;
     this.loggedInSubject.next(false);
     this.router.navigate(['/login']);
   }
@@ -114,9 +178,18 @@ export class AuthService {
   }
 
   isTokenExpired(token: string): boolean {
-    const decoded = jwtDecode(token);
-    if (!decoded.exp) return true;
-    return Date.now() >= decoded.exp * 1000;
+    try {
+      const decoded = jwtDecode(token);
+      // No `exp` means we can't reason about it — treat as expired rather than
+      // as valid forever.
+      if (!decoded.exp) return true;
+      return Date.now() >= decoded.exp * 1000;
+    } catch {
+      // Unparseable token in localStorage. The interceptor calls this on every
+      // request, so throwing here would break the whole app rather than just
+      // this session.
+      return true;
+    }
   }
 
   hasToken(): boolean {
