@@ -14,9 +14,8 @@ import {
 } from '../../../models/BorrowedEquipment';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
-import { Department, DEPARTMENTS, IUser } from '../../../models/User';
+import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
-import { TokenData } from '../../../services/auth.service';
 import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
@@ -41,7 +40,6 @@ import { InputComponent } from '../../shared/input/input.component';
   ],
 })
 export class ClassScheduleComponent implements OnInit {
-  @Input() user!: TokenData;
   @Input() department!: Department | string;
   @Input() resetForm: boolean = false;
   @Output() onFormSubmit: EventEmitter<BorrowedEquipmentPayload> =

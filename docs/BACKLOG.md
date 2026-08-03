@@ -270,29 +270,55 @@ done). What's left:
 - [X] `class-schedule.component.ts:112` — null-pointer crash on borrow submit fixed
   (missing `?.` on `courseOffer?.instructor?._id`).
 
-## Frontend — blocked on backend Phase 2, do together (not before)
+## Frontend — auth & status migration (done, needs your test pass)
 
-- [ ] Implement the refresh-token flow: call `/auth/refresh` before expiry or on a 401,
-  store both tokens.
-- [ ] **Required, not optional, once Phase 2.2 is live**: `hasRole`/`roleGuard`/
-  `AuthService.getUser()` need to read assignments from `GET /auth/profile` instead of
-  decoding `roles` out of the JWT — the claim no longer exists. Until this lands, every
-  role-gated route throws.
+**Prerequisite before testing any of this:** run `npm run db:backfill-borrow-keys`
+(dry run, then `-- --apply`). Existing borrow records have no `instructor`/`department`
+until you do, so chairman/LIC visibility and the Approve button will look broken when
+they aren't. See Phase 3.1 above.
+
+- [X] **Roles now come from `GET /api/auth/profile`, not the JWT.** `AuthService` caches the
+  profile in a **signal** — the call sites that need roles (route guards, `computed()` in
+  templates, form defaults) are all synchronous while the profile is an HTTP call, and a
+  signal is what lets `computed()` consumers recompute when it lands.
+  `authGuard`/`roleGuard` now return Observables and await it: on a hard refresh the token
+  is in localStorage but the profile isn't, and answering synchronously would report "no
+  roles" and bounce you to login on every direct navigation.
+  Login moved token storage into `AuthService.login()` so the profile is fetched as part of
+  logging in. `roles[0].department._id` (3 sites) → `AuthService.primaryDepartmentId()`,
+  which also stops throwing for users with no department-scoped assignment.
+  `IUser.roles` is **deleted** — the API stopped returning it in Phase 1.2, so it was
+  reading `undefined` everywhere, not merely unused.
+  **Test:** log in as each role; check the header subtitle lists every assignment
+  (`CHAIRMAN - CPE`); hard-refresh `/inventory` directly and confirm you aren't bounced to
+  login; confirm a chairman of two departments sees both listed.
+- [X] **Status model updated to the collapsed lifecycle.** `BorrowedEquipmentStatusType`,
+  `BORROW_STATUS_DISPLAY`, `BORROW_STATUS_VARIANT`, `IN_CIRCULATION_STATUS` and the status
+  filter dropdown all rebuilt around `requested → approved → released → mark_returned →
+  returned` + `cancelled`/`unreturned`.
+  **Two live bugs fixed:** the Approve action was still sending `instructor_approved` (a
+  status the backend no longer accepts), and `canRelease` still tested for
+  `instructor_approved`/`oic_approved` — so **the Release button could never appear**.
+  Also: `getVariantFromBorrowStatus` held a second, already-drifted copy of
+  `BORROW_STATUS_VARIANT` (`cancelled` rendered neutral there, danger elsewhere); it now
+  delegates. "Approve as faculty"/"Approve as LIC" collapse to one option — who approved is
+  on the transaction's `actedAsRole`, not in the status.
+  **Test:** request → approve → release → return → confirm, and watch the badges.
+- [X] `getRowActions` ports to assignments. The lab-in-charge check needs a
+  location→department resolution the client can't do, so `/auth/profile` now populates
+  `location.department` — mirroring `AssignmentService.departmentsViaLocationFor`. Marked
+  as moving with SWAP POINT 1 on both sides.
+  This still re-derives permissions client-side; the server re-checks and 403s regardless.
+  **Still open:** the API should return what the caller may do per row so there's one copy
+  of the rules.
+
+## Frontend — auth, still open
+
+- [ ] **Refresh-token flow.** `AuthService.login()` now stores `refresh_token`, but nothing
+  spends it: no interceptor retries a 401 via `POST /auth/refresh`. Access tokens are **15
+  minutes**, so expect to be logged out that often until this lands. This is the next item.
 - [ ] Migrate `localStorage` → httpOnly cookies (backend already sets `credentials: true`
   CORS and is cookie-transport-ready per the plan; not wired up yet).
-- [ ] **Now live, not pending** — backend Phase 4 has landed, so
-  `models/BorrowedEquipment.ts` is out of sync: `instructor_approved`, `oic_approved`,
-  `instructor_rejected`, `oic_cancelled` and `system_reset` no longer exist. Update
-  `BorrowedEquipmentStatusType`, `BORROW_STATUS_DISPLAY`, `BORROW_STATUS_VARIANT` and
-  `IN_CIRCULATION_STATUS` to the lifecycle states. "Cancelled by instructor" now comes from
-  the transaction's `actedAsRole` field, not from the status value.
-- [ ] `borrow.service.ts:110-121` (`getRowActions`) decides who sees approve/cancel buttons
-  by reading `user.roles` from the JWT and comparing departments client-side. Both halves
-  are now wrong: the JWT has no `roles` (Phase 2.2), and the authority on this is the
-  backend's approval policy (Phase 4.3). Longer-term the backend should return what the
-  caller may do on each row rather than the frontend re-deriving it.
-- [ ] Inventory list reads named response fields instead of `data[0]`/`data[1]` — lands
-  together with backend Phase 6.4 (the one backend step that changes the API contract).
 
 ## Frontend — carried over, still open
 

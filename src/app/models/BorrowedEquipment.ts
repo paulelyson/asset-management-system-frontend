@@ -4,18 +4,23 @@ import { IMongoDocument } from './MongoDocument';
 import { Variant } from './ui/common-config.model';
 import User, { Department, IUser } from './User';
 
+/**
+ * Lifecycle states, mirroring the backend enum.
+ *
+ * The actor used to be baked into the status (`instructor_approved` vs
+ * `oic_approved`, and the matching `_rejected` pair). That conflated *what
+ * happened* with *who did it* — who did it is on the transaction's
+ * `actedAsRole`. Render "cancelled by the instructor" from that, not from the
+ * status. `system_reset` is gone entirely; it was never a reachable state.
+ */
 export type BorrowedEquipmentStatusType =
   | 'requested'
-  | 'instructor_approved'
-  | 'instructor_rejected'
-  | 'oic_approved'
-  | 'oic_rejected'
+  | 'approved'
   | 'released'
   | 'mark_returned'
   | 'returned'
-  | 'unreturned'
   | 'cancelled'
-  | 'system_reset';
+  | 'unreturned';
 
 export type BorrowedEquipmentPurpose = 'class_use' | 'research' | 'instructional' | 'others';
 
@@ -28,16 +33,12 @@ export const BORROWED_EQUIPMENT_PURPOSE: BorrowedEquipmentPurpose[] = [
 
 export const BORROWED_EQUIPMENT_STATUS: BorrowedEquipmentStatusType[] = [
   'requested',
-  'instructor_approved',
-  'instructor_rejected',
-  'oic_approved',
-  'oic_rejected',
+  'approved',
   'released',
   'mark_returned',
   'returned',
-  'unreturned',
   'cancelled',
-  'system_reset',
+  'unreturned',
 ];
 
 export type BorrowedEquipmentStatusTypeAndQuantity = { 
@@ -45,37 +46,33 @@ export type BorrowedEquipmentStatusTypeAndQuantity = {
   quantity: number 
 };
 
-export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = ['requested', 'instructor_approved', 'oic_approved', 'released', 'mark_returned'];
+/** Still out with the borrower — i.e. not yet returned, cancelled or written off. */
+export const IN_CIRCULATION_STATUS: BorrowedEquipmentStatusType[] = [
+  'requested',
+  'approved',
+  'released',
+  'mark_returned',
+];
 
 export const BORROW_STATUS_VARIANT: Record<BorrowedEquipmentStatusType, Variant> = {
-    requested: 'neutral',
-    instructor_approved: 'accent',
-    oic_approved: 'accent',
-    released: 'warning',
-    oic_rejected: 'danger',
-    mark_returned: 'warning',
-    returned: 'success',
-    unreturned: 'danger',
-    system_reset: 'danger',
-    cancelled: 'danger',
-    instructor_rejected: 'danger',
-  }; {
-}
+  requested: 'neutral',
+  approved: 'accent',
+  released: 'warning',
+  mark_returned: 'warning',
+  returned: 'success',
+  cancelled: 'danger',
+  unreturned: 'danger',
+};
 
 export const BORROW_STATUS_DISPLAY: Record<BorrowedEquipmentStatusType, string> = {
-    requested: 'Requested',
-    instructor_approved: 'Approved',
-    oic_approved: 'Approved',
-    released: 'Released',
-    oic_rejected: 'Cancelled',
-    mark_returned: 'Marked Returned',
-    returned: 'Returned',
-    unreturned: 'Unreturend',
-    system_reset: 'System Reset',
-    cancelled: 'Cancelled',
-    instructor_rejected: 'Cancelled',
-  }; {
-}
+  requested: 'Requested',
+  approved: 'Approved',
+  released: 'Released',
+  mark_returned: 'Marked Returned',
+  returned: 'Returned',
+  cancelled: 'Cancelled',
+  unreturned: 'Unreturned',
+};
 
 
 export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
@@ -86,16 +83,26 @@ export interface BorrowedEquipmentTransaction extends Partial<IMongoDocument> {
   remarks?: string;
 }
 
+/**
+ * A row of the borrow list — the *joined* shape the aggregation produces, not a
+ * stored document.
+ *
+ * `borrower`, `courseOffering` and `equipment` are optional because they
+ * genuinely can be absent: those `$unwind`s use `preserveNullAndEmptyArrays`, so
+ * a reference that no longer resolves blanks one field instead of deleting the
+ * whole record from the list *and from the total count*. Rendering has to cope
+ * with that rather than assume the join succeeded.
+ */
 export interface IBorrowedEquipment extends IMongoDocument {
   trackId: string;
-  borrower: User;
+  borrower?: User;
   purpose: BorrowedEquipmentPurpose;
-  courseOffering: CourseOffering;
+  courseOffering?: CourseOffering;
   dateOfUse: {
     start: Date;
     end: Date;
   };
-  equipment: IEquipment;
+  equipment?: IEquipment;
   quantity: number;
   transactions: BorrowedEquipmentTransaction[];
   accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];
@@ -122,11 +129,11 @@ export interface BorrowedEquipmentPayload {
 
 class BorrowedEquipment implements IBorrowedEquipment {
   trackId: string;
-  borrower: User;
+  borrower?: User;
   purpose: BorrowedEquipmentPurpose;
-  courseOffering: CourseOffering;
+  courseOffering?: CourseOffering;
   dateOfUse: { start: Date; end: Date };
-  equipment: IEquipment;
+  equipment?: IEquipment;
   quantity: number;
   transactions: BorrowedEquipmentTransaction[];
   accumulatedStatus: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>[];

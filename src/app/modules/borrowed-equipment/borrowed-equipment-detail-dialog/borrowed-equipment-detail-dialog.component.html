@@ -1,12 +1,12 @@
 <div class="borrowed-equipment-detail-container">
   <div class="hero">
     <div class="image-wrapper">
-      <img class="fit-image" [src]="data.equipment.images[0]?.thumbnail ?? default_img" />
+      <img class="fit-image" [src]="data.equipment?.images?.[0]?.thumbnail ?? default_img" />
     </div>
     <div class="dialog-header">
       <div>
-        <p class="dialog-title">{{ data.equipment.name }}</p>
-        <span>{{ data.equipment.type }}</span>
+        <p class="dialog-title">{{ data.equipment?.name ?? "Unknown equipment" }}</p>
+        <span>{{ data.equipment?.type }}</span>
         <div class="dialog-meta">
           @for (status of data.accumulatedStatus; track status) {
             <app-badge [variant]="getVariant(status)" size="xs">

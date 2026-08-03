@@ -30,7 +30,7 @@ export class BorrowedEquipmentDetailDialogComponent {
   }
 
   get instructorName(): string {
-    return getDisplayName(this.data.courseOffering.instructor);
+    return getDisplayName(this.data.courseOffering?.instructor);
   }
 
   getVariant(cond: Pick<BorrowedEquipmentTransaction, 'quantity' | 'status'>) {

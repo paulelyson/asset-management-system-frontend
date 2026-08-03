@@ -14,7 +14,6 @@ import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/route
 import { IEquipment } from '../../../models/Equipment';
 import { EquipmentFilter } from '../../../models/filters/equipment-filter.model';
 import { AuthService } from '../../../services/auth.service';
-import User from '../../../models/User';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
@@ -38,7 +37,6 @@ import { environment } from '../../../../environments/environment';
 export class InventoryComponent implements OnInit {
   hasMore: boolean = false;
   equipment: WritableSignal<IEquipment[]> = signal([]);
-  user: User;
   filter = signal<EquipmentFilter>(new EquipmentFilter());
   filterDisplay = computed(() => getFilterDisplay(this.filter(), ['department']));
   selectedDept: WritableSignal<IDepartment> = signal(new Department());
@@ -68,7 +66,6 @@ export class InventoryComponent implements OnInit {
     private departmentService: DepartmentService,
     private snackBarService: SnackbarService,
   ) {
-    this.user = this.authService.getUser();
   }
 
   ngOnInit(): void {
@@ -213,7 +210,9 @@ export class InventoryComponent implements OnInit {
       categories: params['categories'],
       equipmentType: params['equipmentType'],
       condition: params['condition'],
-      department: this.user.roles[0].department._id,
+      // '' rather than undefined: EquipmentFilter.department is a plain string,
+      // and a user with no department-scoped assignment has no default.
+      department: this.authService.primaryDepartmentId() ?? '',
       pending: params['pending'] && JSON.parse(params['pending']) == true ? true : undefined,
       canBeBorrowed: params['canBeBorrowed'] ? JSON.parse(params['canBeBorrowed']) : undefined,
     });

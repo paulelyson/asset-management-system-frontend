@@ -21,13 +21,21 @@ export class HeaderComponent implements OnInit {
   showAvatarMenu: boolean = false;
   isLoggedIn: WritableSignal<boolean> = signal(false);
   user: WritableSignal<TokenData | null> = signal(null);
+  // Reads the profile signal, not the token: roles left the JWT. A signal is
+  // what lets this recompute on its own once the profile request lands.
   subtitles = computed(() => {
-    let contents: string[] = [];
-    const roles =
-      this.user()?.roles.map((role) => `${role.role.toUpperCase()} - ${role.department.code}`) ||
-      [];
-    contents.push('ID NUMBER: ' + this.user()?.idNumber || '');
-    contents = contents.concat(roles);
+    const profile = this.authService.profile();
+    // Was `'ID NUMBER: ' + idNumber || ''` — the `||` bound to the whole
+    // concatenation, so a missing id rendered "ID NUMBER: undefined".
+    const contents: string[] = ['ID NUMBER: ' + (profile?.idNumber ?? '')];
+
+    for (const assignment of profile?.assignments ?? []) {
+      // Department-scoped roles show their department; lab_in_charge and
+      // assistant are scoped to a location instead.
+      const scope = assignment.department?.code ?? assignment.location?.name;
+      const role = assignment.role.toUpperCase();
+      contents.push(scope ? `${role} - ${scope}` : role);
+    }
     return contents;
   });
 
@@ -58,6 +66,9 @@ export class HeaderComponent implements OnInit {
   onLogin(isLoggedIn: boolean = false) {
     this.isLoggedIn.set(isLoggedIn);
     this.user.set(this.authService.getUser());
+    // The header renders on routes with no guard (login, homepage), so it can't
+    // rely on a guard having warmed the profile for it.
+    this.authService.ensureProfile().subscribe();
     this.isTransparent = false;
   }
 

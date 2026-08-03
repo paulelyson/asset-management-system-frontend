@@ -116,7 +116,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       location: [data?.equipment?.location?._id ?? ''],
       dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
       warrantyPeriod: [data.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
-      department: [data?.equipment?.department?._id ?? this.user.roles[0].department._id],
+      department: [data?.equipment?.department?._id ?? this.authService.primaryDepartmentId() ?? ''],
       updatedBy: [data?.equipment?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
       conditionAndQuantity: this.fb.array([]),

@@ -7,7 +7,7 @@ import BorrowedEquipment, {
 import { BorrowService } from '../../../services/borrow.service';
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
-import { AuthService, TokenData } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import {
   BorrowedEquimentFilter,
   IBorrowedEquimentFilter,
@@ -35,8 +35,6 @@ import { getFilterDisplay } from '../../shared/utils/filter.util';
 export class BorrowedEquipmentComponent implements OnInit {
   borrowed_equipment: WritableSignal<BorrowedEquipment[]> = signal([]);
   hasMore: boolean = false;
-  user: TokenData;
-
   filter = signal<BorrowedEquimentFilter>(new BorrowedEquimentFilter());
   filterDisplay = computed((): FilterDisplay[] => getFilterDisplay(this.filter()));
 
@@ -47,9 +45,7 @@ export class BorrowedEquipmentComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBarService: SnackbarService,
-  ) {
-    this.user = this.authService.getUser();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => this.queryParamsHandling(params));
@@ -72,7 +68,17 @@ export class BorrowedEquipmentComponent implements OnInit {
     remarks?: string,
   ): void {
     // TODO add functional
-    const equipmentId = borrowedEquipment.equipment._id;
+    const equipmentId = borrowedEquipment.equipment?._id;
+    if (!equipmentId) {
+      // The row is showing, but its equipment reference no longer resolves —
+      // there is nothing to post a transaction against.
+      this.snackBarService.openSnackbar({
+        icon: 'info',
+        type: 'error',
+        message: ['This record’s equipment no longer exists; it cannot be updated.'],
+      });
+      return;
+    }
     const borrowId = borrowedEquipment._id;
     let updated: BorrowedEquipmentTransaction = {
       quantity: quantity,
@@ -95,12 +101,19 @@ export class BorrowedEquipmentComponent implements OnInit {
   }
 
   getRowData(borrowedEquipment: BorrowedEquipment) {
-    return this.borrowService.getRowData(borrowedEquipment, this.user, this.filter());
+    const profile = this.authService.profile();
+    // authGuard warms the profile before this route activates, so this is only
+    // null in the window before it resolves — render no action buttons rather
+    // than guessing at permissions.
+    if (!profile) return [];
+    return this.borrowService.getRowData(borrowedEquipment, profile, this.filter());
   }
 
   onActionClicked(action: string, borrowedEquipment: BorrowedEquipment) {
     if (action == 'Approve') {
-      this.onUpdateStatus(borrowedEquipment, 'instructor_approved', 'Approve');
+      // The status records what happened, not who did it — the server stamps
+      // the approver's role onto the transaction as `actedAsRole`.
+      this.onUpdateStatus(borrowedEquipment, 'approved', 'Approve');
     } else if (action == 'Release') {
       this.onUpdateStatus(borrowedEquipment, 'released', 'Release');
     } else if (action == 'Return') {

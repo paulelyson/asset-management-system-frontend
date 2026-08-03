@@ -11,11 +11,10 @@ import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
 import { BorrowedEquimentFilter, IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
-import { IUser } from '../models/User';
+import { AssignmentRole, UserProfile } from '../models/data/user-profile.model';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
 import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
-import { getVariantFromBorrowStatus } from '../modules/shared/utils/filter.util';
 import { ExceptionService } from './exception.service';
 
 @Injectable({
@@ -57,12 +56,14 @@ export class BorrowService {
 
   getRowData(
     borrowedEquipment: BorrowedEquipment,
-    user: IUser,
+    user: UserProfile,
     filter: BorrowedEquimentFilter,
   ): RowColumnConfig[] {
-    const eqpmntName = borrowedEquipment.equipment.name;
+    // Every joined field below is optional — see IBorrowedEquipment. A row whose
+    // reference no longer resolves still belongs in the list; it just renders blank.
+    const eqpmntName = borrowedEquipment.equipment?.name ?? 'Unknown equipment';
     const course = this.displayNamePipe.transform(
-      borrowedEquipment.courseOffering.course,
+      borrowedEquipment.courseOffering?.course,
       'code',
       'title',
     );
@@ -82,7 +83,13 @@ export class BorrowService {
     const actions = this.getRowActions(user, borrowedEquipment, filter);
     const purpose = borrowedEquipment.purpose;
     return [
-      { id: 0, type: 'image', header: '', image: borrowedEquipment.equipment.images[0].thumbnail, weight: 0.5 },
+      {
+        id: 0,
+        type: 'image',
+        header: '',
+        image: borrowedEquipment.equipment?.images?.[0]?.thumbnail ?? '',
+        weight: 0.5,
+      },
       {
         id: 1,
         type: 'title',
@@ -100,34 +107,49 @@ export class BorrowService {
     ];
   }
 
+  /**
+   * Decides which buttons to render. This mirrors the server's approval policy
+   * rather than being it — the server re-checks everything and 403s if this is
+   * wrong. Longer term the API should return what the caller may do per row so
+   * there is only one copy of these rules; until then, changes here have to be
+   * kept in step with `approval.policy.ts`.
+   */
   getRowActions(
-    user: IUser,
+    user: UserProfile,
     borrowedEquipment: BorrowedEquipment,
     filter: BorrowedEquimentFilter,
   ): RowActionConfig[] {
-    let actions: RowActionConfig[] = [];
-    const isBorrower = borrowedEquipment.borrower._id == user._id;
-    const isFaculty = borrowedEquipment.courseOffering.instructor._id === user._id;
-    const isLabInCharge = user.roles.some((role) => {
-      const dept = borrowedEquipment.courseOffering.course.department._id;
-      return role.department._id == dept && role.role == 'lab_in_charge';
-    });
-    const isChairman = user.roles.some((role) => {
-      const dept = borrowedEquipment.courseOffering.course.department._id;
-      return role.department._id == dept && role.role == 'chairman';
-    });
-    const isLabAssistant = user.roles.some((role) => {
-      const dept = borrowedEquipment.courseOffering.course.department._id;
-      return role.department._id == dept && role.role == 'assistant';
-    });
+    const actions: RowActionConfig[] = [];
+    const dept = borrowedEquipment.courseOffering?.course?.department?._id;
+
+    // A department-scoped role (instructor/chairman) matches on its own
+    // department; a location-scoped one (lab_in_charge/assistant) matches
+    // through its location's department — the same resolution the server does
+    // in departmentsViaLocationFor.
+    const holdsRoleInDept = (role: AssignmentRole) =>
+      // No resolvable department means no department-scoped role can match it.
+      !!dept &&
+      user.assignments.some(
+        (a) =>
+          a.role === role && (a.department?._id === dept || a.location?.department === dept),
+      );
+
+    const isBorrower = borrowedEquipment.borrower?._id === user._id;
+    const isFaculty = borrowedEquipment.courseOffering?.instructor?._id === user._id;
+    const isLabInCharge = holdsRoleInDept('lab_in_charge');
+    const isChairman = holdsRoleInDept('chairman');
+    const isLabAssistant = holdsRoleInDept('assistant');
+
     const canApprove = borrowedEquipment.accumulatedStatus.some((x) =>
       ['requested'].includes(x.status),
     );
     const canCancel = borrowedEquipment.accumulatedStatus.some((x) =>
       ['requested'].includes(x.status),
     );
+    // Was ['instructor_approved', 'oic_approved'] — both deleted when the
+    // status model collapsed, so the Release button never appeared.
     const canRelease = borrowedEquipment.accumulatedStatus.some((x) =>
-      ['instructor_approved', 'oic_approved'].includes(x.status),
+      ['approved'].includes(x.status),
     );
     const canReturn = borrowedEquipment.accumulatedStatus.some((x) =>
       ['released'].includes(x.status),

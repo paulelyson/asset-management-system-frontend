@@ -28,8 +28,9 @@ export class LoginDialogComponent {
 
   login() {
     this.authService.login(this.schoolId.value, this.password.value).subscribe({
-      next: (resp) => {
-        localStorage.setItem('token', resp.access_token);
+      next: () => {
+        // Tokens are stored and the profile loaded inside AuthService.login —
+        // by the time this fires, roles are available to the routes below.
         this.router.navigate(['/borrow']);
         this.dialogRef.close('login_success');
       },

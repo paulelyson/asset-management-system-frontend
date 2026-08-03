@@ -14,7 +14,7 @@ import BorrowedEquipment, {
   IBorrowedEquipment,
 } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
-import { AuthService, TokenData } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { SideMenuService } from '../../../services/side-menu.service';
@@ -51,7 +51,6 @@ export class BorrowComponent implements OnInit {
   equipment: WritableSignal<IEquipment[]> = signal([]);
   addedEquipment: IAddedEquipment[] = [];
   resetForm: WritableSignal<boolean> = signal(false);
-  user: TokenData;
   departments: WritableSignal<IDepartment[]> = signal([]);
 
 
@@ -76,7 +75,6 @@ export class BorrowComponent implements OnInit {
     private sideMenuService: SideMenuService,
     private departmentService: DepartmentService,
   ) {
-    this.user = this.authService.getUser();
   }
 
   ngOnInit(): void {
@@ -160,7 +158,7 @@ export class BorrowComponent implements OnInit {
       categories: params['categories'],
       equipmentType: params['equipmentType'],
       condition: params['condition'],
-      department: params['department'] ?? this.user.roles[0].department._id,
+      department: params['department'] ?? this.authService.primaryDepartmentId() ?? '',
       canBeBorrowed: true
     });
     this.getEquipment();

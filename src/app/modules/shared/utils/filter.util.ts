@@ -1,4 +1,5 @@
 import { FilterDisplay, Variant } from "../../../models/ui/common-config.model";
+import { BORROW_STATUS_VARIANT, BorrowedEquipmentStatusType } from "../../../models/BorrowedEquipment";
 
 export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[] = [] ,dontShow: string[] = ['page', 'limit']): FilterDisplay[] => {
   return Object.entries(filter)
@@ -13,22 +14,18 @@ export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[]
 };
 
 
+/**
+ * Delegates to BORROW_STATUS_VARIANT rather than keeping its own table. It used
+ * to hold a second copy that had already drifted — `cancelled` and `unreturned`
+ * rendered 'neutral' here but 'danger' there, so the same status was coloured
+ * differently depending on which component drew it.
+ */
 export function getVariantFromBorrowStatus(status: string): Variant {
-  const normalized = status.replace(/^\d+\s*/, '').trim().toLowerCase();
+  // Callers sometimes pass a display string with a leading count ("3 released").
+  const normalized = status
+    .replace(/^\d+\s*/, '')
+    .trim()
+    .toLowerCase() as BorrowedEquipmentStatusType;
 
-  const map: Record<string, Variant> = {
-    requested: 'neutral',
-    instructor_approved: 'accent',
-    oic_approved: 'accent',
-    released: 'warning',
-    instructor_rejected: 'neutral',
-    oic_rejected: 'neutral',
-    mark_returned: 'warning',
-    returned: 'success',
-    unreturned: 'neutral',
-    cancelled: 'neutral',
-    system_reset: 'neutral'
-  };
-
-  return map[normalized] ?? 'neutral';
+  return BORROW_STATUS_VARIANT[normalized] ?? 'neutral';
 }
