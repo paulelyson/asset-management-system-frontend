@@ -104,7 +104,6 @@ export interface IEquipment {
   inventorytag: boolean;
   checkedBy: string;
   department: IDepartment;
-  inventorytype: EquipmentInventoryType;
   location: ClassLocation;
   confirmed: boolean;
   warrantyPeriod: Date;

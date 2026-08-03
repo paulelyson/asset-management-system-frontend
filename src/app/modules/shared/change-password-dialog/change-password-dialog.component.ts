@@ -36,7 +36,7 @@ export class ChangePasswordDialogComponent {
 
   onPasswordUpdate() {
     this.authService
-      .changePassword(this.user.idNumber, this.currentPassword, this.newPassword)
+      .changePassword(this.currentPassword, this.newPassword)
       .subscribe({
         next: (resp) => {
           this.snackbarService.openSnackbar({

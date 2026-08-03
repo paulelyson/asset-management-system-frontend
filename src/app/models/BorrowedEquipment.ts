@@ -102,12 +102,13 @@ export interface IBorrowedEquipment extends IMongoDocument {
   deleted?: boolean;
 }
 
+// Only what the caller actually decides. `borrower` is stamped from the token,
+// and `instructor`/`department` are resolved server-side from the course
+// offering — the backend DTO no longer declares any of the three, so sending
+// them just gets them stripped.
 export interface BorrowedEquipmentPayload {
-  borrower: string;
   purpose: BorrowedEquipmentPurpose;
   courseOffering: string;
-  instructor: string;
-  department: string;
   dateOfUse: {
     start: Date | string;
     end: Date | string;

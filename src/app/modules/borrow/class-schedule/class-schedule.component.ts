@@ -60,7 +60,6 @@ export class ClassScheduleComponent implements OnInit {
     private displayNamePipe: DisplayNamePipe,
   ) {
     this.classScheduleForm = this.fb.group({
-      borrower: ['', Validators.required],
       purpose: ['class_use', Validators.required],
       courseOffer: ['', Validators.required],
       startDate: [this.dateNow, Validators.required],
@@ -95,13 +94,11 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   onSubmit() {
-    this.classScheduleForm.controls['borrower'].patchValue(this.user._id);
     const startDate: Date = this.classScheduleForm.controls['startDate'].value;
     const startTime: string = this.classScheduleForm.controls['startTime'].value;
     const endDate: Date = this.classScheduleForm.controls['endDate'].value;
     const endTime: string = this.classScheduleForm.controls['endTime'].value;
     const payload: BorrowedEquipmentPayload = {
-      borrower: this.classScheduleForm.controls['borrower'].value,
       purpose: this.classScheduleForm.controls['purpose'].value,
       courseOffering: this.classScheduleForm.controls['courseOffer'].value,
       dateOfUse: {
@@ -109,8 +106,6 @@ export class ClassScheduleComponent implements OnInit {
         end: concatDateAndTime(endDate, endTime),
       },
       borrowedEquipment: [],
-      instructor: this.courseOffer?.instructor?._id ?? '',
-      department: this.courseOffer?.course?.department?._id ?? '',
     };
     if (this.classScheduleForm.invalid) {
       const config: ISnackBarConfig = {

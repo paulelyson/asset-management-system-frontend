@@ -32,7 +32,7 @@ Full design rationale lives in the plan file
   `AssignmentService` directly. Fixed a real bug as a byproduct: a chairman assigned to
   **two** departments used to only see one department's worth of records.
   **Test:** log in as a chairman with 2 department assignments, confirm both show up now.
-- [ ] **Phase 2.1** — bcrypt password hashing. **Needs** `npm run db:hash-passwords` (dry
+- [X] **Phase 2.1** — bcrypt password hashing. **Needs** `npm run db:hash-passwords` (dry
   run first, then `--apply`) to hash any pre-existing plaintext rows — login will fail for
   those accounts until you run it.
 - [ ] **Phase 2.2** — minimal JWT (`{_id, idNumber, name}`, no `roles`) + `AuthGuard`
@@ -110,14 +110,30 @@ Full design rationale lives in the plan file
 
 ### Not started
 
-- [ ] **Phase 2.4 (remainder)** — enable `whitelist: true` in `main.ts:15`. Deliberately
-  held back from the auth rewrite above — it affects every DTO in the app, not just auth,
-  and needs its own audit-what-the-frontend-actually-sends pass.
+- [ ] **Phase 2.4 (remainder)** — `whitelist: true` now enabled in `main.ts`. The DTO is the
+  contract: anything it doesn't declare is stripped from the request body, so server-derived
+  fields can't be smuggled in. `forbidNonWhitelisted` is deliberately **off** — it would 400
+  on extra fields instead of dropping them.
+  Audited both frontends' write payloads first. Four fields are now stripped, all correctly:
+  `borrower`, `instructor`/`department` on the borrow payload, `username` on change-password,
+  and `_id` on the equipment PATCH. The frontend no longer sends any of them.
+  **Test:** create + edit equipment; submit a borrow request; change your password. All three
+  should behave exactly as before — if a field silently stops saving, it's this.
+- [ ] **Found by that audit — the Inventory Type dropdown has never saved.** The equipment
+  create/edit form wrote **`inventorytype`** (lowercase `t`); the backend DTO and schema both
+  use **`inventoryType`**. `IEquipment` declared both spellings, which hid the drift. The
+  detail dialog reads `inventoryType`, so anything created through that form has always shown
+  as "Non-inventory". Fixed in the form, the template and the model.
+  **Test:** create equipment with Inventory Type = "non_inventory", reopen it, and confirm
+  the value persisted — then check the detail dialog badge agrees.
 - [ ] **Phase 6.1–6.4** — type safety pass. `JwtPayload`/`AuthenticatedRequest` (in
   `auth/types/`, not `common/`, to avoid a new inverted dependency) threaded through every
-  `req: any` — zero remain. `QueryFilter<T>` on the filter sites (**note:** Mongoose 9
-  renamed `FilterQuery` → `QueryFilter`; type against the raw schema class, not the hydrated
-  `…Document`). Aggregation results typed.
+  `req: any` — zero remain. `QueryFilter<T>` on every filter site (**note:** Mongoose 9
+  renamed `FilterQuery` → `QueryFilter`. Which form to use depends on where the filter goes:
+  a `Model` query method — `find`/`countDocuments`/`distinct` — needs the hydrated
+  `QueryFilter<XDocument>`; an aggregation `$match` takes the raw `QueryFilter<X>`).
+  Aggregation results typed. `diffEquipment` and the change-log's Mixed values moved off
+  `any` too, so `equipment.seeder.ts` is the only explicit `any` left in the backend.
   **Found a real bug:** `equipment.controller.ts` passed a raw string into a parameter
   declared `Types.ObjectId` — invisible for as long as `req` was `any`.
   **⚠️ API contract changed — frontend updated in the same commit:** the equipment list no
@@ -126,19 +142,46 @@ Full design rationale lives in the plan file
   **Test:** the inventory list (rows render, pending-approval badge shows the right number)
   and the borrow page's equipment list. These are the two screens the contract change
   touches.
-- [ ] **Phase 6.5 (partial)** — `npm run lint` now checks instead of rewriting your source;
+- [ ] **Phase 6.5** — `npm run lint` now checks instead of rewriting your source;
   `npm run lint:fix` does the rewriting. eslint `no-explicit-any` → `warn`.
-  **Remaining tsconfig flags deferred on purpose** — `noUnusedParameters` can't pass until
-  Phase 7.3 deletes the 15 stub methods that ignore their parameters by construction.
-  Enabling it first would just restate 7.3 as a wall of errors.
-- [ ] **Phase 7** — correctness/cleanup: remove the now-redundant `$toObjectId` calls (safe
-  once Phase 0 is fully verified — it is), fix `equipment.service.ts` omitting
-  `deleted: false` so soft-deleted equipment leaks into `GET /equipment`, restore a
-  commented-out `$sort`, fix a dead `department` filter in
-  `equipment-change-log.service.ts`, replace 15 template-string route stubs and ~25 `+id`
-  `NaN` coercions, make `GlobalExceptionFilter` actually log (currently imports `Logger`
-  and never instantiates it), dead-code sweep (14 unused imports incl. `path/win32` in a
-  Dockerized service, 2 `console.log`s in the request path, etc.).
+  **tsconfig flags now enabled** (they were blocked on 7.3/7.5, which is done):
+  `useUnknownInCatchVariables`, `noUnusedLocals`, `noUnusedParameters`. Each was surveyed
+  before flipping — the only code that had to change was three `catch` blocks in the seeders
+  that assumed the caught value was an `Error`.
+  **`noImplicitAny` is now on too.** It surfaced one latent bug: `equipment.seeder.ts` was
+  indexing the `DEPARTMENT` string enum (keyed by department ObjectId) with a plain string.
+  `strictPropertyInitialization` is still held — it needs `!` on every schema and DTO field.
+  Fallout was 22 errors, all TS6133 — dead imports, plus a commented-out one-off migration
+  block in `equipment.service.create` and an unreferenced seeder helper. `intersects` in
+  `approval.policy.ts` was **exported rather than deleted**: it's the entire body of the
+  future lab-in-charge location-scoping swap, and deleting it would cost that.
+  **Test:** `npm run build`. Nothing here changes behaviour — the only runtime-visible edit
+  is that `POST /api/equipment` no longer creates an unused local.
+- [ ] **Found while enabling the flags: four lookup routes ignore their query DTO.**
+  `find()` on department, location, school and term accept a `Query…Dto` and never read it —
+  they return every row, unfiltered and unpaginated. For dropdown lookups that's plausibly
+  the intent, so the parameters are now `_query` with the mismatch noted in the code rather
+  than hidden. **Decide:** implement the paging/filtering those DTOs advertise, or strip
+  those fields from the DTOs so they stop promising it. Low priority — these are the CMS
+  modules that may move to their own backend.
+- [ ] **Phase 7** — correctness/cleanup, all done:
+  - **7.1b** 12 redundant `$toObjectId` calls removed (both defensive `$convert` blocks kept).
+  - **7.2** `GET /equipment` was serving **soft-deleted equipment** while its own count
+    excluded it — `deleted: false` added. `$sort` restored (without it, `$skip`/`$limit`
+    paginated over an unspecified order — a row could appear on two pages or none). The
+    change-log `department` filter now actually applies; its `find()` moved to `$facet` so
+    data and total come from one pass.
+  - **7.3** 35 stub routes now return **501** instead of `200 OK` with a fake message; 9
+    unrouted `findAll()` scaffolds deleted; 24 `+id` coercions (which produce `NaN`) fixed.
+    **Decided: soft delete everywhere when these get implemented** — recorded in each
+    message.
+  - **7.4** `GlobalExceptionFilter` now logs unhandled faults (it imported `Logger` and never
+    instantiated it, so every 500 was silent). Duplicate branches collapsed.
+  - **7.5** `path/win32` import gone (wrong for a Linux deploy), stray `console.log`s
+    removed, and the equipment seeder now logs real validation messages instead of
+    `[object Object]`.
+    **Test:** `npm run start:dev`. Inventory list should no longer show deleted items and
+    should paginate stably. `DELETE /api/school/:id` should now return 501, not 200.
 
 ---
 

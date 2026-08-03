@@ -112,7 +112,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       matter: [data?.equipment?.matter ?? 'solid'],
       description: [data?.equipment?.description ?? ''],
       remarks: [data?.equipment?.remarks ?? ''],
-      inventorytype: [data?.equipment?.inventorytype ?? 'inventory'],
+      inventoryType: [data?.equipment?.inventoryType ?? 'inventory'],
       location: [data?.equipment?.location?._id ?? ''],
       dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
       warrantyPeriod: [data.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],

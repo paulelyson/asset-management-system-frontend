@@ -50,8 +50,11 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  changePassword(idNumber: string, currentPassword: string, newPassword: string) {
-    const body = { username: idNumber, currentPassword, newPassword };
+  // No account identifier: the backend scopes the change to the authenticated
+  // caller (req.user._id). Passing one used to let you change someone else's
+  // password.
+  changePassword(currentPassword: string, newPassword: string) {
+    const body = { currentPassword, newPassword };
     return this.http
       .patch<ApiResponse<AccessToken>>(environment.api_url + '/api/auth/change-password', body)
       .pipe(catchError(this.handleError));
