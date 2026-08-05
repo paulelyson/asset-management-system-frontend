@@ -157,8 +157,11 @@ export class BorrowService {
     const confirmReturns = borrowedEquipment.accumulatedStatus.some((x) =>
       ['mark_returned'].includes(x.status),
     );
-    // enable cancel if the borrowed equipment is still in requested status
-    if (filter.enable_cancel && canCancel) {
+    // Either party to the request may end it: the borrower withdraws, an
+    // approver rejects. `canCancel` already limits this to units still sitting
+    // in `requested` — the server enforces the same window via CANCELLABLE_FROM.
+    const isApprover = isChairman || isLabInCharge || isFaculty;
+    if (filter.enable_cancel && canCancel && (isBorrower || isApprover)) {
       actions.push({
         name: 'Cancel',
         tooltip: 'Cancel Request',
@@ -169,7 +172,7 @@ export class BorrowService {
     }
 
     //  approver | class faculty / oic / chairman of the borrowed equipment
-    if ((isChairman || isLabInCharge || isFaculty) && canApprove) {
+    if (isApprover && canApprove) {
       actions.push({
         name: 'Approve',
         tooltip: 'Approve Request',
@@ -179,8 +182,10 @@ export class BorrowService {
       });
     }
 
-    // can release as lab assistant
-    if (isLabAssistant && canRelease) {
+    // Lab staff hand equipment out. Was `isLabAssistant` alone, which locked
+    // out a lab-in-charge working the counter with no assistant on shift.
+    const isLabStaff = isLabInCharge || isLabAssistant;
+    if (isLabStaff && canRelease) {
       actions.push({
         name: 'Release',
         tooltip: 'Release Equipment',
@@ -201,8 +206,9 @@ export class BorrowService {
       });
     }
 
-    // confirm returns
-    if (isLabAssistant && confirmReturns) {
+    // Confirming receipt is the lab side of the return handshake — the borrower
+    // declares, staff confirms. Same staff set as release.
+    if (isLabStaff && confirmReturns) {
       actions.push({
         icon: 'keyboard_return',
         name: 'Confirm Returns',
