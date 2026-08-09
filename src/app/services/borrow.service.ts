@@ -10,6 +10,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../utils/string.util';
+import { getLocationId } from '../models/Equipment';
 import { BorrowedEquimentFilter, IBorrowedEquimentFilter } from '../models/BorrowedEquipmentFilter';
 import { AssignmentRole, UserProfile } from '../models/data/user-profile.model';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
@@ -121,24 +122,24 @@ export class BorrowService {
   ): RowActionConfig[] {
     const actions: RowActionConfig[] = [];
     const dept = borrowedEquipment.courseOffering?.course?.department?._id;
+    // Where this item is kept. Lab-staff authority is the room, not the
+    // department — an assistant in another lab of the same department may not
+    // hand it out.
+    const equipmentLocation = getLocationId(borrowedEquipment.equipment?.location);
 
-    // A department-scoped role (instructor/chairman) matches on its own
-    // department; a location-scoped one (lab_in_charge/assistant) matches
-    // through its location's department — the same resolution the server does
-    // in departmentsViaLocationFor.
     const holdsRoleInDept = (role: AssignmentRole) =>
       // No resolvable department means no department-scoped role can match it.
-      !!dept &&
-      user.assignments.some(
-        (a) =>
-          a.role === role && (a.department?._id === dept || a.location?.department === dept),
-      );
+      !!dept && user.assignments.some((a) => a.role === role && a.department?._id === dept);
+
+    const staffsEquipmentLocation = (role: AssignmentRole) =>
+      !!equipmentLocation &&
+      user.assignments.some((a) => a.role === role && a.location?._id === equipmentLocation);
 
     const isBorrower = borrowedEquipment.borrower?._id === user._id;
     const isFaculty = borrowedEquipment.courseOffering?.instructor?._id === user._id;
-    const isLabInCharge = holdsRoleInDept('lab_in_charge');
     const isChairman = holdsRoleInDept('chairman');
-    const isLabAssistant = holdsRoleInDept('assistant');
+    const isLabInCharge = staffsEquipmentLocation('lab_in_charge');
+    const isLabAssistant = staffsEquipmentLocation('assistant');
 
     const canApprove = borrowedEquipment.accumulatedStatus.some((x) =>
       ['requested'].includes(x.status),

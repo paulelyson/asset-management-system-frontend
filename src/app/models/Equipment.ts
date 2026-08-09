@@ -73,6 +73,11 @@ export enum EquipmentUnit {
   GALLON = 'gal',
 }
 
+/** Accepts either shape `IEquipment.location` can arrive in — see the field's note. */
+export const getLocationId = (
+  location?: ClassLocation | string | null,
+): string | undefined => (typeof location === 'string' ? location : location?._id);
+
 export interface IConditionAndQuantity {
   condition: EquipmentCondition;
   quantity: number;
@@ -104,7 +109,13 @@ export interface IEquipment {
   inventorytag: boolean;
   checkedBy: string;
   department: IDepartment;
-  location: ClassLocation;
+  /**
+   * Populated on the inventory list, but a **bare id** on the borrow list —
+   * that pipeline projects `location: 1` without joining it (lab-staff
+   * permissions key off the id, and the room's name isn't needed there).
+   * Read it through `getLocationId` rather than assuming a shape.
+   */
+  location: ClassLocation | string;
   confirmed: boolean;
   warrantyPeriod: Date;
   availability: EquipmentAvailability;

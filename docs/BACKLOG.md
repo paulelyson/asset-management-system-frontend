@@ -312,6 +312,27 @@ they aren't. See Phase 3.1 above.
   **Still open:** the API should return what the caller may do per row so there's one copy
   of the rules.
 
+## Config loading — both instances fixed
+
+- [X] **`.env` was never being read.** `app.module.ts` read `process.env.DATABASE` in a
+  top-level `const`, which executes at module *load* time — before
+  `ConfigModule.forRoot()` has loaded `.env`. It always saw `undefined` and fell through to
+  its hardcoded default. Now `MongooseModule.forRootAsync` + `ConfigService`, and it logs
+  the database it connects to on startup: connecting to the wrong database looks like
+  missing data rather than like a misconfiguration, and costs hours.
+  **`.env` itself was wrong too** — it named `nestdb`, a database that has never existed,
+  so fixing the loading without fixing the value would have silently created an empty one.
+  Corrected to `asset_mgt_local`, and `JWT_EXPIRES_IN` from `10d` to `15m` (a 10-day access
+  token would undo the point of refresh rotation).
+- [X] **Same bug in `auth.module.ts`** — `JwtModule.register()` read `process.env` inside the
+  decorator's object literal, which runs even earlier (at import resolution). Now
+  `registerAsync`. **Effect: the signing secret changes** from the `test_jwt_local_`
+  fallback to the real `JWT_SECRET`, so every existing access token is invalid. Sessions
+  survive anyway — refresh tokens are opaque random values stored hashed, not JWTs, so the
+  refresh flow mints a new access token on the next 401. That ordering was deliberate.
+- [ ] `JWT_SECRET` is 8 characters. Too short for HS256 — brute-forceable offline from a
+  captured token. Replace with 32+ random bytes before any deployment.
+
 ## Frontend — auth, still open
 
 - [X] **Refresh-token flow.** The interceptor now refreshes instead of logging you out. Two

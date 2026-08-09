@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, EquipmentUnit, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { InputComponent } from '../../shared/input/input.component';
 import {
@@ -113,7 +113,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       description: [data?.equipment?.description ?? ''],
       remarks: [data?.equipment?.remarks ?? ''],
       inventoryType: [data?.equipment?.inventoryType ?? 'inventory'],
-      location: [data?.equipment?.location?._id ?? ''],
+      location: [getLocationId(data?.equipment?.location) ?? ''],
       dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
       warrantyPeriod: [data.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
       department: [data?.equipment?.department?._id ?? this.authService.primaryDepartmentId() ?? ''],
