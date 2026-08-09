@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-01.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.1.1`, 6 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.1.3`, 7 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -67,12 +67,17 @@ not skip it or force-install against the peer range.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
-Published in `@paulelyson/elyui@0.1.1` (single entry point, no secondary entry points —
+Published in `@paulelyson/elyui@0.1.3` (single entry point, no secondary entry points —
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
-  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Snackbar` +
-  `SnackbarService`.
+  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Textarea`
+  (`ely-textarea`), `Snackbar` + `SnackbarService`.
+
+Also exported: the `Size` / `Variant` / `ButtonAppearance` / `ButtonShade` / `ButtonWidth`
+types and a `FieldConfig` model — AMS's own `models/ui/common-config.model.ts` and
+`button-config.model.ts` are byte-identical to elyui's, so those two files get deleted in
+favour of the package rather than kept in sync by hand.
 
 **`toggle-button-group` is intentionally dropped from the elyui migration** — it was an
 empty stub in the source project and is superseded by `SegmentedControl` (see elyui
@@ -80,9 +85,8 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 instead.
 
 Not yet published — this is elyui's stated roadmap, sourced from the AMS frontend's
-`src/app/modules/shared/` components: `input`, `textarea`, `autocomplete`, `dropdown`,
-`datepicker`, `tab`. Also not on the roadmap at all yet: a table/`data-row` equivalent,
-and dialogs. Migration happens one component at a time, only on the user's explicit go
+`src/app/modules/shared/` components: `input`, `autocomplete`, `dropdown`, `datepicker`,
+`tab`. Also not on the roadmap at all yet: a table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only on the user's explicit go
 signal (per elyui's own `CLAUDE.md`) — never batch-copy multiple components.
 
 kurikula independently hand-rolls its own copies of `icon`, `badge`, `button`, `snackbar`,
