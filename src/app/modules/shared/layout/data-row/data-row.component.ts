@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RowColumnConfig } from '../../../../models/ui/data-row.model';
 import { MatDividerModule } from '@angular/material/divider';
-import { BadgeComponent } from '../../badge/badge.component';
+import { Badge } from '@paulelyson/elyui';
 import { ButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'app-data-row',
-  imports: [BadgeComponent, ButtonComponent, MatDividerModule],
+  imports: [Badge, ButtonComponent, MatDividerModule],
   templateUrl: './data-row.component.html',
   styleUrl: './data-row.component.css',
 })

@@ -2,13 +2,13 @@
   <div class="filter-badge-wrapper">
     @for (filter of filters; track filter.field) {
       @if (filter.show) {
-        <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
+        <ely-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
             {{
             ['advanced', 'enable_cancel'].includes(filter.field)
               ? filter.field
               : filter.value
             }}
-        </app-badge>
+        </ely-badge>
       }
     }
   </div>

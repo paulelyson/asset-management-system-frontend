@@ -31,21 +31,21 @@
                   <div class="change-diff">
                     <div class="badge-wrapper">
                       @for (b of asArray(change.previousValue); track b) {
-                        <app-badge variant="accent">
+                        <ely-badge variant="accent">
                           {{
                             typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b
                           }}
-                        </app-badge>
+                        </ely-badge>
                       }
                     </div>
                     <app-icon name="arrow_forward" />
                     <div class="badge-wrapper">
                       @for (b of asArray(change.newValue); track b) {
-                        <app-badge [variant]="cl.variant">
+                        <ely-badge [variant]="cl.variant">
                           {{
                             typeof b == 'object' ? (b | displayName: 'quantity' : 'condition') : b
                           }}
-                        </app-badge>
+                        </ely-badge>
                       }
                     </div>
                   </div>

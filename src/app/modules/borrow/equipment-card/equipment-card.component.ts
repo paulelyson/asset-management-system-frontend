@@ -8,7 +8,7 @@ import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.co
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { BorrowService } from '../../../services/borrow.service';
-import { SnackbarService } from '@paulelyson/elyui';
+import { Badge, SnackbarService } from '@paulelyson/elyui';
 import { EquipmentService } from '../../../services/equipment.service';
 import {
   BorrowedEquipmentStatusType,
@@ -16,7 +16,6 @@ import {
   IN_CIRCULATION_STATUS,
 } from '../../../models/BorrowedEquipment';
 import { ButtonConfig } from '../../../models/ui/button-config.model';
-import { BadgeComponent } from '../../shared/badge/badge.component';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
@@ -26,7 +25,7 @@ type CardShade = 'default' | 'light';
   selector: 'app-equipment-card',
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
-  imports:[ButtonComponent, IconComponent, BadgeComponent, CommonModule]
+  imports:[ButtonComponent, IconComponent, Badge, CommonModule]
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;

@@ -8,7 +8,7 @@ import BorrowedEquipment, {
 import { MatDividerModule } from '@angular/material/divider';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { EquipmentCondition } from '../../../models/Equipment';
-import { BadgeComponent } from '../../shared/badge/badge.component';
+import { Badge } from '@paulelyson/elyui';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 import { DatePipe } from '@angular/common';
 
@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
   selector: 'app-borrowed-equipment-detail-dialog',
   templateUrl: './borrowed-equipment-detail-dialog.component.html',
   styleUrl: './borrowed-equipment-detail-dialog.component.css',
-  imports: [MatDividerModule, IconComponent, BadgeComponent, DisplayNamePipe, DatePipe],
+  imports: [MatDividerModule, IconComponent, Badge, DisplayNamePipe, DatePipe],
 })
 export class BorrowedEquipmentDetailDialogComponent {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';

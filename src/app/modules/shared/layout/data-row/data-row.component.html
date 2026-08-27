@@ -38,7 +38,7 @@
       @case ('badge') {
         <div class="col badge-col">
           @for (b of asArray(col.content); track b) {
-            <app-badge size="sm" [variant]="col.variant || 'neutral'">{{ b }}</app-badge>
+            <ely-badge size="sm" [variant]="col.variant || 'neutral'">{{ b }}</ely-badge>
           }
         </div>
       }
@@ -49,7 +49,7 @@
             @if (action.type === 'icon') {
               <!-- <app-icon [name]="action.name" [size]="action.size" [tooltip]="action.tooltip" (iconclicked)="onActionClicked($event)" /> -->
             } @else if (action.type == 'badge') {
-              <app-badge size="sm" [variant]="action.variant || 'neutral'">{{ action.name }}</app-badge>
+              <ely-badge size="sm" [variant]="action.variant || 'neutral'">{{ action.name }}</ely-badge>
             }
             @else {
               <app-button size="sm" appearance="link" [icon]="action.icon" [action]="action.name" (btnclicked)="onActionClicked($event)" [tooltip]="action.tooltip ?? ''">

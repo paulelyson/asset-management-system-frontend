@@ -9,9 +9,9 @@
         <span>{{ data.equipment?.type }}</span>
         <div class="dialog-meta">
           @for (status of data.accumulatedStatus; track status) {
-            <app-badge [variant]="getVariant(status)" size="xs">
+            <ely-badge [variant]="getVariant(status)" size="xs">
               {{ (status | displayName: 'quantity' : 'status') || '' }}
-            </app-badge>
+            </ely-badge>
           }
         </div>
       </div>

@@ -7,9 +7,9 @@
     <span>{{ equipment.brand }}</span>
   </div>
   <div class="availability">
-    <app-badge [variant]="totalAvailable > 0 ? 'success' : 'danger'" size="xs">
+    <ely-badge [variant]="totalAvailable > 0 ? 'success' : 'danger'" size="xs">
       {{ availability }}
-    </app-badge>
+    </ely-badge>
     <app-icon name="info_outlined" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
   </div>
   <div class="action-wrapper">

@@ -13,7 +13,7 @@ import {
 import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../../../../utils/string.util';
-import { BadgeComponent } from '../../badge/badge.component';
+import { Badge } from '@paulelyson/elyui';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
 import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
 import { ButtonComponent } from '../../button/button.component';
@@ -26,7 +26,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
     IconComponent,
     VerticalStepperComponent,
     MatDividerModule,
-    BadgeComponent,
+    Badge,
     EmptyPlaceholderComponent,
     DisplayNamePipe,
     ButtonComponent,

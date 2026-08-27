@@ -2,9 +2,9 @@
   <div class="filter-badge-wrapper">
     @for (filter of filters(); track filter.field) {
       @if (filter.show) {
-        <app-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
+        <ely-badge size="sm" [hasCloseIcon]="filter.canClose" (closed)="onBadgeClosed(filter)">
           {{ ['pending', 'canBeBorrowed'].includes(filter.field) ? filter.field === 'canBeBorrowed' ? (filter.value ? 'can be borrowed' : 'cannot be borrowed') : filter.field : filter.value }}
-        </app-badge>
+        </ely-badge>
       }
     }
   </div>

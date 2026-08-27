@@ -8,7 +8,7 @@ import {
 } from '../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConditionQuantityPipe } from '../../../pipes/condition-quantity.pipe';
-import { BadgeComponent } from '../badge/badge.component';
+import { Badge } from '@paulelyson/elyui';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 import { IconComponent } from '../icon/icon.component';
 
@@ -17,7 +17,7 @@ import { IconComponent } from '../icon/icon.component';
   imports: [
     MatDividerModule,
     ConditionQuantityPipe,
-    BadgeComponent,
+    Badge,
     DisplayNamePipe,
     IconComponent,
   ],

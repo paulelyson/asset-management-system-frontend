@@ -1,9 +1,0 @@
-<div class="badge-container" [ngClass]="[size, variant]" [class.clickable]="clickable">
-  @if (hasBadgeIcon) {
-    <app-icon name="info" [size]="size"/>
-  }
-  <ng-content></ng-content>
-  @if (hasCloseIcon) {
-    <app-icon name="close" [size]="size" (iconclicked)="onClosed()"/>
-  }
-</div>

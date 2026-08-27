@@ -12,9 +12,9 @@
       <div class="subtitle">Condition</div>
       <div class="badge-wrapper">
         @for (cond of data.conditionAndQuantity; track cond) {
-          <app-badge [variant]="getVariant(cond.condition)">
+          <ely-badge [variant]="getVariant(cond.condition)">
             {{ cond | conditionQuantity }}
-          </app-badge>
+          </ely-badge>
         }
       </div>
     </div>
@@ -64,9 +64,9 @@
     <mat-divider></mat-divider>
     <div class="label-wrapper">
       <div class="subtitle">Has Tag</div>
-      <app-badge [variant]="data.hasTag ? 'success' : 'warning'">
+      <ely-badge [variant]="data.hasTag ? 'success' : 'warning'">
         {{ data.hasTag ? 'Yes' : 'No' }}
-      </app-badge>
+      </ely-badge>
     </div>
     <mat-divider></mat-divider>
     <div class="label-wrapper">
@@ -102,16 +102,16 @@
         <p class="dialog-title">{{ data.name }}</p>
         <div class="dialog-meta">
           @for (cond of data.conditionAndQuantity; track cond) {
-            <app-badge [variant]="getVariant(cond.condition)" size="xs">
+            <ely-badge [variant]="getVariant(cond.condition)" size="xs">
               {{ cond | conditionQuantity }}
-            </app-badge>
+            </ely-badge>
           }
-          <app-badge [variant]="data.canBeBorrowed ? 'success' : 'warning'" size="xs">
+          <ely-badge [variant]="data.canBeBorrowed ? 'success' : 'warning'" size="xs">
             {{ data.canBeBorrowed ? 'Can be borrowed' : 'Cannot be borrowed' }}
-          </app-badge>
-          <app-badge [variant]="data.inventoryType === 'inventory' ? 'success' : 'warning'" size="xs">
+          </ely-badge>
+          <ely-badge [variant]="data.inventoryType === 'inventory' ? 'success' : 'warning'" size="xs">
             {{ data.inventoryType === 'inventory' ? 'Inventory' : 'Non-inventory' }}
-          </app-badge>
+          </ely-badge>
         </div>
         <span>{{ data.modelNo }}</span>
       </div>
