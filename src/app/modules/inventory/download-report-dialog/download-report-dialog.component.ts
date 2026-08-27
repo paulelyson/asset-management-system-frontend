@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ToggleButtonGroupComponent } from '../../shared/toggle-button-group/toggle-button-group.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { Button, Icon, Toggle } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
