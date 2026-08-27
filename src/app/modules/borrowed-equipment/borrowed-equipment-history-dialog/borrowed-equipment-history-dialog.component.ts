@@ -8,13 +8,13 @@ import { BORROW_STATUS_DISPLAY, BORROW_STATUS_VARIANT, BorrowedEquipmentTransact
 import { IUser } from '../../../models/User';
 import { VerticalStepperConfig } from '../../../models/ui/vertical-stepper-config';
 import { MatDividerModule } from '@angular/material/divider';
-import { IconComponent } from '../../shared/icon/icon.component';
+import { Icon } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
   templateUrl: './borrowed-equipment-history-dialog.component.html',
   styleUrl: './borrowed-equipment-history-dialog.component.css',
-  imports: [VerticalStepperComponent, MatDividerModule, IconComponent],
+  imports: [VerticalStepperComponent, MatDividerModule, Icon],
 })
 export class BorrowedEquipmentHistoryDialogComponent {
   transaction: VerticalStepperConfig[];

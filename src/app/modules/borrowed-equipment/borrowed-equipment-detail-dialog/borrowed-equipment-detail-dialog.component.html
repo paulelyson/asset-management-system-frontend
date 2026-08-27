@@ -15,7 +15,7 @@
           }
         </div>
       </div>
-      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+      <ely-icon size="lg" name="close" (iconclicked)="onClose()" />
     </div>
   </div>
   <mat-divider></mat-divider>
@@ -23,7 +23,7 @@
   <div class="beq-grid">
     <div class="beq-field">
       <p class="beq-field-label">
-        <app-icon size="xs" name="person" />
+        <ely-icon size="xs" name="person" />
         Borrower
       </p>
       <p class="beq-field-value">
@@ -32,28 +32,28 @@
     </div>
     <div class="beq-field">
       <p class="beq-field-label">
-        <app-icon size="xs" name="book_ribbon" />
+        <ely-icon size="xs" name="book_ribbon" />
         Purpose
       </p>
       <p class="beq-field-value">{{ data.purpose }}</p>
     </div>
     <div class="beq-field">
       <p class="beq-field-label">
-        <app-icon size="xs" name="school" />
+        <ely-icon size="xs" name="school" />
         Course
       </p>
       <p class="beq-field-value">{{ data.courseOffering | displayName: 'name' : 'code' }}</p>
     </div>
     <div class="beq-field">
       <p class="beq-field-label">
-        <app-icon size="xs" name="date_range" />
+        <ely-icon size="xs" name="date_range" />
         Date Of Use
       </p>
       <p class="beq-field-value">{{ data.dateOfUse.start | date }} - {{ data.dateOfUse.end | date }}</p>
     </div>
     <div class="beq-field">
       <p class="beq-field-label">
-        <app-icon size="xs" name="history" />
+        <ely-icon size="xs" name="history" />
         Requested On
       </p>
       <p class="beq-field-value">{{ data.createdAt | date }}</p>

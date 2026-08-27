@@ -6,7 +6,7 @@
         <p class="dialog-title">Add Equipment</p>
         <p class="dialog-sub">Fill in the details below to register new equipment</p>
       </div>
-      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+      <ely-icon size="lg" name="close" (iconclicked)="onClose()" />
     </div>
     <mat-divider></mat-divider>
     <div class="content-body">
@@ -31,7 +31,7 @@
           <div class="condition-wrapper" [formGroupName]="$index">
             <app-input label="Quantity" width="sm" formControlName="quantity"/>
             <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
-            <app-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
+            <ely-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
             <!-- <ely-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</ely-button> -->
           </div>
         }

@@ -47,7 +47,7 @@
         <div class="col action-col">
           @for (action of col.actions; track $index) {
             @if (action.type === 'icon') {
-              <!-- <app-icon [name]="action.name" [size]="action.size" [tooltip]="action.tooltip" (iconclicked)="onActionClicked($event)" /> -->
+              <!-- <ely-icon [name]="action.name" [size]="action.size" [tooltip]="action.tooltip" (iconclicked)="onActionClicked($event)" /> -->
             } @else if (action.type == 'badge') {
               <ely-badge size="sm" [variant]="action.variant || 'neutral'">{{ action.name }}</ely-badge>
             }

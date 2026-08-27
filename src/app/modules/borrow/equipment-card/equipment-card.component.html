@@ -10,10 +10,10 @@
     <ely-badge [variant]="totalAvailable > 0 ? 'success' : 'danger'" size="xs">
       {{ availability }}
     </ely-badge>
-    <app-icon name="info_outlined" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
+    <ely-icon name="info_outlined" tooltip="Equipment Info" (iconclicked)="onViewEquipmentInfo()" />
   </div>
   <div class="action-wrapper">
-    <ely-button icon="add" width="width-filled" variant="primary" (click)="onAddEquipment()" size="md">
+    <ely-button icon="add" appearance="filled" width="width-filled" variant="primary" (click)="onAddEquipment()" size="sm">
       Add
     </ely-button>
   </div>

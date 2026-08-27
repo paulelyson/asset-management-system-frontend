@@ -8,9 +8,8 @@ import {
 } from '../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConditionQuantityPipe } from '../../../pipes/condition-quantity.pipe';
-import { Badge } from '@paulelyson/elyui';
+import { Badge, Icon } from '@paulelyson/elyui';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
-import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-equipment-detail-dialog',
@@ -19,7 +18,7 @@ import { IconComponent } from '../icon/icon.component';
     ConditionQuantityPipe,
     Badge,
     DisplayNamePipe,
-    IconComponent,
+    Icon,
   ],
   templateUrl: './equipment-detail-dialog.component.html',
   styleUrl: './equipment-detail-dialog.component.css',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
+import { Icon } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-side-navigation',
-  imports: [IconComponent],
+  imports: [Icon],
   templateUrl: './side-navigation.component.html',
   styleUrl: './side-navigation.component.css',
 })

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IconComponent } from '../../shared/icon/icon.component';
+import { Icon } from '@paulelyson/elyui';
 import { IEquipment } from '../../../models/Equipment';
 import { BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
 
@@ -17,7 +17,7 @@ type CardShade = 'default' | 'light';
   selector: 'app-added-equipment-card',
   templateUrl: './added-equipment-card.component.html',
   styleUrl: './added-equipment-card.component.css',
-  imports: [IconComponent, CommonModule]
+  imports: [Icon, CommonModule]
 })
 export class AddedEquipmentCardComponent {
   @Input() equipment!: IAddedEquipment;

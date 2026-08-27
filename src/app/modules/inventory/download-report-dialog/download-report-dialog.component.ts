@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { ToggleButtonGroupComponent } from '../../shared/toggle-button-group/toggle-button-group.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { IconComponent } from '../../shared/icon/icon.component';
+import { Button, Icon } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
-import { Button } from '@paulelyson/elyui';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-download-report-dialog',
   imports: [
     MatDividerModule,
-    IconComponent,
+    Icon,
     ToggleComponent,
     Button,
   ],

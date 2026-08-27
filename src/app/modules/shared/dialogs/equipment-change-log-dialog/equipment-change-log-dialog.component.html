@@ -5,7 +5,7 @@
         <p class="dialog-title">Change Logs — {{ equipmentName }}</p>
         <p class="dialog-sub">SN: {{ serialNo }} · {{ total }} entries</p>
       </div>
-      <app-icon size="lg" name="close" (iconclicked)="onClose()" />
+      <ely-icon size="lg" name="close" (iconclicked)="onClose()" />
     </div>
     <mat-divider></mat-divider>
     <div class="content-body">
@@ -38,7 +38,7 @@
                         </ely-badge>
                       }
                     </div>
-                    <app-icon name="arrow_forward" />
+                    <ely-icon name="arrow_forward" />
                     <div class="badge-wrapper">
                       @for (b of asArray(change.newValue); track b) {
                         <ely-badge [variant]="cl.variant">

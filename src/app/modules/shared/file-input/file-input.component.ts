@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
+import { Icon } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-file-input',
-  imports: [IconComponent],
+  imports: [Icon],
   templateUrl: './file-input.component.html',
   styleUrl: './file-input.component.css',
 })
