@@ -3,6 +3,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {
   EQUIPMENT_STATUS_VARIANT,
   EquipmentCondition,
+  getLocationName,
   IEquipment,
 } from '../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -32,6 +33,10 @@ export class EquipmentDetailDialogComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+  }
+
+  get locationName(): string | undefined {
+    return getLocationName(this.data.location);
   }
 
   getVariant(cond: EquipmentCondition) {

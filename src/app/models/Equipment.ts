@@ -78,6 +78,14 @@ export const getLocationId = (
   location?: ClassLocation | string | null,
 ): string | undefined => (typeof location === 'string' ? location : location?._id);
 
+/**
+ * The room's name, or `undefined` when only its id came back — an unpopulated
+ * `location` carries no name to show.
+ */
+export const getLocationName = (
+  location?: ClassLocation | string | null,
+): string | undefined => (typeof location === 'string' ? undefined : location?.name);
+
 export interface IConditionAndQuantity {
   condition: EquipmentCondition;
   quantity: number;
