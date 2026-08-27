@@ -15,7 +15,7 @@
     </ely-button>
   }
   @if (canAccessEquipment) {
-    <app-toggle
+    <ely-toggle
       [isChecked]="isPending()"
       [badge]="pendingApprovalCount"
       label="Pending Approval"

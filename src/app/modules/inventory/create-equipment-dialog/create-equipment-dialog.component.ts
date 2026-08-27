@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
-import { Button, Icon, SnackbarService } from '@paulelyson/elyui';
+import { Button, Icon, SnackbarService, Toggle } from '@paulelyson/elyui';
 import { InputComponent } from '../../shared/input/input.component';
 import {
   AutocompleteComponent,
@@ -28,7 +28,6 @@ import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
 import { MatDividerModule } from '@angular/material/divider';
 import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
-import { ToggleComponent } from '../../shared/toggle/toggle.component';
 import { TextareaComponent } from '../../shared/components/forms/textarea/textarea.component';
 
 @Component({
@@ -46,7 +45,7 @@ import { TextareaComponent } from '../../shared/components/forms/textarea/textar
     Icon,
     MatDividerModule,
     DropdownComponent,
-    ToggleComponent,
+    Toggle,
     TextareaComponent,
   ],
 })

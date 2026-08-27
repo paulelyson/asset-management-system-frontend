@@ -3,8 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
-import { Badge, Button } from '@paulelyson/elyui';
-import { ToggleComponent } from '../../shared/toggle/toggle.component';
+import { Badge, Button, Toggle } from '@paulelyson/elyui';
 import { InputComponent } from '../../shared/input/input.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 
@@ -12,7 +11,7 @@ import { FilterDisplay } from '../../../models/ui/common-config.model';
   selector: 'app-borrowed-equipment-toolbar',
   templateUrl: './borrowed-equipment-toolbar.component.html',
   styleUrl: './borrowed-equipment-toolbar.component.css',
-  imports: [Badge, Button, ToggleComponent, InputComponent, ReactiveFormsModule]
+  imports: [Badge, Button, Toggle, InputComponent, ReactiveFormsModule]
 })
 export class BorrowedEquipmentToolbarComponent implements OnChanges {
   @Input() filters: FilterDisplay[] = [];

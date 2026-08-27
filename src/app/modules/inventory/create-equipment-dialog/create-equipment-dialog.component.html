@@ -56,10 +56,10 @@
       <div class="label">Options</div>
       <div class="fields-grid">
         <div class="toggle-field">
-          <app-toggle label="Can be borrowed" [isChecked]="equipmentForm.get('canBeBorrowed')?.value" (toggle)="onToggleCanBeBorrowed($event)" />
+          <ely-toggle label="Can be borrowed" [isChecked]="equipmentForm.get('canBeBorrowed')?.value" (toggle)="onToggleCanBeBorrowed($event)" />
         </div>
          <div class="toggle-field">
-          <app-toggle label="Has inventory tag" [isChecked]="equipmentForm.get('hasTag')?.value" (toggle)="onToggleHasTag($event)" />
+          <ely-toggle label="Has inventory tag" [isChecked]="equipmentForm.get('hasTag')?.value" (toggle)="onToggleHasTag($event)" />
         </div>
       </div>
       <div class="label">Additional Information</div>

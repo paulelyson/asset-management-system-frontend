@@ -14,18 +14,17 @@ import { NavigationExtras, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';
 import { EquipmentService } from '../../../services/equipment.service';
-import { Badge, Button } from '@paulelyson/elyui';
+import { Badge, Button, Toggle } from '@paulelyson/elyui';
 import { InputComponent } from '../../shared/input/input.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { IEquipment } from '../../../models/Equipment';
-import { ToggleComponent } from '../../shared/toggle/toggle.component';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-inventory-toolbar',
   templateUrl: './inventory-toolbar.component.html',
   styleUrl: './inventory-toolbar.component.css',
-  imports: [Badge, Button, ReactiveFormsModule, InputComponent, ToggleComponent],
+  imports: [Badge, Button, ReactiveFormsModule, InputComponent, Toggle],
 })
 export class InventoryToolbarComponent {
   filters = input<FilterDisplay[]>([]);

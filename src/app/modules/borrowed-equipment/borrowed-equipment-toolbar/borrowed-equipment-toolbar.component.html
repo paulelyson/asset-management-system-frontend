@@ -18,13 +18,13 @@
       Clear Filters
     </ely-button>
   }
-  <app-toggle
+  <ely-toggle
     label="Advance Options"
     [isChecked]="infoAndHistory"
     tooltip="Display additional option on adding transaction and viewing details"
     (toggle)="onShowInfoAndHistoryToggle($event)"
   />
-  <app-toggle
+  <ely-toggle
     label="Enable Cancel"
     [isChecked]="enableCancel"
     (toggle)="onEnableCancelToggle($event)"

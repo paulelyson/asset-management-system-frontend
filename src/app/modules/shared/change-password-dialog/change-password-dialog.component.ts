@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { InputComponent } from '../input/input.component';
-import { Button, SnackbarService } from '@paulelyson/elyui';
-import { ToggleComponent } from '../toggle/toggle.component';
+import { Button, SnackbarService, Toggle } from '@paulelyson/elyui';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-change-password-dialog',
-  imports: [InputComponent, Button, ToggleComponent, FormsModule],
+  imports: [InputComponent, Button, Toggle, FormsModule],
   templateUrl: './change-password-dialog.component.html',
   styleUrl: './change-password-dialog.component.css',
 })

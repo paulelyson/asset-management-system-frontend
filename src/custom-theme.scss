@@ -86,21 +86,6 @@
     container-max-width: 600px
   ));
 
-  // slide toggle
-  --mat-slide-toggle-with-icon-handle-size: 16px;
-  --mat-slide-toggle-track-height: 18px;
-  mat-slide-toggle .mdc-switch__track::before ,
-  mat-slide-toggle .mdc-switch__track::after {
-    width: 42px;
-   }
-
-  mat-slide-toggle .mdc-switch__ripple {
-    display: none;
-  }
-  // mat-slide-toggle .mdc-switch__track {
-  //   height: 16px;
-  // }
-
   // Mat Tab overrides
   mat-tab-group {
     .mat-mdc-tab {
