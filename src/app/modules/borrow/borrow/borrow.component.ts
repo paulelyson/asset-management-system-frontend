@@ -16,7 +16,7 @@ import BorrowedEquipment, {
 import { BorrowService } from '../../../services/borrow.service';
 import { AuthService } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';

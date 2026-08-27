@@ -4,7 +4,7 @@ import { ButtonComponent } from '../button/button.component';
 import { ToggleComponent } from '../toggle/toggle.component';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({

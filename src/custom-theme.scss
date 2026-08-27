@@ -159,17 +159,6 @@ body {
   height: 100%;
 }
 
-.snackbar-override {
-  .mat-mdc-snackbar-surface {
-    // border-radius: 12px;
-    --mat-sys-corner-extra-small: 12px;
-    background-color: transparent !important;
-    .mdc-snackbar__label {
-      padding: 0;
-    }
-  }
-}
-
 .underlined {
   // -webkit-text-decoration: underline var(--accent) solid 4px;
   // text-decoration: underline var(--accent) solid 0.2em;

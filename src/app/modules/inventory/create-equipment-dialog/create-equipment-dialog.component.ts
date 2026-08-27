@@ -26,7 +26,7 @@ import { Department, IUser } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { DropdownComponent } from '../../shared/dropdown/dropdown.component';

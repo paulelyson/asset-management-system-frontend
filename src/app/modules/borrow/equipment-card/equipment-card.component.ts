@@ -8,7 +8,7 @@ import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.co
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { BorrowService } from '../../../services/borrow.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { EquipmentService } from '../../../services/equipment.service';
 import {
   BorrowedEquipmentStatusType,

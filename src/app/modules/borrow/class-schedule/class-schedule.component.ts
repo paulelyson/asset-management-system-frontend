@@ -12,8 +12,7 @@ import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
 } from '../../../models/BorrowedEquipment';
-import { SnackbarService } from '../../../services/snackbar.service';
-import { ISnackBarConfig } from '../../shared/snackbar/snackbar.component';
+import { ISnackBarConfig, SnackbarService } from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';

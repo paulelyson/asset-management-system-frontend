@@ -30,7 +30,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/custom-theme.scss", "src/styles.css"]
+            "styles": [
+              "node_modules/@paulelyson/elyui/styles/elyui.css",
+              "src/custom-theme.scss",
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {

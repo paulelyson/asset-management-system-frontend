@@ -22,7 +22,7 @@ import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { getFilterDisplay } from '../../shared/utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
 import { DepartmentService } from '../../../services/department.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 import { Department, IDepartment } from '../../../models/Department';
 import { environment } from '../../../../environments/environment';

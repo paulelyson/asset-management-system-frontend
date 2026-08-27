@@ -3,7 +3,7 @@ import { InputComponent } from '../input/input.component';
 import { ButtonComponent } from '../button/button.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../../../services/auth.service';
 
