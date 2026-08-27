@@ -4,7 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToggleComponent } from '../../shared/toggle/toggle.component';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { Button } from '@paulelyson/elyui';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
 @Component({
@@ -13,7 +13,7 @@ import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
     MatDividerModule,
     IconComponent,
     ToggleComponent,
-    ButtonComponent,
+    Button,
   ],
   templateUrl: './download-report-dialog.component.html',
   styleUrl: './download-report-dialog.component.css',

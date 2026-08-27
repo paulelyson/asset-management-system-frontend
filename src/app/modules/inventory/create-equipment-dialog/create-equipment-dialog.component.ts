@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { Button, SnackbarService } from '@paulelyson/elyui';
 import { InputComponent } from '../../shared/input/input.component';
 import {
   AutocompleteComponent,
@@ -26,7 +26,6 @@ import { Department, IUser } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
-import { SnackbarService } from '@paulelyson/elyui';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
@@ -38,7 +37,7 @@ import { TextareaComponent } from '../../shared/components/forms/textarea/textar
   templateUrl: './create-equipment-dialog.component.html',
   styleUrl: './create-equipment-dialog.component.css',
   imports: [
-    ButtonComponent,
+    Button,
     InputComponent,
     AutocompleteComponent,
     FileInputComponent,

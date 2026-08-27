@@ -60,7 +60,7 @@
     width: 100%;
   }
 
-  .toolbar-container > app-button {
+  .toolbar-container > ely-button {
     order: 2;
     flex: 1;
   }

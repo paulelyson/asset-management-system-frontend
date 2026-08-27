@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { Badge, Button, SnackbarService } from '@paulelyson/elyui';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { IEquipment } from '../../../models/Equipment';
@@ -8,7 +8,6 @@ import { IAddedEquipment } from '../added-equipment-card/added-equipment-card.co
 import { DialogService } from '../../../services/dialog.service';
 import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { BorrowService } from '../../../services/borrow.service';
-import { Badge, SnackbarService } from '@paulelyson/elyui';
 import { EquipmentService } from '../../../services/equipment.service';
 import {
   BorrowedEquipmentStatusType,
@@ -25,7 +24,7 @@ type CardShade = 'default' | 'light';
   selector: 'app-equipment-card',
   templateUrl: './equipment-card.component.html',
   styleUrl: './equipment-card.component.css',
-  imports:[ButtonComponent, IconComponent, Badge, CommonModule]
+  imports:[Button, IconComponent, Badge, CommonModule]
 })
 export class EquipmentCardComponent {
   @Input() equipment!: IEquipment;

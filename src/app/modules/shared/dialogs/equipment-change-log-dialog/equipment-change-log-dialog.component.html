@@ -68,12 +68,12 @@
     <mat-divider></mat-divider>
     @if (showAction) {
       <div class="action-wrapper">
-        <app-button appearance="link" icon="close" (btnclicked)="onResolve(ChangeStatus.REJECTED)">
+        <ely-button appearance="link" icon="close" (btnclicked)="onResolve(ChangeStatus.REJECTED)">
           Reject
-        </app-button>
-        <app-button appearance="link" icon="check" (btnclicked)="onResolve(ChangeStatus.APPROVED)">
+        </ely-button>
+        <ely-button appearance="link" icon="check" (btnclicked)="onResolve(ChangeStatus.APPROVED)">
           Approve
-        </app-button>
+        </ely-button>
       </div>
     }
   </div>

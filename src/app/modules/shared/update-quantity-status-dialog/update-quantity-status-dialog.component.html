@@ -20,9 +20,9 @@
         <app-textarea formControlName="remarks"></app-textarea>
       </div>
       @for (action of data.actions; track action.id) {
-        <app-button width="width-filled" (btnclicked)="onClicked(action.name)">
+        <ely-button width="width-filled" (btnclicked)="onClicked(action.name)">
           {{ action.name }}
-        </app-button>
+        </ely-button>
       }
     </div>
   </div>

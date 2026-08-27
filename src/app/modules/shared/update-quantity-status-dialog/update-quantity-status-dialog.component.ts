@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
-import { ButtonComponent } from '../button/button.component';
+import { Button } from '@paulelyson/elyui';
 import { InputComponent } from '../input/input.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -24,7 +24,7 @@ export interface IQuantityStatusDialogConfig {
 @Component({
   selector: 'app-update-quantity-status-dialog',
   imports: [
-    ButtonComponent,
+    Button,
     InputComponent,
     AutocompleteComponent,
     FormsModule,

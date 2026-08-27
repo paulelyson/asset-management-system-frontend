@@ -12,7 +12,7 @@ import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
 } from '../../../models/BorrowedEquipment';
-import { ISnackBarConfig, SnackbarService } from '@paulelyson/elyui';
+import { Button, ISnackBarConfig, SnackbarService } from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
@@ -21,7 +21,6 @@ import CourseOffering from '../../../models/CourseOffering';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
 import { CourseOfferDetailCardComponent } from '../../shared/course-offer-detail-card/course-offer-detail-card.component';
-import { ButtonComponent } from '../../shared/button/button.component';
 import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 import { InputComponent } from '../../shared/input/input.component';
 
@@ -33,7 +32,7 @@ import { InputComponent } from '../../shared/input/input.component';
     ReactiveFormsModule,
     AutocompleteComponent,
     CourseOfferDetailCardComponent,
-    ButtonComponent,
+    Button,
     DatepickerComponent,
     InputComponent,
   ],

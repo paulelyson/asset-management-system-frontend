@@ -6,7 +6,6 @@ import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { EquipmentChangeLog } from '../../../models/data/equipment-change-logs.model';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
-import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-equipment-change-log',

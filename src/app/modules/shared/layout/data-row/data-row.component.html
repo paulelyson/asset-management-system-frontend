@@ -52,9 +52,9 @@
               <ely-badge size="sm" [variant]="action.variant || 'neutral'">{{ action.name }}</ely-badge>
             }
             @else {
-              <app-button size="sm" appearance="link" [icon]="action.icon" [action]="action.name" (btnclicked)="onActionClicked($event)" [tooltip]="action.tooltip ?? ''">
+              <ely-button size="sm" appearance="link" [icon]="action.icon" [action]="action.name" (btnclicked)="onActionClicked($event)" [tooltip]="action.tooltip ?? ''">
                 {{ action.name }}
-              </app-button>
+              </ely-button>
             }
           }
         </div>

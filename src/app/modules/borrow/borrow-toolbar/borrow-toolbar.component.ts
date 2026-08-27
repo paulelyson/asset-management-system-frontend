@@ -4,13 +4,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationExtras, Router } from '@angular/router';
-import { Badge } from '@paulelyson/elyui';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { Badge, Button } from '@paulelyson/elyui';
 import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-borrow-toolbar',
-  imports: [Badge, ButtonComponent, ReactiveFormsModule, InputComponent],
+  imports: [Badge, Button, ReactiveFormsModule, InputComponent],
   templateUrl: './borrow-toolbar.component.html',
   styleUrl: './borrow-toolbar.component.css',
 })

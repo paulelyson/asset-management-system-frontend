@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { InputComponent } from '../input/input.component';
-import { ButtonComponent } from '../button/button.component';
+import { Button, SnackbarService } from '@paulelyson/elyui';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SnackbarService } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login-dialog',
-  imports: [InputComponent, ButtonComponent, FormsModule, ReactiveFormsModule],
+  imports: [InputComponent, Button, FormsModule, ReactiveFormsModule],
   templateUrl: './login-dialog.component.html',
   styleUrl: './login-dialog.component.css',
 })

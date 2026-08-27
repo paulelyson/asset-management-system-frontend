@@ -8,13 +8,13 @@ import { AutocompleteComponent, IAutocompleteOption } from '../../shared/autocom
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ButtonComponent } from '../../shared/button/button.component';
+import { Button } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-borrowed-equipment-filter-dialog',
   templateUrl: './borrowed-equipment-filter-dialog.component.html',
   styleUrl: './borrowed-equipment-filter-dialog.component.css',
-  imports: [ButtonComponent, AutocompleteComponent, ReactiveFormsModule]
+  imports: [Button, AutocompleteComponent, ReactiveFormsModule]
 })
 export class BorrowedEquipmentFilterDialogComponent {
   purposes: IAutocompleteOption[] = [];

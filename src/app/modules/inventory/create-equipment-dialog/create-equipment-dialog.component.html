@@ -32,10 +32,10 @@
             <app-input label="Quantity" width="sm" formControlName="quantity"/>
             <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
             <app-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
-            <!-- <app-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</app-button> -->
+            <!-- <ely-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</ely-button> -->
           </div>
         }
-        <app-button icon="add" appearance="link" (btnclicked)="addConditionAndQuantity()">Add Quantity</app-button>
+        <ely-button icon="add" appearance="link" (btnclicked)="addConditionAndQuantity()">Add Quantity</ely-button>
       </div>
       <div class="label">Unit and Classification</div>
       <div class="fields-grid">
@@ -74,7 +74,7 @@
     </div>
     <mat-divider></mat-divider>
     <div class="action-wrapper">
-      <app-button appearance="link" icon="check" type="submit">Save Equipment</app-button>
+      <ely-button appearance="link" icon="check" type="submit">Save Equipment</ely-button>
     </div>
   </div>
 </form>

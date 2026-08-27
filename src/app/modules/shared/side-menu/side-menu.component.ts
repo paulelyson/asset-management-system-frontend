@@ -2,13 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { ClassScheduleComponent } from '../../borrow/class-schedule/class-schedule.component';
 import { BorrowModule } from '../../borrow/borrow-module';
-import { ButtonComponent } from '../button/button.component';
+import { Button } from '@paulelyson/elyui';
 import { EquipmentCardComponent } from '../../borrow/equipment-card/equipment-card.component';
 import { EmptyPlaceholderComponent } from '../empty-placeholder/empty-placeholder.component';
 
 @Component({
   selector: 'app-side-menu',
-  imports: [BorrowModule, ButtonComponent],
+  imports: [BorrowModule, Button],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.css',
 })

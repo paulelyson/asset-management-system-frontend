@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { ButtonComponent } from '../button/button.component';
+import { Button } from '@paulelyson/elyui';
 import { MatDividerModule } from '@angular/material/divider';
 import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-menu',
-  imports: [ButtonComponent, MatDividerModule],
+  imports: [Button, MatDividerModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
 })

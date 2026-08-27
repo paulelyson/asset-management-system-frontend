@@ -6,11 +6,11 @@ import { DialogService } from '../../../services/dialog.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { MenuComponent } from '../menu/menu.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
-import { ButtonComponent } from '../button/button.component';
+import { Button } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-header',
-  imports: [MatMenuModule, RouterLink, AvatarComponent, MenuComponent, ButtonComponent],
+  imports: [MatMenuModule, RouterLink, AvatarComponent, MenuComponent, Button],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

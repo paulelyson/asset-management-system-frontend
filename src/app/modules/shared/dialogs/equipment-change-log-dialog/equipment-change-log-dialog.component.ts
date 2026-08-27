@@ -13,10 +13,9 @@ import {
 import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../../../../utils/string.util';
-import { Badge } from '@paulelyson/elyui';
+import { Badge, Button } from '@paulelyson/elyui';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
 import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
-import { ButtonComponent } from '../../button/button.component';
 import { TextareaComponent } from '../../components/forms/textarea/textarea.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -29,7 +28,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
     Badge,
     EmptyPlaceholderComponent,
     DisplayNamePipe,
-    ButtonComponent,
+    Button,
     TextareaComponent,
     FormsModule,
     ReactiveFormsModule

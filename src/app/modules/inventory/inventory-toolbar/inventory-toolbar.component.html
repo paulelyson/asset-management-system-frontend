@@ -10,9 +10,9 @@
   </div>
   <span class="spacer"></span>
   @if (showClearFilter()) {
-    <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
+    <ely-button appearance="link" icon="history" (btnclicked)="clearFilter()">
       Clear Filters
-    </app-button>
+    </ely-button>
   }
   @if (canAccessEquipment) {
     <app-toggle
@@ -22,19 +22,19 @@
       (toggle)="onPendingToggle($event)"
       tooltip="Show equipment with unconfirmed changes awaiting approval"
     />
-    <app-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
+    <ely-button appearance="link" icon="add" (btnclicked)="addNewEquipment()">
       New Equipment
-    </app-button>
-    <app-button
+    </ely-button>
+    <ely-button
       appearance="link"
       icon="download"
       (btnclicked)="onDownloadReport()"
     >
       Report
-    </app-button>
+    </ely-button>
   }
-  <app-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
+  <ely-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
-  </app-button>
+  </ely-button>
   <app-input suffix_icon="search" [formControl]="searchControl" placeholder="Equipment Name" />
 </div>

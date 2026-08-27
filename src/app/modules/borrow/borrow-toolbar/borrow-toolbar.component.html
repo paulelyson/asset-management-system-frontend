@@ -10,15 +10,15 @@
   </div>
   <span class="spacer"></span>
   @if (showClearFilter()) {
-    <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
+    <ely-button appearance="link" icon="history" (btnclicked)="clearFilter()">
       Clear Filters
-    </app-button>
+    </ely-button>
   }
-  <app-button appearance="link" icon="assignment_outline" (btnclicked)="onToggleBorrowForm()">
+  <ely-button appearance="link" icon="assignment_outline" (btnclicked)="onToggleBorrowForm()">
     Open Borrow Form
-  </app-button>
-  <app-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
+  </ely-button>
+  <ely-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
-  </app-button>
+  </ely-button>
   <app-input suffix_icon="search" [formControl]="searchControl" placeholder="Equipment Name" />
 </div>

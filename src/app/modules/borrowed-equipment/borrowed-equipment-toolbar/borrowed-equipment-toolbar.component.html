@@ -14,9 +14,9 @@
   </div>
   <span class="spacer"></span>
   @if (filters.length) {
-    <app-button appearance="link" icon="history" (btnclicked)="clearFilter()">
+    <ely-button appearance="link" icon="history" (btnclicked)="clearFilter()">
       Clear Filters
-    </app-button>
+    </ely-button>
   }
   <app-toggle
     label="Advance Options"
@@ -30,8 +30,8 @@
     (toggle)="onEnableCancelToggle($event)"
     tooltip="Cancel allowed only before approval."
   />
-  <app-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
+  <ely-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
-  </app-button>
+  </ely-button>
   <app-input suffix_icon="search" [formControl]="searchControl" placeholder="Equipment Name" />
 </div>
