@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { Button, Icon, Toggle } from '@paulelyson/elyui';
+import {
+  Button,
+  Icon,
+  SegmentedControl,
+  SegmentedControlOption,
+  Toggle,
+} from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
 
@@ -10,6 +16,7 @@ import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
     MatDividerModule,
     Icon,
     Toggle,
+    SegmentedControl,
     Button,
   ],
   templateUrl: './download-report-dialog.component.html',
@@ -79,16 +86,55 @@ export class DownloadReportDialogComponent {
     }
   ];
 
+  /**
+   * Page setup. `PDFFormatConfig`'s own declared defaults are the source of truth for
+   * the initial selection — reading them off an instance rather than repeating 'LEGAL'
+   * and 'landscape' here means the dialog cannot drift from the model.
+   *
+   * Both values already travel all the way to the API (`EquipmentService.downloadReport`
+   * maps them to `paperSize` / `orientation`); until now nothing set them, so every
+   * report came out LEGAL/landscape.
+   */
+  private readonly formatDefaults = new PDFFormatConfig();
+
+  pageSize: PDFFormatConfig['pageSize'] = this.formatDefaults.pageSize;
+  orientation: PDFFormatConfig['orientation'] = this.formatDefaults.orientation;
+
+  paperSizes: SegmentedControlOption[] = [
+    { value: 'A4', label: 'A4' },
+    { value: 'LETTER', label: 'Letter' },
+    { value: 'LEGAL', label: 'Legal' },
+  ];
+
+  orientations: SegmentedControlOption[] = [
+    { value: 'portrait', label: 'Portrait', icon: 'crop_portrait' },
+    { value: 'landscape', label: 'Landscape', icon: 'crop_landscape' },
+  ];
+
   constructor(private dialogRef: MatDialogRef<DownloadReportDialogComponent>) {}
 
   onDownloadPDF() {
     const pdfConfg = new PDFFormatConfig({
+      pageSize: this.pageSize,
+      orientation: this.orientation,
       columns: this.equipmentFields.filter((x) => x.checked).map((x) => x.value),
     });
     this.dialogRef.close(pdfConfg);
   }
   onClose() {
     this.dialogRef.close();
+  }
+
+  /**
+   * `valueChange` is typed `string | string[]` because the control also supports
+   * multi-select. Both of these are single-select, so the array case cannot occur.
+   */
+  onPageSizeChange(value: string | string[]): void {
+    this.pageSize = value as PDFFormatConfig['pageSize'];
+  }
+
+  onOrientationChange(value: string | string[]): void {
+    this.orientation = value as PDFFormatConfig['orientation'];
   }
 
   onToggleAll(event: boolean) {

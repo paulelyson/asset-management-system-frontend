@@ -8,6 +8,24 @@
   </div>
   <mat-divider></mat-divider>
   <div class="content-body">
+    <div class="page-setup">
+      <div class="page-setup__group">
+        <p class="page-setup__label">Paper size</p>
+        <ely-segmented-control
+          [options]="paperSizes"
+          [value]="pageSize"
+          (valueChange)="onPageSizeChange($event)"
+        />
+      </div>
+      <div class="page-setup__group">
+        <p class="page-setup__label">Orientation</p>
+        <ely-segmented-control
+          [options]="orientations"
+          [value]="orientation"
+          (valueChange)="onOrientationChange($event)"
+        />
+      </div>
+    </div>
     <div class="fields-grid">
       @for (field of equipmentFields; track field) {
         <div class="field">

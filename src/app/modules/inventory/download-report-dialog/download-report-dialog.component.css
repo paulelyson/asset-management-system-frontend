@@ -28,3 +28,23 @@
   padding: 10px 26px;
   align-items: flex-end;
 }
+
+.page-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.page-setup__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-setup__label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-gray-default);
+}
