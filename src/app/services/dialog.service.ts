@@ -18,7 +18,7 @@ import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equ
 import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
 import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialog.component';
 import { ChangePasswordDialogComponent } from '../modules/shared/change-password-dialog/change-password-dialog.component';
-import { ButtonConfig } from '../models/ui/button-config.model';
+import { ButtonConfig } from '@paulelyson/elyui';
 import { EquipmentChangeLogDialogComponent } from '../modules/shared/dialogs/equipment-change-log-dialog/equipment-change-log-dialog.component';
 import { EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
 import { DownloadReportDialogComponent } from '../modules/inventory/download-report-dialog/download-report-dialog.component';

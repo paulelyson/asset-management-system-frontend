@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Variant } from '../../../models/ui/common-config.model';
+import { Badge, Variant } from '@paulelyson/elyui';
 import { CommonModule } from '@angular/common';
-import { Badge } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-vertical-stepper',

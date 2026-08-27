@@ -1,7 +1,7 @@
 import CourseOffering from './CourseOffering';
 import { IConditionAndQuantity, IEquipment } from './Equipment';
 import { IMongoDocument } from './MongoDocument';
-import { Variant } from './ui/common-config.model';
+import { Variant } from '@paulelyson/elyui';
 import User, { Department, IUser } from './User';
 
 /**

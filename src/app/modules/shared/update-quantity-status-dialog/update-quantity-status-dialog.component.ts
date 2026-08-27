@@ -1,13 +1,12 @@
 import { Component, Inject, Input } from '@angular/core';
 import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
-import { Button, Icon } from '@paulelyson/elyui';
+import { Button, ButtonConfig, Icon } from '@paulelyson/elyui';
 import { InputComponent } from '../input/input.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
-import { ButtonConfig } from '../../../models/ui/button-config.model';
 import { MatDividerModule } from '@angular/material/divider';
 import { TextareaComponent } from '../components/forms/textarea/textarea.component';
 

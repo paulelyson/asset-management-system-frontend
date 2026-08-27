@@ -5,17 +5,17 @@ session working in any of these repos should read this file first. Update it whe
 cross-repo fact changes (a new elyui component ships, a backend contract changes, a
 priority shifts) — don't let it drift into aspiration.
 
-Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-01.
+Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-27.
 
 ## Repo map
 
 | Repo | Path | Stack | State |
 |---|---|---|---|
-| **AMS frontend** | `~/Documents/personals/asset-management-system-frontend` | Angular 20, zoneless, signals | Inventory + borrowing built |
+| **AMS frontend** | `~/Documents/personals/asset-management-system-frontend` |Angular 21, zoneless, signals | Inventory + borrowing built; consumes elyui |
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.1.3`, 7 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.1.3`, 6 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -56,14 +56,15 @@ frontends. Longer-term this envelope belongs in a shared package (see elyui note
 
 | Repo | Angular |
 |---|---|
-| AMS frontend | 20.3 |
+| AMS frontend | 21.2 |
 | kurikula | 21.2 |
 | elyui (library + peer requirement) | 21.2 / `^21.0.0` |
 
-`@paulelyson/elyui` declares `peerDependencies: { "@angular/core": "^21.0.0", ... }`. AMS
-frontend is on 20, so **`npm install @paulelyson/elyui` cannot happen until AMS frontend
-upgrades to Angular 21.** This is the first step of the elyui adoption path below — do
-not skip it or force-install against the peer range.
+`@paulelyson/elyui` declares `peerDependencies: { "@angular/core": "^21.0.0", ... }`. All
+three repos are now on 21.2 stable, so the peer range is satisfied. AMS frontend upgraded
+on 2026-08-27 and pins Material/CDK to `^21.2.14` — the exact versions elyui was built
+against. Do not force-install against a peer range, and avoid the `21.3.0-next` prerelease
+line that `ng update @angular/material@21` resolves to by default.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
@@ -71,13 +72,19 @@ Published in `@paulelyson/elyui@0.1.3` (single entry point, no secondary entry p
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
-  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Textarea`
-  (`ely-textarea`), `Snackbar` + `SnackbarService`.
+  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Snackbar` +
+  `SnackbarService`.
 
-Also exported: the `Size` / `Variant` / `ButtonAppearance` / `ButtonShade` / `ButtonWidth`
-types and a `FieldConfig` model — AMS's own `models/ui/common-config.model.ts` and
-`button-config.model.ts` are byte-identical to elyui's, so those two files get deleted in
-favour of the package rather than kept in sync by hand.
+**`Textarea` is NOT in the published 0.1.3**, even though elyui's `public-api.ts` exports it
+— the published bundle does not contain it. The authority on what a consumer can import is
+`node_modules/@paulelyson/elyui/types/paulelyson-elyui.d.ts`, never elyui's source tree.
+
+Also exported, and confirmed present in the published bundle: `ButtonConfig`, plus the
+`Size` / `Variant` / `ButtonAppearance` / `ButtonShade` / `ButtonWidth` / `ISnackBarConfig`
+/ `SnackBarType` / `SegmentedControlOption` types. AMS's own `models/ui/common-config.model.ts`
+and `button-config.model.ts` were byte-identical to elyui's, so `button-config.model.ts` is
+deleted outright and `common-config.model.ts` keeps only `FilterDisplay`, which is
+app-specific and not part of the library.
 
 **`toggle-button-group` is intentionally dropped from the elyui migration** — it was an
 empty stub in the source project and is superseded by `SegmentedControl` (see elyui
@@ -85,9 +92,11 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 instead.
 
 Not yet published — this is elyui's stated roadmap, sourced from the AMS frontend's
-`src/app/modules/shared/` components: `input`, `autocomplete`, `dropdown`, `datepicker`,
-`tab`. Also not on the roadmap at all yet: a table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only on the user's explicit go
-signal (per elyui's own `CLAUDE.md`) — never batch-copy multiple components.
+`src/app/modules/shared/` components: `textarea` (written but unreleased), `input`,
+`autocomplete`, `dropdown`, `datepicker`, `tab`. Also not on the roadmap at all yet: a
+table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only
+on the user's explicit go signal (per elyui's own `CLAUDE.md`) — never batch-copy
+multiple components.
 
 kurikula independently hand-rolls its own copies of `icon`, `badge`, `button`, `snackbar`,
 `avatar`, `input`, `autocomplete`, `tab`, `data-row` under

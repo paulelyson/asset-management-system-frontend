@@ -1,5 +1,4 @@
-import { ButtonAppearance } from './button-config.model';
-import { Size, Variant } from './common-config.model';
+import { ButtonAppearance, Size, Variant } from '@paulelyson/elyui';
 
 export type RowContentType = 'image' | 'title' | 'text' | 'badge' | 'action';
 

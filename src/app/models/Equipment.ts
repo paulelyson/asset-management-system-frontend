@@ -1,7 +1,7 @@
 import { BorrowedEquipmentTransaction } from './BorrowedEquipment';
 import { ClassLocation } from './data/location.model';
 import { IDepartment } from './Department';
-import { Variant } from './ui/common-config.model';
+import { Variant } from '@paulelyson/elyui';
 import { Department, IUser } from './User';
 
 export type EquipmentCondition =

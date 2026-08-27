@@ -1,4 +1,4 @@
-import { Variant } from './common-config.model';
+import { Variant } from '@paulelyson/elyui';
 
 export class VerticalStepperConfig {
   title: string = '';

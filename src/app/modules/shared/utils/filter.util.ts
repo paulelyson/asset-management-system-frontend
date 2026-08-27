@@ -1,4 +1,5 @@
-import { FilterDisplay, Variant } from "../../../models/ui/common-config.model";
+import { Variant } from '@paulelyson/elyui';
+import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { BORROW_STATUS_VARIANT, BorrowedEquipmentStatusType } from "../../../models/BorrowedEquipment";
 
 export const getFilterDisplay = (filter: Record<string, any>, unClosed: string[] = [] ,dontShow: string[] = ['page', 'limit']): FilterDisplay[] => {

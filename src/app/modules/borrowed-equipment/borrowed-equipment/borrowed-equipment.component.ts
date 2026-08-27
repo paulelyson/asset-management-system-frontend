@@ -12,8 +12,7 @@ import {
   BorrowedEquimentFilter,
   IBorrowedEquimentFilter,
 } from '../../../models/BorrowedEquipmentFilter';
-import { Button, SnackbarService } from '@paulelyson/elyui';
-import { ButtonConfig } from '../../../models/ui/button-config.model';
+import { Button, ButtonConfig, SnackbarService } from '@paulelyson/elyui';
 import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';

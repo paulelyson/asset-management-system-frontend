@@ -6,7 +6,7 @@ from before this session. Testing is manual and one item at a time (see each rep
 laid out as a checklist you can work through and verify individually. Companion to
 `docs/PROJECT-SYNC.md` (the narrative/architecture doc); this file is the flat todo list.
 
-Last updated: 2026-08-02.
+Last updated: 2026-08-27.
 
 ---
 
@@ -386,72 +386,71 @@ they aren't. See Phase 3.1 above.
 
 ---
 
-## elyui adoption (priority #2, after AMS is finished)
+## elyui adoption — DONE 2026-08-27 (was priority #2)
 
-1. [ ] Upgrade AMS frontend Angular 20 → 21 (`ng update`, including Material/CDK) — blocks
-    everything below; elyui's peer range is `^21.0.0`.
+AMS frontend is on Angular 21.2 and consumes `@paulelyson/elyui@0.1.3`. Five hand-rolled
+components plus the `toggle-button-group` stub are gone from `src/app/modules/shared/`,
+which is down from 29 folders to 23.
 
-    Already clear: builders are `@angular/build:*` (no devkit migration), TypeScript is
-    5.9.2, the app is zoneless via the *stable* `provideZonelessChangeDetection`, every
-    component is standalone (no `standalone: false` left), and `custom-theme.scss` already
-    uses the M3 `mat.theme()` API. No `HttpClientModule`, no `platform-browser-dynamic`,
-    no `BrowserAnimationsModule`.
+1. [x] **Angular 20 → 21.2.** `ng update @angular/core@21 @angular/cli@21`, then
+    `ng update @angular/material@21.2` — the explicit `21.2` matters, because bare `@21`
+    resolves to the `21.3.0-next` prerelease. Zero source files changed: the app was
+    already on `@angular/build` builders, TypeScript 5.9, stable zoneless, all-standalone,
+    and the M3 `mat.theme()` API, so none of Angular's migrations had anything to rewrite.
+2. [x] **Karma → Vitest.** `@angular/build:unit-test` builder with no options,
+    `types: ["vitest/globals"]`, 7 karma/jasmine devDeps dropped for `vitest` + `jsdom`.
+    Matches kurikula and elyui exactly. There were no spec files to port — the failing
+    `app.spec.ts` this backlog used to mention had already been deleted.
+3. [x] **Wired elyui.** `elyui.css` first in `angular.json`'s `styles`, before
+    `custom-theme.scss` and `styles.css`, so AMS's 180 tokens win. `provideAnimationsAsync()`
+    proved **unnecessary** — MatSnackBar and MatDialog animate without it on Material 21.
+    No token overrides needed either: elyui's `--color-toggle-*` defaults are byte-identical
+    to the values AMS had hardcoded.
 
-    Two things to settle first: **Node** must be `^20.19 || ^22.12 || >=24`, and
-    `angular.json`'s test target is `@angular/build:karma` — Karma is on its way out in
-    favour of Vitest, and the repo's single spec (`app.spec.ts`) already fails against a
-    template that no longer has the `<h1>` it asserts. Delete or fix that spec **before**
-    upgrading so a red suite can't be mistaken for upgrade fallout. (elyui itself already
-    runs Vitest — a useful reference config.)
+    ⚠️ **`ng serve` reads `angular.json` once, at startup.** Editing the `styles` array
+    while the dev server is running silently does nothing — the watcher watches the files
+    *in* the list, never the list itself. This cost a debugging round; restart after any
+    config edit.
+4. [x] **Five swaps, one commit each**, cheapest first: `SnackbarService` (8 consumers) →
+    `Badge` (9 templates) → `Button` (20) → `Icon` (12) → `Toggle` (5). Each deleted its
+    local folder. Found along the way:
+    - **`app-icon`'s `type` input was dead** — the template was `[ngClass]="[size]"` and the
+      CSS had no variant rules, so the input did nothing. elyui implements it, so icons now
+      take an explicit `variant` color (default `primary`) where they used to inherit.
+      The one app-wide visual change of the migration.
+    - **The toggle was already hand-rolled**, not `MatSlideToggle` — `<mat-slide-toggle>`
+      appears in no template in the app. The `--mat-slide-toggle-*` overrides in
+      `custom-theme.scss` had never applied to anything; deleted, 15 dead lines.
+    - **A CSS selector targeted the element name** — `.toolbar-container > app-button` in
+      `borrow-toolbar.component.css`, a mobile-layout rule that would have failed silently.
+      Sweep `.css`/`.scss` for old selectors, not just `.ts`/`.html`.
+    - **Three dead imports** (`ButtonComponent` in `equipment-change-log`, `IconComponent`
+      in `header`, `ToggleButtonGroupComponent` in `download-report-dialog`) — imported,
+      never in `imports:`, never in a template.
+    - elyui's `Badge` and `Button` pass `[variant]` through to their inner icon; the local
+      versions did not. Icon buttons on `danger`/`warning` now tint to match.
+5. [x] **Retired `toggle-button-group`** — a two-input stub with no output, superseded by
+    `SegmentedControl`. Its only references were a dead import and a commented-out line.
+6. [x] **Deduplicated the ui models.** `models/ui/button-config.model.ts` deleted (it was
+    byte-identical to elyui's, `ButtonConfig` class included); `common-config.model.ts`
+    keeps only `FilterDisplay`, which is app-specific. `Size`/`Variant`/`ButtonAppearance`/
+    `ButtonConfig` now come from the package.
 
-2. [ ] `npm install @paulelyson/elyui`. Material/CDK are already direct dependencies, so
-    they only need to reach `^21`. Then:
-    - `angular.json` styles → `["node_modules/@paulelyson/elyui/styles/elyui.css",
-      "src/custom-theme.scss", "src/styles.css"]`. elyui **first** so `styles.css` wins.
-    - Material Icons `<link>` in `index.html` (elyui's `Icon` wraps `mat-icon`).
-    - `provideAnimationsAsync()` in `app.config.ts` **only if needed** — the app runs
-      MatSnackBar today with no animations provider at all, so verify before adding it.
-    - Token gap: AMS's `styles.css` already defines every colour token elyui reads except
-      `--color-toggle-thumb` / `--color-toggle-track-off`, and defines none of
-      `--padding-*`, `--gap-*`, `--border-radius-*`. Those 12 fall back to elyui's own
-      values — a visual difference, not a break. Add them to `styles.css` if the sizing
-      drifts.
-    - `elyui.css` ships a `.snackbar-override` block identical to the one in
-      `custom-theme.scss`. Delete the local copy when step 4's snackbar swap lands, not
-      before.
+### Still open
 
-3. [ ] Replace `toggle-button-group` with `<ely-segmented-control>` — its only call site is
-    the commented-out paper-size selector in `download-report-dialog.component.html:11`, so
-    this also restores PDF page-size/orientation selection (currently hardcoded to
-    LEGAL/landscape).
-
-4. [ ] Swap one at a time, manual test after each. Call-site counts and the one real API
-    break, from a diff of both sources:
-
-    | Swap | Sites | Delta |
-    |---|---|---|
-    | `SnackbarService` | 9 TS | none — the service is byte-identical; import path only |
-    | `app-badge` → `ely-badge` | 9 tpl / 10 TS | additive `hasBorder` (default `true`) |
-    | `app-button` → `ely-button` | 20 tpl / 22 TS | additive `hasBorder`, `hasRadius` (both default `true`) |
-    | `app-icon` → `ely-icon` | 15 tpl / 16 TS | **`[type]` is renamed `[variant]`** — the only breaking rename in the set |
-    | `app-toggle` → `ely-toggle` | 5 tpl / 6 TS | elyui's toggle is **hand-rolled, not `MatSlideToggle`** |
-
-    The toggle is the one to eyeball rather than trust: dropping `MatSlideToggle` means the
-    `--mat-slide-toggle-*` overrides in `custom-theme.scss` stop applying to it (delete them
-    once the last call site moves), and it's the component that reads the two
-    `--color-toggle-*` tokens AMS doesn't define. AMS's `badge` input is a signal
-    (`input()`) where elyui's is `@Input()` — template bindings are unaffected either way.
-
-    Delete `models/ui/common-config.model.ts` and `button-config.model.ts` at the end of
-    this step and import those types from the package instead — but keep `FilterDisplay`,
-    which lives in AMS's `common-config.model.ts` and is not part of elyui.
-
-5. [ ] `textarea` → `ely-textarea` is now publishable too (shipped in 0.1.3). Its only AMS
-    call site is `shared/components/forms/textarea/`.
-
-6. [ ] Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
-    a table) stays hand-rolled until elyui ships it — migrate one component at a time, only
-    on your explicit go-signal.
+- [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
+    `PDFFormatConfig` declares `pageSize: 'A4' | 'LETTER' | 'LEGAL'` and
+    `orientation: 'portrait' | 'landscape'`, but the download dialog only ever sets
+    `columns` — so every report ever generated has been LEGAL/landscape with no way to
+    change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
+    handlers, thread the values into the constructor that already accepts them.
+- [ ] **`textarea` → `ely-textarea`** once elyui actually releases it. It is exported from
+    elyui's `public-api.ts` but **not present in the published 0.1.3 bundle** — check
+    `node_modules/@paulelyson/elyui/types/paulelyson-elyui.d.ts`, not elyui's source tree.
+    Its only AMS call site is `shared/components/forms/textarea/`.
+- [ ] Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
+    a table) stays hand-rolled until elyui ships it — one component at a time, only on an
+    explicit go-signal.
 
 ## kurikula — last priority
 

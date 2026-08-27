@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Badge, Button, Icon, SnackbarService } from '@paulelyson/elyui';
+import { Badge, Button, ButtonConfig, Icon, SnackbarService } from '@paulelyson/elyui';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { IEquipment } from '../../../models/Equipment';
@@ -13,7 +13,6 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
   IN_CIRCULATION_STATUS,
 } from '../../../models/BorrowedEquipment';
-import { ButtonConfig } from '../../../models/ui/button-config.model';
 
 type CardSize = 'sm' | 'md' | 'lg';
 type CardType = 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';

@@ -1,6 +1,6 @@
 import { IEquipment } from '../Equipment';
 import { IMongoDocument } from '../MongoDocument';
-import { Variant } from '../ui/common-config.model';
+import { Variant } from '@paulelyson/elyui';
 import { IUser } from '../User';
 
 export enum ChangeAction {
