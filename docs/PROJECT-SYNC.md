@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-27.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.1.3`, 6 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.2.0`, 7 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -68,20 +68,23 @@ line that `ng update @angular/material@21` resolves to by default.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
-Published in `@paulelyson/elyui@0.1.3` (single entry point, no secondary entry points —
+Published in `@paulelyson/elyui@0.2.0` (single entry point, no secondary entry points —
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
-  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Snackbar` +
-  `SnackbarService`.
+  (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Textarea`
+  (`ely-textarea`), `Snackbar` + `SnackbarService`.
 
-**`Textarea` is NOT in the published 0.1.3**, even though elyui's `public-api.ts` exports it
-— the published bundle does not contain it. The authority on what a consumer can import is
+`Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
+elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
+authority on what a consumer can import is
 `node_modules/@paulelyson/elyui/types/paulelyson-elyui.d.ts`, never elyui's source tree.
+Unlike `SegmentedControl`, `Textarea` **is** a `ControlValueAccessor`, so it plugs into
+`formControlName` / `[formControl]` directly.
 
 Also exported, and confirmed present in the published bundle: `ButtonConfig`, plus the
 `Size` / `Variant` / `ButtonAppearance` / `ButtonShade` / `ButtonWidth` / `ISnackBarConfig`
-/ `SnackBarType` / `SegmentedControlOption` types. AMS's own `models/ui/common-config.model.ts`
+/ `SnackBarType` / `SegmentedControlOption` / `FieldWidth` types. AMS's own `models/ui/common-config.model.ts`
 and `button-config.model.ts` were byte-identical to elyui's, so `button-config.model.ts` is
 deleted outright and `common-config.model.ts` keeps only `FilterDisplay`, which is
 app-specific and not part of the library.
@@ -92,8 +95,8 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 instead.
 
 Not yet published — this is elyui's stated roadmap, sourced from the AMS frontend's
-`src/app/modules/shared/` components: `textarea` (written but unreleased), `input`,
-`autocomplete`, `dropdown`, `datepicker`, `tab`. Also not on the roadmap at all yet: a
+`src/app/modules/shared/` components: `input`, `autocomplete`, `dropdown`, `datepicker`,
+`tab`. Also not on the roadmap at all yet: a
 table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only
 on the user's explicit go signal (per elyui's own `CLAUDE.md`) — never batch-copy
 multiple components.
@@ -224,9 +227,9 @@ checklist is the "in what order".
    `formControlName` yet.
 4. Then swap, one at a time, with a manual test after each: `icon` → `ely-icon`, `badge` →
    `ely-badge`, `button` → `ely-button`, `toggle` → `ely-toggle`, `snackbar` →
-   `SnackbarService`.
-5. Everything else (`input`, `textarea`, `autocomplete`, `dropdown`, `datepicker`, `tab`,
-   dialogs, a table) stays hand-rolled until elyui ships it.
+   `SnackbarService`, `textarea` → `ely-textarea` (needs elyui ≥ 0.2.0).
+5. Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs, a
+   table) stays hand-rolled until elyui ships it.
 
 ### P2 — architecture debt (documented, deliberately deferred)
 

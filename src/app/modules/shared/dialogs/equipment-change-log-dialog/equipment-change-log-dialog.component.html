@@ -62,7 +62,12 @@
     <mat-divider></mat-divider>
     @if (showAction) {
       <div class="remarks">
-        <app-textarea [formControl]="remarksControl"></app-textarea>
+        <ely-textarea
+          label="Remarks"
+          tag="(Optional)"
+          placeholder="Add note.."
+          [formControl]="remarksControl"
+        />
       </div>
     }
     <mat-divider></mat-divider>

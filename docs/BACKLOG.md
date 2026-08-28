@@ -388,9 +388,8 @@ they aren't. See Phase 3.1 above.
 
 ## elyui adoption — DONE 2026-08-27 (was priority #2)
 
-AMS frontend is on Angular 21.2 and consumes `@paulelyson/elyui@0.1.3`. Five hand-rolled
-components plus the `toggle-button-group` stub are gone from `src/app/modules/shared/`,
-which is down from 29 folders to 23.
+AMS frontend is on Angular 21.2 and consumes `@paulelyson/elyui@0.2.0`. Six hand-rolled
+components plus the `toggle-button-group` stub are gone from `src/app/modules/shared/`.
 
 1. [x] **Angular 20 → 21.2.** `ng update @angular/core@21 @angular/cli@21`, then
     `ng update @angular/material@21.2` — the explicit `21.2` matters, because bare `@21`
@@ -435,6 +434,16 @@ which is down from 29 folders to 23.
     byte-identical to elyui's, `ButtonConfig` class included); `common-config.model.ts`
     keeps only `FilterDisplay`, which is app-specific. `Size`/`Variant`/`ButtonAppearance`/
     `ButtonConfig` now come from the package.
+7. [x] **`textarea` → `ely-textarea`** (2026-08-28, elyui `0.2.0`). `^0.1.3` had to be
+    bumped to `^0.2.0` by hand — a caret on a `0.x` range stops at the minor, so
+    `npm install` alone would never have picked it up. The 0.1.3→0.2.0 lib diff is purely
+    additive (the component plus a `FieldWidth` type), so nothing already migrated moved.
+    elyui's `Textarea` is a real `ControlValueAccessor`, so all three reactive-forms call
+    sites kept working unchanged. Its defaults are empty strings where the local one
+    hardcoded `'Remarks'`/`'(Optional)'`/`'Add note..'`, so every call site now passes
+    `label`/`tag`/`placeholder` explicitly. Two latent bugs died with the local component:
+    `readonly` was declared but never bound in the template, and `registerOnTouched` was
+    registered but never called, so the controls never left `ng-untouched`.
 
 ### Still open
 
@@ -444,10 +453,6 @@ which is down from 29 folders to 23.
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] **`textarea` → `ely-textarea`** once elyui actually releases it. It is exported from
-    elyui's `public-api.ts` but **not present in the published 0.1.3 bundle** — check
-    `node_modules/@paulelyson/elyui/types/paulelyson-elyui.d.ts`, not elyui's source tree.
-    Its only AMS call site is `shared/components/forms/textarea/`.
 - [ ] Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
     a table) stays hand-rolled until elyui ships it — one component at a time, only on an
     explicit go-signal.

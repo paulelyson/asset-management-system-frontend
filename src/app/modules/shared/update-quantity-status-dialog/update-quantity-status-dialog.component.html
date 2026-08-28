@@ -17,7 +17,12 @@
       </div>
 
       <div class="remarks">
-        <app-textarea formControlName="remarks"></app-textarea>
+        <ely-textarea
+          label="Remarks"
+          tag="(Optional)"
+          placeholder="Add note.."
+          formControlName="remarks"
+        />
       </div>
       @for (action of data.actions; track action.id) {
         <ely-button width="width-filled" (btnclicked)="onClicked(action.name)">

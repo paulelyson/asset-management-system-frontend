@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
-import { Button, ButtonConfig, Icon } from '@paulelyson/elyui';
+import { Button, ButtonConfig, Icon, Textarea } from '@paulelyson/elyui';
 import { InputComponent } from '../input/input.component';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
 import { MatDividerModule } from '@angular/material/divider';
-import { TextareaComponent } from '../components/forms/textarea/textarea.component';
 
 export type BorrowedEquipmentStatusFields = 'quantity' | 'status' | 'condition' | 'remarks';
 export interface IQuantityStatusDialogConfig {
@@ -29,7 +28,7 @@ export interface IQuantityStatusDialogConfig {
     ReactiveFormsModule,
     MatDividerModule,
     Icon,
-    TextareaComponent,
+    Textarea,
   ],
   templateUrl: './update-quantity-status-dialog.component.html',
   styleUrl: './update-quantity-status-dialog.component.css',

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Badge, Button, Icon } from '@paulelyson/elyui';
+import { Badge, Button, Icon, Textarea } from '@paulelyson/elyui';
 import { BorrowedEquipmentHistoryDialogComponent } from '../../../borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerticalStepperComponent } from '../../vertical-stepper/vertical-stepper.component';
@@ -15,7 +15,6 @@ import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../../../../utils/string.util';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
 import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
-import { TextareaComponent } from '../../components/forms/textarea/textarea.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -28,7 +27,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
     EmptyPlaceholderComponent,
     DisplayNamePipe,
     Button,
-    TextareaComponent,
+    Textarea,
     FormsModule,
     ReactiveFormsModule
   ],

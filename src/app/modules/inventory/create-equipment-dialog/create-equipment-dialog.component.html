@@ -65,8 +65,18 @@
       <div class="label">Additional Information</div>
       <div class="fields-grid">
         <div class="field full">
-          <app-textarea label="Description" formControlName="description"></app-textarea>
-          <app-textarea label="Remarks" formControlName="remarks"></app-textarea>
+          <ely-textarea
+            label="Description"
+            tag="(Optional)"
+            placeholder="Add note.."
+            formControlName="description"
+          />
+          <ely-textarea
+            label="Remarks"
+            tag="(Optional)"
+            placeholder="Add note.."
+            formControlName="remarks"
+          />
         </div>
       </div>
       <div class="label">Images</div>
