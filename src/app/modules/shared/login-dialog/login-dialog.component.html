@@ -1,7 +1,15 @@
 <form>
   <div class="login-container">
-    <ely-input [formControl]="schoolId" suffixIcon="person" placeholder="School Id" />
     <ely-input
+      class="field-underline"
+      [hasRadius]="false"
+      [formControl]="schoolId"
+      suffixIcon="person"
+      placeholder="School Id"
+    />
+    <ely-input
+      class="field-underline"
+      [hasRadius]="false"
       [type]="inputType"
       [formControl]="password"
       suffixIcon="password"

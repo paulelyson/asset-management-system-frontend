@@ -515,15 +515,16 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     until `autocomplete` migrates. This is the unavoidable cost of a one-component-at-a-time
     sequence; it resolves itself rather than needing a fix.
 
-    **Toolbar inputs are restyled to an underline** — transparent fill, bottom border
-    only — by a `.toolbar-container > ely-input .field__box` rule under "Toolbar Commons"
-    in `styles.css`, plus `[hasRadius]="false"` on the three inputs. The rule lives in the
-    global sheet on purpose: global styles carry no encapsulation attribute, so they reach
-    a component's internals without `::ng-deep`, which this app uses nowhere. elyui exposes
-    no custom properties for `.field__box`'s background or border, and `hasBorder="false"`
-    is not a substitute (it clears all four edges and restores all four on focus). If elyui
-    ever ships an `appearance` input for its fields, this override is the first thing to
-    retire.
+    **Some inputs are restyled to an underline** — transparent fill, bottom border only —
+    via an opt-in `.field-underline` class under "Field Commons" in `styles.css`. Applied
+    as `<ely-input class="field-underline" [hasRadius]="false" />`; **both halves are
+    required**, see the specificity warning below. Worn by the three toolbar search inputs
+    and both login-dialog fields. The rule lives in the global sheet on purpose: global
+    styles carry no encapsulation attribute, so they reach a component's internals without
+    `::ng-deep`, which this app uses nowhere. elyui exposes no custom properties for
+    `.field__box`'s background or border, and `hasBorder="false"` is not a substitute (it
+    clears all four edges and restores all four on focus). If elyui ever ships an
+    `appearance` input for its fields, this override is the first thing to retire.
 
     ⚠️ **Overriding an elyui internal from the global sheet has a specificity ceiling.**
     elyui is built with emulated encapsulation, so every one of its rules carries an
