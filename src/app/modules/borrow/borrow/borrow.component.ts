@@ -16,12 +16,11 @@ import BorrowedEquipment, {
 import { BorrowService } from '../../../services/borrow.service';
 import { AuthService } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
-import { Button, SnackbarService } from '@paulelyson/elyui';
+import { Button, SnackbarService, TitleSection } from '@paulelyson/elyui';
 import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
-import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { EquipmentCardComponent } from '../equipment-card/equipment-card.component';
 import { ClassScheduleComponent } from '../class-schedule/class-schedule.component';
@@ -35,7 +34,7 @@ import { isObjectId } from '../../../utils/string.util';
   templateUrl: './borrow.component.html',
   styleUrl: './borrow.component.css',
   imports: [
-    TitleSectionComponent,
+    TitleSection,
     MatSidenavModule,
     Button,
     EquipmentCardComponent,

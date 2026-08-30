@@ -12,8 +12,12 @@ import {
   BorrowedEquimentFilter,
   IBorrowedEquimentFilter,
 } from '../../../models/BorrowedEquipmentFilter';
-import { Button, ButtonConfig, SnackbarService } from '@paulelyson/elyui';
-import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
+import {
+  Button,
+  ButtonConfig,
+  SnackbarService,
+  TitleSection,
+} from '@paulelyson/elyui';
 import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
@@ -24,7 +28,7 @@ import { getFilterDisplay } from '../../shared/utils/filter.util';
   templateUrl: './borrowed-equipment.component.html',
   styleUrl: './borrowed-equipment.component.css',
   imports: [
-    TitleSectionComponent,
+    TitleSection,
     DataRowComponent,
     Button,
     BorrowedEquipmentToolbarComponent,

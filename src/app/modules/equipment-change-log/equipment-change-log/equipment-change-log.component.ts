@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { TitleSectionComponent } from '../../shared/title-section/title-section.component';
+import { TitleSection } from '@paulelyson/elyui';
 import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 import { EquipmentService } from '../../../services/equipment.service';
@@ -10,7 +10,7 @@ import { DataRowComponent } from '../../shared/layout/data-row/data-row.componen
 @Component({
   selector: 'app-equipment-change-log',
   imports: [
-    TitleSectionComponent,
+    TitleSection,
     TabComponent,
     InventoryToolbarComponent,
     DataRowComponent,

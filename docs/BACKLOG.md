@@ -445,6 +445,20 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `readonly` was declared but never bound in the template, and `registerOnTouched` was
     registered but never called, so the controls never left `ng-untouched`.
 
+8. [x] **`title-section` → `ely-title-section`** (2026-08-30, elyui `0.4.0`). `^0.2.0`
+    bumped to `^0.4.0` by hand for the same caret-on-`0.x` reason as the textarea swap;
+    0.2.0→0.4.0 is purely additive (`VerticalStepper` + `TitleSection` in 0.3.0, `Input` in
+    0.4.0), so nothing already migrated moved. All four call sites (`borrow`,
+    `borrowed-equipment`, `inventory`, `equipment-change-log`) pass plain text and take the
+    defaults — `size="lg"`, `variant="primary"`, `showBottomBorder` true — so none needed a
+    binding. Two deliberate visual shifts: the title and its rule now read
+    `--color-text-primary-default` (#539364) where the local component used
+    `--color-text-primary-strong` / `--color-border-primary-active` (#4b7947), and the
+    heading is 2.25rem rather than 2.2rem. Note that the variant class sets `--title-color`
+    on the inner element, so a host-level `ely-title-section { --title-color: … }` override
+    loses to it — restoring the darker green means a new elyui variant, not a consumer
+    override.
+
 ### Still open
 
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
@@ -453,7 +467,10 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
+- [ ] **`vertical-stepper` → `ely-vertical-stepper`** — shipped in elyui 0.3.0 and now
+    installed; the local `src/app/modules/shared/vertical-stepper/` is still the one in use.
+- [ ] **`input` → `ely-input`** — shipped in elyui 0.4.0.
+- [ ] Everything else (`autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
     a table) stays hand-rolled until elyui ships it — one component at a time, only on an
     explicit go-signal.
 

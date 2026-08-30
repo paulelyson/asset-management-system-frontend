@@ -1,5 +1,5 @@
 <div class="container">
-  <app-title-section>Borrowed Equipment</app-title-section>
+  <ely-title-section>Borrowed Equipment</ely-title-section>
   <app-borrowed-equipment-toolbar [filters]="filterDisplay()"/>
   <div class="list-wrapper">
     @for (eqpmnt of borrowed_equipment(); track eqpmnt.trackId; let first = $first) {
