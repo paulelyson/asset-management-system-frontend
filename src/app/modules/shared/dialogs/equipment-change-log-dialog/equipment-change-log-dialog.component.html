@@ -10,7 +10,7 @@
     <mat-divider></mat-divider>
     <div class="content-body">
       @for (cl of changeLogs; track $index; let last = $last) {
-        <app-vertical-stepper
+        <ely-vertical-stepper
           [badgeContent]="cl.badgeContent"
           [variant]="cl.variant"
           [time]="cl.time"
@@ -56,7 +56,7 @@
               <span class="remarks">"{{ data[$index]?.resolverRemarks }}"</span>
             }
           </div>
-        </app-vertical-stepper>
+        </ely-vertical-stepper>
       }
     </div>
     <mat-divider></mat-divider>

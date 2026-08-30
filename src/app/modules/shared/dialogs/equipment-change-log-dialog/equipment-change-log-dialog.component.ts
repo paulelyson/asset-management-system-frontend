@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Badge, Button, Icon, Textarea } from '@paulelyson/elyui';
+import { Badge, Button, Icon, Textarea, VerticalStepper } from '@paulelyson/elyui';
 import { BorrowedEquipmentHistoryDialogComponent } from '../../../borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { VerticalStepperComponent } from '../../vertical-stepper/vertical-stepper.component';
 import { MatDividerModule } from '@angular/material/divider';
 import {
   ChangeAction,
@@ -10,7 +9,7 @@ import {
   ChangeStatus,
   EquipmentChangeLog,
 } from '../../../../models/data/equipment-change-logs.model';
-import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config';
+import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config.model';
 import { DatePipe } from '@angular/common';
 import { getDisplayName } from '../../../../utils/string.util';
 import { EmptyPlaceholderComponent } from '../../empty-placeholder/empty-placeholder.component';
@@ -21,7 +20,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   selector: 'app-equipment-change-log-dialog',
   imports: [
     Icon,
-    VerticalStepperComponent,
+    VerticalStepper,
     MatDividerModule,
     Badge,
     EmptyPlaceholderComponent,

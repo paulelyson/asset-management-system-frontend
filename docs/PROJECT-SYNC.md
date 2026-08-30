@@ -75,7 +75,9 @@ everything imports from `@paulelyson/elyui`):
   (`ely-toggle`), `SegmentedControl` (`ely-segmented-control`), `Textarea`
   (`ely-textarea`), `Snackbar` + `SnackbarService`.
 - Added in **0.3.0**: `VerticalStepper` (`ely-vertical-stepper`), `TitleSection`
-  (`ely-title-section`). Added in **0.4.0**: `Input` (`ely-input`).
+  (`ely-title-section`). Added in **0.4.0**: `TextInput` (`ely-input`) — note the class and
+  the selector disagree; the `.d.ts` is the authority, and `public-api.ts` exporting
+  `./components/input/input` does not mean the symbol is named `Input`.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the

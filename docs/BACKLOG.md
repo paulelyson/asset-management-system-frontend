@@ -459,6 +459,29 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     loses to it — restoring the darker green means a new elyui variant, not a consumer
     override.
 
+9. [x] **`vertical-stepper` → `ely-vertical-stepper`** (2026-08-30, elyui `0.4.0`, shipped
+    in 0.3.0). Two call sites, both dialogs: `borrowed-equipment-history-dialog` and
+    `equipment-change-log-dialog`. Both take the default `size="sm"`, which keeps the badge
+    at `xs` exactly as the local component hardcoded it. `VerticalStepperConfig` stays an
+    app model — elyui ships the component but no config class — and was renamed to
+    `vertical-stepper-config.model.ts` on the way past, the suffix CLAUDE.md flagged.
+    Four behaviour changes, all inherited from elyui:
+    - The badge and the timestamp are now `@if`-guarded. The local template rendered
+      `<ely-badge>` and the time `<span>` unconditionally, so an empty `badgeContent` drew
+      a bare badge pill. Neither call site currently passes an empty one.
+    - The connector line was `position: absolute` with `height: calc(100% + 15px)`; elyui
+      grows it with `flex: 1` against a `align-items: stretch` row. Same look, but it no
+      longer overshoots by a hardcoded 15px.
+    - Spacing tightens: the local `.step` had `padding: 10px` and `gap: 15px`, elyui has no
+      padding and `gap: var(--gap-lg)` (8px).
+    - The timestamp reads `--color-text-gray-light` (#adb5bd) instead of
+      `--color-text-gray` (rgba(0,0,0,.54)) — lighter.
+
+    Also noticed, left alone: `borrowed-equipment-history-dialog` builds a `title` into
+    every `VerticalStepperConfig` and then never binds it in the template, so the step
+    titles have never rendered in that dialog. The change-log dialog does bind it. Fixing
+    it is a visual change, not a migration change.
+
 ### Still open
 
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
@@ -467,9 +490,7 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] **`vertical-stepper` → `ely-vertical-stepper`** — shipped in elyui 0.3.0 and now
-    installed; the local `src/app/modules/shared/vertical-stepper/` is still the one in use.
-- [ ] **`input` → `ely-input`** — shipped in elyui 0.4.0.
+- [ ] **`input` → `ely-input`** — shipped in elyui 0.4.0; the class is `TextInput`.
 - [ ] Everything else (`autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
     a table) stays hand-rolled until elyui ships it — one component at a time, only on an
     explicit go-signal.

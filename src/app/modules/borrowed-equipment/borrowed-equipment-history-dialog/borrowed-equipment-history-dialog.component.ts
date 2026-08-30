@@ -1,20 +1,19 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHistory';
-import { VerticalStepperComponent } from '../../shared/vertical-stepper/vertical-stepper.component';
 import { getDisplayName } from '../../../utils/string.util';
 import { DatePipe } from '@angular/common';
 import { BORROW_STATUS_DISPLAY, BORROW_STATUS_VARIANT, BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
 import { IUser } from '../../../models/User';
-import { VerticalStepperConfig } from '../../../models/ui/vertical-stepper-config';
+import { VerticalStepperConfig } from '../../../models/ui/vertical-stepper-config.model';
 import { MatDividerModule } from '@angular/material/divider';
-import { Icon } from '@paulelyson/elyui';
+import { Icon, VerticalStepper } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-borrowed-equipment-history-dialog',
   templateUrl: './borrowed-equipment-history-dialog.component.html',
   styleUrl: './borrowed-equipment-history-dialog.component.css',
-  imports: [VerticalStepperComponent, MatDividerModule, Icon],
+  imports: [VerticalStepper, MatDividerModule, Icon],
 })
 export class BorrowedEquipmentHistoryDialogComponent {
   transaction: VerticalStepperConfig[];
