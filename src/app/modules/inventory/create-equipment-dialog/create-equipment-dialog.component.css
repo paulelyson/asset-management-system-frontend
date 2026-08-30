@@ -53,6 +53,16 @@
   align-items: baseline;
 }
 
+/*
+ * The quantity field used to be sized by the local input's `width="sm"` bucket,
+ * which was a flat 100px. elyui's `width` is a layout mode ('full' | 'auto'), not
+ * a size scale, so the exact width moves out here onto the host.
+ */
+.condition-wrapper > ely-input {
+  width: 100px;
+  flex-shrink: 0;
+}
+
 .action-wrapper {
   flex-direction: column;
   padding: 10px 20px;

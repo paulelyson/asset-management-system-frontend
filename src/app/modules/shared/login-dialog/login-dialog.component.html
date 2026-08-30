@@ -1,11 +1,11 @@
 <form>
   <div class="login-container">
-    <app-input [formControl]="schoolId" suffix_icon="person" placeholder="School Id" />
-    <app-input
-      [inputType]="inputType"
+    <ely-input [formControl]="schoolId" suffixIcon="person" placeholder="School Id" />
+    <ely-input
+      [type]="inputType"
       [formControl]="password"
-      suffix_icon="password"
-      [suffix_icon_clickable]="true"
+      suffixIcon="password"
+      [suffixIconClickable]="true"
       placeholder="Password"
       (suffixIconClick)="onPasswordSuffixIconClick()"
     />

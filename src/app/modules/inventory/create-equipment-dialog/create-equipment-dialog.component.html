@@ -12,16 +12,16 @@
     <div class="content-body">
       <div class="label">Basic Information</div>
       <div class="fields-grid">
-        <app-input label="Serial Number" formControlName="serialNo"/>
-        <app-input label="Name *" formControlName="name"/>
+        <ely-input label="Serial Number" formControlName="serialNo"/>
+        <ely-input label="Name *" formControlName="name"/>
         <!-- <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
         <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/> -->
-        <app-input label="Equipment Type" formControlName="type"/>
-        <app-input label="Brand" formControlName="brand"/>
-        <app-input label="Model Number" formControlName="modelNo" />
-        <app-input label="Color" formControlName="color" />
+        <ely-input label="Equipment Type" formControlName="type"/>
+        <ely-input label="Brand" formControlName="brand"/>
+        <ely-input label="Model Number" formControlName="modelNo" />
+        <ely-input label="Color" formControlName="color" />
         <div class="field full">
-          <app-input label="Categories" formControlName="categories" />
+          <ely-input label="Categories" formControlName="categories" />
           <!-- <app-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/> -->
         </div>
       </div>
@@ -29,7 +29,7 @@
       <div formArrayName="conditionAndQuantity" class="cond-qty-container">
         @for (item of conditionAndQuantity.controls; track $index; let last = $last; let first = $first) {
           <div class="condition-wrapper" [formGroupName]="$index">
-            <app-input label="Quantity" width="sm" formControlName="quantity"/>
+            <ely-input label="Quantity" formControlName="quantity"/>
             <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
             <ely-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
             <!-- <ely-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</ely-button> -->

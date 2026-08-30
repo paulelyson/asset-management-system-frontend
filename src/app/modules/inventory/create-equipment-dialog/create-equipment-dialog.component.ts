@@ -9,8 +9,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
-import { Button, Icon, SnackbarService, Textarea, Toggle } from '@paulelyson/elyui';
-import { InputComponent } from '../../shared/input/input.component';
+import { Button, Icon, SnackbarService, Textarea, TextInput, Toggle } from '@paulelyson/elyui';
 import {
   AutocompleteComponent,
   IAutocompleteOption,
@@ -35,7 +34,7 @@ import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
   styleUrl: './create-equipment-dialog.component.css',
   imports: [
     Button,
-    InputComponent,
+    TextInput,
     AutocompleteComponent,
     FileInputComponent,
     ReactiveFormsModule,

@@ -14,10 +14,10 @@
     <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
     <div class="subtitle">Start Date of Use</div>
     <app-datepicker label="Start date" formControlName="startDate"></app-datepicker>
-    <app-input label="Start Time*" inputType="time" formControlName="startTime" />
+    <ely-input label="Start Time*" type="time" formControlName="startTime" />
     <div class="subtitle">End Date of Use</div>
     <app-datepicker label="End date" formControlName="endDate"></app-datepicker>
-    <app-input label="End Time*" inputType="time" formControlName="endTime" />
+    <ely-input label="End Time*" type="time" formControlName="endTime" />
   </div>
   <div class="action-wrapper">
     <ely-button size="md" type="submit" width="width-filled" variant="accent">Submit Request</ely-button>

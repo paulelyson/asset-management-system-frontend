@@ -482,6 +482,45 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     titles have never rendered in that dialog. The change-log dialog does bind it. Fixing
     it is a visual change, not a migration change.
 
+10. [x] **`input` → `ely-input`** (2026-08-30, elyui `0.4.0`). The biggest swap so far: 16
+    call sites across 8 components (three toolbars, login, change-password,
+    class-schedule, update-quantity-status, create-equipment). The class is **`TextInput`**,
+    not `Input` — elyui names it that way deliberately so consumers can import it alongside
+    Angular's own `@Input` decorator without a collision. Renamed inputs:
+    `suffix_icon` → `suffixIcon`, `suffix_icon_clickable` → `suffixIconClickable`,
+    `inputType` → `type`.
+
+    **`width` changed meaning, and it is a silent trap.** The local input's `width` was a
+    size bucket (`'sm' | 'md' | 'lg'`, where `sm` was a flat 100px); elyui's `width` is a
+    layout mode (`'full' | 'auto'`). The one call site passing `width="sm"` — the quantity
+    field in `create-equipment-dialog` — now gets its 100px from a
+    `.condition-wrapper > ely-input` rule in that dialog's own stylesheet, which is what
+    elyui's `FieldWidth` doc comment recommends. Any future `width="sm"` will typecheck as
+    a plain string and silently do nothing.
+
+    This one drops Material: the local input wrapped `<mat-form-field appearance="fill"
+    floatLabel="always">`, elyui's is hand-rolled with the label sitting *above* the box.
+    No call site passed `appearance` or `floatLabel`, so nothing needed rewiring, but the
+    look changes everywhere — most visibly the toolbars, whose unlabelled search inputs
+    lose the 70px `mat-form-field` height (and the `margin-bottom: -22px` compensating for
+    it) that `custom-theme.scss` sets.
+
+    ⚠️ **Do not delete the `mat-form-field` block in `custom-theme.scss`.** It looks
+    orphaned after this swap but still serves `autocomplete`, `datepicker`, and `dropdown`,
+    which are all still hand-rolled on Material.
+
+    ⚠️ **Mixed rows now look off.** `.condition-wrapper` in `create-equipment-dialog` puts
+    an `ely-input` (label above the box) next to an `app-autocomplete` (Material floating
+    label inside a 70px field) on an `align-items: baseline` row. They will not line up
+    until `autocomplete` migrates. This is the unavoidable cost of a one-component-at-a-time
+    sequence; it resolves itself rather than needing a fix.
+
+    Two more found along the way: `.toolbar-container > app-input` in
+    `borrow-toolbar.component.css` was another element-name selector in a `max-width: 480px`
+    block (same trap as `app-button` before it), and elyui gates `suffixIconClick` emission
+    on `suffixIconClickable` where the local component emitted unconditionally — only
+    `login-dialog` listens, and it already sets the flag, so behaviour is unchanged.
+
 ### Still open
 
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
@@ -490,10 +529,11 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] **`input` → `ely-input`** — shipped in elyui 0.4.0; the class is `TextInput`.
 - [ ] Everything else (`autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
     a table) stays hand-rolled until elyui ships it — one component at a time, only on an
-    explicit go-signal.
+    explicit go-signal. **AMS is now caught up with every component elyui has published**;
+    the next swap waits on elyui shipping `autocomplete` (the highest-value one — it would
+    let `create-equipment-dialog`'s mixed rows line up again).
 
 ## kurikula — last priority
 

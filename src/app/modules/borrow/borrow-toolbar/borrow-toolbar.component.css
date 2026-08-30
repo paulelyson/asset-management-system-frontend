@@ -55,7 +55,7 @@
     gap: 8px;
   }
 
-  .toolbar-container > app-input {
+  .toolbar-container > ely-input {
     order: 1;
     width: 100%;
   }

@@ -12,7 +12,7 @@ import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
 } from '../../../models/BorrowedEquipment';
-import { Button, ISnackBarConfig, SnackbarService } from '@paulelyson/elyui';
+import { Button, ISnackBarConfig, SnackbarService, TextInput } from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
@@ -22,7 +22,6 @@ import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
 import { CourseOfferDetailCardComponent } from '../../shared/course-offer-detail-card/course-offer-detail-card.component';
 import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
-import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-class-schedule',
@@ -34,7 +33,7 @@ import { InputComponent } from '../../shared/input/input.component';
     CourseOfferDetailCardComponent,
     Button,
     DatepickerComponent,
-    InputComponent,
+    TextInput,
   ],
 })
 export class ClassScheduleComponent implements OnInit {

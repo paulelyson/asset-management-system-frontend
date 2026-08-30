@@ -98,9 +98,14 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 `CLAUDE.md`). Don't migrate it; replace its call sites with `ely-segmented-control`
 instead.
 
+As of 2026-08-30 AMS consumes **every** component elyui has published; nothing in
+`src/app/modules/shared/` duplicates one any more.
+
 Not yet published — this is elyui's stated roadmap, sourced from the AMS frontend's
 `src/app/modules/shared/` components: `autocomplete`, `dropdown`, `datepicker`,
-`tab`. Also not on the roadmap at all yet: a
+`tab`. `autocomplete` is the one to want next: it, `dropdown` and `datepicker` are the
+last Material `mat-form-field` users in the app, and until they migrate they sit visibly
+out of line beside `ely-input` in any shared row. Also not on the roadmap at all yet: a
 table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only
 on the user's explicit go signal (per elyui's own `CLAUDE.md`) — never batch-copy
 multiple components.
