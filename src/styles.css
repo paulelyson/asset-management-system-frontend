@@ -376,6 +376,47 @@
   gap: 12px;
 }
 
+/* Toolbar Commons */
+
+/*
+ * The toolbar search fields read as an underline rather than a boxed control:
+ * no fill, no top or side borders, just the rule beneath.
+ *
+ * This has to reach into elyui's template. `.field__box` hardcodes its own
+ * background and border with no custom properties to retheme, and elyui's
+ * `hasBorder="false"` is not a substitute — it clears all four edges and then
+ * restores all four on focus. Living in the global sheet is what makes it work
+ * without `::ng-deep`: global styles carry no encapsulation attribute, so they
+ * match a component's internals directly.
+ *
+ * Specificity note, and the reason the radius is NOT handled here: elyui is built
+ * with emulated encapsulation, so its rules carry an appended `[_ngcontent-*]`
+ * attribute. `.field__box` is really (0,2,0) and this selector's (0,2,1) beats it —
+ * but `.field__box.sm`, which sets the padding and radius, is (0,3,0) and wins.
+ * A `border-radius: 0` here silently loses and needs `!important` to land. The
+ * corner comes off via `[hasRadius]="false"` on the three toolbar inputs instead:
+ * elyui orders `.radiusless` after its size rules precisely to win that tie.
+ * Same trap applies to padding if it ever needs overriding.
+ */
+.toolbar-container > ely-input .field__box {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-gray-idle);
+}
+
+/*
+ * Focus tints the underline and thickens it with an inset shadow rather than a
+ * wider border, which would reflow the row by a pixel. Replaces elyui's 2px ring,
+ * which reads as a floating box around a field that no longer has one. The colour
+ * is pinned to primary rather than `--field-accent`, whose neutral value is a
+ * near-invisible #ced4da — and it restores the green underline these inputs had
+ * as Material fill fields.
+ */
+.toolbar-container > ely-input .field__box:focus-within {
+  border-bottom-color: var(--color-border-primary-active);
+  box-shadow: inset 0 -1px 0 var(--color-border-primary-active);
+}
+
 /* Tablet (≤1024px) */
 @media (max-width: 1024px) {
   .container {

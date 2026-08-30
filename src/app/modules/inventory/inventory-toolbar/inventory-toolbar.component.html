@@ -36,5 +36,10 @@
   <ely-button appearance="link" icon="filter_list" (btnclicked)="openFilterDialog()">
     Filter
   </ely-button>
-  <ely-input suffixIcon="search" [formControl]="searchControl" placeholder="Equipment Name" />
+  <ely-input
+    suffixIcon="search"
+    [hasRadius]="false"
+    [formControl]="searchControl"
+    placeholder="Equipment Name"
+  />
 </div>

@@ -515,6 +515,26 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     until `autocomplete` migrates. This is the unavoidable cost of a one-component-at-a-time
     sequence; it resolves itself rather than needing a fix.
 
+    **Toolbar inputs are restyled to an underline** — transparent fill, bottom border
+    only — by a `.toolbar-container > ely-input .field__box` rule under "Toolbar Commons"
+    in `styles.css`, plus `[hasRadius]="false"` on the three inputs. The rule lives in the
+    global sheet on purpose: global styles carry no encapsulation attribute, so they reach
+    a component's internals without `::ng-deep`, which this app uses nowhere. elyui exposes
+    no custom properties for `.field__box`'s background or border, and `hasBorder="false"`
+    is not a substitute (it clears all four edges and restores all four on focus). If elyui
+    ever ships an `appearance` input for its fields, this override is the first thing to
+    retire.
+
+    ⚠️ **Overriding an elyui internal from the global sheet has a specificity ceiling.**
+    elyui is built with emulated encapsulation, so every one of its rules carries an
+    appended `[_ngcontent-*]` attribute worth +1 in the class column. `.field__box` is
+    (0,2,0) — beatable — but `.field__box.sm`, which sets the **padding and radius**, is
+    (0,3,0) and beats the `.toolbar-container > ely-input .field__box` selector at (0,2,1).
+    That is why the radius comes off via `[hasRadius]="false"` and not CSS: elyui orders
+    `.radiusless` after its size rules specifically to win that tie. Anything else living
+    on a size class needs the component's own API or a longer selector — reaching for
+    `!important` means the specificity was misread.
+
     Two more found along the way: `.toolbar-container > app-input` in
     `borrow-toolbar.component.css` was another element-name selector in a `max-width: 480px`
     block (same trap as `app-button` before it), and elyui gates `suffixIconClick` emission
