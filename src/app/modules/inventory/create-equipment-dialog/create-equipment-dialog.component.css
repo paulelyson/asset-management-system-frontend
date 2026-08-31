@@ -46,21 +46,46 @@
   flex-direction: column;
 }
 
+/*
+ * `align-items: flex-end`, not `baseline`. elyui's fields put their label ABOVE
+ * the box, so baseline alignment lined the bare close icon up with the LABEL
+ * row and left it floating above the inputs. Bottom-aligning puts it on the
+ * boxes instead.
+ *
+ * No `justify-content` either: the two fields absorb the free space now (see
+ * below), so `space-between` had nothing left to distribute — it was only ever
+ * pushing the icon to the far edge and leaving a gap mid-row.
+ */
 .condition-wrapper {
   display: flex;
   gap: 10px;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
 }
 
 /*
- * The quantity field used to be sized by the local input's `width="sm"` bucket,
- * which was a flat 100px. elyui's `width` is a layout mode ('full' | 'auto'), not
- * a size scale, so the exact width moves out here onto the host.
+ * Quantity and Condition split the row evenly. Quantity used to be pinned at
+ * 100px — the flat width the old local input's `width="sm"` bucket gave it —
+ * which left it looking stunted next to the condition field.
+ *
+ * `flex: 1` is `flex: 1 1 0%`: the basis is 0, so both get an equal share
+ * regardless of their content. `width="full"` alone is not enough — it makes
+ * each host `display: block`, which fills a *block* container, but a flex item
+ * still sizes to its content unless told to grow. `min-width: 0` overrides the
+ * `auto` minimum so a long condition label shrinks instead of overflowing.
  */
-.condition-wrapper > ely-input {
-  width: 100px;
-  flex-shrink: 0;
+.condition-wrapper > ely-input,
+.condition-wrapper > ely-autocomplete {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * Centres the icon on the field box rather than sitting flush with its bottom
+ * edge: the `sm` box is ~25px tall (4px padding top and bottom, 12px text, 1px
+ * borders) and the `lg` icon is 16px, so half the difference is ~4px.
+ */
+.condition-wrapper > ely-icon {
+  padding-bottom: var(--gap-sm);
 }
 
 .action-wrapper {

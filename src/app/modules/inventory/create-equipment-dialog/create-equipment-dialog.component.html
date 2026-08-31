@@ -31,7 +31,7 @@
           <div class="condition-wrapper" [formGroupName]="$index">
             <ely-input label="Quantity" formControlName="quantity"/>
             <ely-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
-            <ely-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
+            <ely-icon size="lg" name="close" variant="danger" tooltip="Remove" (iconclicked)="removeConditionAndQuantity($index)"/>
             <!-- <ely-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</ely-button> -->
           </div>
         }
