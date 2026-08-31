@@ -1,6 +1,5 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DropdownComponent } from '../dropdown/dropdown.component';
-import { Button } from '@paulelyson/elyui';
+import { Button, Dropdown } from '@paulelyson/elyui';
 import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
@@ -16,7 +15,7 @@ import { EQUIPMENT_CONDITION } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
-  imports: [Button, FormsModule, ReactiveFormsModule, AutocompleteComponent, DropdownComponent],
+  imports: [Button, FormsModule, ReactiveFormsModule, AutocompleteComponent, Dropdown],
   templateUrl: './equipment-filter-dialog.component.html',
   styleUrl: './equipment-filter-dialog.component.css',
 })

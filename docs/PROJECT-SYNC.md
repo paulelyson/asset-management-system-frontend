@@ -80,8 +80,9 @@ everything imports from `@paulelyson/elyui`):
   `./components/input/input` does not mean the symbol is named `Input`.
 - Added in **0.5.x**: `DataRow` (`ely-data-row`), `Autocomplete` (`ely-autocomplete`),
   `Dropdown` (`ely-dropdown`), `Datepicker` (`ely-datepicker`), `DateRangePicker`
-  (`ely-date-range-picker`). Only `DataRow` is adopted in AMS so far (2026-08-31); the four
-  form controls are still hand-rolled here and need their own explicit go signal.
+  (`ely-date-range-picker`). Adopted in AMS so far: `DataRow` and `Dropdown` (both
+  2026-08-31). `autocomplete`, `datepicker` and the date-range picker are still hand-rolled
+  here and need their own explicit go signal.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -103,10 +104,25 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 instead.
 
 As of 2026-08-31 AMS's own `src/app/modules/shared/` no longer duplicates any published
-elyui component **except** the four form controls added in 0.5.x — `autocomplete`,
-`dropdown`, `datepicker` and a date-range picker are now published but AMS still uses its
-hand-rolled copies. They are the last Material `mat-form-field` users in the app and sit
-visibly out of line beside `ely-input`; migrating them is the obvious next elyui step.
+elyui component **except** `autocomplete`, `datepicker` and a date-range picker — published
+in 0.5.x, but AMS still uses its hand-rolled copies. They are the last Material
+`mat-form-field` users in the app and sit visibly out of line beside `ely-input` /
+`ely-dropdown`; migrating them is the obvious next elyui step. `autocomplete` is the
+highest-value of the three — it's the one that would let `create-equipment-dialog`'s and
+`equipment-filter-dialog`'s mixed rows line up again.
+
+`dropdown` migrated on **2026-08-31**: `src/app/modules/shared/dropdown/` is deleted and
+`Dropdown` comes from `@paulelyson/elyui`. Only rename: the output `selectChanged` →
+`valueChange`. `options` still accepts a plain `string[]` (a `normalizedOptions` getter
+widens it to `DropdownOption[]` internally). Two things worth carrying forward: the local
+component had **no `placeholder` input**, so `equipment-filter-dialog`'s
+`placeholder="Select.."` had been an inert host attribute — elyui has the input, so that
+filter no longer opens blank. And elyui renders a **native `<select>`**, which silently
+displays its first option whenever the bound value isn't in `options` and no `placeholder`
+is set; every AMS call site seeds a real default, but a control starting at `''` needs a
+`placeholder`. This removed the last `mat-select` in the app, so that selector came out of
+`custom-theme.scss` — `mat-option.mat-mdc-option` stays for `app-autocomplete`'s panel, and
+the `mat-form-field` block stays for `autocomplete` and `datepicker`.
 
 `data-row` migrated on **2026-08-31**: `src/app/modules/shared/layout/data-row/` and
 `src/app/models/ui/data-row.model.ts` are deleted, and `RowColumnConfig` /
@@ -254,9 +270,10 @@ checklist is the "in what order".
    `SnackbarService`, `textarea` → `ely-textarea` (needs elyui ≥ 0.2.0).
 5. `data-row` → `ely-data-row` (elyui ≥ 0.5.1) — **done 2026-08-31**; see the delta notes
    in the component-inventory section above.
-6. Next up, one at a time: `autocomplete`, `dropdown`, `datepicker` → their elyui
-   equivalents (all published in 0.5.x). `tab` and dialogs stay hand-rolled until elyui
-   ships them.
+6. `dropdown` → `ely-dropdown` (elyui ≥ 0.5.1) — **done 2026-08-31**; see the delta notes
+   in the component-inventory section above.
+7. Next up, one at a time: `autocomplete`, then `datepicker` (both published in 0.5.x).
+   `tab` and dialogs stay hand-rolled until elyui ships them.
 
 ### P2 — architecture debt (documented, deliberately deferred)
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
-import { Button, Icon, SnackbarService, Textarea, TextInput, Toggle } from '@paulelyson/elyui';
+import { Button, Dropdown, Icon, SnackbarService, Textarea, TextInput, Toggle } from '@paulelyson/elyui';
 import {
   AutocompleteComponent,
   IAutocompleteOption,
@@ -26,7 +26,6 @@ import { DepartmentService } from '../../../services/department.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
 import { MatDividerModule } from '@angular/material/divider';
-import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-create-equipment-dialog',
@@ -42,7 +41,7 @@ import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
     DatepickerComponent,
     Icon,
     MatDividerModule,
-    DropdownComponent,
+    Dropdown,
     Toggle,
     Textarea,
   ],

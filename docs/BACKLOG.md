@@ -542,6 +542,40 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     on `suffixIconClickable` where the local component emitted unconditionally — only
     `login-dialog` listens, and it already sets the flag, so behaviour is unchanged.
 
+11. [x] **`dropdown` → `ely-dropdown`** (2026-08-31, elyui `0.5.1`). No version bump — the
+    package was already on `^0.5.1`. Small swap: 4 call sites across 2 components
+    (`create-equipment-dialog` ×3, `equipment-filter-dialog` ×1). Renamed output:
+    `selectChanged` → `valueChange`. Options still take a plain `string[]`; elyui's
+    `normalizedOptions` getter widens it to `DropdownOption[]` internally, so no call site
+    had to change shape.
+
+    **`placeholder` was a dead attribute and is now live.**
+    `equipment-filter-dialog.component.html` passed `placeholder="Select.."` to a component
+    that declared no `placeholder` input — a static attribute, so no template error, it just
+    landed inertly on the host element and did nothing. elyui *has* the input, so it now
+    renders as a `disabled hidden` first `<option>`. That is the one visible change of this
+    swap, and it's a fix: the Can Be Borrowed filter used to open blank.
+
+    This one drops Material: the local dropdown was `mat-form-field` + `mat-select`, elyui's
+    is a native `<select>` with the label above the box. That removed the **last `mat-select`
+    in the app**, so the `mat-select` selector in `custom-theme.scss`'s "Dropdown option
+    override" block went dead and was deleted, along with the commented-out
+    `mat.select-overrides` block under it. `mat-option.mat-mdc-option` **stays** — the
+    `mat-autocomplete` panel in `app-autocomplete` still renders `mat-option`. The
+    `mat-form-field` block stays too (`autocomplete` and `datepicker` are still on it).
+
+    ⚠️ **Native `<select>` desyncs on a value that isn't in `options`.** With no
+    `placeholder`, a bound value of `''` (or anything absent from the list) makes the browser
+    display the *first* option while the model still holds the old value — no event fires, so
+    the form and the screen disagree. All three `create-equipment-dialog` dropdowns seed a
+    real default in the `FormBuilder` group (`unit` → `EquipmentUnit.PC`, `matter` →
+    `'solid'`, `inventoryType` → `'inventory'`), so none of them can hit it. Any future
+    dropdown over a control that starts empty needs a `placeholder` to render honestly.
+
+    ⚠️ **`equipment-filter-dialog` now has mixed rows**, same cost as the `ely-input` swap:
+    three `app-autocomplete`s (Material floating label in a 70px field) stacked above one
+    `ely-dropdown` (label above the box). It resolves when `autocomplete` migrates.
+
 ### Still open
 
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
@@ -550,11 +584,15 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] Everything else (`autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs,
-    a table) stays hand-rolled until elyui ships it — one component at a time, only on an
-    explicit go-signal. **AMS is now caught up with every component elyui has published**;
-    the next swap waits on elyui shipping `autocomplete` (the highest-value one — it would
-    let `create-equipment-dialog`'s mixed rows line up again).
+- [ ] **`autocomplete` → `ely-autocomplete`, then `datepicker` → `ely-datepicker`.** Both
+    are published (0.5.x); they just need their own go-signal, one at a time.
+    `autocomplete` is the higher-value of the two — it has the most call sites and it's what
+    makes `create-equipment-dialog`'s and `equipment-filter-dialog`'s mixed rows line up
+    again. Note `AutocompleteOption` renames the display field `view` → `label`, which every
+    AMS call site and `AutocompleteService.mapIntoAutocompleteOption` currently emits as
+    `view`. Doing these two retires the last `mat-form-field` in the app, and with it the
+    whole `mat-form-field` / `mat-option` block in `custom-theme.scss`.
+- [ ] `tab`, dialogs and a table stay hand-rolled — elyui hasn't shipped them.
 
 ## kurikula — last priority
 
