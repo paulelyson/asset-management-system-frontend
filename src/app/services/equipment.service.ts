@@ -115,13 +115,18 @@ export class EquipmentService {
       icon: '',
       variant: EQUIPMENT_STATUS_VARIANT[x.condition]
     }));
+    // Weights are relative (they become `fr` units). Categories, Brand and
+    // Condition sat at 0.5 against a 2.0 name, which squeezed them to roughly a
+    // fifth of the name column — category lists wrapped to three lines and
+    // condition badges broke mid-label. The width has to come from somewhere:
+    // Name gives up some of its share and still ellipsizes cleanly.
     return [
-      { id: 0, type: 'image', header: '', image: equipment.images[0]?.thumbnail, weight: 0.5 },
+      { id: 0, type: 'image', header: '', image: equipment.images[0]?.thumbnail, weight: 0.4 },
       { id: 1, type: 'title', header: 'Name', content: [equipment.name], weight: 2 },
-      { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 0.5 },
-      { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.5 },
-      { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 0.5 },
-      { id: 5, type: 'action', header: '', actions: actions, weight: 1 },
+      { id: 2, type: 'text', header: 'Categories', content: equipment.categories, weight: 1.1 },
+      { id: 3, type: 'text', header: 'Brand', content: [equipment.brand], weight: 0.7 },
+      { id: 4, type: 'action', header: 'Condition', actions: conditions, weight: 1 },
+      { id: 5, type: 'action', header: '', actions: actions, weight: 1.3 },
     ];
   }
 
