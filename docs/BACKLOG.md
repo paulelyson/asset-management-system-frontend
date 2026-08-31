@@ -576,6 +576,14 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     three `app-autocomplete`s (Material floating label in a 70px field) stacked above one
     `ely-dropdown` (label above the box). It resolves when `autocomplete` migrates.
 
+    **The filter dialog's fields were never full-width** — `.equipment-filter-container` is
+    a column flex with `align-items: center`, which is the *cross* axis, so every field
+    shrank to its content. Material's fields hid it behind an intrinsic ~180px input width;
+    `ely-dropdown` has none, so it collapsed to the width of "Select.." and made the
+    pre-existing bug obvious. Changed to `stretch` — all four fields now fill the dialog.
+    Worth watching for elsewhere: `align-items: center` on a column flex container is almost
+    always a width bug waiting for a component with no intrinsic width.
+
 ### Still open
 
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.

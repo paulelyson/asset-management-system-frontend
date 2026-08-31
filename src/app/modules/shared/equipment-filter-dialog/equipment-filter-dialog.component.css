@@ -1,8 +1,15 @@
+/*
+ * `align-items: stretch` (the flex default) rather than `center`: on a column
+ * flex container, `center` is cross-axis, so every field shrank to its own
+ * content width. Material's fields hid that behind an intrinsic ~180px input
+ * width; `ely-dropdown` has none, so it collapsed to the width of "Select..".
+ * The Apply/Cancel row keeps its own `justify-content: center` below.
+ */
 .equipment-filter-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   padding: 2em;
   gap: 10px;
