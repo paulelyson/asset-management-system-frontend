@@ -12,14 +12,19 @@ import {
   BORROWED_EQUIPMENT_PURPOSE,
   BorrowedEquipmentPayload,
 } from '../../../models/BorrowedEquipment';
-import { Button, ISnackBarConfig, SnackbarService, TextInput } from '@paulelyson/elyui';
+import {
+  Autocomplete,
+  Button,
+  ISnackBarConfig,
+  SnackbarService,
+  TextInput,
+} from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
-import { AutocompleteComponent } from '../../shared/autocomplete/autocomplete.component';
 import { CourseOfferDetailCardComponent } from '../../shared/course-offer-detail-card/course-offer-detail-card.component';
 import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 
@@ -29,7 +34,7 @@ import { DatepickerComponent } from '../../shared/datepicker/datepicker.componen
   styleUrl: './class-schedule.component.css',
   imports: [
     ReactiveFormsModule,
-    AutocompleteComponent,
+    Autocomplete,
     CourseOfferDetailCardComponent,
     Button,
     DatepickerComponent,
@@ -46,7 +51,6 @@ export class ClassScheduleComponent implements OnInit {
   courseOffering: WritableSignal<CourseOffering[]> = signal([]);
   dateNow = new Date();
 
-  // facultyAutoCompleteOptions: IAutocompleteOption[] = []
   constructor(
     private fb: FormBuilder,
     private snackBarService: SnackbarService,
@@ -78,7 +82,7 @@ export class ClassScheduleComponent implements OnInit {
   get courseOfferingAutoCompleteOptions() {
     return this.courseOffering().map((course) => {
       return {
-        view: course.code + ' - ' + this.displayNamePipe.transform(course.course, 'code', 'title'),
+        label: course.code + ' - ' + this.displayNamePipe.transform(course.course, 'code', 'title'),
         value: course._id,
       };
     });

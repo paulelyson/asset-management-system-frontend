@@ -9,11 +9,17 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
-import { Button, Dropdown, Icon, SnackbarService, Textarea, TextInput, Toggle } from '@paulelyson/elyui';
 import {
-  AutocompleteComponent,
-  IAutocompleteOption,
-} from '../../shared/autocomplete/autocomplete.component';
+  Autocomplete,
+  AutocompleteOption,
+  Button,
+  Dropdown,
+  Icon,
+  SnackbarService,
+  Textarea,
+  TextInput,
+  Toggle,
+} from '@paulelyson/elyui';
 import { FileInputComponent } from '../../shared/file-input/file-input.component';
 import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 import { AutocompleteService } from '../../../services/autocomplete.service';
@@ -34,7 +40,7 @@ import { MatDividerModule } from '@angular/material/divider';
   imports: [
     Button,
     TextInput,
-    AutocompleteComponent,
+    Autocomplete,
     FileInputComponent,
     ReactiveFormsModule,
     FormsModule,
@@ -55,27 +61,27 @@ export class CreateEquipmentDialogComponent implements OnInit {
   inventoryTypes: string[] = ['inventory', 'non_inventory'];
   units: string[] = Object.values(EquipmentUnit);
   locations: WritableSignal<ClassLocation[]> = signal([]);
-  locationlist = computed((): IAutocompleteOption[] =>
-    this.locations().map((loc) => ({ view: loc.name, value: loc._id })),
+  locationlist = computed((): AutocompleteOption[] =>
+    this.locations().map((loc) => ({ label: loc.name, value: loc._id })),
   );
   brands: WritableSignal<string[]> = signal([]);
-  brandlist = computed((): IAutocompleteOption[] =>
-    this.brands().map((x) => ({ value: x, view: x })),
+  brandlist = computed((): AutocompleteOption[] =>
+    this.brands().map((x) => ({ value: x, label: x })),
   );
 
   equipmenttypes: WritableSignal<string[]> = signal([]);
-  equipmenttypelist = computed((): IAutocompleteOption[] =>
-    this.equipmenttypes().map((x) => ({ value: x, view: x })),
+  equipmenttypelist = computed((): AutocompleteOption[] =>
+    this.equipmenttypes().map((x) => ({ value: x, label: x })),
   );
 
   departments: WritableSignal<IDepartment[]> = signal([]);
-  departmentlist = computed((): IAutocompleteOption[] =>
-    this.departments().map((dept) => ({ value: dept._id, view: dept.code })),
+  departmentlist = computed((): AutocompleteOption[] =>
+    this.departments().map((dept) => ({ value: dept._id, label: dept.code })),
   );
 
   categories: WritableSignal<string[]> = signal([]);
-  categorylist = computed((): IAutocompleteOption[] =>
-    this.categories().map((x) => ({ value: x, view: x })),
+  categorylist = computed((): AutocompleteOption[] =>
+    this.categories().map((x) => ({ value: x, label: x })),
   );
 
   user: TokenData;

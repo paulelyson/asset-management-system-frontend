@@ -1,6 +1,5 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Button, Dropdown } from '@paulelyson/elyui';
-import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
+import { Autocomplete, AutocompleteOption, Button, Dropdown } from '@paulelyson/elyui';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,17 +14,17 @@ import { EQUIPMENT_CONDITION } from '../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
-  imports: [Button, FormsModule, ReactiveFormsModule, AutocompleteComponent, Dropdown],
+  imports: [Button, FormsModule, ReactiveFormsModule, Autocomplete, Dropdown],
   templateUrl: './equipment-filter-dialog.component.html',
   styleUrl: './equipment-filter-dialog.component.css',
 })
 export class EquipmentFilterDialogComponent implements OnInit {
   filterForm: FormGroup;
   url: string = '';
-  categories: IAutocompleteOption[] = [];
-  brands: IAutocompleteOption[] = [];
-  equipmentTypes: IAutocompleteOption[] = [];
-  departments: IAutocompleteOption[] = [];
+  categories: AutocompleteOption[] = [];
+  brands: AutocompleteOption[] = [];
+  equipmentTypes: AutocompleteOption[] = [];
+  departments: AutocompleteOption[] = [];
   equipmentCondition;
 
   constructor(
@@ -57,8 +56,8 @@ export class EquipmentFilterDialogComponent implements OnInit {
     })
       .pipe(
         map(({ departments, brands }) => ({
-          departments: departments.data.map((dept) => ({ value: dept._id, view: dept.code })),
-          brands: brands.data.map((brand) => ({ value: brand, view: brand })),
+          departments: departments.data.map((dept) => ({ value: dept._id, label: dept.code })),
+          brands: brands.data.map((brand) => ({ value: brand, label: brand })),
         })),
       )
       .subscribe((result) => {

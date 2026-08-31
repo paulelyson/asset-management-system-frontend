@@ -1,7 +1,7 @@
 <form [formGroup]="classScheduleForm" (ngSubmit)="onSubmit()">
   <div class="class-detail-container">
     <div class="subtitle">Subject and Purpose</div>
-    <app-autocomplete
+    <ely-autocomplete
       label="Class/Subject*"
       placeholder="Start typing"
       formControlName="courseOffer"
@@ -11,7 +11,7 @@
       <app-course-offer-detail-card [courseOffer]="courseOffer"></app-course-offer-detail-card>
     }
     <div class="subtitle">Purpose</div>
-    <app-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
+    <ely-autocomplete label="Purpose*" formControlName="purpose" [options]="purposeOptions" />
     <div class="subtitle">Start Date of Use</div>
     <app-datepicker label="Start date" formControlName="startDate"></app-datepicker>
     <ely-input label="Start Time*" type="time" formControlName="startTime" />

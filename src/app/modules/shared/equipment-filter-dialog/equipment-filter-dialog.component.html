@@ -1,13 +1,13 @@
 <form [formGroup]="filterForm">
   <div class="equipment-filter-container">
-    <app-autocomplete [options]="departments" label="Department" formControlName="department" placeholder="Start typing..."/>
-    <app-autocomplete [options]="brands" label="Brand" formControlName="brand" placeholder="Start typing..."/>
-    <app-autocomplete [options]="equipmentCondition" label="Condition" formControlName="condition" placeholder="Start typing..."/>
+    <ely-autocomplete [options]="departments" label="Department" formControlName="department" placeholder="Start typing..."/>
+    <ely-autocomplete [options]="brands" label="Brand" formControlName="brand" placeholder="Start typing..."/>
+    <ely-autocomplete [options]="equipmentCondition" label="Condition" formControlName="condition" placeholder="Start typing..."/>
     <ely-dropdown [options]="['Yes', 'No']" label="Can Be Borrowed" (valueChange)="onCanBeBorrowedChange($event)" placeholder="Select.."/>
-    <!-- <app-autocomplete [options]="brands" label="Brand" formControlName="brand"/>
-    <app-autocomplete [options]="equipmentTypes" label="Equipment Type" formControlName="equipmentType"/>
-    <app-autocomplete [options]="categories" label="Categories" formControlName="categories"/>
-    <app-autocomplete [options]="equipment_types" label="Location" formControlName="location"/> -->
+    <!-- <ely-autocomplete [options]="brands" label="Brand" formControlName="brand"/>
+    <ely-autocomplete [options]="equipmentTypes" label="Equipment Type" formControlName="equipmentType"/>
+    <ely-autocomplete [options]="categories" label="Categories" formControlName="categories"/>
+    <ely-autocomplete [options]="equipment_types" label="Location" formControlName="location"/> -->
     <div class="action-wrapper">
       <ely-button (btnclicked)="navigate()">Apply</ely-button>
       <ely-button>Cancel</ely-button>

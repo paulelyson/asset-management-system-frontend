@@ -4,22 +4,21 @@ import {
   BORROWED_EQUIPMENT_STATUS,
 } from '../../../models/BorrowedEquipment';
 import { AutocompleteService } from '../../../services/autocomplete.service';
-import { AutocompleteComponent, IAutocompleteOption } from '../../shared/autocomplete/autocomplete.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Button } from '@paulelyson/elyui';
+import { Autocomplete, AutocompleteOption, Button } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-borrowed-equipment-filter-dialog',
   templateUrl: './borrowed-equipment-filter-dialog.component.html',
   styleUrl: './borrowed-equipment-filter-dialog.component.css',
-  imports: [Button, AutocompleteComponent, ReactiveFormsModule]
+  imports: [Button, Autocomplete, ReactiveFormsModule]
 })
 export class BorrowedEquipmentFilterDialogComponent {
-  purposes: IAutocompleteOption[] = [];
-  status: IAutocompleteOption[] = [];
-  departments: IAutocompleteOption[] = [];
+  purposes: AutocompleteOption[] = [];
+  status: AutocompleteOption[] = [];
+  departments: AutocompleteOption[] = [];
   filterForm: FormGroup;
   url: string = '';
   constructor(

@@ -14,15 +14,15 @@
       <div class="fields-grid">
         <ely-input label="Serial Number" formControlName="serialNo"/>
         <ely-input label="Name *" formControlName="name"/>
-        <!-- <app-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
-        <app-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/> -->
+        <!-- <ely-autocomplete label="Equipment Type" formControlName="type" [options]="equipmenttypelist()"/>
+        <ely-autocomplete label="Brand" formControlName="brand" [options]="brandlist()"/> -->
         <ely-input label="Equipment Type" formControlName="type"/>
         <ely-input label="Brand" formControlName="brand"/>
         <ely-input label="Model Number" formControlName="modelNo" />
         <ely-input label="Color" formControlName="color" />
         <div class="field full">
           <ely-input label="Categories" formControlName="categories" />
-          <!-- <app-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/> -->
+          <!-- <ely-autocomplete label="Category" formControlName="categories" [options]="categorylist()"/> -->
         </div>
       </div>
       <div class="label">Condition and Quantity</div>
@@ -30,7 +30,7 @@
         @for (item of conditionAndQuantity.controls; track $index; let last = $last; let first = $first) {
           <div class="condition-wrapper" [formGroupName]="$index">
             <ely-input label="Quantity" formControlName="quantity"/>
-            <app-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
+            <ely-autocomplete [options]="conditions" label="Condition" formControlName="condition" />
             <ely-icon size="lg" name="close" (iconclicked)="removeConditionAndQuantity($index)"/>
             <!-- <ely-button icon="delete_outlined" appearance="link" (btnclicked)="removeConditionAndQuantity($index)">Remove</ely-button> -->
           </div>
@@ -45,8 +45,8 @@
       </div>
       <div class="label">Assignment</div>
       <div class="fields-grid">
-        <app-autocomplete label="Department" formControlName="department" [options]="departmentlist()" [readonly]="true"/>
-        <app-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder=""/>
+        <ely-autocomplete label="Department" formControlName="department" [options]="departmentlist()" [readonly]="true"/>
+        <ely-autocomplete label="Location" formControlName="location" [options]="locationlist()" placeholder=""/>
       </div>
       <div class="label">Dates</div>
       <div class="fields-grid">

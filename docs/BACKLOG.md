@@ -584,8 +584,53 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     Worth watching for elsewhere: `align-items: center` on a column flex container is almost
     always a width bug waiting for a component with no intrinsic width.
 
+12. [x] **`autocomplete` → `ely-autocomplete`** (2026-08-31, elyui `0.5.1`). 8 live call sites
+    across 5 components (`create-equipment-dialog` ×3, `equipment-filter-dialog` ×3,
+    `borrowed-equipment-filter-dialog` ×2, `class-schedule` ×2, `update-quantity-status`
+    ×1), plus the commented-out ones updated so they still work if uncommented.
+
+    **The type rename reached further than the templates.** `IAutocompleteOption` →
+    `AutocompleteOption`, and its display field **`view` → `label`**. That is 9 object
+    literals in 5 files: `AutocompleteService` (both methods), five `computed()` lists in
+    `create-equipment-dialog`, the `forkJoin` map in `equipment-filter-dialog`, and
+    `courseOfferingAutoCompleteOptions` in `class-schedule`. Grep `view:` after a rename
+    like this, not just the selector.
+
+    Output renamed `optionselected` → `optionSelected`, **and its payload changed from the
+    value string to the whole `AutocompleteOption`**. That cost nothing only because no
+    template ever listened to it — it was a dead output. Dropped inputs: `floatLabel` and
+    `appearance`, both Material-only and never passed by any call site.
+
+    **Two behaviour changes, both fixes.** ① *Typing clears the bound value.* The AMS copy's
+    `onInput` only reset the control when the field went empty, so typing a non-matching
+    string left the form holding a stale value while the user saw different text. elyui
+    treats selection as strict: any keystroke clears until an option is picked. ②
+    *`readonly` is honoured.* elyui's `toggle()` returns early when readonly, so the panel
+    won't open; Material's autocomplete opened anyway on a readonly input. The one call site
+    is `create-equipment-dialog`'s Department field, which is meant to be display-only.
+
+    `borrowed-equipment-filter-dialog.component.css` had the **same `align-items: center`
+    width bug** as the equipment filter dialog — a copy-paste of the same container — and
+    would have shipped visibly broken once its two Material fields lost their intrinsic
+    width. Fixed to `stretch` in the same pass.
+
+    This removed the last `mat-option` in the app, so that block came out of
+    `custom-theme.scss`. The `mat-form-field` block **stays** — `app-datepicker` is still on
+    Material and is now its only consumer.
+
+    Left behind deliberately: `AutocompleteService.mapIntoAutocompleteOption` is now an
+    identity mapper (`value` and `label` are the same string), because elyui accepts a plain
+    `string[]` and normalises internally. Its four callers could pass their arrays straight
+    through and drop it. Not done here — separate logical change.
+
 ### Still open
 
+- [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
+    old local autocomplete refused bare strings. `ely-autocomplete` and `ely-dropdown` both
+    take `string[]`, so its four call sites (`update-quantity-status-dialog`,
+    `equipment-filter-dialog`, `borrowed-equipment-filter-dialog`, `class-schedule`) can
+    pass their constants directly. `getBorrowedStatusOptions` stays — its value and label
+    genuinely differ.
 - [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
     `PDFFormatConfig` declares `pageSize: 'A4' | 'LETTER' | 'LEGAL'` and
     `orientation: 'portrait' | 'landscape'`, but the download dialog only ever sets

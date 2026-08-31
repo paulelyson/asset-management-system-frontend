@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IAutocompleteOption } from '../modules/shared/autocomplete/autocomplete.component';
+import { AutocompleteOption } from '@paulelyson/elyui';
 import { BorrowedEquipmentStatusType } from '../models/BorrowedEquipment';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class AutocompleteService {
    * statuses. They're one status now — who approved is recorded on the
    * transaction, not in the state — so offering two would filter identically.
    */
-  getBorrowedStatusOptions(): IAutocompleteOption[] {
+  getBorrowedStatusOptions(): AutocompleteOption[] {
     const actions: Partial<Record<BorrowedEquipmentStatusType, string>> = {
       requested: 'Request',
       approved: 'Approve',
@@ -22,10 +22,17 @@ export class AutocompleteService {
       cancelled: 'Cancel',
     };
 
-    return Object.entries(actions).map(([value, view]) => ({ value, view }));
+    return Object.entries(actions).map(([value, label]) => ({ value, label }));
   }
 
-  mapIntoAutocompleteOption(options: string[]): IAutocompleteOption[] {
-    return options.map(opt=> ({value: opt, view: opt}))
+  /**
+   * Identity mapper: value and label are the same string. It exists because the
+   * old local autocomplete only accepted objects — elyui's takes a plain
+   * `string[]` and normalises internally, so these call sites could pass their
+   * arrays straight through and drop this. Left in place for now; retiring it is
+   * its own change.
+   */
+  mapIntoAutocompleteOption(options: string[]): AutocompleteOption[] {
+    return options.map((opt) => ({ value: opt, label: opt }));
   }
 }

@@ -1,8 +1,13 @@
+/*
+ * `stretch`, not `center` — see the same note in `equipment-filter-dialog`.
+ * On a column flex container `align-items` is the cross axis, so `center` was
+ * shrink-wrapping every field to its content width.
+ */
 .borrowed-equipment-filter-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   padding: 2em;
   gap: 10px;

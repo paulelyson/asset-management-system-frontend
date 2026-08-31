@@ -1,7 +1,14 @@
 import { Component, Inject, Input } from '@angular/core';
 import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
-import { Button, ButtonConfig, Icon, Textarea, TextInput } from '@paulelyson/elyui';
-import { AutocompleteComponent, IAutocompleteOption } from '../autocomplete/autocomplete.component';
+import {
+  Autocomplete,
+  AutocompleteOption,
+  Button,
+  ButtonConfig,
+  Icon,
+  Textarea,
+  TextInput,
+} from '@paulelyson/elyui';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteService } from '../../../services/autocomplete.service';
@@ -22,7 +29,7 @@ export interface IQuantityStatusDialogConfig {
   imports: [
     Button,
     TextInput,
-    AutocompleteComponent,
+    Autocomplete,
     FormsModule,
     ReactiveFormsModule,
     MatDividerModule,
@@ -35,7 +42,7 @@ export interface IQuantityStatusDialogConfig {
 export class UpdateQuantityStatusDialogComponent {
   conditions: EquipmentCondition[] = EQUIPMENT_CONDITION;
   borrowedEquipmentStatusForm: FormGroup;
-  statuses: IAutocompleteOption[];
+  statuses: AutocompleteOption[];
   constructor(
     public dialogRef: MatDialogRef<UpdateQuantityStatusDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IQuantityStatusDialogConfig,
