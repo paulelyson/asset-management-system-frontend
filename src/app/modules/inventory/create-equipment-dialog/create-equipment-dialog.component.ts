@@ -13,6 +13,7 @@ import {
   Autocomplete,
   AutocompleteOption,
   Button,
+  Datepicker,
   Dropdown,
   Icon,
   SnackbarService,
@@ -21,7 +22,6 @@ import {
   Toggle,
 } from '@paulelyson/elyui';
 import { FileInputComponent } from '../../shared/file-input/file-input.component';
-import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 import { AutocompleteService } from '../../../services/autocomplete.service';
 import { LocationService } from '../../../services/location.service';
 import { ClassLocation } from '../../../models/data/location.model';
@@ -31,6 +31,7 @@ import { Department, IUser } from '../../../models/User';
 import { DepartmentService } from '../../../services/department.service';
 import { AuthService, TokenData } from '../../../services/auth.service';
 import { getDisplayName } from '../../../utils/string.util';
+import { toISODateOnly } from '../../../utils/date.util';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
@@ -44,7 +45,7 @@ import { MatDividerModule } from '@angular/material/divider';
     FileInputComponent,
     ReactiveFormsModule,
     FormsModule,
-    DatepickerComponent,
+    Datepicker,
     Icon,
     MatDividerModule,
     Dropdown,
@@ -114,8 +115,12 @@ export class CreateEquipmentDialogComponent implements OnInit {
       remarks: [data?.equipment?.remarks ?? ''],
       inventoryType: [data?.equipment?.inventoryType ?? 'inventory'],
       location: [getLocationId(data?.equipment?.location) ?? ''],
-      dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
-      warrantyPeriod: [data?.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
+      dateAcquired: [toISODateOnly(data?.equipment?.dateAcquired ?? new Date())],
+      warrantyPeriod: [
+        data?.action === 'update'
+          ? toISODateOnly(data?.equipment?.warrantyPeriod)
+          : toISODateOnly(new Date()),
+      ],
       department: [data?.equipment?.department?._id ?? this.authService.primaryDepartmentId() ?? ''],
       updatedBy: [data?.equipment?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),

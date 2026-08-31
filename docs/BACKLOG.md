@@ -623,6 +623,37 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `string[]` and normalises internally. Its four callers could pass their arrays straight
     through and drop it. Not done here — separate logical change.
 
+13. [x] **`datepicker` → `ely-datepicker`** (2026-08-31, elyui `0.5.1`). Only 4 call sites
+    (`create-equipment-dialog` ×2, `class-schedule` ×2), but the first swap in this whole
+    sequence that changed **data, not just markup**.
+
+    **Half the local component was dead.** It covered a date range too, switched by a
+    `type: 'datepicker' | 'daterange'` input — and nothing ever used it: no call site passed
+    `type="daterange"`, nothing imported `IDateRange`, and `initialDateRange` /
+    `dateRangeChanged` had no listeners. Deleted rather than ported, which is why elyui's
+    `DateRangePicker` stays unused here. Check for this before porting a mode-switching
+    component; half of it may be answering a question nobody asked.
+
+    ⚠️ **The control value changed from `Date` to a `yyyy-mm-dd` string.** Material's picker
+    held a `Date` (via `provideNativeDateAdapter`); elyui renders a native
+    `<input type="date">`, which accepts **only** `yyyy-mm-dd` and renders **blank,
+    silently**, for anything else — a `Date` object or the full ISO datetime the API returns
+    included. Left alone, editing existing equipment would have shown empty date fields with
+    no error anywhere. New `toISODateOnly()` in `utils/date.util.ts` normalises at the
+    form-seeding boundary.
+
+    **A latent timezone bug went with it.** `concatDateAndTime()` now takes the
+    `yyyy-mm-dd` string and builds its `Date` from the parts, instead of
+    `new Date('2026-08-31')` — which parses as midnight **UTC**, i.e. still the previous day
+    anywhere west of Greenwich, so `setHours` would have stamped the wrong date. It happened
+    to be right in UTC+8; it is right everywhere now. `americanDateToISODate` went with the
+    dead range branch that was its only caller.
+
+    This removed the **last `mat-form-field` in the app** — the whole block came out of
+    `custom-theme.scss`, along with `provideNativeDateAdapter()` and the Material date
+    adapter. Every form control is elyui now; Material is left doing dialogs, tooltips,
+    tabs, the sidenav and dividers.
+
 ### Still open
 
 - [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
@@ -645,7 +676,9 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     AMS call site and `AutocompleteService.mapIntoAutocompleteOption` currently emits as
     `view`. Doing these two retires the last `mat-form-field` in the app, and with it the
     whole `mat-form-field` / `mat-option` block in `custom-theme.scss`.
-- [ ] `tab`, dialogs and a table stay hand-rolled — elyui hasn't shipped them.
+- [ ] `tab`, dialogs and a table stay hand-rolled — elyui hasn't shipped them. Everything
+    elyui *has* shipped and AMS has a use for is now adopted; `DateRangePicker` is the one
+    published component with nothing to point it at.
 
 ## kurikula — last priority
 

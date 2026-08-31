@@ -15,18 +15,18 @@ import {
 import {
   Autocomplete,
   Button,
+  Datepicker,
   ISnackBarConfig,
   SnackbarService,
   TextInput,
 } from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
 import { AutocompleteService } from '../../../services/autocomplete.service';
-import { concatDateAndTime, get24HourTime } from '../../../utils/date.util';
+import { concatDateAndTime, get24HourTime, toISODateOnly } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
 import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
 import { CourseOfferDetailCardComponent } from '../../shared/course-offer-detail-card/course-offer-detail-card.component';
-import { DatepickerComponent } from '../../shared/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-class-schedule',
@@ -37,7 +37,7 @@ import { DatepickerComponent } from '../../shared/datepicker/datepicker.componen
     Autocomplete,
     CourseOfferDetailCardComponent,
     Button,
-    DatepickerComponent,
+    Datepicker,
     TextInput,
   ],
 })
@@ -61,8 +61,8 @@ export class ClassScheduleComponent implements OnInit {
     this.classScheduleForm = this.fb.group({
       purpose: ['class_use', Validators.required],
       courseOffer: ['', Validators.required],
-      startDate: [this.dateNow, Validators.required],
-      endDate: [this.dateNow, Validators.required],
+      startDate: [toISODateOnly(this.dateNow), Validators.required],
+      endDate: [toISODateOnly(this.dateNow), Validators.required],
       startTime: [get24HourTime(this.dateNow.toISOString(), true), Validators.required],
       endTime: [get24HourTime(this.dateNow.toISOString(), true, 1), Validators.required],
     });
@@ -93,9 +93,9 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   onSubmit() {
-    const startDate: Date = this.classScheduleForm.controls['startDate'].value;
+    const startDate: string = this.classScheduleForm.controls['startDate'].value;
     const startTime: string = this.classScheduleForm.controls['startTime'].value;
-    const endDate: Date = this.classScheduleForm.controls['endDate'].value;
+    const endDate: string = this.classScheduleForm.controls['endDate'].value;
     const endTime: string = this.classScheduleForm.controls['endTime'].value;
     const payload: BorrowedEquipmentPayload = {
       purpose: this.classScheduleForm.controls['purpose'].value,

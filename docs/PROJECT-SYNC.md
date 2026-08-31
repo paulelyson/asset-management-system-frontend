@@ -80,9 +80,8 @@ everything imports from `@paulelyson/elyui`):
   `./components/input/input` does not mean the symbol is named `Input`.
 - Added in **0.5.x**: `DataRow` (`ely-data-row`), `Autocomplete` (`ely-autocomplete`),
   `Dropdown` (`ely-dropdown`), `Datepicker` (`ely-datepicker`), `DateRangePicker`
-  (`ely-date-range-picker`). Adopted in AMS so far: `DataRow`, `Dropdown` and `Autocomplete`
-  (all 2026-08-31). `datepicker` and the date-range picker are still hand-rolled here and
-  need their own explicit go signal.
+  (`ely-date-range-picker`). All adopted in AMS on 2026-08-31 except `DateRangePicker`,
+  which AMS has no use for — see the `datepicker` note below.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -103,12 +102,11 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 `CLAUDE.md`). Don't migrate it; replace its call sites with `ely-segmented-control`
 instead.
 
-As of 2026-08-31 AMS's own `src/app/modules/shared/` no longer duplicates any published
-elyui component **except** `datepicker` (which also covers the date-range case) — published
-in 0.5.x, but AMS still uses its hand-rolled copy. It is the **last Material
-`mat-form-field` user in the app**, so migrating it retires the whole `mat-form-field` block
-in `custom-theme.scss` and drops `@angular/material/form-field` from the form layer
-entirely. That's the obvious next elyui step.
+As of 2026-08-31 AMS's own `src/app/modules/shared/` **no longer duplicates any published
+elyui component.** Every form control in the app is elyui; Angular Material is left doing
+dialogs, tooltips, tabs, the sidenav and dividers, and `@angular/material/form-field` is
+gone from the app entirely. Still hand-rolled only because elyui hasn't shipped them: `tab`
+and the dialogs.
 
 `dropdown` migrated on **2026-08-31**: `src/app/modules/shared/dropdown/` is deleted and
 `Dropdown` comes from `@paulelyson/elyui`. Only rename: the output `selectChanged` →
@@ -139,6 +137,33 @@ the form holding a stale value while the user saw different text — elyui treat
 strict and clears on any keystroke until an option is picked. And **`readonly` is now
 honoured**: the panel refuses to open, where Material's autocomplete opened anyway on a
 readonly input (`create-equipment-dialog`'s Department field is the one call site).
+
+`datepicker` migrated on **2026-08-31**: `src/app/modules/shared/datepicker/` is deleted and
+`Datepicker` comes from `@paulelyson/elyui`. Only 4 call sites, but this one changed **data,
+not just markup** — the others were markup-only.
+
+The local component covered a date range too, switched by a `type: 'datepicker' | 'daterange'`
+input. **That half was entirely dead**: no call site ever passed `type="daterange"`, nothing
+imported its `IDateRange`, and `initialDateRange` / `dateRangeChanged` had no listeners. It
+was deleted rather than ported, which is why elyui's `DateRangePicker` is published but
+unused here — adopt it if a range filter is ever actually built.
+
+**The control value changed from a `Date` to a `yyyy-mm-dd` string.** Material's picker held
+a `Date` (via `provideNativeDateAdapter`); elyui renders a native `<input type="date">`,
+which accepts **only** `yyyy-mm-dd` and renders **blank, silently**, for anything else — a
+`Date` object or a full ISO datetime included. Since the API returns dates as ISO datetimes,
+editing existing equipment would have shown empty date fields. `toISODateOnly()` in
+`utils/date.util.ts` normalises at the form-seeding boundary; use it anywhere a stored date
+meets an `ely-datepicker`.
+
+`concatDateAndTime()` was retyped to take that string, and now builds its `Date` from the
+parts rather than `new Date('2026-08-31')` — that parses as midnight **UTC**, which is still
+the previous day anywhere west of Greenwich, so `setHours` would have landed on the wrong
+date. It was correct in UTC+8 by luck; it is correct everywhere now. `americanDateToISODate`
+went with the dead range branch that was its only caller.
+
+This removed the last `mat-form-field` in the app, so that whole block came out of
+`custom-theme.scss`, along with `provideNativeDateAdapter()` and the Material date adapter.
 
 `data-row` migrated on **2026-08-31**: `src/app/modules/shared/layout/data-row/` and
 `src/app/models/ui/data-row.model.ts` are deleted, and `RowColumnConfig` /
@@ -286,10 +311,12 @@ checklist is the "in what order".
    `SnackbarService`, `textarea` → `ely-textarea` (needs elyui ≥ 0.2.0).
 5. `data-row` → `ely-data-row` (elyui ≥ 0.5.1) — **done 2026-08-31**; see the delta notes
    in the component-inventory section above.
-6. `dropdown` → `ely-dropdown`, then `autocomplete` → `ely-autocomplete` (elyui ≥ 0.5.1) —
-   both **done 2026-08-31**; see the delta notes in the component-inventory section above.
-7. Next up: `datepicker` → `ely-datepicker` / `ely-date-range-picker` (published in 0.5.x),
-   the last Material form field. `tab` and dialogs stay hand-rolled until elyui ships them.
+6. `dropdown` → `ely-dropdown`, `autocomplete` → `ely-autocomplete`, `datepicker` →
+   `ely-datepicker` (elyui ≥ 0.5.1) — all **done 2026-08-31**; see the delta notes in the
+   component-inventory section above.
+7. **The adoption path is finished.** AMS consumes every elyui component it has a use for.
+   `tab` and dialogs stay hand-rolled until elyui ships them; `DateRangePicker` is published
+   but AMS has nothing to point it at.
 
 ### P2 — architecture debt (documented, deliberately deferred)
 
