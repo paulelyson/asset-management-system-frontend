@@ -256,7 +256,7 @@ checklist is the "in what order".
   commented out of the request. The search box, purpose filter, and "Show more..." button
   all update the URL but never change the results.
 - **Hardcoded placeholder content ships in a live dialog.**
-  `src/app/modules/shared/update-quantity-status-dialog/` renders a literal
+  `src/app/modules/shared/dialogs/update-quantity-status-dialog/` renders a literal
   `Flat Screw Driver 6.5×200mm` / `SN: entries` for every item, and a hardcoded
   `Add Transaction` label so Cancel/Approve/Release all read "Add Transaction".
 - **`/login` route is likely broken.** `homepage.component.ts` is `standalone: false` but

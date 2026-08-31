@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Badge, Button, Icon, Textarea, VerticalStepper } from '@paulelyson/elyui';
-import { BorrowedEquipmentHistoryDialogComponent } from '../../../borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
+import { BorrowedEquipmentHistoryDialogComponent } from '../borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import {

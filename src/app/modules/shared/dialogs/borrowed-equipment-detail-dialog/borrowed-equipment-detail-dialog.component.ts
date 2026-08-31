@@ -1,14 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { getDisplayName } from '../../../utils/string.util';
+import { getDisplayName } from '../../../../utils/string.util';
 import BorrowedEquipment, {
   BORROW_STATUS_VARIANT,
   BorrowedEquipmentTransaction,
-} from '../../../models/BorrowedEquipment';
+} from '../../../../models/BorrowedEquipment';
 import { MatDividerModule } from '@angular/material/divider';
 import { Badge, Icon } from '@paulelyson/elyui';
-import { EquipmentCondition } from '../../../models/Equipment';
-import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
+import { EquipmentCondition } from '../../../../models/Equipment';
+import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
 import { DatePipe } from '@angular/common';
 
 @Component({

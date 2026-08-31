@@ -1,5 +1,5 @@
 import { Component, Inject, Input } from '@angular/core';
-import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../../models/Equipment';
 import {
   Autocomplete,
   AutocompleteOption,
@@ -11,8 +11,8 @@ import {
 } from '@paulelyson/elyui';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AutocompleteService } from '../../../services/autocomplete.service';
-import { BorrowedEquipmentStatusType } from '../../../models/BorrowedEquipment';
+import { AutocompleteService } from '../../../../services/autocomplete.service';
+import { BorrowedEquipmentStatusType } from '../../../../models/BorrowedEquipment';
 import { MatDividerModule } from '@angular/material/divider';
 
 export type BorrowedEquipmentStatusFields = 'quantity' | 'status' | 'condition' | 'remarks';

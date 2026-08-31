@@ -5,11 +5,11 @@ import {
   EquipmentCondition,
   getLocationName,
   IEquipment,
-} from '../../../models/Equipment';
+} from '../../../../models/Equipment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ConditionQuantityPipe } from '../../../pipes/condition-quantity.pipe';
+import { ConditionQuantityPipe } from '../../../../pipes/condition-quantity.pipe';
 import { Badge, Icon } from '@paulelyson/elyui';
-import { DisplayNamePipe } from '../../../pipes/displayname.pipe';
+import { DisplayNamePipe } from '../../../../pipes/displayname.pipe';
 
 @Component({
   selector: 'app-equipment-detail-dialog',

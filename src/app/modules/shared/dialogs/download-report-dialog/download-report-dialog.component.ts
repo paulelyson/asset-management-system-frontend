@@ -8,7 +8,7 @@ import {
   Toggle,
 } from '@paulelyson/elyui';
 import { MatDialogRef } from '@angular/material/dialog';
-import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';
+import { PDFFormatConfig } from '../../../../models/ui/pdf-format-config.model';
 
 @Component({
   selector: 'app-download-report-dialog',

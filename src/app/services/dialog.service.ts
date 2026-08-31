@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EquipmentDetailDialogComponent } from '../modules/shared/equipment-detail-dialog/equipment-detail-dialog.component';
-import { EquipmentFilterDialogComponent } from '../modules/shared/equipment-filter-dialog/equipment-filter-dialog.component';
+import { EquipmentDetailDialogComponent } from '../modules/shared/dialogs/equipment-detail-dialog/equipment-detail-dialog.component';
+import { EquipmentFilterDialogComponent } from '../modules/shared/dialogs/equipment-filter-dialog/equipment-filter-dialog.component';
 import { IEquipment } from '../models/Equipment';
-import { CreateEquipmentDialogComponent } from '../modules/inventory/create-equipment-dialog/create-equipment-dialog.component';
+import { CreateEquipmentDialogComponent } from '../modules/shared/dialogs/create-equipment-dialog/create-equipment-dialog.component';
 import {
   BorrowedEquipmentStatusFields,
   UpdateQuantityStatusDialogComponent,
-} from '../modules/shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+} from '../modules/shared/dialogs/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import BorrowedEquipment, {
   BorrowedEquipmentStatusType,
   BorrowedEquipmentTransaction,
 } from '../models/BorrowedEquipment';
-import { BorrowedEquipmentFilterDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
-import { BorrowedEquipmentDetailDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
-import { BorrowedEquipmentHistoryDialogComponent } from '../modules/borrowed-equipment/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
+import { BorrowedEquipmentFilterDialogComponent } from '../modules/shared/dialogs/borrowed-equipment-filter-dialog/borrowed-equipment-filter-dialog.component';
+import { BorrowedEquipmentDetailDialogComponent } from '../modules/shared/dialogs/borrowed-equipment-detail-dialog/borrowed-equipment-detail-dialog.component';
+import { BorrowedEquipmentHistoryDialogComponent } from '../modules/shared/dialogs/borrowed-equipment-history-dialog/borrowed-equipment-history-dialog.component';
 import { IBorrowedEquipmentHistory } from '../models/BorrowedEquipmentHistory';
-import { LoginDialogComponent } from '../modules/shared/login-dialog/login-dialog.component';
-import { ChangePasswordDialogComponent } from '../modules/shared/change-password-dialog/change-password-dialog.component';
+import { LoginDialogComponent } from '../modules/shared/dialogs/login-dialog/login-dialog.component';
+import { ChangePasswordDialogComponent } from '../modules/shared/dialogs/change-password-dialog/change-password-dialog.component';
 import { ButtonConfig } from '@paulelyson/elyui';
 import { EquipmentChangeLogDialogComponent } from '../modules/shared/dialogs/equipment-change-log-dialog/equipment-change-log-dialog.component';
 import { EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
-import { DownloadReportDialogComponent } from '../modules/inventory/download-report-dialog/download-report-dialog.component';
+import { DownloadReportDialogComponent } from '../modules/shared/dialogs/download-report-dialog/download-report-dialog.component';
 
 type DialogComponent = 'equipment-detail' | 'equipment-filter';
 

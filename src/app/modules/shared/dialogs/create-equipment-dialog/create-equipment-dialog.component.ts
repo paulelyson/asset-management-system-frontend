@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../../models/Equipment';
 import {
   Autocomplete,
   AutocompleteOption,
@@ -21,17 +21,17 @@ import {
   TextInput,
   Toggle,
 } from '@paulelyson/elyui';
-import { FileInputComponent } from '../../shared/file-input/file-input.component';
-import { AutocompleteService } from '../../../services/autocomplete.service';
-import { LocationService } from '../../../services/location.service';
-import { ClassLocation } from '../../../models/data/location.model';
-import { EquipmentService } from '../../../services/equipment.service';
-import { IDepartment } from '../../../models/Department';
-import { Department, IUser } from '../../../models/User';
-import { DepartmentService } from '../../../services/department.service';
-import { AuthService, TokenData } from '../../../services/auth.service';
-import { getDisplayName } from '../../../utils/string.util';
-import { toISODateOnly } from '../../../utils/date.util';
+import { FileInputComponent } from '../../file-input/file-input.component';
+import { AutocompleteService } from '../../../../services/autocomplete.service';
+import { LocationService } from '../../../../services/location.service';
+import { ClassLocation } from '../../../../models/data/location.model';
+import { EquipmentService } from '../../../../services/equipment.service';
+import { IDepartment } from '../../../../models/Department';
+import { Department, IUser } from '../../../../models/User';
+import { DepartmentService } from '../../../../services/department.service';
+import { AuthService, TokenData } from '../../../../services/auth.service';
+import { getDisplayName } from '../../../../utils/string.util';
+import { toISODateOnly } from '../../../../utils/date.util';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({

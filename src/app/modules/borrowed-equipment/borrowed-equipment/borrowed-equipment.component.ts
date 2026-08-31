@@ -6,7 +6,7 @@ import BorrowedEquipment, {
 } from '../../../models/BorrowedEquipment';
 import { BorrowService } from '../../../services/borrow.service';
 import { DialogService } from '../../../services/dialog.service';
-import { BorrowedEquipmentStatusFields } from '../../shared/update-quantity-status-dialog/update-quantity-status-dialog.component';
+import { BorrowedEquipmentStatusFields } from '../../shared/dialogs/update-quantity-status-dialog/update-quantity-status-dialog.component';
 import { AuthService } from '../../../services/auth.service';
 import {
   BorrowedEquimentFilter,

@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { IBorrowedEquipmentHistory } from '../../../models/BorrowedEquipmentHistory';
-import { getDisplayName } from '../../../utils/string.util';
+import { IBorrowedEquipmentHistory } from '../../../../models/BorrowedEquipmentHistory';
+import { getDisplayName } from '../../../../utils/string.util';
 import { DatePipe } from '@angular/common';
-import { BORROW_STATUS_DISPLAY, BORROW_STATUS_VARIANT, BorrowedEquipmentTransaction } from '../../../models/BorrowedEquipment';
-import { IUser } from '../../../models/User';
-import { VerticalStepperConfig } from '../../../models/ui/vertical-stepper-config.model';
+import { BORROW_STATUS_DISPLAY, BORROW_STATUS_VARIANT, BorrowedEquipmentTransaction } from '../../../../models/BorrowedEquipment';
+import { IUser } from '../../../../models/User';
+import { VerticalStepperConfig } from '../../../../models/ui/vertical-stepper-config.model';
 import { MatDividerModule } from '@angular/material/divider';
 import { Icon, VerticalStepper } from '@paulelyson/elyui';
 

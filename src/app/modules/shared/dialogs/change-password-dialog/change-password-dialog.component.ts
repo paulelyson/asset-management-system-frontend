@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Button, SnackbarService, TextInput, Toggle } from '@paulelyson/elyui';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 

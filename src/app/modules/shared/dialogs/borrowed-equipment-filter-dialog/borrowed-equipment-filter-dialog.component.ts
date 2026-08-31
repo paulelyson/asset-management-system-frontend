@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import {
   BORROWED_EQUIPMENT_PURPOSE,
   BORROWED_EQUIPMENT_STATUS,
-} from '../../../models/BorrowedEquipment';
-import { AutocompleteService } from '../../../services/autocomplete.service';
+} from '../../../../models/BorrowedEquipment';
+import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';

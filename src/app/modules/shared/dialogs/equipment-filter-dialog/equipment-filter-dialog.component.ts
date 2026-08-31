@@ -3,14 +3,14 @@ import { Autocomplete, AutocompleteOption, Button, Dropdown } from '@paulelyson/
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EquipmentService } from '../../../services/equipment.service';
-import { AutocompleteService } from '../../../services/autocomplete.service';
+import { EquipmentService } from '../../../../services/equipment.service';
+import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { forkJoin, map, of } from 'rxjs';
-import { DEPARTMENTS } from '../../../models/User';
-import { DepartmentService } from '../../../services/department.service';
-import { IDepartment } from '../../../models/Department';
+import { DEPARTMENTS } from '../../../../models/User';
+import { DepartmentService } from '../../../../services/department.service';
+import { IDepartment } from '../../../../models/Department';
 import { IQuantityStatusDialogConfig } from '../update-quantity-status-dialog/update-quantity-status-dialog.component';
-import { EQUIPMENT_CONDITION } from '../../../models/Equipment';
+import { EQUIPMENT_CONDITION } from '../../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
