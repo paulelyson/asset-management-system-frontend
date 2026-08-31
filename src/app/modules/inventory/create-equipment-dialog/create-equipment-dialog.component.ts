@@ -94,7 +94,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
     private equipmentService: EquipmentService,
     private authService: AuthService,
     private snackBarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) public data: {action: string, equipment?: IEquipment},
+    @Inject(MAT_DIALOG_DATA) public data: {action: string, equipment?: IEquipment} | null,
   ) {
     this.user = this.authService.getUser();
     // this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
@@ -115,7 +115,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
       inventoryType: [data?.equipment?.inventoryType ?? 'inventory'],
       location: [getLocationId(data?.equipment?.location) ?? ''],
       dateAcquired: [data?.equipment?.dateAcquired ?? new Date()],
-      warrantyPeriod: [data.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
+      warrantyPeriod: [data?.action === 'update' ? data?.equipment?.warrantyPeriod : new Date()],
       department: [data?.equipment?.department?._id ?? this.authService.primaryDepartmentId() ?? ''],
       updatedBy: [data?.equipment?.updatedBy?._id ?? this.user._id],
       images: this.fb.array([]),
