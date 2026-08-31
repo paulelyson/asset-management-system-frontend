@@ -30,7 +30,7 @@
     "@angular/material": "^21.2.14",
     "@angular/platform-browser": "^21.2.19",
     "@angular/router": "^21.2.19",
-    "@paulelyson/elyui": "^0.4.0",
+    "@paulelyson/elyui": "^0.5.1",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

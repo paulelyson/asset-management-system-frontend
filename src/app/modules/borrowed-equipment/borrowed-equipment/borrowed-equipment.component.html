@@ -3,7 +3,7 @@
   <app-borrowed-equipment-toolbar [filters]="filterDisplay()"/>
   <div class="list-wrapper">
     @for (eqpmnt of borrowed_equipment(); track eqpmnt.trackId; let first = $first) {
-      <app-data-row [columns]="getRowData(eqpmnt)" [showHeader]="first" (actionclicked)="onActionClicked($event, eqpmnt)"/>
+      <ely-data-row size="md" [columns]="getRowData(eqpmnt)" [showHeader]="first" (actionClicked)="onActionClicked($event, eqpmnt)"/>
     } @empty {
       <span>No items.</span>
     }

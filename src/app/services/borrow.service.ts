@@ -15,7 +15,7 @@ import { BorrowedEquimentFilter, IBorrowedEquimentFilter } from '../models/Borro
 import { AssignmentRole, UserProfile } from '../models/data/user-profile.model';
 import { DisplayNamePipe } from '../pipes/displayname.pipe';
 import { ApiResponse } from '../models/ApiResponse';
-import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
+import { RowActionConfig, RowColumnConfig } from '@paulelyson/elyui';
 import { ExceptionService } from './exception.service';
 
 @Injectable({

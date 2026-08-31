@@ -9,10 +9,11 @@
   />
   <div class="list-wrapper">
     @for (eqpmnt of equipment(); track eqpmnt._id; let first = $first) {
-      <app-data-row
+      <ely-data-row
+        size="md"
         [columns]="getRowData(eqpmnt)"
         [showHeader]="first"
-        (actionclicked)="onActionClicked($event, eqpmnt)"
+        (actionClicked)="onActionClicked($event, eqpmnt)"
       />
     } @empty {
       <span>No items.</span>

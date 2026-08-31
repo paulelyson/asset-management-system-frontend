@@ -8,7 +8,7 @@ import {
   BorrowedEquipmentStatusTypeAndQuantity,
 } from '../models/BorrowedEquipment';
 import { ApiResponse } from '../models/ApiResponse';
-import { RowActionConfig, RowColumnConfig } from '../models/ui/data-row.model';
+import { RowActionConfig, RowColumnConfig } from '@paulelyson/elyui';
 import { IUser } from '../models/User';
 import { CHANGELOG_STATUS_VARIANT, EquipmentChangeLog } from '../models/data/equipment-change-logs.model';
 import { getDisplayName } from '../utils/string.util';
@@ -77,30 +77,33 @@ export class EquipmentService {
   }
 
   getRowData(equipment: IEquipment, canAccessEquipment: boolean): RowColumnConfig[] {
+    // `size` used to be dead data — the old app-data-row hardcoded sm on every
+    // button and ignored it. ely-data-row honours it, so these say sm to keep
+    // rendering what they rendered before.
     const actions: RowActionConfig[] = [{
       type: 'button',
       name: 'Details',
       icon: 'info_outlined',
-      size: 'xs'
+      size: 'sm'
     },
     {
       type: 'button',
       name: 'Changes History',
       icon: 'history',
-      size: 'xs'
+      size: 'sm'
     }]
     if(canAccessEquipment) {
       actions.push({
         type: 'button',
         name: 'Update',
         icon: 'edit',
-        size: 'xs'
+        size: 'sm'
       })
       actions.push({
         type: 'button',
         name: 'Create a Copy',
         icon: 'content_copy',
-        size: 'xs',
+        size: 'sm',
         tooltip: 'Create a new equipment with the same details as this one'
       })
     }
@@ -124,11 +127,12 @@ export class EquipmentService {
 
   getChangeLogRowData(log: EquipmentChangeLog): RowColumnConfig[]  {
     const performedBy = getDisplayName(log.performedBy);
-    const status: RowActionConfig[] = [new RowActionConfig({
+    const status: RowActionConfig[] = [{
       name: log.status,
       type: 'badge',
+      size: 'sm',
       variant: CHANGELOG_STATUS_VARIANT[log.status]
-    })]
+    }]
     const changes = log.changes.map(ch=> `${ch.field}: \n ${ch.previousValue} → ${ch.newValue} `)
      return [
       { id: 0, type: 'image', header: '', weight: 0.5 },

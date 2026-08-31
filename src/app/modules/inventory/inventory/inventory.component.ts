@@ -14,9 +14,8 @@ import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/route
 import { IEquipment } from '../../../models/Equipment';
 import { EquipmentFilter } from '../../../models/filters/equipment-filter.model';
 import { AuthService } from '../../../services/auth.service';
-import { Button, SnackbarService, TitleSection } from '@paulelyson/elyui';
+import { Button, DataRow, SnackbarService, TitleSection } from '@paulelyson/elyui';
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
-import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { getFilterDisplay } from '../../shared/utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
@@ -29,7 +28,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
-  imports: [Button, TitleSection, DataRowComponent, InventoryToolbarComponent],
+  imports: [Button, TitleSection, DataRow, InventoryToolbarComponent],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnInit {

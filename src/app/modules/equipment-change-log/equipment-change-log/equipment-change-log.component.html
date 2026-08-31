@@ -4,10 +4,11 @@
   <app-inventory-toolbar />
   <div class="list-wrapper">
     @for (log of changeLogs(); track log._id; let first = $first) {
-      <app-data-row
+      <ely-data-row
+        size="md"
         [columns]="getRowData(log)"
         [showHeader]="first"
-        (actionclicked)="onActionClicked($event, log)"
+        (actionClicked)="onActionClicked($event, log)"
       />
     } @empty {
       <span>No items.</span>

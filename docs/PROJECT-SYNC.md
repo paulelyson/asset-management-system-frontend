@@ -5,7 +5,7 @@ session working in any of these repos should read this file first. Update it whe
 cross-repo fact changes (a new elyui component ships, a backend contract changes, a
 priority shifts) — don't let it drift into aspiration.
 
-Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-27.
+Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-31.
 
 ## Repo map
 
@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-27.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.4.0`, 10 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.5.1`, 15 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -68,7 +68,7 @@ line that `ng update @angular/material@21` resolves to by default.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
-Published in `@paulelyson/elyui@0.4.0` (single entry point, no secondary entry points —
+Published in `@paulelyson/elyui@0.5.1` (single entry point, no secondary entry points —
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
@@ -78,6 +78,10 @@ everything imports from `@paulelyson/elyui`):
   (`ely-title-section`). Added in **0.4.0**: `TextInput` (`ely-input`) — note the class and
   the selector disagree; the `.d.ts` is the authority, and `public-api.ts` exporting
   `./components/input/input` does not mean the symbol is named `Input`.
+- Added in **0.5.x**: `DataRow` (`ely-data-row`), `Autocomplete` (`ely-autocomplete`),
+  `Dropdown` (`ely-dropdown`), `Datepicker` (`ely-datepicker`), `DateRangePicker`
+  (`ely-date-range-picker`). Only `DataRow` is adopted in AMS so far (2026-08-31); the four
+  form controls are still hand-rolled here and need their own explicit go signal.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -98,17 +102,28 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 `CLAUDE.md`). Don't migrate it; replace its call sites with `ely-segmented-control`
 instead.
 
-As of 2026-08-30 AMS consumes **every** component elyui has published; nothing in
-`src/app/modules/shared/` duplicates one any more.
+As of 2026-08-31 AMS's own `src/app/modules/shared/` no longer duplicates any published
+elyui component **except** the four form controls added in 0.5.x — `autocomplete`,
+`dropdown`, `datepicker` and a date-range picker are now published but AMS still uses its
+hand-rolled copies. They are the last Material `mat-form-field` users in the app and sit
+visibly out of line beside `ely-input`; migrating them is the obvious next elyui step.
 
-Not yet published — this is elyui's stated roadmap, sourced from the AMS frontend's
-`src/app/modules/shared/` components: `autocomplete`, `dropdown`, `datepicker`,
-`tab`. `autocomplete` is the one to want next: it, `dropdown` and `datepicker` are the
-last Material `mat-form-field` users in the app, and until they migrate they sit visibly
-out of line beside `ely-input` in any shared row. Also not on the roadmap at all yet: a
-table/`data-row` equivalent, and dialogs. Migration happens one component at a time, only
-on the user's explicit go signal (per elyui's own `CLAUDE.md`) — never batch-copy
-multiple components.
+`data-row` migrated on **2026-08-31**: `src/app/modules/shared/layout/data-row/` and
+`src/app/models/ui/data-row.model.ts` are deleted, and `RowColumnConfig` /
+`RowActionConfig` / `RowContentType` now come from `@paulelyson/elyui`. API deltas that
+bit: the output is `actionClicked` (was `actionclicked`), `RowActionConfig` is an
+**interface** not a class (`new RowActionConfig({...})` no longer compiles — use an object
+literal), and the library honours each action's `size`/`appearance`, which the AMS copy
+hardcoded to `sm`/`link` and silently ignored. New inputs: `size` (`xs|sm|md|lg`, default
+`sm` — AMS passes `md` to match the old row's 50px thumbnail and 16px title),
+`hasDivider` (replaces the `<mat-divider>` the AMS copy rendered), and `placeholderImage`
+(empty by default; the library draws a local placeholder instead of the AMS copy's
+placehold.co request). The AMS copy's `min-width: 900px` is gone — rows now compress
+between 768px and 900px instead of forcing a horizontal scroll.
+
+Still not published, and still hand-rolled here: `tab` and dialogs. Migration happens one
+component at a time, only on the user's explicit go signal (per elyui's own `CLAUDE.md`) —
+never batch-copy multiple components.
 
 kurikula independently hand-rolls its own copies of `icon`, `badge`, `button`, `snackbar`,
 `avatar`, `input`, `autocomplete`, `tab`, `data-row` under
@@ -237,8 +252,11 @@ checklist is the "in what order".
 4. Then swap, one at a time, with a manual test after each: `icon` → `ely-icon`, `badge` →
    `ely-badge`, `button` → `ely-button`, `toggle` → `ely-toggle`, `snackbar` →
    `SnackbarService`, `textarea` → `ely-textarea` (needs elyui ≥ 0.2.0).
-5. Everything else (`input`, `autocomplete`, `dropdown`, `datepicker`, `tab`, dialogs, a
-   table) stays hand-rolled until elyui ships it.
+5. `data-row` → `ely-data-row` (elyui ≥ 0.5.1) — **done 2026-08-31**; see the delta notes
+   in the component-inventory section above.
+6. Next up, one at a time: `autocomplete`, `dropdown`, `datepicker` → their elyui
+   equivalents (all published in 0.5.x). `tab` and dialogs stay hand-rolled until elyui
+   ships them.
 
 ### P2 — architecture debt (documented, deliberately deferred)
 

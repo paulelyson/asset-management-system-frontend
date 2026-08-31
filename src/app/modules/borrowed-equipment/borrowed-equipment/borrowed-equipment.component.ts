@@ -15,10 +15,10 @@ import {
 import {
   Button,
   ButtonConfig,
+  DataRow,
   SnackbarService,
   TitleSection,
 } from '@paulelyson/elyui';
-import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
 import { getFilterDisplay } from '../../shared/utils/filter.util';
@@ -29,7 +29,7 @@ import { getFilterDisplay } from '../../shared/utils/filter.util';
   styleUrl: './borrowed-equipment.component.css',
   imports: [
     TitleSection,
-    DataRowComponent,
+    DataRow,
     Button,
     BorrowedEquipmentToolbarComponent,
   ],

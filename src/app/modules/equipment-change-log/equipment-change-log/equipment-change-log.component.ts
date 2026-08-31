@@ -1,11 +1,10 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { TitleSection } from '@paulelyson/elyui';
+import { DataRow, TitleSection } from '@paulelyson/elyui';
 import { TabComponent } from '../../shared/layout/tab/tab.component';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { EquipmentChangeLog } from '../../../models/data/equipment-change-logs.model';
-import { DataRowComponent } from '../../shared/layout/data-row/data-row.component';
 
 @Component({
   selector: 'app-equipment-change-log',
@@ -13,7 +12,7 @@ import { DataRowComponent } from '../../shared/layout/data-row/data-row.componen
     TitleSection,
     TabComponent,
     InventoryToolbarComponent,
-    DataRowComponent,
+    DataRow,
   ],
   templateUrl: './equipment-change-log.component.html',
   styleUrl: './equipment-change-log.component.css',
