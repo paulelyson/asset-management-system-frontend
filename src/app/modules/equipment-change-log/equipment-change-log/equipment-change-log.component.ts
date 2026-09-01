@@ -1,6 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { DataRow, TitleSection } from '@paulelyson/elyui';
-import { TabComponent } from '../../shared/layout/tab/tab.component';
+import { DataRow, Tab, TitleSection } from '@paulelyson/elyui';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 import { EquipmentService } from '../../../services/equipment.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -10,7 +9,7 @@ import { EquipmentChangeLog } from '../../../models/data/equipment-change-logs.m
   selector: 'app-equipment-change-log',
   imports: [
     TitleSection,
-    TabComponent,
+    Tab,
     InventoryToolbarComponent,
     DataRow,
   ],

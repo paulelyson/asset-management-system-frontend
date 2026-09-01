@@ -83,8 +83,7 @@ everything imports from `@paulelyson/elyui`):
   (`ely-date-range-picker`). All adopted in AMS on 2026-08-31 except `DateRangePicker`,
   which AMS has no use for — see the `datepicker` note below.
 - Added in **0.6.0**: `FileInput` (`ely-file-input`) + the `FileRejection` type, and `Tab`
-  (`ely-tab`) + the `TabOption` type. `FileInput` adopted 2026-09-01; **`Tab` is published
-  but not yet adopted** — see the note below.
+  (`ely-tab`) + the `TabOption` type. `FileInput` adopted 2026-09-01, `Tab` 2026-09-02.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -105,27 +104,31 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 `CLAUDE.md`). Don't migrate it; replace its call sites with `ely-segmented-control`
 instead.
 
-As of 2026-09-01 the only thing in AMS's own `src/app/modules/shared/` that duplicates a
-published elyui component is **`layout/tab/`** — `Tab` shipped in 0.6.0 and hasn't been
-adopted yet. Every form control in the app is elyui; Angular Material is left doing dialogs,
-tooltips, tabs, the sidenav and dividers, and `@angular/material/form-field` is gone from the
-app entirely. Still hand-rolled because elyui hasn't shipped it: the dialogs.
+As of 2026-09-02 AMS's own `src/app/modules/shared/` **no longer duplicates any published
+elyui component** — `layout/` is gone entirely, `data-row` and `tab` having been its last two
+occupants. Every form control and layout primitive in the app is elyui; Angular Material is
+left doing dialogs, tooltips, the sidenav and dividers, and both
+`@angular/material/form-field` and `@angular/material/tabs` are gone from the app. Still
+hand-rolled because elyui hasn't shipped it: the dialogs.
 
-**Before migrating `tab`, read this.** Its single call site
-(`equipment-change-log.component.html`) is doubly dead, so a straight swap would be porting
-something that does nothing:
-- The tab has **no `(tabChange)` listener and no `[selected]` binding**, so switching tabs
-  emits into the void and the component renders change logs unconditionally. The two tabs
-  look switchable and aren't.
-- **The screen is unreachable.** `EquipmentChangeLogModule` is never lazy-loaded —
-  `app.routes.ts` has no `equipment-change-log` path, and nothing else imports the module.
-  It and its routing module reference only each other.
+`tab` migrated on **2026-09-02**: `src/app/modules/shared/layout/tab/` is deleted and `Tab`
+comes from `@paulelyson/elyui`. `[tabs]` still accepts a plain `string[]` (a `normalizedTabs`
+getter widens it to `TabOption[]`), so the one call site was a drop-in. API deltas nobody
+felt, because that call site binds no outputs: `tabChange` now emits the whole `TabOption`
+rather than the label string, and there's a new two-way `selected` / `selectedChange` (a
+number). elyui hand-rolls the strip, so it also owns the arrow/Home/End keyboard handling
+Material used to supply. This removed the last `mat-tab-group`, so those overrides came out
+of `custom-theme.scss`.
 
-The screen also looks half-built rather than abandoned (`onActionClicked` is an empty method
-body; `getChangeLogs` appends rather than replaces, so it would duplicate rows on every
-query-param change). Decide whether to route it or delete it before swapping the component;
-if it's routed, the tab needs wiring as a URL query param to match the app's URL-is-the-store
-pattern. `mat-tab-group` in `custom-theme.scss` is only alive through this dead path too.
+⚠️ **The one call site is still on a dead screen, and migrating the component did not fix
+that.** `equipment-change-log.component.html` binds no `(tabChange)` and no `[selected]`, so
+switching tabs does nothing and the component renders change logs unconditionally — the two
+tabs look switchable and aren't. And the screen is **unreachable**:
+`EquipmentChangeLogModule` is never lazy-loaded (`app.routes.ts` has no `equipment-change-log`
+path, and nothing else imports it). It also looks half-built rather than abandoned —
+`onActionClicked` is an empty method body, and `getChangeLogs` appends instead of replacing,
+so it would duplicate rows on every query-param change. Route it or delete it; if routed,
+wire the tab as a URL query param to match the URL-is-the-store pattern.
 
 `dropdown` migrated on **2026-08-31**: `src/app/modules/shared/dropdown/` is deleted and
 `Dropdown` comes from `@paulelyson/elyui`. Only rename: the output `selectChanged` →
@@ -357,9 +360,9 @@ checklist is the "in what order".
    component-inventory section above.
 7. `file-input` → `ely-file-input` (elyui ≥ 0.6.0) — **done 2026-09-01**; see the delta
    notes in the component-inventory section above.
-8. Outstanding: **`tab` → `ely-tab`** (published in 0.6.0, not adopted — but read the
-   warning in the component-inventory section first; its only call site is on an unrouted
-   screen and the tab is unwired). Dialogs stay hand-rolled until elyui ships them;
+8. `tab` → `ely-tab` (elyui ≥ 0.6.0) — **done 2026-09-02**. **The adoption path is finished:**
+   AMS consumes every elyui component it has a use for, and `src/app/modules/shared/`
+   duplicates none of them. Dialogs stay hand-rolled until elyui ships them;
    `DateRangePicker` is published but AMS has nothing to point it at.
 
 ### P2 — architecture debt (documented, deliberately deferred)

@@ -1,6 +1,6 @@
 <div class="container">
   <ely-title-section>Inventory</ely-title-section>
-  <app-tab [tabs]="['Inventory', 'Change Logs']"></app-tab>
+  <ely-tab [tabs]="['Inventory', 'Change Logs']" />
   <app-inventory-toolbar />
   <div class="list-wrapper">
     @for (log of changeLogs(); track log._id; let first = $first) {

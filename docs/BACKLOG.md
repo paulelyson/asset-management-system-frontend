@@ -679,6 +679,24 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     emits real `File[]`, what an upload endpoint actually wants; `addImage` still takes the
     base64 data URL, so moving to multipart is its own change.
 
+15. [x] **`tab` → `ely-tab`** (2026-09-02, elyui `0.6.0`). The last one — `shared/layout/`
+    is gone entirely now, `data-row` and `tab` having been its only two occupants. `[tabs]`
+    still takes a plain `string[]` (a `normalizedTabs` getter widens it to `TabOption[]`), so
+    the single call site was a drop-in. API deltas nobody felt, because it binds no outputs:
+    `tabChange` emits the whole `TabOption` rather than the label string, and `selected` is
+    now two-way via `selectedChange` (a number). elyui hand-rolls the strip, so it owns the
+    arrow/Home/End keyboard handling Material used to give for free.
+
+    **A second, dead import turned up in `inventory.component.ts`** — `TabComponent` was
+    imported there but absent from the `imports:` array and the template. Fourth dead import
+    found in this migration sequence; worth grepping the *symbol*, not just the selector,
+    before assuming a component has one consumer.
+
+    This removed the last `mat-tab-group`, so its overrides came out of `custom-theme.scss`
+    and `@angular/material/tabs` is gone from the app. Material now covers only dialogs,
+    tooltips, the sidenav and dividers — worth updating `CLAUDE.md`'s stack blurb, which
+    still lists tabs.
+
 ### Still open
 
 - [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
@@ -701,17 +719,14 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     AMS call site and `AutocompleteService.mapIntoAutocompleteOption` currently emits as
     `view`. Doing these two retires the last `mat-form-field` in the app, and with it the
     whole `mat-form-field` / `mat-option` block in `custom-theme.scss`.
-- [ ] **`tab` → `ely-tab`** — shipped in elyui `0.6.0`, not adopted. **Don't do a straight
-    swap: the call site is doubly dead.** `layout/tab/`'s only consumer,
-    `equipment-change-log.component.html`, binds no `(tabChange)` and no `[selected]`, so
-    switching tabs does nothing and the component renders change logs unconditionally — and
-    the screen itself is **unreachable**, because `EquipmentChangeLogModule` is never
-    lazy-loaded (`app.routes.ts` has no `equipment-change-log` path, and nothing else imports
-    it). The screen looks half-built rather than abandoned: `onActionClicked` is an empty
-    method body, and `getChangeLogs` appends instead of replacing, so it would duplicate rows
-    on every query-param change. Decide route-it-or-delete-it first; if routed, wire the tab
-    as a URL query param to match the URL-is-the-store pattern. `mat-tab-group` in
-    `custom-theme.scss` is alive only through this dead path.
+- [ ] **Route the equipment-change-log screen, or delete it.** Migrating `tab` did not make
+    it any less dead. `EquipmentChangeLogModule` is never lazy-loaded — `app.routes.ts` has
+    no `equipment-change-log` path and nothing else imports it, so the screen is
+    unreachable — and its `<ely-tab>` binds no `(tabChange)` and no `[selected]`, so the two
+    tabs look switchable and aren't. It reads half-built rather than abandoned:
+    `onActionClicked` is an empty method body, and `getChangeLogs` appends instead of
+    replacing, so it would duplicate rows on every query-param change. If it's routed, wire
+    the tab as a URL query param to match the URL-is-the-store pattern.
 - [ ] Dialogs and a table stay hand-rolled — elyui hasn't shipped them. `DateRangePicker` is
     published but AMS has nothing to point it at.
 
