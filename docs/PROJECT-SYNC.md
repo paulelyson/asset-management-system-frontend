@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-31.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.5.1`, 15 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.6.0`, 17 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -68,7 +68,7 @@ line that `ng update @angular/material@21` resolves to by default.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
-Published in `@paulelyson/elyui@0.5.1` (single entry point, no secondary entry points —
+Published in `@paulelyson/elyui@0.6.0` (single entry point, no secondary entry points —
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
@@ -82,6 +82,9 @@ everything imports from `@paulelyson/elyui`):
   `Dropdown` (`ely-dropdown`), `Datepicker` (`ely-datepicker`), `DateRangePicker`
   (`ely-date-range-picker`). All adopted in AMS on 2026-08-31 except `DateRangePicker`,
   which AMS has no use for — see the `datepicker` note below.
+- Added in **0.6.0**: `FileInput` (`ely-file-input`) + the `FileRejection` type, and `Tab`
+  (`ely-tab`) + the `TabOption` type. `FileInput` adopted 2026-09-01; **`Tab` is published
+  but not yet adopted** — see the note below.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -102,11 +105,27 @@ empty stub in the source project and is superseded by `SegmentedControl` (see el
 `CLAUDE.md`). Don't migrate it; replace its call sites with `ely-segmented-control`
 instead.
 
-As of 2026-08-31 AMS's own `src/app/modules/shared/` **no longer duplicates any published
-elyui component.** Every form control in the app is elyui; Angular Material is left doing
-dialogs, tooltips, tabs, the sidenav and dividers, and `@angular/material/form-field` is
-gone from the app entirely. Still hand-rolled only because elyui hasn't shipped them: `tab`
-and the dialogs.
+As of 2026-09-01 the only thing in AMS's own `src/app/modules/shared/` that duplicates a
+published elyui component is **`layout/tab/`** — `Tab` shipped in 0.6.0 and hasn't been
+adopted yet. Every form control in the app is elyui; Angular Material is left doing dialogs,
+tooltips, tabs, the sidenav and dividers, and `@angular/material/form-field` is gone from the
+app entirely. Still hand-rolled because elyui hasn't shipped it: the dialogs.
+
+**Before migrating `tab`, read this.** Its single call site
+(`equipment-change-log.component.html`) is doubly dead, so a straight swap would be porting
+something that does nothing:
+- The tab has **no `(tabChange)` listener and no `[selected]` binding**, so switching tabs
+  emits into the void and the component renders change logs unconditionally. The two tabs
+  look switchable and aren't.
+- **The screen is unreachable.** `EquipmentChangeLogModule` is never lazy-loaded —
+  `app.routes.ts` has no `equipment-change-log` path, and nothing else imports the module.
+  It and its routing module reference only each other.
+
+The screen also looks half-built rather than abandoned (`onActionClicked` is an empty method
+body; `getChangeLogs` appends rather than replaces, so it would duplicate rows on every
+query-param change). Decide whether to route it or delete it before swapping the component;
+if it's routed, the tab needs wiring as a URL query param to match the app's URL-is-the-store
+pattern. `mat-tab-group` in `custom-theme.scss` is only alive through this dead path too.
 
 `dropdown` migrated on **2026-08-31**: `src/app/modules/shared/dropdown/` is deleted and
 `Dropdown` comes from `@paulelyson/elyui`. Only rename: the output `selectChanged` →
@@ -165,6 +184,28 @@ went with the dead range branch that was its only caller.
 This removed the last `mat-form-field` in the app, so that whole block came out of
 `custom-theme.scss`, along with `provideNativeDateAdapter()` and the Material date adapter.
 
+`file-input` migrated on **2026-09-01** (elyui `0.6.0`): `src/app/modules/shared/file-input/`
+is deleted and `FileInput` comes from `@paulelyson/elyui`. One call site, in
+`create-equipment-dialog`. The output renamed `filechanged` → `fileRead` with an identical
+`string` payload (a data URL), because `readAsDataUrl` defaults to `true` — so `addImage`
+needed no change.
+
+**The local control could never be opened.** Its `<input type="file">` was `display: none`,
+its `#fileInput` template ref was never used, and the drop zone was a plain `<div>`, not a
+`<label for>` — so clicking it did nothing, and there was no drag-and-drop handler either.
+elyui's version visually-hides the input instead (keeping it focusable and in the
+accessibility tree) and wraps it in a real `<label>`. That means **the swap turns a dead
+control into a working one**, which is why the call site now passes `[disabled]="true"`
+explicitly: image upload is still blocked pending the server migration, and that is now a
+deliberate state rather than an accident. Flip the one attribute when the backend is ready.
+
+Two other API gains worth knowing when it is re-enabled: `rejected` emits `FileRejection[]`
+so invalid files stop failing silently (the local component's two feedback calls were both
+commented out), and validation runs against the `accept` string rather than a hardcoded
+jpeg/png list — the local one would have silently discarded a PDF from `accept="application/pdf"`.
+`filesSelected` also emits real `File[]`, which is what an upload endpoint actually wants;
+`addImage` still consumes the base64 data URL, so moving to multipart is a separate change.
+
 `data-row` migrated on **2026-08-31**: `src/app/modules/shared/layout/data-row/` and
 `src/app/models/ui/data-row.model.ts` are deleted, and `RowColumnConfig` /
 `RowActionConfig` / `RowContentType` now come from `@paulelyson/elyui`. API deltas that
@@ -178,7 +219,7 @@ hardcoded to `sm`/`link` and silently ignored. New inputs: `size` (`xs|sm|md|lg`
 placehold.co request). The AMS copy's `min-width: 900px` is gone — rows now compress
 between 768px and 900px instead of forcing a horizontal scroll.
 
-Still not published, and still hand-rolled here: `tab` and dialogs. Migration happens one
+Still not published, and still hand-rolled here: the dialogs. Migration happens one
 component at a time, only on the user's explicit go signal (per elyui's own `CLAUDE.md`) —
 never batch-copy multiple components.
 
@@ -314,9 +355,12 @@ checklist is the "in what order".
 6. `dropdown` → `ely-dropdown`, `autocomplete` → `ely-autocomplete`, `datepicker` →
    `ely-datepicker` (elyui ≥ 0.5.1) — all **done 2026-08-31**; see the delta notes in the
    component-inventory section above.
-7. **The adoption path is finished.** AMS consumes every elyui component it has a use for.
-   `tab` and dialogs stay hand-rolled until elyui ships them; `DateRangePicker` is published
-   but AMS has nothing to point it at.
+7. `file-input` → `ely-file-input` (elyui ≥ 0.6.0) — **done 2026-09-01**; see the delta
+   notes in the component-inventory section above.
+8. Outstanding: **`tab` → `ely-tab`** (published in 0.6.0, not adopted — but read the
+   warning in the component-inventory section first; its only call site is on an unrouted
+   screen and the tab is unwired). Dialogs stay hand-rolled until elyui ships them;
+   `DateRangePicker` is published but AMS has nothing to point it at.
 
 ### P2 — architecture debt (documented, deliberately deferred)
 

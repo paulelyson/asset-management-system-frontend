@@ -654,6 +654,31 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     adapter. Every form control is elyui now; Material is left doing dialogs, tooltips,
     tabs, the sidenav and dividers.
 
+14. [x] **`file-input` → `ely-file-input`** (2026-09-01, elyui `0.6.0`). One call site, in
+    `create-equipment-dialog`. Output renamed `filechanged` → `fileRead`, identical `string`
+    payload (a data URL) because `readAsDataUrl` defaults to `true`, so `addImage` was
+    untouched. `accept` defaults to `'image/*'` on both sides.
+
+    ⚠️ **The local control could never be opened, and the swap fixes that.** Its
+    `<input type="file">` was `display: none`, the `#fileInput` template ref was never used,
+    and the drop zone was a plain `<div>` rather than a `<label for>` — so clicking it did
+    nothing, and there was no drag handler either. The uploader has been decorative for as
+    long as it has existed. elyui visually-hides the input instead (still focusable, still in
+    the accessibility tree) inside a real `<label>`.
+
+    Because that would have silently *enabled* uploads the backend can't take yet, the call
+    site now passes **`[disabled]="true"`** with the existing "not available due to server
+    migration" text as `hint`. Same observable behaviour as before — nothing uploadable — but
+    deliberate instead of accidental. **Re-enabling is deleting one attribute**, at which
+    point also wire `(rejected)` to a snackbar (`SnackbarService` is already injected there).
+
+    Gains for when it is re-enabled: `rejected` emits `FileRejection[]` so invalid files stop
+    failing silently — the local component's two feedback calls were both commented out — and
+    validation runs against the `accept` string instead of a hardcoded jpeg/png list, which
+    would have silently discarded a PDF from `accept="application/pdf"`. `filesSelected`
+    emits real `File[]`, what an upload endpoint actually wants; `addImage` still takes the
+    base64 data URL, so moving to multipart is its own change.
+
 ### Still open
 
 - [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
@@ -676,9 +701,19 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     AMS call site and `AutocompleteService.mapIntoAutocompleteOption` currently emits as
     `view`. Doing these two retires the last `mat-form-field` in the app, and with it the
     whole `mat-form-field` / `mat-option` block in `custom-theme.scss`.
-- [ ] `tab`, dialogs and a table stay hand-rolled — elyui hasn't shipped them. Everything
-    elyui *has* shipped and AMS has a use for is now adopted; `DateRangePicker` is the one
-    published component with nothing to point it at.
+- [ ] **`tab` → `ely-tab`** — shipped in elyui `0.6.0`, not adopted. **Don't do a straight
+    swap: the call site is doubly dead.** `layout/tab/`'s only consumer,
+    `equipment-change-log.component.html`, binds no `(tabChange)` and no `[selected]`, so
+    switching tabs does nothing and the component renders change logs unconditionally — and
+    the screen itself is **unreachable**, because `EquipmentChangeLogModule` is never
+    lazy-loaded (`app.routes.ts` has no `equipment-change-log` path, and nothing else imports
+    it). The screen looks half-built rather than abandoned: `onActionClicked` is an empty
+    method body, and `getChangeLogs` appends instead of replacing, so it would duplicate rows
+    on every query-param change. Decide route-it-or-delete-it first; if routed, wire the tab
+    as a URL query param to match the URL-is-the-store pattern. `mat-tab-group` in
+    `custom-theme.scss` is alive only through this dead path.
+- [ ] Dialogs and a table stay hand-rolled — elyui hasn't shipped them. `DateRangePicker` is
+    published but AMS has nothing to point it at.
 
 ## kurikula — last priority
 

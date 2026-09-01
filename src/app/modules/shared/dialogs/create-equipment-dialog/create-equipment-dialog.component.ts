@@ -15,13 +15,13 @@ import {
   Button,
   Datepicker,
   Dropdown,
+  FileInput,
   Icon,
   SnackbarService,
   Textarea,
   TextInput,
   Toggle,
 } from '@paulelyson/elyui';
-import { FileInputComponent } from '../../file-input/file-input.component';
 import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { LocationService } from '../../../../services/location.service';
 import { ClassLocation } from '../../../../models/data/location.model';
@@ -42,7 +42,7 @@ import { MatDividerModule } from '@angular/material/divider';
     Button,
     TextInput,
     Autocomplete,
-    FileInputComponent,
+    FileInput,
     ReactiveFormsModule,
     FormsModule,
     Datepicker,

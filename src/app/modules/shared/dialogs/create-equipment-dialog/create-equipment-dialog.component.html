@@ -80,7 +80,16 @@
         </div>
       </div>
       <div class="label">Images</div>
-      <app-file-input (filechanged)="addImage($event)"></app-file-input>
+      <!--
+        Disabled until the server can accept images again. elyui's file input
+        actually opens on click, where the local one never could, so leaving it
+        enabled would let uploads through that the backend can't take yet.
+      -->
+      <ely-file-input
+        [disabled]="true"
+        hint="Image upload currently not available due to server migration."
+        (fileRead)="addImage($event)"
+      />
     </div>
     <mat-divider></mat-divider>
     <div class="action-wrapper">
