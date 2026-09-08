@@ -8,16 +8,13 @@
 
 // No `mat-form-field` block any more. It was the last Material form styling in
 // the app and went dead with `app-datepicker` — every form control is elyui now,
-// and Material is left doing dialogs, tooltips, tabs, the sidenav and dividers.
+// and Material is left doing dialogs, the sidenav and dividers.
 
 :root {
 
-  // Tooltip override
-  @include mat.tooltip-overrides((
-    container-color: var(--gray-100),
-    supporting-text-color: var(--gray-900)
-  ));
-
+  // No `mat-tooltip` overrides any more. The app's one `matTooltip` sat on a
+  // component that never imported `MatTooltipModule`, so the directive was inert
+  // and the tooltip had never rendered; both went in the same pass.
 
   // SideNav Override
   @include mat.sidenav-overrides((
@@ -36,11 +33,8 @@
   // the only `mat-tab-group` in the app — the strip is `ely-tab` now, themed
   // through elyui's own CSS variables.
 
-  // count badge overrides
-  @include mat.badge-overrides((
-    background-color: var(--color-bg-danger-idle),
-    text-color: var(--color-text-danger-default)
-  ));
+  // No `mat-badge` overrides any more either. `matBadge` appears nowhere in the
+  // app — the count badges are `ely-badge`, themed through elyui's variables.
 }
 
 html {

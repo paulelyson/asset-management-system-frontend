@@ -1,5 +1,4 @@
 import { Component, computed, Input, OnInit, signal, WritableSignal } from '@angular/core';
-import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { MenuComponent } from '../menu/menu.component';
@@ -8,7 +7,7 @@ import { Avatar, Button } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-header',
-  imports: [MatMenuModule, RouterLink, Avatar, MenuComponent, Button],
+  imports: [RouterLink, Avatar, MenuComponent, Button],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
