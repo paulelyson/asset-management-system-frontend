@@ -17,7 +17,6 @@ import { BorrowService } from '../../../services/borrow.service';
 import { AuthService } from '../../../services/auth.service';
 import { Department } from '../../../models/User';
 import { Button, SnackbarService, TitleSection } from '@paulelyson/elyui';
-import { SideMenuService } from '../../../services/side-menu.service';
 import { IDepartment } from '../../../models/Department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
@@ -70,7 +69,6 @@ export class BorrowComponent implements OnInit {
     private authService: AuthService,
     private snackBarService: SnackbarService,
     private router: Router,
-    private sideMenuService: SideMenuService,
     private departmentService: DepartmentService,
   ) {
   }
