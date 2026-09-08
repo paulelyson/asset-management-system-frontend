@@ -21,7 +21,7 @@ import {
 } from '@paulelyson/elyui';
 import { BorrowedEquipmentToolbarComponent } from '../borrowed-equipment-toolbar/borrowed-equipment-toolbar.component';
 import { FilterDisplay } from '../../../models/ui/common-config.model';
-import { getFilterDisplay } from '../../shared/utils/filter.util';
+import { getFilterDisplay } from '../../../utils/filter.util';
 
 @Component({
   selector: 'app-borrowed-equipment',

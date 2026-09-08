@@ -16,7 +16,7 @@ import { EquipmentFilter } from '../../../models/filters/equipment-filter.model'
 import { AuthService } from '../../../services/auth.service';
 import { Button, DataRow, SnackbarService, TitleSection } from '@paulelyson/elyui';
 import { InventoryToolbarComponent } from '../inventory-toolbar/inventory-toolbar.component';
-import { getFilterDisplay } from '../../shared/utils/filter.util';
+import { getFilterDisplay } from '../../../utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
 import { DepartmentService } from '../../../services/department.service';
 import { PDFFormatConfig } from '../../../models/ui/pdf-format-config.model';

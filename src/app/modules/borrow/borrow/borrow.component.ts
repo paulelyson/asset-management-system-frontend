@@ -25,7 +25,7 @@ import { EquipmentCardComponent } from '../equipment-card/equipment-card.compone
 import { ClassScheduleComponent } from '../class-schedule/class-schedule.component';
 import { InventoryToolbarComponent } from '../../inventory/inventory-toolbar/inventory-toolbar.component';
 import { BorrowToolbarComponent } from '../borrow-toolbar/borrow-toolbar.component';
-import { getFilterDisplay } from '../../shared/utils/filter.util';
+import { getFilterDisplay } from '../../../utils/filter.util';
 import { isObjectId } from '../../../utils/string.util';
 
 @Component({
