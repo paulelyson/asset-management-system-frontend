@@ -121,15 +121,13 @@ number). elyui hand-rolls the strip, so it also owns the arrow/Home/End keyboard
 Material used to supply. This removed the last `mat-tab-group`, so those overrides came out
 of `custom-theme.scss`.
 
-⚠️ **The one call site is still on a dead screen, and migrating the component did not fix
-that.** `equipment-change-log.component.html` binds no `(tabChange)` and no `[selected]`, so
-switching tabs does nothing and the component renders change logs unconditionally — the two
-tabs look switchable and aren't. And the screen is **unreachable**:
-`EquipmentChangeLogModule` is never lazy-loaded (`app.routes.ts` has no `equipment-change-log`
-path, and nothing else imports it). It also looks half-built rather than abandoned —
-`onActionClicked` is an empty method body, and `getChangeLogs` appends instead of replacing,
-so it would duplicate rows on every query-param change. Route it or delete it; if routed,
-wire the tab as a URL query param to match the URL-is-the-store pattern.
+The one call site was, at the time, still on a dead screen — migrating `tab` didn't fix
+that on its own. **The screen (`src/app/modules/equipment-change-log/`) was deleted on
+2026-09-08**, not routed: it was unreachable (no path in `app.routes.ts`, nothing imported
+its module) and half-built (`onActionClicked` empty, `getChangeLogs` appending instead of
+replacing). The live per-equipment change-log view is unaffected — it's a separate dialog,
+`equipment-change-log-dialog`, opened from Inventory via a different service method
+(`getChangeLogsByEquipment`). See `docs/BACKLOG.md` item 19 for the full delta.
 
 `dropdown` migrated on **2026-08-31**: `src/app/modules/shared/dropdown/` is deleted and
 `Dropdown` comes from `@paulelyson/elyui`. Only rename: the output `selectChanged` →
@@ -353,8 +351,6 @@ checklist is the "in what order".
   image. `equipment.controller.ts` also imports `path/win32` in a Linux-deployed service.
 - Frontend: no user-management UI (`UserService.getUsers()` is never called), no
   dashboard, no settings page. Header renders a `Register` button with no click handler.
-- Frontend: `equipment-change-log` feature module is unroutable — referenced nowhere in
-  `app.routes.ts`.
 - Frontend: `borrowed-equipment.component.ts:74` hardcodes transaction condition to
   `'functional'` (`// TODO add functional`).
 
@@ -366,12 +362,12 @@ checklist is the "in what order".
    `"node_modules/@paulelyson/elyui/styles/elyui.css"` before `src/styles.css` in
    `angular.json`. Add the Material Icons `<link>` to `index.html`. Add
    `provideAnimationsAsync()` to `app.config.ts` (needed for `Snackbar`).
-3. Replace `toggle-button-group` with `<ely-segmented-control>`. Its only current call
-   site is the commented-out paper-size selector in
-   `download-report-dialog.component.html:11` — wiring elyui in also restores PDF
-   page-size/orientation selection, which is currently hardcoded to LEGAL/landscape. Note:
-   `SegmentedControl` is not a `ControlValueAccessor`, so it won't plug into
-   `formControlName` yet.
+3. Replace `toggle-button-group` with `<ely-segmented-control>` — **done**. Its only call
+   site, the PDF paper-size/orientation selector in `download-report-dialog`, was wired up
+   in commit `994ecbf` (2026-08-27) — every report used to ship LEGAL/landscape with no way
+   to change it; now both are real `<ely-segmented-control>` pickers. Note:
+   `SegmentedControl` is not a `ControlValueAccessor`, so it doesn't plug into
+   `formControlName`.
 4. Then swap, one at a time, with a manual test after each: `icon` → `ely-icon`, `badge` →
    `ely-badge`, `button` → `ely-button`, `toggle` → `ely-toggle`, `snackbar` →
    `SnackbarService`, `textarea` → `ely-textarea` (needs elyui ≥ 0.2.0).
@@ -399,8 +395,11 @@ checklist is the "in what order".
   payload, a request-scoped tenant guard, and real (non-hardcoded) seeders. Retrofit cost
   grows with every collection and every row of real data — cheaper to do before this app
   has live multi-school data than after.
-- Frontend: seven 0-byte CSS files (`equipment-change-log`, `inventory`, `autocomplete`,
-  `datepicker`, `dropdown`, `tab`, `toggle-button-group`); ~12 leftover `console.log`s;
+- Frontend: one 0-byte CSS file left, `inventory.component.css` (the other six named here
+  — `equipment-change-log`, `autocomplete`, `datepicker`, `dropdown`, `tab`,
+  `toggle-button-group` — went with the directories they were in as those components were
+  migrated to elyui or, for `equipment-change-log`, deleted outright); ~12 leftover
+  `console.log`s;
   large commented-out template blocks in 9 templates; near-duplicated filter/search logic
   across three toolbar components; two separate `utils/` folders
   (`src/app/utils/` and `src/app/modules/shared/utils/`); `BorrowedEquimentFilter`

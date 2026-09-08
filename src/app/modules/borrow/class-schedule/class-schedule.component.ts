@@ -21,7 +21,6 @@ import {
   TextInput,
 } from '@paulelyson/elyui';
 import { Department, DEPARTMENTS } from '../../../models/User';
-import { AutocompleteService } from '../../../services/autocomplete.service';
 import { concatDateAndTime, get24HourTime, toISODateOnly } from '../../../utils/date.util';
 import { CourseOfferingService } from '../../../services/course-offering.service';
 import CourseOffering from '../../../models/CourseOffering';
@@ -55,7 +54,6 @@ export class ClassScheduleComponent implements OnInit {
     private fb: FormBuilder,
     private snackBarService: SnackbarService,
     private courseOfferingService: CourseOfferingService,
-    private autocompleteService: AutocompleteService,
     private displayNamePipe: DisplayNamePipe,
   ) {
     this.classScheduleForm = this.fb.group({
@@ -89,7 +87,7 @@ export class ClassScheduleComponent implements OnInit {
   }
 
   get purposeOptions() {
-    return this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
+    return BORROWED_EQUIPMENT_PURPOSE;
   }
 
   onSubmit() {

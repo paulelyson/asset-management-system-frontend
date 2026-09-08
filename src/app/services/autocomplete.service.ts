@@ -24,15 +24,4 @@ export class AutocompleteService {
 
     return Object.entries(actions).map(([value, label]) => ({ value, label }));
   }
-
-  /**
-   * Identity mapper: value and label are the same string. It exists because the
-   * old local autocomplete only accepted objects — elyui's takes a plain
-   * `string[]` and normalises internally, so these call sites could pass their
-   * arrays straight through and drop this. Left in place for now; retiring it is
-   * its own change.
-   */
-  mapIntoAutocompleteOption(options: string[]): AutocompleteOption[] {
-    return options.map((opt) => ({ value: opt, label: opt }));
-  }
 }

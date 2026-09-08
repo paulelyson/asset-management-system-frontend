@@ -4,13 +4,12 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EquipmentService } from '../../../../services/equipment.service';
-import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { forkJoin, map, of } from 'rxjs';
 import { DEPARTMENTS } from '../../../../models/User';
 import { DepartmentService } from '../../../../services/department.service';
 import { IDepartment } from '../../../../models/Department';
 import { IQuantityStatusDialogConfig } from '../update-quantity-status-dialog/update-quantity-status-dialog.component';
-import { EQUIPMENT_CONDITION } from '../../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentCondition } from '../../../../models/Equipment';
 
 @Component({
   selector: 'app-equipment-filter-dialog',
@@ -25,7 +24,7 @@ export class EquipmentFilterDialogComponent implements OnInit {
   brands: AutocompleteOption[] = [];
   equipmentTypes: AutocompleteOption[] = [];
   departments: AutocompleteOption[] = [];
-  equipmentCondition;
+  equipmentCondition: EquipmentCondition[];
 
   constructor(
     public dialogRef: MatDialogRef<EquipmentFilterDialogComponent>,
@@ -33,11 +32,10 @@ export class EquipmentFilterDialogComponent implements OnInit {
     private router: Router,
     private departmentService: DepartmentService,
     private equipmentService: EquipmentService,
-    private autocompleteService: AutocompleteService,
     @Inject(MAT_DIALOG_DATA) public data: { department: string },
   ) {
     this.url = this.router.url.split('?')[0];
-    this.equipmentCondition = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION)
+    this.equipmentCondition = EQUIPMENT_CONDITION;
     this.filterForm = this.fb.group({
       department: [this.data.department],
       categories: [''],

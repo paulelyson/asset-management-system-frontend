@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import {
   BORROWED_EQUIPMENT_PURPOSE,
   BORROWED_EQUIPMENT_STATUS,
+  BorrowedEquipmentPurpose,
+  BorrowedEquipmentStatusType,
 } from '../../../../models/BorrowedEquipment';
-import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Params, Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -16,14 +17,13 @@ import { Autocomplete, AutocompleteOption, Button } from '@paulelyson/elyui';
   imports: [Button, Autocomplete, ReactiveFormsModule]
 })
 export class BorrowedEquipmentFilterDialogComponent {
-  purposes: AutocompleteOption[] = [];
-  status: AutocompleteOption[] = [];
+  purposes: BorrowedEquipmentPurpose[] = [];
+  status: BorrowedEquipmentStatusType[] = [];
   departments: AutocompleteOption[] = [];
   filterForm: FormGroup;
   url: string = '';
   constructor(
     public dialogRef: MatDialogRef<BorrowedEquipmentFilterDialogComponent>,
-    private autocompleteService: AutocompleteService,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -31,8 +31,8 @@ export class BorrowedEquipmentFilterDialogComponent {
       status: [''],
       purpose: [''],
     });
-    this.purposes = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_PURPOSE);
-    this.status = this.autocompleteService.mapIntoAutocompleteOption(BORROWED_EQUIPMENT_STATUS);
+    this.purposes = BORROWED_EQUIPMENT_PURPOSE;
+    this.status = BORROWED_EQUIPMENT_STATUS;
     this.url = this.router.url.split('?')[0];
   }
 

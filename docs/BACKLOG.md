@@ -716,30 +716,44 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     behind the whole row — elyui's hover is a `filter: brightness(0.95)` on the circle
     alone. Revisit only if that flatter affordance turns out to matter.
 
-### Still open
+17. [x] **PDF paper-size selector — correcting a stale checkbox, not new work.** This item
+    was already implemented in commit `994ecbf` (2026-08-27, "restore paper size and
+    orientation selection"), which predates the `avatar` entry above by over a week — the
+    backlog checkbox for it was simply never flipped. `download-report-dialog` wires two
+    `<ely-segmented-control>` blocks (the only usage of that component in the app) to
+    `PDFFormatConfig.pageSize`/`.orientation`, and `EquipmentService.downloadReport` already
+    forwards both into the POST body. Nothing to do here.
 
-- [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
-    old local autocomplete refused bare strings. `ely-autocomplete` and `ely-dropdown` both
-    take `string[]`, so its four call sites (`update-quantity-status-dialog`,
-    `equipment-filter-dialog`, `borrowed-equipment-filter-dialog`, `class-schedule`) can
-    pass their constants directly. `getBorrowedStatusOptions` stays — its value and label
-    genuinely differ.
-- [ ] **Restore the PDF paper-size selector** with `<ely-segmented-control>`.
-    `PDFFormatConfig` declares `pageSize: 'A4' | 'LETTER' | 'LEGAL'` and
-    `orientation: 'portrait' | 'landscape'`, but the download dialog only ever sets
-    `columns` — so every report ever generated has been LEGAL/landscape with no way to
-    change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
-    handlers, thread the values into the constructor that already accepts them.
-- [ ] **Route the equipment-change-log screen, or delete it.** Migrating `tab` did not make
-    it any less dead. `EquipmentChangeLogModule` is never lazy-loaded — `app.routes.ts` has
-    no `equipment-change-log` path and nothing else imports it, so the screen is
-    unreachable — and its `<ely-tab>` binds no `(tabChange)` and no `[selected]`, so the two
-    tabs look switchable and aren't. It reads half-built rather than abandoned:
-    `onActionClicked` is an empty method body, and `getChangeLogs` appends instead of
-    replacing, so it would duplicate rows on every query-param change. If it's routed, wire
-    the tab as a URL query param to match the URL-is-the-store pattern.
-- [ ] Dialogs and a table stay hand-rolled — elyui hasn't shipped them. `DateRangePicker` is
-    published but AMS has nothing to point it at.
+18. [x] **Drop `AutocompleteService.mapIntoAutocompleteOption`** (2026-09-08). It only
+    existed because the old local autocomplete refused bare strings; `ely-autocomplete` and
+    `ely-dropdown` both take `string[]` directly. **Five** live call sites, not the four
+    originally listed here — `create-equipment-dialog` was missed. All five now assign
+    their constant (`EQUIPMENT_CONDITION`, `BORROWED_EQUIPMENT_PURPOSE`,
+    `BORROWED_EQUIPMENT_STATUS`) straight to the field, and `AutocompleteService` came out
+    of the constructor and imports of four of them — `update-quantity-status-dialog` keeps
+    it, since its fallback branch still calls `getBorrowedStatusOptions()` (kept: value and
+    label genuinely differ there). That one field, `statuses`, is retyped
+    `(string | AutocompleteOption)[]` because its two branches now return different shapes.
+    The method itself, plus its doc comment, is deleted from `autocomplete.service.ts`.
+
+19. [x] **Delete the equipment-change-log screen** (2026-09-08). Confirmed unreachable —
+    `app.routes.ts` never had a path to it — and confirmed half-built: `<ely-tab>` bound
+    neither `(tabChange)` nor `[selected]`, `onActionClicked` was an empty method body, and
+    `getChangeLogs` appended instead of replacing on every query-param change. Deleted
+    outright rather than routed: the live per-equipment change-log view already exists as
+    `equipment-change-log-dialog` (opened from Inventory via a **different** service method,
+    `getChangeLogsByEquipment`), with zero overlap confirmed before deleting anything.
+
+    Removed: `src/app/modules/equipment-change-log/` (component + both module/routing
+    files), plus the two methods only the dead screen called —
+    `EquipmentService.getChangeLogs()` and `.getChangeLogRowData()` — and the
+    `CHANGELOG_STATUS_VARIANT`/`getDisplayName` imports that were only there to support
+    them. `EquipmentChangeLog` (the type) and `getChangeLogsByEquipment`/`resolveChangeLog`
+    stay — all three still back the live dialog.
+
+Dialogs and a table stay hand-rolled — elyui hasn't shipped them. `DateRangePicker` is
+published but AMS has nothing to point it at. **With items 17-19 done, the elyui-adoption
+section has no open items left** beyond those two.
 
 ## kurikula — last priority
 

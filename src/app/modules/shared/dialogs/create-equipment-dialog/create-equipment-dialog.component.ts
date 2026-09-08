@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EQUIPMENT_CONDITION, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../../models/Equipment';
+import { EQUIPMENT_CONDITION, EquipmentCondition, EquipmentUnit, getLocationId, IConditionAndQuantity, IEquipment, IEquipmentImage } from '../../../../models/Equipment';
 import {
   Autocomplete,
   AutocompleteOption,
@@ -22,7 +22,6 @@ import {
   TextInput,
   Toggle,
 } from '@paulelyson/elyui';
-import { AutocompleteService } from '../../../../services/autocomplete.service';
 import { LocationService } from '../../../../services/location.service';
 import { ClassLocation } from '../../../../models/data/location.model';
 import { EquipmentService } from '../../../../services/equipment.service';
@@ -57,7 +56,7 @@ export class CreateEquipmentDialogComponent implements OnInit {
   default_img = 'https://placehold.co/60?text=No+Image&font=poppins';
   image: string | undefined;
   equipmentForm: FormGroup;
-  conditions;
+  conditions: EquipmentCondition[];
   matter: string[] = ['solid', 'liquid', 'gas'];
   inventoryTypes: string[] = ['inventory', 'non_inventory'];
   units: string[] = Object.values(EquipmentUnit);
@@ -89,7 +88,6 @@ export class CreateEquipmentDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateEquipmentDialogComponent>,
-    private autocompleteService: AutocompleteService,
     private locationService: LocationService,
     private departmentService: DepartmentService,
     private equipmentService: EquipmentService,
@@ -98,8 +96,8 @@ export class CreateEquipmentDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: {action: string, equipment?: IEquipment} | null,
   ) {
     this.user = this.authService.getUser();
-    // this.matter = this.autocompleteService.mapIntoAutocompleteOption(['solid', 'liquid', 'gas']);
-    this.conditions = this.autocompleteService.mapIntoAutocompleteOption(EQUIPMENT_CONDITION);
+    // this.matter = ['solid', 'liquid', 'gas'];
+    this.conditions = EQUIPMENT_CONDITION;
     this.equipmentForm = this.fb.nonNullable.group({
       _id: [data?.equipment?._id ?? ''],
       name: [data?.equipment?.name ?? ''],

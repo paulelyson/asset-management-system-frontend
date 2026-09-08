@@ -42,7 +42,7 @@ export interface IQuantityStatusDialogConfig {
 export class UpdateQuantityStatusDialogComponent {
   conditions: EquipmentCondition[] = EQUIPMENT_CONDITION;
   borrowedEquipmentStatusForm: FormGroup;
-  statuses: AutocompleteOption[];
+  statuses: (string | AutocompleteOption)[];
   constructor(
     public dialogRef: MatDialogRef<UpdateQuantityStatusDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IQuantityStatusDialogConfig,
@@ -50,7 +50,7 @@ export class UpdateQuantityStatusDialogComponent {
     private autocompleteService: AutocompleteService,
   ) {
     this.statuses = data.statusOptions
-      ? this.autocompleteService.mapIntoAutocompleteOption(data.statusOptions)
+      ? data.statusOptions
       : this.autocompleteService.getBorrowedStatusOptions();
     this.borrowedEquipmentStatusForm = this.fb.group({
       quantity: [1],
