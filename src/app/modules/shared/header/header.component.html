@@ -10,7 +10,13 @@
           <li><a routerLink="/borrow">Borrow</a></li>
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">
-            <app-avatar (avatarclicked)="onAvatarClicked()" [label]="user()?.name ?? ''" />
+            <ely-avatar
+              [label]="user()?.name ?? ''"
+              [showLabel]="true"
+              [clickable]="true"
+              variant="primary"
+              (avatarClicked)="onAvatarClicked()"
+            />
             <app-menu
               [show]="showAvatarMenu"
               (onActionClicked)="onActionClicked($event)"

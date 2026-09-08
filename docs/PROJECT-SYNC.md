@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-31.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
-| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.6.0`, 17 components published |
+| **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.7.0`, 18 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
 branch — it is dead. Nothing should read from it, seed from it, or be reconciled against
@@ -68,7 +68,7 @@ line that `ng update @angular/material@21` resolves to by default.
 
 ## elyui component inventory vs. what each app still hand-rolls
 
-Published in `@paulelyson/elyui@0.6.0` (single entry point, no secondary entry points —
+Published in `@paulelyson/elyui@0.7.0` (single entry point, no secondary entry points —
 everything imports from `@paulelyson/elyui`):
 
 - `Icon` (`ely-icon`), `Badge` (`ely-badge`), `Button` (`ely-button`), `Toggle`
@@ -84,6 +84,7 @@ everything imports from `@paulelyson/elyui`):
   which AMS has no use for — see the `datepicker` note below.
 - Added in **0.6.0**: `FileInput` (`ely-file-input`) + the `FileRejection` type, and `Tab`
   (`ely-tab`) + the `TabOption` type. `FileInput` adopted 2026-09-01, `Tab` 2026-09-02.
+- Added in **0.7.0**: `Avatar` (`ely-avatar`). Adopted 2026-09-03 — see below.
 
 `Textarea` landed in **0.2.0** — it was absent from the published 0.1.3 bundle even though
 elyui's `public-api.ts` exported it. The lesson stands regardless of that one fix: the
@@ -221,6 +222,27 @@ hardcoded to `sm`/`link` and silently ignored. New inputs: `size` (`xs|sm|md|lg`
 (empty by default; the library draws a local placeholder instead of the AMS copy's
 placehold.co request). The AMS copy's `min-width: 900px` is gone — rows now compress
 between 768px and 900px instead of forcing a horizontal scroll.
+
+`avatar` migrated on **2026-09-03** (elyui `0.7.0`): `src/app/modules/shared/avatar/` is
+deleted and `Avatar` comes from `@paulelyson/elyui`. One call site, the header's user menu
+trigger. Output renamed `avatarclicked` → `avatarClicked`, and elyui **gates emission on a
+new `clickable` input** (default `false`) — the AMS copy emitted unconditionally, so
+`[clickable]="true"` had to be added explicitly or the click handler that opens the account
+menu would go dead. `showLabel` is also new and also defaults `false`; without it the name
+next to the circle disappears, since the AMS copy always rendered its label with no way to
+turn it off.
+
+**The rendered circle changes from a real image to CSS-drawn initials.** The AMS copy built
+a `https://placehold.co/60?text=XX&font=poppins` URL from the label and fetched it — a
+network request per render, and one that threw a `TypeError` if the label was ever empty
+(indexing `parts[0][0]` unguarded). elyui's `Avatar` falls back image → initials → icon and
+never received an `image`, so it renders `resolvedInitials` as text inside a plain colored
+circle — same information, no network call, and the empty-label case now falls through to
+elyui's default `icon="person"` instead of throwing. `variant="primary"` was set explicitly
+to keep the circle green rather than elyui's default gray; nothing else was themed to match
+the AMS copy's gold (`--accent`) label text or its `--primary-200` hover highlight behind
+the whole row — elyui's hover is a `filter: brightness(0.95)` on the circle only. Revisit
+only if the flatter hover affordance turns out to matter.
 
 Still not published, and still hand-rolled here: the dialogs. Migration happens one
 component at a time, only on the user's explicit go signal (per elyui's own `CLAUDE.md`) —

@@ -2,14 +2,13 @@ import { Component, computed, Input, OnInit, signal, WritableSignal } from '@ang
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
-import { AvatarComponent } from '../avatar/avatar.component';
 import { MenuComponent } from '../menu/menu.component';
 import { AuthService, TokenData } from '../../../services/auth.service';
-import { Button } from '@paulelyson/elyui';
+import { Avatar, Button } from '@paulelyson/elyui';
 
 @Component({
   selector: 'app-header',
-  imports: [MatMenuModule, RouterLink, AvatarComponent, MenuComponent, Button],
+  imports: [MatMenuModule, RouterLink, Avatar, MenuComponent, Button],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

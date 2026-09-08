@@ -697,6 +697,25 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     tooltips, the sidenav and dividers — worth updating `CLAUDE.md`'s stack blurb, which
     still lists tabs.
 
+16. [x] **`avatar` → `ely-avatar`** (2026-09-03, elyui `0.7.0`). One call site, the header's
+    account-menu trigger. Two renamed/gated pieces: the output is `avatarClicked` (was
+    `avatarclicked`), and elyui only emits it when a new `clickable` input is `true`
+    (default `false`) — missing that would have silently killed the click handler that
+    opens the menu, so it's set explicitly alongside a new `showLabel` (also default
+    `false`, needed to keep the name text visible next to the circle).
+
+    **Drops a network request per render, and a latent crash.** The local component built a
+    `https://placehold.co/60?text=XX&font=poppins` URL from the label and fetched it as an
+    `<img>`; elyui draws the initials as text in a CSS circle — same information, no
+    request. The local version also indexed `parts[0][0]` unguarded, which threw whenever
+    the label was empty (its own default state); elyui's image → initials → icon fallback
+    means an empty label now renders a plain `person` icon instead of crashing.
+
+    `variant="primary"` was set explicitly to keep the circle green; nothing else was
+    themed to match the old gold (`--accent`) label text or the `--primary-200` hover fill
+    behind the whole row — elyui's hover is a `filter: brightness(0.95)` on the circle
+    alone. Revisit only if that flatter affordance turns out to matter.
+
 ### Still open
 
 - [ ] **Drop `AutocompleteService.mapIntoAutocompleteOption`.** It only existed because the
@@ -711,14 +730,6 @@ components plus the `toggle-button-group` stub are gone from `src/app/modules/sh
     `columns` — so every report ever generated has been LEGAL/landscape with no way to
     change it. ~15 lines: two `SegmentedControlOption[]` arrays, two `valueChange`
     handlers, thread the values into the constructor that already accepts them.
-- [ ] **`autocomplete` → `ely-autocomplete`, then `datepicker` → `ely-datepicker`.** Both
-    are published (0.5.x); they just need their own go-signal, one at a time.
-    `autocomplete` is the higher-value of the two — it has the most call sites and it's what
-    makes `create-equipment-dialog`'s and `equipment-filter-dialog`'s mixed rows line up
-    again. Note `AutocompleteOption` renames the display field `view` → `label`, which every
-    AMS call site and `AutocompleteService.mapIntoAutocompleteOption` currently emits as
-    `view`. Doing these two retires the last `mat-form-field` in the app, and with it the
-    whole `mat-form-field` / `mat-option` block in `custom-theme.scss`.
 - [ ] **Route the equipment-change-log screen, or delete it.** Migrating `tab` did not make
     it any less dead. `EquipmentChangeLogModule` is never lazy-loaded — `app.routes.ts` has
     no `equipment-change-log` path and nothing else imports it, so the screen is
