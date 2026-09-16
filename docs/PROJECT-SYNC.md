@@ -5,7 +5,7 @@ session working in any of these repos should read this file first. Update it whe
 cross-repo fact changes (a new elyui component ships, a backend contract changes, a
 priority shifts) — don't let it drift into aspiration.
 
-Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-31.
+Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-09-16.
 
 ## Repo map
 
@@ -14,7 +14,8 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-08-31.
 | **AMS frontend** | `~/Documents/personals/asset-management-system-frontend` |Angular 21, zoneless, signals | Inventory + borrowing built; consumes elyui |
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
-| **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~35–40% of v1, dormant since 2026-04-28 |
+| **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~30% of v1; dormant 2026-04-28 → 2026-09-13, now being revived |
+| **CMS backend** | `~/Documents/personals/kurikula-backend` | NestJS 12, ESM, vitest | Serves the 6 contract endpoints on `:3001`; no auth yet |
 | **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.7.0`, 18 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
@@ -34,13 +35,35 @@ forward, its borrow-status vocabulary needs remapping (`faculty_approved` →
 
 ## Runtime topology
 
-One NestJS API (`asset-management-system-backend-v2`) on `localhost:3000`, global prefix
-`api`, serving two Angular frontends via CORS (`src/main.ts`, hardcoded to
-`localhost:4200` = AMS frontend, `localhost:4201` = kurikula — not env-driven, see
-backlog).
+**Changed 2026-09-13 — the two frontends no longer share one API.**
 
-Shared Mongo collections consumed by both frontends: `user`, `department`, `school`,
-`course`, `course-offering`, `location`, `term`.
+| Frontend | Dev port | API |
+|---|---|---|
+| AMS frontend | `localhost:4200` | AMS backend v2, `localhost:3000`, prefix `api` |
+| kurikula | `localhost:4201` (now pinned in its `angular.json`) | CMS backend, `localhost:3001`, prefix `api` |
+
+**Updated 2026-09-16 — the CMS backend exists and serves kurikula.** `kurikula-backend`
+implements the six endpoints in `kurikula-frontend/docs/API-CONTRACT.md`: `GET /api/course`,
+`GET /api/course-offering`, `GET /api/user`, `POST /api/user`, `GET /api/department`,
+`GET /api/department/:id`, plus `GET /api` as a liveness check. All reads are public —
+see the auth note under the kurikula phase table.
+
+The AMS backend still lists `http://localhost:4201` in its CORS origins
+(`src/main.ts`). **Remove that entry once kurikula is verified green against `:3001`**,
+not before — pulling it early cuts kurikula's only working API mid-migration.
+
+### One database, two services
+
+`users`, `assignments`, `departments`, `schools`, `courses`, `courseofferings`,
+`locations` and `terms` live in **one Mongo database** (`asset_mgt_local`), fronted by
+both APIs with their own Mongoose schemas. Decided 2026-09-16 — see Decided below.
+
+The invariant that keeps that honest: **a schema's class name is its collection name.**
+Mongoose pluralises and lowercases it, so renaming `Course` in one repo silently starts
+writing to a second, empty collection while the other repo keeps using the first, with no
+error anywhere. Every mirrored schema in `kurikula-backend` carries a `SHARED COLLECTION`
+comment naming its AMS counterpart. Adding a field is usually safe; renaming, retyping or
+changing a `unique` index is a two-repo change.
 
 ## Shared contracts
 
@@ -246,19 +269,87 @@ Still not published, and still hand-rolled here: the dialogs. Migration happens 
 component at a time, only on the user's explicit go signal (per elyui's own `CLAUDE.md`) —
 never batch-copy multiple components.
 
-kurikula independently hand-rolls its own copies of `icon`, `badge`, `button`, `snackbar`,
-`avatar`, `input`, `autocomplete`, `tab`, `data-row` under
-`src/app/shared/components/` — same token vocabulary (`Size`, `Variant`), same event
-naming (`btnclicked`, `iconclicked`). It does **not** consume elyui today. It's a natural
-second consumer once elyui's form controls ship, but per priority order below it's last.
+### kurikula's hand-rolled components → elyui (phase 2 map)
+
+kurikula does **not** consume elyui today — `@paulelyson/elyui` isn't even installed. It
+hand-rolls 11 components under `src/app/shared/components/`, forked from the same source
+AMS's were, so the same deltas AMS hit apply. Audited 2026-09-13:
+
+| kurikula | elyui | Delta to expect |
+|---|---|---|
+| `app-button` | `ely-button` | identical API, `btnclicked` and all; elyui adds `tooltip`, `hasBorder`, `hasRadius` |
+| `app-badge` | `ely-badge` | identical (`closed`, `hasCloseIcon`); elyui adds `hasBorder` |
+| `app-icon` | `ely-icon` | **`type` → `variant`**, and the local `IconType` union lacks `neutral`/`accent` |
+| `app-avatar` | `ely-avatar` | `avatarclicked` → `avatarClicked`, gated on a new `clickable` (default `false`); `showLabel` also defaults `false`; placehold.co image → CSS initials |
+| `app-title` | `ely-title-section` | rename only; `showBottomBorder` matches |
+| `app-tab` | `ely-tab` | **`tabChange` emits `TabOption`, not the label string** — kurikula's one call site *does* bind it (`onTabChange($event)` writes `?tab=`), so this one is not a drop-in |
+| `app-data-row` | `ely-data-row` | `actionclicked` → `actionClicked`; `RowActionConfig` becomes an interface; elyui honours `size`/`appearance` the local copy ignored |
+| `app-input` | `ely-input` | **`suffix_icon` → `suffixIcon`**, `suffix_icon_clickable` → `suffixIconClickable`, `inputType` → `type`, `width` takes `FieldWidth` not `'sm'\|'md'\|'lg'`; drops the Material `appearance`/`floatLabel` |
+| `app-autocomplete` | `ely-autocomplete` | **`AutocompleteOption.view` → `label`** (touches `register.component.ts`'s `departmentOptions`), `optionselected` → `optionSelected` emitting the whole option |
+| `SnackbarService` + `app-snackbar` | `SnackbarService` | elyui's service replaces both; `SnackBarConfig` → `ISnackBarConfig`. Note kurikula's local type has a typo'd `'dafault'` member |
+| `app-header`, the two dialogs | — | app-specific, stay hand-rolled |
+
+Models that get deleted with them: `models/ui/button-config.model.ts`,
+`data-row.model.ts`, `snackbar-config.model.ts`, and `common.model.ts` minus
+`FilterDisplay` (which is app-specific, exactly as in AMS).
+
+Removing them also removes most of kurikula's Angular Material surface:
+`form-field`, `input`, `autocomplete`, `tabs`, `icon`, `tooltip`, `divider` and the
+snackbar all leave with the components above, and `src/material-theme.scss` (3.3 KB of
+overrides, all of them aimed at `mat-form-field`) can shrink to whatever `MatDialog`
+still needs.
+
+Prerequisites, same as AMS's: `npm install @paulelyson/elyui`, add
+`node_modules/@paulelyson/elyui/styles/elyui.css` before `src/styles.css` in
+`angular.json`, and add `provideAnimationsAsync()` to `app.config.ts` — kurikula has no
+animations provider today, which elyui's `Snackbar` needs. The Material Icons `<link>`
+is already in `index.html`.
 
 ## Priority order
 
-1. Finish AMS (frontend + backend) — see the P0/P1 backlog below.
-2. Adopt `@paulelyson/elyui` inside AMS frontend (blocked on the Angular 21 upgrade).
-3. Migrate AMS's remaining hand-rolled components to elyui as elyui ships them, one at a
-   time.
-4. kurikula — last. Revisit once AMS is stable and elyui covers form controls.
+Revised 2026-09-13: kurikula is no longer "last". It moved to the front because the CMS
+back-office split (see Open questions) is being executed, and because AMS's own elyui
+adoption path is finished.
+
+1. **kurikula revival, in phases** — see below.
+2. Finish AMS (frontend + backend) — see the P0/P1 backlog below.
+3. Migrate AMS's remaining hand-rolled components (the dialogs) to elyui as elyui ships
+   them, one at a time.
+
+### kurikula phases
+
+Phase 1 is done in the frontend as of 2026-09-13; everything after it is planned.
+
+| Phase | What | Owner | State |
+|---|---|---|---|
+| 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
+| 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 11 components + 4 UI models come out; see the component table below. | frontend | next |
+| 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, guards, `isLoggedIn` wiring. Nothing in kurikula can authenticate today. | frontend + CMS backend (B2) | unblocked |
+| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination re-requests page 1, `user-detail-dialog` is a scaffold, `Usersff` typo, four dead NgModules. | frontend | after 2 |
+| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 3 |
+
+**Every read on the CMS backend is public today, and that is deliberate.** kurikula has
+no `AuthService` at all, so a global auth guard would black out every one of its screens
+with no way to obtain a token. The one endpoint that would be dangerous unguarded —
+`POST /api/user`, public self-registration — is safe on its own terms instead: the role is
+hardcoded to `student` and the status to `pending_approval`, and `CreateUserDto` does not
+declare `role`, `roles`, `account_status` or `activated`, so `whitelist: true` strips them
+from the body. That is the constraint that has to survive B2, not just a stopgap.
+
+### CMS backend phases
+
+| Phase | What | Pairs with | State |
+|---|---|---|---|
+| **B1** | Foundation (envelope interceptor, exception filter, shared schemas) + the six contract endpoints, reads public | kurikula phase 1 | **done 2026-09-16** |
+| B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | next |
+| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates | kurikula phase 5 | after B2 |
+| B4 | K-12 curriculum models — `program`, `curriculum`, `gradeLevel`, `strand`, `track`, `section`, `schoolYear` | kurikula phase 5 | after B3 |
+
+B2 should copy AMS v2's `src/auth/` rather than re-derive it, fixing two things on the way
+in: register the guards as `APP_GUARD` providers (AMS resolves them with `app.get()` in
+`main.ts`), and read every env var through `ConfigService`. Because the `users` collection
+is shared, a password hashed by either service must verify in the other — bcrypt at 10
+rounds, both sides.
 
 ## Cross-repo working rules
 
@@ -282,49 +373,33 @@ deferred). Each P0 item has a corresponding line in the execution checklist in
 `CLAUDE.md` (backend) with a commit message; this list is the "what and why", the
 checklist is the "in what order".
 
-### P0 — backend correctness/security
+### P0 — all clear as of 2026-09-13
 
-- **`GET /api/course` fails on every request.**
-  `src/course/course.service.ts:29-36` — all three `$or` entries are commented out, so
-  `$or: []` ships to Mongo, which rejects an empty `$or`
-  (`$or/$and/$nor must be a nonempty array`). This is the endpoint kurikula depends on.
-- **Passwords are stored and compared in plaintext.** `src/auth/auth.service.ts:14,41` —
-  `user.password !== pass`. No bcrypt/argon anywhere in the repo. Needs a migration path
-  for existing rows before hashing can turn on.
-- **No RBAC exists.** No `@Roles()` decorator, no `RolesGuard`. `UserRole` is used only
-  for *data filtering* inside a few services, never to authorize an endpoint. Any
-  authenticated user — including a student — can currently `POST /api/user`,
-  `PATCH /api/equipment/:id`, or `PATCH /api/equipment-change-log/:changeLogId/resolve`.
-  **Design is blocked on the CMS back-office split decision** — see Open questions below.
-- **Every `HttpException` subclass reports as a 500.**
-  `src/common/filters/global-exception.filter.ts` has no generic `HttpException` branch,
-  so `NotFoundException`/`ForbiddenException` thrown anywhere in services collapse to
-  "Internal server error". Also has a leftover debug `console.log(exception)` at line 20.
-- **Mass assignment via `ValidationPipe`.** `src/main.ts:15` — `whitelist: true` is
-  commented out. `UpdateEquipmentDto = PartialType(CreateEquipmentDto)` exposes
-  `confirmed` and `deleted`, so a client can self-approve their own equipment change or
-  soft-delete a record via `PATCH /api/equipment/:id`.
-- **Equipment borrow-status lookup can never match.**
-  `src/equipment/equipment.repository.ts:26-31` — `$lookup` binds
-  `{ $toString: '$_id' }` (a string) against `borrowedEquipment.equipment`, which is an
-  ObjectId. Source even carries the comment
-  `/* replace with $$equipmentId when testing */`. `accumulatedStatus` is always `[]` on
-  `GET /api/equipment`.
+Every P0 that used to be listed here has been fixed. Re-verified against both repos on
+2026-09-13, item by item, because this list had drifted badly out of date:
 
-### P0 — frontend
+- `GET /api/course` — fixed (`ea3f632`); the filter is a plain `title` regex, no empty `$or`.
+- Plaintext passwords — fixed (`9230714`); `hashPassword`/`comparePassword` in
+  `src/common/utils/password.util.ts`, with a migration script, plus refresh tokens with
+  family revocation on reuse.
+- No RBAC — fixed (`5b650d8`, `900d24b`); `@Roles()` + a `RolesGuard` registered globally
+  alongside `AuthGuard` in `main.ts`, backed by the new `Assignment` collection rather
+  than roles embedded on the user.
+- `HttpException` → 500 — fixed; `global-exception.filter.ts` has a generic
+  `instanceof HttpException` branch and the debug `console.log` is gone.
+- Mass assignment — fixed; `whitelist: true` is live in `main.ts` (deliberately without
+  `forbidNonWhitelisted`, so extra client fields are stripped rather than rejected).
+- Equipment borrow-status `$lookup` — fixed; binds `$$equipmentId`, ids normalised to
+  ObjectId (`8e7f73e`, `672d04b`).
+- Frontend: the login-logs-itself-out interceptor is rewritten around token endpoints +
+  a single refresh attempt; `borrow.service.ts` sends `page`/`search`/`purpose`/`status`;
+  the `update-quantity-status-dialog` placeholders are gone; `homepage.component.ts` is
+  standalone (Angular 21 default) so the `/login` route resolves.
 
-- **Login logs itself out.** `src/app/interceptors/auth.interceptor.ts:13-15` calls
-  `authService.logout()` on *any* tokenless request — including the login `POST` itself.
-- **Borrowed-equipment search/purpose/pagination are no-ops.**
-  `src/app/services/borrow.service.ts:47-49` — `page`, `search`, `purpose` params are
-  commented out of the request. The search box, purpose filter, and "Show more..." button
-  all update the URL but never change the results.
-- **Hardcoded placeholder content ships in a live dialog.**
-  `src/app/modules/shared/dialogs/update-quantity-status-dialog/` renders a literal
-  `Flat Screw Driver 6.5×200mm` / `SN: entries` for every item, and a hardcoded
-  `Add Transaction` label so Cancel/Approve/Release all read "Add Transaction".
-- **`/login` route is likely broken.** `homepage.component.ts` is `standalone: false` but
-  `HomepageModule` declares nothing — the component is declared nowhere.
+**Consequence for the CMS backend being built now:** auth, hashing, refresh-token
+rotation, the global exception filter, the response interceptor and the assignment-based
+`RolesGuard` all exist in working form in `asset-management-system-backend-v2` — copy
+them rather than re-deriving. They are the reference implementation.
 
 ### P1 — gaps blocking "finish AMS"
 
@@ -421,13 +496,51 @@ checklist is the "in what order".
   Prettier config — `package.json` says `printWidth: 100`, `.prettierrc` says `150`. Pick
   one and delete the other.
 
+### Decided — the CMS/back-office split (2026-09-13)
+
+**The split is happening.** Curriculum management moves onto its own backend, so students
+cannot reach the back-office at the network layer at all, independent of RBAC. Kurikula's
+frontend was repointed at it the same day; the backend is the owner's to build.
+
+What this settles: RBAC on the AMS API no longer has to cover the curriculum surface. It
+shipped anyway (`RolesGuard` + `@Roles()`, assignment-backed), so the remaining question
+is only which of the 12 AMS modules still need role gates once curriculum is gone.
+
+### Decided — how the two services share data (2026-09-16)
+
+**One Mongo database, two services in front of it.** `kurikula-backend` connects to the
+same `asset_mgt_local` as AMS v2 and declares its own Mongoose schemas over the same
+collections.
+
+Chosen over the alternatives because it was the only one that made kurikula work the day
+the backend landed: separate databases with a sync means kurikula starts empty and the
+sync becomes a permanent chore, and CMS-owns-it-AMS-reads-through-an-API means refactoring
+AMS's hot paths before kurikula has rendered a single row. The boundary this buys is a
+network boundary, not a data one — which is what the split was actually for (students
+cannot reach the back-office at all, independent of RBAC).
+
+What it costs: the schemas must not drift, and nothing enforces that but convention. See
+the class-name-is-collection-name invariant under Runtime topology. Revisit if the two
+services ever want genuinely different shapes for the same entity — that is the signal
+this choice has run out.
+
+### Decided — one user record (2026-09-16)
+
+**`users` and `assignments` are shared; the CMS owns registration.** kurikula's register
+form creates the account AMS authenticates. AMS has no registration form and does not need
+one.
+
+Consequences, both live now:
+
+- A password hashed by either service must verify in the other — **bcrypt, 10 rounds,
+  both sides**. Changing the algorithm in one repo locks accounts out of the other.
+- An `assignments` row written by the CMS grants authority in AMS, where `RolesGuard`
+  reads it. That is why `POST /api/user` hardcodes `student` rather than trusting the
+  body, and why the `Assignment` scope guard is mirrored in `kurikula-backend`.
+
 ### Open questions (recorded, not decided)
 
-- **Possible split: a separate CMS/back-office backend.** Under consideration: moving
-  curriculum management onto its own backend, shaped so students cannot reach it at the
-  network layer at all, independent of whatever RBAC exists in the shared API. This
-  directly changes the shape of the RBAC work above — if student-facing and back-office
-  surfaces end up as separate deployments, RBAC on the shared AMS/kurikula API becomes a
-  smaller, targeted job (protect the AMS student-facing surface only) instead of a
-  blanket pass over all 12 modules. **Do not design the RBAC guard/role map until this is
-  settled** — it changes the scope of that work materially.
+- **Which service owns writes to a shared collection when both want them.** B3 gives the
+  CMS real CRUD for course/offering/department/location/school/term — the collections AMS
+  also reads. Read-read is fine; two writers on one document is the case nobody has
+  designed for yet. Worth settling before B3, not during.
