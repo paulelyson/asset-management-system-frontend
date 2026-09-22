@@ -326,15 +326,15 @@ adoption path is finished.
 
 ### kurikula phases
 
-Phase 1 is done in the frontend as of 2026-09-13; everything after it is planned.
+Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 
 | Phase | What | Owner | State |
 |---|---|---|---|
 | 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
-| 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **code done 2026-09-16, unverified** — see `kurikula-frontend/docs/ELYUI-MIGRATION.md` |
-| 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **code done 2026-09-16, unverified** |
-| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination re-requests page 1, `user-detail-dialog` is a scaffold, `Usersff` typo, four dead NgModules. | frontend | after 2 |
-| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 3 |
+| 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
+| 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
+| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, `user-detail-dialog` is a scaffold, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **next** |
+| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 4 |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
 then they were public because kurikula had no way to obtain a token, so a guard would have
@@ -357,8 +357,8 @@ guard is inert without the decorator. Role gates are B3.
 | Phase | What | Pairs with | State |
 |---|---|---|---|
 | **B1** | Foundation (envelope interceptor, exception filter, shared schemas) + the six contract endpoints, reads public | kurikula phase 1 | **done 2026-09-16** |
-| B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | **code done 2026-09-16, unverified** |
-| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates | kurikula phase 5 | next |
+| B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | **done — verified 2026-09-22** |
+| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates **and scope gates** — see below | kurikula phase 5 | next |
 | B4 | K-12 curriculum models — `program`, `curriculum`, `gradeLevel`, `strand`, `track`, `section`, `schoolYear` | kurikula phase 5 | after B3 |
 
 B2 copied AMS v2's `src/auth/` rather than re-deriving it, and fixed both of the things it
@@ -371,6 +371,17 @@ service must verify in the other — bcrypt at 10 rounds, both sides.
 `refreshtokens`, note, is **not** a shared collection. Only `users` and `assignments` are
 shared identity; a CMS session is not an AMS session and the two sign with different
 secrets, so `JWT_SECRET` deliberately does not have to match.
+
+**Found while verifying phase 3 (2026-09-22): the CMS has role gates coming in B3 but no
+*scope* gates, and they are not the same thing.** A chairman of CPE currently sees every
+user in the system, because `UserService.find` filters by whatever the query asks for and
+nothing else — there is no "you may only see your own department". `@Roles(CHAIRMAN)`
+would not fix that; it answers "may you call this endpoint", not "which rows may you see".
+
+The client passing `?department=` is a convenience, not a boundary — the param can simply
+be deleted. **B3 has to carry scoping, not just role checks**, and AMS's own visibility
+filters are the reference for what that looks like. Tracked as item A1 in
+`kurikula-frontend/docs/PHASE-4-UNBREAK.md`.
 
 ## Cross-repo working rules
 
