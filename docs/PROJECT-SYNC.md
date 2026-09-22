@@ -15,7 +15,7 @@ Owner: paulelyson (polusesmercur@gmail.com). Last written: 2026-09-16.
 | **AMS backend** | `~/Documents/personals/asset-management-system-backend-v2` | NestJS 11 + Mongoose 9 | 3 of 12 modules real |
 | ~~AMS backend (legacy)~~ | `~/Documents/personals/asset-management-system-backend` | Express 5 + Mongoose | **Dead. Do not edit.** |
 | **CMS / kurikula** | `~/Documents/personals/kurikula-frontend` | Angular 21 | ~30% of v1; dormant 2026-04-28 → 2026-09-13, now being revived |
-| **CMS backend** | `~/Documents/personals/kurikula-backend` | NestJS 12, ESM, vitest | Serves the 6 contract endpoints on `:3001`; no auth yet |
+| **CMS backend** | `~/Documents/personals/kurikula-backend` | NestJS 12, ESM, vitest | Serves the 6 contract endpoints on `:3001` behind a global auth guard |
 | **elyui** | `~/Documents/personals/elyui` | Angular 21 library | `@paulelyson/elyui@0.7.0`, 18 components published |
 
 `asset-management-system-backend` (no `-v2` suffix) is **not** a fallback or a parallel
@@ -45,8 +45,9 @@ forward, its borrow-status vocabulary needs remapping (`faculty_approved` →
 **Updated 2026-09-16 — the CMS backend exists and serves kurikula.** `kurikula-backend`
 implements the six endpoints in `kurikula-frontend/docs/API-CONTRACT.md`: `GET /api/course`,
 `GET /api/course-offering`, `GET /api/user`, `POST /api/user`, `GET /api/department`,
-`GET /api/department/:id`, plus `GET /api` as a liveness check. All reads are public —
-see the auth note under the kurikula phase table.
+`GET /api/department/:id`, plus `GET /api` as a liveness check — and, since auth landed the
+same day, the `/api/auth/*` family. **The reads are no longer public** — see the auth note
+under the kurikula phase table.
 
 The AMS backend still lists `http://localhost:4201` in its CORS origins
 (`src/main.ts`). **Remove that entry once kurikula is verified green against `:3001`**,
@@ -271,9 +272,16 @@ never batch-copy multiple components.
 
 ### kurikula's hand-rolled components → elyui (phase 2 map)
 
-kurikula does **not** consume elyui today — `@paulelyson/elyui` isn't even installed. It
-hand-rolls 11 components under `src/app/shared/components/`, forked from the same source
-AMS's were, so the same deltas AMS hit apply. Audited 2026-09-13:
+**Executed 2026-09-16 but not yet run** — `kurikula-frontend/docs/ELYUI-MIGRATION.md` is
+the record, including the verification checklist and what was deliberately left undone.
+The app will not compile until `npm install` pulls `@paulelyson/elyui@0.7.0`.
+
+One thing that caught this migration out, worth remembering for the AMS dialogs too:
+**elyui's working tree is ahead of its published version.** Its local `public-api.ts`
+exports an uncommitted `tooltip`/`tooltip-panel` that 0.7.0 does not ship. Always plan a
+consumer against the published package, not against elyui's source tree.
+
+The map below is as audited 2026-09-13; every row of it held up:
 
 | kurikula | elyui | Delta to expect |
 |---|---|---|
@@ -323,33 +331,46 @@ Phase 1 is done in the frontend as of 2026-09-13; everything after it is planned
 | Phase | What | Owner | State |
 |---|---|---|---|
 | 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
-| 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 11 components + 4 UI models come out; see the component table below. | frontend | next |
-| 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, guards, `isLoggedIn` wiring. Nothing in kurikula can authenticate today. | frontend + CMS backend (B2) | unblocked |
+| 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **code done 2026-09-16, unverified** — see `kurikula-frontend/docs/ELYUI-MIGRATION.md` |
+| 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **code done 2026-09-16, unverified** |
 | 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination re-requests page 1, `user-detail-dialog` is a scaffold, `Usersff` typo, four dead NgModules. | frontend | after 2 |
 | 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 3 |
 
-**Every read on the CMS backend is public today, and that is deliberate.** kurikula has
-no `AuthService` at all, so a global auth guard would black out every one of its screens
-with no way to obtain a token. The one endpoint that would be dangerous unguarded —
-`POST /api/user`, public self-registration — is safe on its own terms instead: the role is
-hardcoded to `student` and the status to `pending_approval`, and `CreateUserDto` does not
-declare `role`, `roles`, `account_status` or `activated`, so `whitelist: true` strips them
-from the body. That is the constraint that has to survive B2, not just a stopgap.
+**The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
+then they were public because kurikula had no way to obtain a token, so a guard would have
+blacked out every screen. Both halves shipped together for exactly that reason.
+
+Everything now requires a bearer token except five routes, each of which cannot present
+one by definition: `GET /api` (liveness), `POST /api/user` (self-registration), and
+`POST /api/auth/login` / `refresh` / `logout`.
+
+`POST /api/user` being public is still not what makes it safe — the service is, and that
+constraint survived B2 exactly as it had to: the role is hardcoded to `student` and the
+status to `pending_approval`, and `CreateUserDto` does not declare `role`, `roles`,
+`account_status` or `activated`, so `whitelist: true` strips them from the body.
+
+`RolesGuard` and `@Roles()` ship on the CMS backend but **no route uses them yet** — the
+guard is inert without the decorator. Role gates are B3.
 
 ### CMS backend phases
 
 | Phase | What | Pairs with | State |
 |---|---|---|---|
 | **B1** | Foundation (envelope interceptor, exception filter, shared schemas) + the six contract endpoints, reads public | kurikula phase 1 | **done 2026-09-16** |
-| B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | next |
-| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates | kurikula phase 5 | after B2 |
+| B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | **code done 2026-09-16, unverified** |
+| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates | kurikula phase 5 | next |
 | B4 | K-12 curriculum models — `program`, `curriculum`, `gradeLevel`, `strand`, `track`, `section`, `schoolYear` | kurikula phase 5 | after B3 |
 
-B2 should copy AMS v2's `src/auth/` rather than re-derive it, fixing two things on the way
-in: register the guards as `APP_GUARD` providers (AMS resolves them with `app.get()` in
-`main.ts`), and read every env var through `ConfigService`. Because the `users` collection
-is shared, a password hashed by either service must verify in the other — bcrypt at 10
-rounds, both sides.
+B2 copied AMS v2's `src/auth/` rather than re-deriving it, and fixed both of the things it
+was meant to fix on the way in: the guards are `APP_GUARD` providers in `app.module.ts`
+(AMS still resolves them with `app.get()` in `main.ts`), and the refresh TTL is read
+through `ConfigService` rather than a module-level `process.env` that evaluates before
+`.env` is parsed. Because the `users` collection is shared, a password hashed by either
+service must verify in the other — bcrypt at 10 rounds, both sides.
+
+`refreshtokens`, note, is **not** a shared collection. Only `users` and `assignments` are
+shared identity; a CMS session is not an AMS session and the two sign with different
+secrets, so `JWT_SECRET` deliberately does not have to match.
 
 ## Cross-repo working rules
 
@@ -416,6 +437,12 @@ them rather than re-deriving. They are the reference implementation.
   becomes a live bug the moment any of them is implemented.
 - Backend: `PATCH /api/auth/change-password` reads `username` from the request body
   instead of `req.user` — operates cross-account.
+- Backend: `AuthService.signIn` ignores `account_status` entirely, so a `deactivated`,
+  `rejected` or never-approved account can still obtain a token from AMS. The CMS backend
+  gates on it as of 2026-09-16 (see Decided above); against one shared `users` collection
+  the two now disagree, and AMS is the permissive side. Port the check — and note that
+  doing so locks out every currently-seeded account until statuses are set, which is the
+  same constraint kurikula already lives with.
 - Backend: seeders are half-disabled. `src/database/seeders/seed.ts` has
   `CourseOfferingsSeeder` and `EquipmentSeeder` commented out; there is no seeder at all
   for School, Department, Location, Course, or Term — hence hardcoded department
@@ -537,6 +564,27 @@ Consequences, both live now:
 - An `assignments` row written by the CMS grants authority in AMS, where `RolesGuard`
   reads it. That is why `POST /api/user` hardcodes `student` rather than trusting the
   body, and why the `Assignment` scope guard is mirrored in `kurikula-backend`.
+
+### Decided — the CMS requires an active account to log in (2026-09-16)
+
+`kurikula-backend`'s `signIn` refuses any account whose `account_status` is not `active`,
+and re-checks it on every refresh so that deactivating an account ends the session it
+already holds. **AMS's `signIn` checks nothing** — so against one shared `users` collection
+the two services now disagree about who may log in, and a `deactivated` account can still
+get a token from AMS. That gap is on the AMS side; see the P1 line below.
+
+The live consequence is operational and affects testing immediately: `account_status`
+defaults to `pending_approval` on both `User` schemas, `UsersSeeder` never sets it, and
+`kurikula-backend`'s `create()` hardcodes it. **Nothing in either repo ever writes
+`'active'`**, and there is no approval UI until phase 5 — so every account, including any
+registered through kurikula's own form, has to be activated by hand:
+
+```bash
+mongosh asset_mgt_local --eval 'db.users.updateOne({ idNumber: "<id>" }, { $set: { account_status: "active" } })'
+```
+
+Worth settling when phase 5 is planned: either registration mints `active` accounts, or the
+approval UI comes forward. Leaving it as manual Mongo edits is not a resting state.
 
 ### Open questions (recorded, not decided)
 
