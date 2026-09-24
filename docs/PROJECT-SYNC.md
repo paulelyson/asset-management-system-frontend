@@ -245,6 +245,16 @@ hardcoded to `sm`/`link` and silently ignored. New inputs: `size` (`xs|sm|md|lg`
 placehold.co request). The AMS copy's `min-width: 900px` is gone — rows now compress
 between 768px and 900px instead of forcing a horizontal scroll.
 
+**Gap worth knowing before designing a row action: `RowActionConfig` has `tooltip` but no
+`disabled`,** and `data-row.html` does not bind one on the `<ely-button>` it renders
+(checked against 0.7.0's `.d.ts` and elyui's source, 2026-09-24). So a row action cannot be
+greyed out — an action with no destination yet has to be either removed or left clickable
+with a tooltip and a handler that says why. kurikula hit this on its Deactivate button
+(phase 4 B2) and took the second option. A `disabled?: boolean` on the interface plus the
+binding is the obvious fix whenever elyui is next opened, and it would need both consumers
+bumped. Related trap: Material suppresses pointer events on a natively disabled `<button>`,
+so `[tooltip]` on a disabled `ely-button` never fires — put the explanation in visible text.
+
 `avatar` migrated on **2026-09-03** (elyui `0.7.0`): `src/app/modules/shared/avatar/` is
 deleted and `Avatar` comes from `@paulelyson/elyui`. One call site, the header's user menu
 trigger. Output renamed `avatarclicked` → `avatarClicked`, and elyui **gates emission on a
@@ -333,7 +343,7 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 | 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
 | 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
 | 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
-| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, `user-detail-dialog` is a scaffold, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **next** |
+| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — B1 (offerings list) and B2 (user detail dialog) done |
 | 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 4 |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
