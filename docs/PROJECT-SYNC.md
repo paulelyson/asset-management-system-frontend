@@ -344,7 +344,7 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 | 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
 | 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
 | 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — B1 (offerings list) and B2 (user detail dialog) done |
-| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. | both | after 4 |
+| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | after 4 |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
 then they were public because kurikula had no way to obtain a token, so a guard would have
@@ -612,4 +612,12 @@ approval UI comes forward. Leaving it as manual Mongo edits is not a resting sta
 - **Which service owns writes to a shared collection when both want them.** B3 gives the
   CMS real CRUD for course/offering/department/location/school/term — the collections AMS
   also reads. Read-read is fine; two writers on one document is the case nobody has
-  designed for yet. Worth settling before B3, not during.
+  designed for yet. Worth settling before B3, not during. kurikula's course-offering
+  create/update is what forces the answer first; it is P1 in
+  `kurikula-frontend/docs/PHASE-5-PRODUCT.md`.
+
+  Scale of B3, checked 2026-09-24: `course` and `department` expose `@Get()` + `@Get(':id')`,
+  `course-offering` exposes `@Get()` alone, and **`location`, `school` and `assignment` have
+  no controller at all** — schemas and modules only. `term` has no module on either side, and
+  AMS's `Term` is still an orphan nothing references. So B3 is not "add writes to existing
+  resources" for half its surface; it is building the read path first.
