@@ -628,15 +628,30 @@ approval UI comes forward. Leaving it as manual Mongo edits is not a resting sta
 when kurikula's P1 (course-offering create/update) forced it. `POST`/`PATCH
 /api/course-offering` and `GET /api/course-offering/:id` are live on the CMS, gated by
 `@Roles(ADMINISTRATOR, DEAN, CHAIRMAN)` **and** a write-scope policy
-(`src/course-offering/policies/write.policy.ts`): administrator and dean anywhere, a
+(`src/department/policies/department-write.policy.ts` since P2): administrator and dean anywhere, a
 chairman only for courses in a department they chair. Same rule shape as the user-list
 visibility policy. These are the first CMS routes to carry `@Roles()`.
 
-Outstanding on the AMS side: **AMS v2 still exposes its own `POST /api/course-offering`,
-live and role-ungated** (its `PATCH`/`DELETE` are `NotImplemented` stubs). Remove all three
-in a separate AMS-backend commit; until then there are two writers in practice. The
-general question below, for the other shared collections, stays open — this settles one
-collection, not the rule.
+AMS v2's own `POST /api/course-offering` (live, role-ungated) and its `PATCH`/`DELETE`
+stubs were **removed on 2026-09-26**, with the course routes below — AMS's offering and
+course controllers are now `GET`-only. The general question below, for the other shared
+collections, stays open — this settles one collection, not the rule.
+
+### Decided — the CMS owns course writes (2026-09-26)
+
+**`kurikula-backend` is the only writer of `courses`; AMS reads them.** Settled by
+kurikula's P2 (course CRUD), on P1's answer. `POST`/`PATCH`/`DELETE /api/course` are live
+on the CMS behind the same role gate and the same scope policy, now shared as
+`src/department/policies/department-write.policy.ts`.
+
+**Delete is hard, and refused (409) while any offering references the course.**
+`courseofferings` is the only collection referencing `courses` in either backend, and
+offerings are never deleted, so the guard alone rules out dangling refs — no `deleted`
+field was added to `Course`, and neither side's course reads change. The CMS also
+uppercases `code` on write (in the DTO, not the shared schema).
+
+AMS v2's `POST /api/course` (live, role-ungated) and its `PATCH`/`DELETE` stubs were
+removed in the same AMS-backend commit as the course-offering routes (2026-09-26).
 
 ### Open questions (recorded, not decided)
 
@@ -644,7 +659,7 @@ collection, not the rule.
   CMS real CRUD for course/offering/department/location/school/term — the collections AMS
   also reads. Read-read is fine; two writers on one document is the case nobody has
   designed for yet. Worth settling before B3, not during. **Answered for
-  `courseofferings` on 2026-09-26 (CMS owns, see above);** still open for `courses`,
+  `courseofferings` and `courses` on 2026-09-26 (CMS owns, see above);** still open for
   `departments`, `locations` and `schools`. The course-offering answer is the natural
   default for the rest of the curriculum collections; `locations` is the one where AMS
   has the stronger claim, since rooms and labs are what it manages.
