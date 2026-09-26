@@ -343,7 +343,7 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 | 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
 | 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
 | 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
-| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — B1 (offerings list), B2 (user detail dialog), C (pagination) and D1 done |
+| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — A1 (user-list scoping), B1 (offerings list), B2 (user detail dialog), C (pagination) and D1 done |
 | 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | after 4 |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
@@ -392,6 +392,12 @@ The client passing `?department=` is a convenience, not a boundary — the param
 be deleted. **B3 has to carry scoping, not just role checks**, and AMS's own visibility
 filters are the reference for what that looks like. Tracked as item A1 in
 `kurikula-frontend/docs/PHASE-4-UNBREAK.md`.
+
+**The user-list read scope landed 2026-09-26, ahead of B3**
+(`kurikula-backend/src/user/policies/visibility.policy.ts`). The rule: administrator and
+dean are unscoped, a chairman is scoped to the departments they chair, and everyone else
+sees only themselves. Write-side scoping still belongs to B3, along with scoping every
+other CMS resource, and should reuse that policy.
 
 ## Cross-repo working rules
 
