@@ -748,6 +748,33 @@ kurikula's register form always sent `18`. This came out of rebuilding kurikula'
 - **AMS UI consequence:** none. The AMS frontend's `User` model still declares `age`, but
   nothing renders it.
 
+### Decided — `departments.acceptsStudents` (2026-09-27)
+
+Some departments exist to own labs, equipment, faculty or service courses, but **no
+student enrols in them**: USJ-R Engineering's ECL and DMSEP, for example (DMSEP owns the
+physics and chemistry labs in the AMS equipment seed). The others, such as CE, ECE and CPE,
+are where students enrol. A new boolean, `acceptsStudents`, records the difference. It
+was named for what the department is for rather than a head count, so a brand-new
+department with no students yet is still `true`.
+
+- **Both schemas declare it, `default: true`, and a missing field means true.** Every row
+  that existed before 2026-09-27 lacks it, and `lean()` reads skip schema defaults, so
+  queries must use `{ $ne: false }`, never `true`. AMS declares it but doesn't read it.
+- **Only a student's department is restricted.** This covers the register form's picker,
+  `POST /api/user`, and student rows in the CMS user create and update routes; the server
+  returns 400 for a department that doesn't accept students. Instructor, chairman and lab
+  roles, courses, locations and AMS equipment can still point at ECL or DMSEP.
+- **Nothing writes the flag yet,** because department writes have no owner (see Open
+  questions). Set it by hand:
+
+  ```bash
+  mongosh asset_mgt_local --eval 'db.departments.updateMany({ code: { $in: ["ECL", "DMSEP"] } }, { $set: { acceptsStudents: false } })'
+  ```
+
+- **It's a bridge to B4's `program` model.** Once students enrol in a program that belongs
+  to a department, "accepts students" becomes "has at least one program", and this field
+  can be removed.
+
 ### Open questions (recorded, not decided)
 
 - **Which service owns writes to a shared collection when both want them.** B3 gives the
