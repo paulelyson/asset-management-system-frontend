@@ -344,7 +344,7 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 | 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
 | 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
 | 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — A1 (user-list scoping), B1 (offerings list), B2 (user detail dialog), B3 (`/location` crash, with phase 5 P3), B4 (course row actions, with phase 5 P1), C (pagination) and D1 done |
-| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | **started** — P1 (offering create/update) and P2 (course CRUD) built 2026-09-26, P3 (location CRUD) 2026-09-27; all awaiting manual verification |
+| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | **started** — P1 (offering create/update) and P2 (course CRUD) built 2026-09-26; P3 (location CRUD) and P6 (user create/update/activate) built 2026-09-27; all awaiting manual verification |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
 then they were public because kurikula had no way to obtain a token, so a guard would have
@@ -369,7 +369,7 @@ role gates are B3.
 |---|---|---|---|
 | **B1** | Foundation (envelope interceptor, exception filter, shared schemas) + the six contract endpoints, reads public | kurikula phase 1 | **done 2026-09-16** |
 | B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | **done — verified 2026-09-22** |
-| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates **and scope gates** — see below | kurikula phase 5 | **started** — course-offering get/create/update and course CRUD landed 2026-09-26, location CRUD 2026-09-27 |
+| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates **and scope gates** — see below | kurikula phase 5 | **started** — course-offering get/create/update and course CRUD landed 2026-09-26; location CRUD and user create/update 2026-09-27 |
 | B4 | K-12 curriculum models — `program`, `curriculum`, `gradeLevel`, `strand`, `track`, `section`, `schoolYear` | kurikula phase 5 | after B3 |
 
 B2 copied AMS v2's `src/auth/` rather than re-deriving it, and fixed both of the things it
@@ -397,8 +397,8 @@ filters are the reference for what that looks like. Tracked as item A1 in
 **The user-list read scope landed 2026-09-26, ahead of B3**
 (`kurikula-backend/src/user/policies/visibility.policy.ts`). The rule: administrator and
 dean are unscoped, a chairman is scoped to the departments they chair, and everyone else
-sees only themselves. Write-side scoping still belongs to B3, along with scoping every
-other CMS resource, and should reuse that policy.
+sees only themselves. The user write side landed 2026-09-27 and reuses that policy (see
+"the CMS owns user and assignment writes" below).
 
 ## Cross-repo working rules
 
@@ -471,7 +471,9 @@ them rather than re-deriving. They are the reference implementation.
   gates on it as of 2026-09-16 (see Decided above); against one shared `users` collection
   the two now disagree, and AMS is the permissive side. Port the check — and note that
   doing so locks out every currently-seeded account until statuses are set, which is the
-  same constraint kurikula already lives with.
+  same constraint kurikula already lives with. **More pressing since 2026-09-27:**
+  kurikula's Users screen can now deactivate an account, and until this is ported that
+  account can still log in to AMS.
 - Backend: seeders are half-disabled. `src/database/seeders/seed.ts` has
   `CourseOfferingsSeeder` and `EquipmentSeeder` commented out; there is no seeder at all
   for School, Department, Location, Course, or Term — hence hardcoded department
@@ -480,8 +482,15 @@ them rather than re-deriving. They are the reference implementation.
 - Backend: `Dockerfile` doesn't install Chromium and uses `npm install --ignore-scripts`,
   so Puppeteer PDF generation (`/api/equipment/report/download`) will fail in the built
   image. `equipment.controller.ts` also imports `path/win32` in a Linux-deployed service.
-- Frontend: no user-management UI (`UserService.getUsers()` is never called), no
-  dashboard, no settings page. Header renders a `Register` button with no click handler.
+- Frontend: no dashboard, no settings page. Header renders a `Register` button with no
+  click handler. **User management is not an AMS gap any more:** it lives in kurikula
+  (phase 5 P6, 2026-09-27), because the CMS owns user writes. AMS does not need a Users
+  screen.
+- Backend: `GET /api/user/:id` calls `UserService.findOne`, which is the login lookup: it
+  matches on `idNumber` and selects `+password`. So any authenticated caller can read
+  another account's bcrypt hash. Point the route at a password-free read, or remove it
+  (nothing in the AMS frontend calls it). Found 2026-09-27 while removing the user write
+  routes.
 - Frontend: `borrowed-equipment.component.ts:74` hardcodes transaction condition to
   `'functional'` (`// TODO add functional`).
 
@@ -620,8 +629,11 @@ registered through kurikula's own form, has to be activated by hand:
 mongosh asset_mgt_local --eval 'db.users.updateOne({ idNumber: "<id>" }, { $set: { account_status: "active" } })'
 ```
 
-Worth settling when phase 5 is planned: either registration mints `active` accounts, or the
-approval UI comes forward. Leaving it as manual Mongo edits is not a resting state.
+**Settled 2026-09-27 — the approval UI came forward.** kurikula's Users screen has
+Activate/Deactivate row actions (phase 5 P6). A chairman approves their department's
+registrants, and an administrator or dean approves anyone. Accounts created through user
+management start `active`. The `mongosh` line above is now needed only to bootstrap the
+first administrator.
 
 ### Decided — the CMS owns course-offering writes (2026-09-26)
 
@@ -673,6 +685,41 @@ AMS's location controller `GET`-only.
   `LocationService.remove` in `kurikula-backend`**, or a delete can strand it.
 - **No AMS UI creates locations.** A new lab reaches the create-equipment dialog's picker
   only after an administrator or dean adds it in kurikula.
+
+### Decided — the CMS owns user and assignment writes (2026-09-27)
+
+**`kurikula-backend` is the only writer of `users` and `assignments`; AMS reads them.**
+This extends "the CMS owns registration" (2026-09-16) to all of user management. It was
+settled by kurikula's P6. AMS v2's `POST /api/user` (live, administrator-only) and its
+`PATCH`/`DELETE` 501 stubs were removed, which leaves AMS's user controller `GET`-only.
+AMS's `updatePassword` (change-password) stays: that is a caller changing their own
+credential, not user management.
+
+- **Routes:** `POST /api/user/managed` and `PATCH /api/user/:id`, both
+  `@Roles(ADMINISTRATOR, DEAN, CHAIRMAN)`, plus the per-row policy in
+  `kurikula-backend/src/user/policies/user-write.policy.ts`. Public `POST /api/user`
+  registration is unchanged.
+
+  | Caller | May grant | Scope |
+  |---|---|---|
+  | administrator | every role | anywhere |
+  | dean | chairman and below (not dean, not administrator) | anywhere |
+  | chairman | instructor, student | departments they chair |
+  | chairman | lab in charge, assistant | any location, if the user keeps a row in a chaired department |
+
+- **Editing a user requires seeing them** (the user-list visibility policy) **and
+  outranking them.** A chairman can't edit a chairman, and a dean can't edit a dean.
+  Nobody can change their own roles or status. For a chairman, another department's rows
+  on the same person are left untouched.
+- **A removed role becomes `active: false`, not a deleted row.** Both services already
+  filter on `active: true`, so AMS's `RolesGuard` stops honouring it on the next request.
+- **Staff-created accounts are `active`, with a generated initial password.** The rule is
+  ported from AMS's seeder `getUserPassword` (`parse-user.util.ts`), so seeded and created
+  accounts match. Administrator uses the staff pattern here rather than the seeder's
+  `default123` fallback.
+- **No user delete.** Deactivation covers it: offerings and borrow records reference users,
+  and a deactivated account keeps its history.
+- **AMS UI consequence:** none. AMS has no Users screen and does not need one.
 
 ### Open questions (recorded, not decided)
 
