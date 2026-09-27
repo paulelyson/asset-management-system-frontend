@@ -350,9 +350,15 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 then they were public because kurikula had no way to obtain a token, so a guard would have
 blacked out every screen. Both halves shipped together for exactly that reason.
 
-Everything now requires a bearer token except five routes, each of which cannot present
-one by definition: `GET /api` (liveness), `POST /api/user` (self-registration), and
+Everything now requires a bearer token except six routes, each of which cannot present
+one by definition: `GET /api` (liveness), `POST /api/user` (self-registration),
+`GET /api/department` (the register form's department picker), and
 `POST /api/auth/login` / `refresh` / `logout`.
+
+The department list was added on 2026-09-27, trimmed to `_id`, `code` and `name`. From
+2026-09-16 until then, registration was impossible for a logged-out visitor: the picker's
+request returned 401, the form swallowed the error, and Department (a required field)
+stayed empty.
 
 `POST /api/user` being public is still not what makes it safe — the service is, and that
 constraint survived B2 exactly as it had to: the role is hardcoded to `student` and the
