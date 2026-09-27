@@ -721,6 +721,27 @@ credential, not user management.
   and a deactivated account keeps its history.
 - **AMS UI consequence:** none. AMS has no Users screen and does not need one.
 
+### Decided — a birthday replaces age on `users` (2026-09-27)
+
+**`users.birthDate` (a `Date`) replaces `users.age`**, so age is always derived and never
+goes stale. The stored ages were placeholders anyway: the AMS seeder writes `1`, and
+kurikula's register form always sent `18`. This came out of rebuilding kurikula's
+`/register` page.
+
+- **Both schemas changed together.** Each declares `birthDate?: Date` and makes `age`
+  optional. `age` had to stop being required, because `UserService.update` in the CMS goes
+  through `user.save()`, which would reject any new account that has no age. `age` stays
+  declared on both schemas as a legacy field that nothing reads. The AMS seeder still
+  writes `age: 1`, which is harmless.
+- **Date only, stored at UTC midnight.** The API takes `yyyy-mm-dd`, and clients slice the
+  ISO string rather than building a local `Date`. This is the same west-of-Greenwich trap
+  as `concatDateAndTime` above. The 1900 → today range lives on the CMS schema, the only
+  writer.
+- **Required on self-registration, optional for staff-created accounts.** Every account
+  created before this date has none, and the UI shows "Not set".
+- **AMS UI consequence:** none. The AMS frontend's `User` model still declares `age`, but
+  nothing renders it.
+
 ### Open questions (recorded, not decided)
 
 - **Which service owns writes to a shared collection when both want them.** B3 gives the
