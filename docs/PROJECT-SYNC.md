@@ -343,8 +343,8 @@ Phases 1–3 are done and verified as of 2026-09-22; 4 and 5 are planned.
 | 1 | **Detach from the AMS backend.** Frontend repoints at `:3001`, dev port pinned to 4201, contract written (`docs/API-CONTRACT.md`); `kurikula-backend` stood up serving all six endpoints. | frontend + CMS backend | **done 2026-09-16** |
 | 2 | **Drop the hand-rolled shared components, consume `@paulelyson/elyui`.** 10 components + 3 UI models + the local `SnackbarService` came out. | frontend | **done — verified in the browser 2026-09-22** |
 | 3 | **Auth of its own.** `AuthService`, a real login dialog, token storage, `authGuard`/`roleGuard`, `isLoggedIn` wiring. Landed with backend B2. | frontend + CMS backend (B2) | **done — login verified end to end 2026-09-22** |
-| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — A1 (user-list scoping), B1 (offerings list), B2 (user detail dialog), B4 (course row actions, with phase 5 P1), C (pagination) and D1 done |
-| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | **started** — P1 (offering create/update) built 2026-09-26, awaiting manual verification |
+| 4 | **Unbreak what exists.** `/location` crashes, user list filters are inert, course-offering pagination duplicates rows, the Courses screen's row actions go nowhere, `Usersff` typo, four dead NgModules — plus four things found while verifying 2 and 3. Checklist: `kurikula-frontend/docs/PHASE-4-UNBREAK.md`. | frontend (one item needs B3) | **in progress** — A1 (user-list scoping), B1 (offerings list), B2 (user detail dialog), B3 (`/location` crash, with phase 5 P3), B4 (course row actions, with phase 5 P1), C (pagination) and D1 done |
+| 5 | **Build the actual product.** Course/offering CRUD, curriculum & program structure, terms, and the K-12 concepts (`gradeLevel`, `strand`, `track`, `section`, `schoolYear`) that neither repo models today. Backlog: `kurikula-frontend/docs/PHASE-5-PRODUCT.md`. | both | **started** — P1 (offering create/update) and P2 (course CRUD) built 2026-09-26, P3 (location CRUD) 2026-09-27; all awaiting manual verification |
 
 **The CMS backend's reads closed on 2026-09-16, when auth landed on both sides.** Until
 then they were public because kurikula had no way to obtain a token, so a guard would have
@@ -369,7 +369,7 @@ role gates are B3.
 |---|---|---|---|
 | **B1** | Foundation (envelope interceptor, exception filter, shared schemas) + the six contract endpoints, reads public | kurikula phase 1 | **done 2026-09-16** |
 | B2 | Auth of its own — port AMS v2's JWT + refresh-token family revocation + `AuthGuard`/`RolesGuard`/`@Public()`, then close the reads | kurikula phase 3 | **done — verified 2026-09-22** |
-| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates **and scope gates** — see below | kurikula phase 5 | **started** — course-offering get/create/update and a read-only location list landed 2026-09-26 |
+| B3 | Real CRUD for course / course-offering / department / location / school / term, with role gates **and scope gates** — see below | kurikula phase 5 | **started** — course-offering get/create/update and course CRUD landed 2026-09-26, location CRUD 2026-09-27 |
 | B4 | K-12 curriculum models — `program`, `curriculum`, `gradeLevel`, `strand`, `track`, `section`, `schoolYear` | kurikula phase 5 | after B3 |
 
 B2 copied AMS v2's `src/auth/` rather than re-deriving it, and fixed both of the things it
@@ -452,13 +452,14 @@ them rather than re-deriving. They are the reference implementation.
 
 ### P1 — gaps blocking "finish AMS"
 
-- Backend: `school`, `term`, `location` modules are pure `nest g resource` scaffolds
+- Backend: `school`, `term` modules are pure `nest g resource` scaffolds
   (every method past `create`/`find` returns a literal template string). `department`
-  `update`/`remove` are stubs too.
+  `update`/`remove` are stubs too. `location` is `GET`-only since 2026-09-27 — the CMS
+  owns its writes (see Decided).
 - Backend: empty DTOs (zero validation) — `create-school`, `create-term`,
   `create-department`, `create-equipment-change-log`. Near-empty —
-  `create-course` (only `department`), `create-location` (only `department?`).
-- Backend: query DTOs (`school`, `term`, `location`, `department`) have no
+  `create-course` (only `department`).
+- Backend: query DTOs (`school`, `term`, `department`) have no
   page/limit defaults → `NaN` skip/limit if the client omits them.
 - Backend: `findOne(+id)`/`update(+id)`/`remove(+id)` coerce a Mongo ObjectId string with
   unary `+`, producing `NaN`. Currently harmless only because those methods are stubs —
@@ -653,16 +654,35 @@ uppercases `code` on write (in the DTO, not the shared schema).
 AMS v2's `POST /api/course` (live, role-ungated) and its `PATCH`/`DELETE` stubs were
 removed in the same AMS-backend commit as the course-offering routes (2026-09-26).
 
+### Decided — the CMS owns location writes (2026-09-27)
+
+**`kurikula-backend` is the only writer of `locations`; AMS reads them.** Settled by
+kurikula's P3 (location CRUD). AMS had the stronger claim — rooms and labs are what it
+manages — but one writer for every shared curriculum collection won over splitting the
+rule. AMS's own `POST /api/location` had never worked (its DTO declared only `department`,
+so `whitelist` stripped `name` and `type`); it was removed with the 501 stubs, leaving
+AMS's location controller `GET`-only.
+
+- **Gate: administrator and dean only** (`isUnscopedWriter`). `Location.department` is
+  optional and null on every existing row, so a chairman scope would admit nobody.
+- **Delete is hard, and refused (409) while anything references the location** — across
+  four collections in two repos: `courseofferings.schedule.location` and
+  `assignments.location` (both declared in the CMS), and AMS's `equipment.location` and
+  `borrowedequipments.classLocations`, which the CMS counts on the raw driver without
+  declaring AMS's schemas. **An AMS schema that gains a location ref must be added to
+  `LocationService.remove` in `kurikula-backend`**, or a delete can strand it.
+- **No AMS UI creates locations.** A new lab reaches the create-equipment dialog's picker
+  only after an administrator or dean adds it in kurikula.
+
 ### Open questions (recorded, not decided)
 
 - **Which service owns writes to a shared collection when both want them.** B3 gives the
   CMS real CRUD for course/offering/department/location/school/term — the collections AMS
   also reads. Read-read is fine; two writers on one document is the case nobody has
   designed for yet. Worth settling before B3, not during. **Answered for
-  `courseofferings` and `courses` on 2026-09-26 (CMS owns, see above);** still open for
-  `departments`, `locations` and `schools`. The course-offering answer is the natural
-  default for the rest of the curriculum collections; `locations` is the one where AMS
-  has the stronger claim, since rooms and labs are what it manages.
+  `courseofferings` and `courses` on 2026-09-26, and `locations` on 2026-09-27 (CMS owns
+  all three, see above);** still open for `departments` and `schools`. The
+  course-offering answer is the natural default for both.
 
   Scale of B3, checked 2026-09-24: `course` and `department` expose `@Get()` + `@Get(':id')`,
   `course-offering` exposes `@Get()` alone, and **`location`, `school` and `assignment` have

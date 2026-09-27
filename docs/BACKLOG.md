@@ -191,13 +191,13 @@ Already-fixed P0 items from earlier in this project are omitted here (course `$o
 plaintext passwords, exception filter 500s, equipment `$lookup` ObjectId mismatch — all
 done). What's left:
 
-- [ ] `school`, `term`, `location` modules are `nest g resource` scaffolds — every method
+- [ ] `school`, `term` modules are `nest g resource` scaffolds — every method
   past `create`/`find` returns a literal template string. `department` `update`/`remove`
-  are stubs too.
+  are stubs too. (`location` is out of this list: it is `GET`-only since 2026-09-27,
+  kurikula-backend owning its writes.)
 - [ ] Empty/near-empty DTOs: `create-school`, `create-term`, `create-department`,
-  `create-equipment-change-log` (zero validation); `create-course` (only `department`),
-  `create-location` (only `department?`).
-- [ ] Query DTOs (`school`, `term`, `location`, `department`) have no page/limit defaults →
+  `create-equipment-change-log` (zero validation); `create-course` (only `department`).
+- [ ] Query DTOs (`school`, `term`, `department`) have no page/limit defaults →
   `NaN` skip/limit if the client omits them.
 - [ ] `findOne(+id)`/`update(+id)`/`remove(+id)` coerce a Mongo ObjectId string with unary
   `+`, producing `NaN`. Dormant today only because those methods are stubs — becomes a live
