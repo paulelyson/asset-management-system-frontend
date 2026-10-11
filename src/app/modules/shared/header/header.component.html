@@ -1,4 +1,4 @@
-<div [class.transparent]="isTransparent">
+<div [class.transparent]="isTransparent()">
   <header id="header">
     <div class="nav-wrapper">
       <span style="flex: 1"></span>
@@ -11,22 +11,22 @@
           <li><a routerLink="/borrowed-equipment">Borrowed Equipment</a></li>
           <div class="avatar-wrapper">
             <ely-avatar
-              [label]="user()?.name ?? ''"
+              [label]="userName()"
               [showLabel]="true"
               [clickable]="true"
               variant="primary"
               (avatarClicked)="onAvatarClicked()"
             />
             <app-menu
-              [show]="showAvatarMenu"
+              [show]="showAvatarMenu()"
               (onActionClicked)="onActionClicked($event)"
-              [title]="user()?.name ?? ''"
+              [title]="userName()"
               [subtitles]="subtitles()"
             />
           </div>
         } @else {
           <ely-button size="lg" (btnclicked)="login()" appearance="ghost"> Login </ely-button>
-          <ely-button size="lg" appearance="filled" variant="accent"> Register </ely-button>
+          <ely-button size="lg" (btnclicked)="register()" appearance="filled" variant="accent"> Register </ely-button>
         }
       </ul>
     </div>

@@ -19,6 +19,19 @@ export type AssignmentRole =
   | 'assistant'
   | 'student';
 
+/**
+ * Who sees the Inventory screen. Shared by the route guard and the header link
+ * so the two can't disagree — they used to each carry their own copy.
+ */
+export const INVENTORY_ROLES: AssignmentRole[] = [
+  'lab_in_charge',
+  'chairman',
+  'instructor',
+  'assistant',
+  'administrator',
+  'dean',
+];
+
 /** Populated by the profile endpoint only — elsewhere these are bare ObjectIds. */
 export interface AssignmentDepartment {
   _id: string;

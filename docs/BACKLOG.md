@@ -362,7 +362,8 @@ they aren't. See Phase 3.1 above.
 ## Frontend — carried over, still open
 
 - [ ] No user-management UI (`UserService.getUsers()` is never called), no dashboard, no
-  settings page. Header renders a `Register` button with no click handler.
+  settings page. (The header's dead `Register` button now sends users to the CMS's
+  `/register` via `environment.cms_url`, 2026-10-11.)
 - [ ] `equipment-change-log` feature module is unroutable — not referenced in
   `app.routes.ts`.
 - [ ] `borrowed-equipment.component.ts:74` hardcodes a transaction condition to

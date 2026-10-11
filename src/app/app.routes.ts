@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
+import { INVENTORY_ROLES } from './models/data/user-profile.model';
 
 export const routes: Routes = [
   {
@@ -15,7 +16,7 @@ export const routes: Routes = [
   {
     path: 'inventory',
     loadChildren: () => import('./modules/inventory/inventory-module').then((m) => m.InventoryModule),
-    canActivate: [authGuard, roleGuard(['lab_in_charge', 'chairman', 'instructor', 'assistant', 'administrator', 'dean'])]
+    canActivate: [authGuard, roleGuard(INVENTORY_ROLES)]
   },
   {
     path: 'borrowed-equipment',

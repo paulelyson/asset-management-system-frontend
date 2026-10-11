@@ -10,7 +10,7 @@ full backlog. This file covers only what's specific to working inside this repo.
 
 ## Stack
 
-- Angular 20.3, **zoneless** (`provideZonelessChangeDetection()` in `app.config.ts`),
+- Angular 21.2, **zoneless** (`provideZonelessChangeDetection()` in `app.config.ts`),
   standalone components.
 - Angular Material 20 + CDK — used as underlying primitives (tooltips, dialogs, tabs), not
   themed directly; the app has its own hand-rolled design system in
@@ -83,8 +83,10 @@ than necessary.
 
 `src/environments/environment.ts` is the **production** file (inverted-looking but
 correct — `fileReplacements` swaps in `environment.development.ts` for the dev
-config) — currently `api_url: ''` (empty, needs to be filled in before a real prod
-deploy). `environment.development.ts` → `http://localhost:3000`.
+config) — currently `api_url: ''` and `cms_url: ''` (empty, both need filling in before a
+real prod deploy). `environment.development.ts` → `api_url` `http://localhost:3000`,
+`cms_url` `http://localhost:4201` (kurikula — the header's Register button sends users
+there, since the CMS owns registration).
 
 ## File naming convention
 
